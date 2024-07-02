@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>{% block title %}
+      登录
+      {% endblock %}</title>
+      <link rel="stylesheet" href="/static/css/backend-plugin.min.css">
+      <link rel="stylesheet" href="/static/css/backend.css">
+  <meta name="referrer" content="no-referrer" />
+  </head>
+  <body class=" ">
+    <!-- loader Start -->
+    <div id="loading">
+          <div id="loading-center">
+          </div>
+    </div>
+    <!-- loader END -->
+
+      <div class="wrapper">
+    <section class="login-content" style="background-image: url(https://img0.baidu.com/it/u=4260343253,426122526&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800);background-repeat: no-repeat;background-size: cover">
+         <div class="container h-100">
+            <div class="row align-items-center justify-content-center h-100">
+               <div class="col-md-5">
+                  <div class="card p-3">
+                     {% block content %}
+                      <div class="card-body">
+                        <div class="auth-logo">
+                           <img src="https://weibo.com/favicon.ico" class="img-fluid rounded-normal light-logo" alt="logo">
+                        </div>
+                        <h3 class="mb-3 font-weight-bold text-center">登录</h3>
+                        <p class="text-center text-secondary mb-4">微博话题舆情分析可视化系统 - flask echarts SnowNLP</p>
+                        <div class="mb-5">
+                            <p class="line-around text-secondary mb-0"><span class="line-around-1">输入您的用户名和密码</span></p>
+                        </div>
+                        <form method="POST" action="/user/login">
+                           <div class="row">
+                              <div class="col-lg-12">
+                                 <div class="form-group">
+                                    <label class="text-secondary">用户名</label>
+                                    <input class="form-control" name="username" type="text" placeholder="请输入您的用户名">
+                                 </div>
+                              </div>
+                              <div class="col-lg-12 mt-2">
+                                 <div class="form-group">
+                                     <div class="d-flex justify-content-between align-items-center">
+                                         <label class="text-secondary">密码</label>
+                                     </div>
+                                    <input class="form-control" name="password" type="password" placeholder="请输入您的密码">
+                                 </div>
+                              </div>
+                           </div>
+                           <button type="submit" class="btn btn-primary btn-block mt-2">登录</button>
+                           <div class="col-lg-12 mt-3">
+                                <p class="mb-0 text-center">还没有账号?  <a href="/user/register">注册</a></p>
+                           </div>
+                        </form>
+                     </div>
+                      {% endblock %}
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      </div>
+
+    <script src="/static/js/backend-bundle.min.js"></script>
+    <script src="/static/js/customizer.js"></script>
+    <script src="/static/js/sidebar.js"></script>
+    <script src="/static/js/flex-tree.min.js"></script>
+    <script src="/static/js/tree.js"></script>
+    <script src="/static/js/table-treeview.js"></script>
+    <script src="/static/js/sweetalert.js"></script>
+    <script src="/static/js/vector-map-custom.js"></script>
+    <script src="/static/js/chart-custom.js"></script>
+    <script src="/static/js/01.js"></script>
+    <script src="/static/js/02.js"></script>
+    <script src="/static/js/slider.js"></script>
+    <script src="/static/js/index.js" type="module"></script>
+    <script src="/static/js/app.js"></script>  </body>
+</html>
