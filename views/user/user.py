@@ -41,3 +41,8 @@ def register():
             ''',[request.form['username'],request.form['password'],str(time_tuple[0]) + '-' + str(time_tuple[1]) + '-' + str(time_tuple[2])])
 
         return redirect('/user/login')
+    
+@ub.route('/logOut')
+def logOut():
+        session.clear()
+        return redirect('/user/login')
