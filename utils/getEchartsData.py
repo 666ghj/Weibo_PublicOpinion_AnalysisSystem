@@ -152,3 +152,59 @@ def getCommentCharDataTwo():# 统计评论数据中不同性别的数量
         })
     return resultData
 
+def getYuQingCharDataOne():# 统计热词中正面、中性、负面的数量
+    hotWordList = getAllHotWords()
+    xData = ['正面','中性','负面']
+    yData = [0,0,0]
+    for word in hotWordList:
+        emotionValue = SnowNLP(word[0]).sentiments
+        if emotionValue > 0.5:
+            yData[0] += 1
+        elif emotionValue == 0.5:
+            yData[1] += 1
+        elif emotionValue < 0.5:
+            yData[2] += 1
+    finalData = [{
+        'name':x,
+        'value':yData[index]
+    } for index,x in enumerate(xData)]
+    return xData,yData,finalData
+
+def getYuQingCharDataTwo():# 统计评论列表和文章列表中的情感值
+    xData = ['正面', '中性', '负面']
+    finalData1 = [{
+        'name':x,
+        'value':0
+    } for x in xData]
+    finalData2 = [{
+        'name': x,
+        'value': 0
+    } for x in xData]
+
+    for comment in commentList:
+        emotionValue = SnowNLP(comment[4]).sentiments
+        if emotionValue > 0.5:
+            finalData1[0]['value'] += 1
+        elif emotionValue == 0.5:
+            finalData1[1]['value'] += 1
+        elif emotionValue < 0.5:
+            finalData1[2]['value'] += 1
+    for artile in articleList:
+        emotionValue = SnowNLP(artile[5]).sentiments
+        if emotionValue > 0.5:
+            finalData2[0]['value'] += 1
+        elif emotionValue == 0.5:
+            finalData2[1]['value'] += 1
+        elif emotionValue < 0.5:
+            finalData2[2]['value'] += 1
+    return finalData1,finalData2
+
+def getYuQingCharDataThree():# 提取前10个热词及其对应的出现频率
+    hotWordList = getAllHotWords()
+    xData = []
+    yData = []
+    for i in hotWordList[:10]:
+        xData.append(i[0])
+        yData.append(int(i[1]))
+    return xData,yData
+
