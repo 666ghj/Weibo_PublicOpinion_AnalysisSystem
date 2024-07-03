@@ -1,0 +1,72 @@
+{% extends 'base_page.html' %}
+
+{% block title %}
+    IP分析
+{% endblock %}
+
+
+
+{% block echarts %}
+    <script>
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title:{
+                text:'文章IP发布地址地图',
+                left:'center',
+                textStyle:{
+                    color:"#333",
+                    fontWeight:"bold"
+                }
+            },
+            tooltip:{
+                trigger:'item',
+                formatter:function(params){
+                    return params.name + '<br>微博发布个数： ' + params.value + ' 个'
+                }
+            },
+            visualMap:{
+                min:0,
+                max:200,
+                text:['高','低'],
+                realtime:true,
+                calulable:true,
+                inRange:{
+                    color:['orange','green']
+                }
+            },
+            series:[{
+                type:'map',
+                map:"china",
+                label:{
+                    normal:{
+                        show:true,
+                        color:"white",
+                        fontSize:'12'
+                    }
+                },
+                emphasis:{
+                    label:{
+                        show:true
+                    },
+                },
+                data:{{ commentRegionData | tojson }},
+                itemStyle:{
+                    normal: {
+                        areaColor:"skyblue",
+                        borderColor:"#fff"
+                    },
+                    emphasis:{
+                        areaColor: '#2b91b7'
+                    }
+                },
+                zoom:1.4,
+                roam:true
+            }]
+        }
+
+        option && myChart.setOption(option);
+    </script>
+{% endblock %}
