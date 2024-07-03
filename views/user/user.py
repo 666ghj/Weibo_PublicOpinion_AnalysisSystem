@@ -21,7 +21,7 @@ def login():
             hash_with_salt = hashlib.sha256('XiaoXueQi2024'.encode('utf-8'))
             hash_with_salt.update(request.form['password'].encode('utf-8'))
             return request.form[
-                'username'] in user and hash_with_salt.hexdigest in user
+                'username'] in user and hash_with_salt.hexdigest() in user
 
         users = query('select * from user', [], 'select')
         login_success = list(filter(filter_fn, users))
