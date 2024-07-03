@@ -4,7 +4,7 @@ import re
 def main():
     reader = open('./cutComments.txt','r',encoding='utf8')
     strs = reader.read()
-    result = open('./cipingTotal.csv','w',encoding='utf8')
+    result = open('cipingTotal.csv', 'w', encoding='utf8')
 
     # 分词，去重，列表
     word_list = jieba.cut(strs,cut_all=True)
