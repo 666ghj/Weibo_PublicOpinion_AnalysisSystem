@@ -8,7 +8,7 @@ def getTopicLen(topic):# 统计特定话题下的评论数目
             topicLen+=1
     return topic_len
 
-def getTopicPageCreatedAtCharData(topic):# 统计包含特定热词的评论在每个日期的数量，并返回日期和对应的评论数量
+def getTopicPageCreatedAtCharData(topic):# 统计特定话题的评论在每个日期的数量，并返回日期和对应的评论数量
     commentsList = getAllCommentsData()
     createdAt = {}
     for i in commentsList:
@@ -19,7 +19,7 @@ def getTopicPageCreatedAtCharData(topic):# 统计包含特定热词的评论在�
                 createdAt[i[1]] = 1
     return list(createdAt.keys()),list(createdAt.values())
 
-def getCommentFilterDataTopic(topic):# 筛选包含特定热词的评论并返回这些评论的数据
+def getCommentFilterDataTopic(topic):# 筛选特定话题下的评论并返回这些评论的数据
     commentsList = getAllCommentsData()
     commentData = []
     for i in commentsList:
