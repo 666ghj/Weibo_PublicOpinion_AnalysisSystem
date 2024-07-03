@@ -173,3 +173,163 @@
           </div>
 {% endblock %}
 
+{% block echarts %}
+    <script>
+    var chartDom = document.getElementById('main');
+    var myChart = echarts.init(chartDom);
+    var option;
+    var colors = ['#66cc99','#ffcc66','#ff6666','#6699cc']
+        option = {
+          title: {
+            text: '点赞区间统计'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data: ['区间个数']
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              dataView: { show: true, readOnly: false },
+              magicType: { show: true, type: ['line', 'bar'] },
+              restore: { show: true },
+              saveAsImage: { show: true }
+            }
+          },
+          calculable: true,
+          xAxis: [
+            {
+              type: 'category',
+              // prettier-ignore
+              data:{{ xData |tojson }}
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value'
+            }
+          ],
+          series: [
+            {
+              name: '区间个数',
+              type: 'bar',
+              data: {{ yData }},
+                itemStyle:{
+                  color:function(params){
+                      return colors[params.dataIndex % colors.length];
+                  }
+                },
+              markPoint: {
+                data: [
+                  { type: 'max', name: 'Max' },
+                  { type: 'min', name: 'Min' }
+                ]
+              },
+              markLine: {
+                data: [{ type: 'average', name: 'Avg' }]
+              }
+            }
+          ]
+        };
+        option && myChart.setOption(option);
+    </script>
+    <script>
+        var chartDom = document.getElementById('mainTwo');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            toolbox: {
+            show: true,
+            feature: {
+              dataView: { show: true, readOnly: false },
+              magicType: { show: true, type: ['line', 'bar'] },
+              restore: { show: true },
+              saveAsImage: { show: true }
+            }
+          },
+             title: {
+            text: '文章评论区间统计'
+          },
+            tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+
+          },
+          xAxis: {
+            type: 'category',
+            data: {{ x1Data | tojson }}
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+                name:"区间个数",
+              data: {{ y1Data }},
+              type: 'line',
+              symbol: 'triangle',
+              symbolSize: 20,
+              lineStyle: {
+                color: '#5470C6',
+                width: 4,
+                type: 'dashed'
+              },
+              itemStyle: {
+                borderWidth: 3,
+                borderColor: '#EE6666',
+                color: 'yellow'
+              }
+            }
+          ]
+        };
+
+        option && myChart.setOption(option);
+
+    </script>
+    <script>
+    var chartDom = document.getElementById('mainThree');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+      title: {
+        text: '转发量分析区间图'
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      legend: {},
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01]
+      },
+      yAxis: {
+        type: 'category',
+        data: {{ x2Data | tojson }}
+      },
+      series: [
+        {
+          name: '区间个数',
+          type: 'bar',
+          data: {{ y2Data }}
+        }
+      ]
+    };
+
+    option && myChart.setOption(option);
+
+    </script>
+{% endblock %}
