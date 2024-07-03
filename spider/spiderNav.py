@@ -45,11 +45,9 @@ def parse_json(response):
             containerid
         ])
 
-def start():
+
+if __name__ == '__main__':
     init()
     url = 'https://weibo.com/ajax/feed/allGroups'
     response = get_data(url)
     parse_json(response)
-
-if __name__ == '__main__':
-    start()
