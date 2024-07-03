@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原神登录</title>
+    <link rel="icon" href="login_resources/favicon.ico">
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .login,
+    .register {
+        display: none;
+    }
+
+    .show {
+        display: block;
+    }
+
+
+    #video-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -3;
+        overflow: hidden;
+    }
+
+    #video-background video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        max-height: 110%;
+        object-fit: cover;
+    }
+
+    #black-hid {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: #0a0a0a;
+        opacity: 0.6;
+        z-index: -2;
+    }
+
+    form {
+        position: relative;
+        width: 642.03px;
+        height: 477.28px;
+        background-color: #fff;
+        margin: auto;
+        top: 20%;
+        border-radius: 0.1cm;
+
+
+    }
+
+
+
+    .login_box {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+        box-shadow: inset 0px 0px 3px black;
+        padding: 15px;
+        box-sizing: border-box;
+
+    }
+
+    .title {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 612px;
+        height: auto;
+        padding: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+
+    }
+
+    .QRcode img {
+        height: 90px;
+        width: 90px;
+
+        object-fit: unset;
+
+        /* 添加过渡效果 */
+        cursor: pointer;
+    }
+
+    .QRcode {
+        height: 90px;
+        width: 90px;
+
+    }
+
+    .QRcode:hover>img {
+        line-height: normal;
+
+        /* transform-origin: unset; */
+
+    }
+
+
+    .logo {
+        position: absolute;
+        width: 150px;
+        height: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 15px;
+    }
+
+    .logo img {
+        width: 150px;
+        height: 50px;
+    }
+
+    .content {
+        position: absolute;
+        width: 612px;
+        height: 150px;
+
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .input {
+        height: 60px;
+        width: 522px;
+        margin-top: 25px;
+        margin-left: 40px;
+
+        border: none;
+
+
+    }
+
+    .content input {
+        height: 60px;
+        width: 522px;
+
+        text-indent: 1em;
+        font-size: 18px;
+        letter-spacing: .2em;
+        font-weight: 700;
+        outline: none;
+        border: none;
+        box-shadow: inset 0px 0px 2px rgb(207, 206, 206);
+        box-shadow: 0px 0px 4px rgb(207, 206, 206);
+        border-radius: 0.1cm;
+
+    }
+
+    .content input::placeholder {
+        opacity: 0.4;
+    }
+
+    .register-text {
+        position: absolute;
+        width: 522px;
+        height: 30px;
+        top: 270px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .register-text a {
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: .1em;
+    }
+
+    .a1 {
+        color: #949292;
+    }
+
+
+    .a2 {
+        color: #d6c194;
+    }
+
+    .a2:hover {
+        color: #d6a948;
+    }
+
+    .a3:hover {
+        color: #d6a948;
+    }
+
+    .a3 {
+        position: absolute;
+        right: 0;
+        color: #d6c194;
+    }
+
+    .start {
+        position: absolute;
+        top: 320px;
+        width: 612px;
+        height: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .start button {
+        position: absolute;
+        width: 522px;
+        height: 60px;
+
+        left: 50%;
+        transform: translateX(-50%);
+        cursor: pointer;
+        border: none;
+        font-size: 20px;
+        letter-spacing: 0.1em;
+        background-color: rgb(54, 54, 61);
+        color: rgb(215, 210, 180);
+        font-weight: 700;
+        border-radius: .1cm;
+        box-shadow: 0px 0px 3px 1px #969595;
+    }
+
+    .start button:hover {
+        color: #d6c194;
+    }
+
+    .exit {
+        position: absolute;
+        right: 20px;
+        width: 25px;
+        height: 25px;
+    }
+
+    .exit img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .other-login {
+        position: absolute;
+        width: 612px;
+        height: 80px;
+        top: 400px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding-left: 80px;
+        font-size: 18px;
+        letter-spacing: 0.1em;
+
+        font-weight: 700;
+    }
+
+    .other-login a {
+        color: rgb(15, 15, 15);
+    }
+
+    .other-login span:first-child {
+        margin-left: 15px;
+    }
+
+    .other-login span:last-child {
+        position: absolute;
+        right: 80px;
+    }
+
+    .xieyi {
+        position: absolute;
+        width: 612px;
+        height: 40px;
+        line-height: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 310px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #8d8c8b;
+    }
+
+    .xieyi input {
+        margin-left: 45px;
+    }
+
+    .yanzhengma:hover {
+        color: #aa863e;
+    }
+</style>
+
+<body onclick="playAudio()">
+
+    <audio id="audio-player" autoplay class="hide-player">
+        <source src="https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/%E5%8E%9F%E7%A5%9E%E9%A6%96%E9%A1%B5%E8%83%8C%E6%99%AF%E9%9F%B3.mp4"
+            type="audio/mp3">
+    </audio>
+
+    <div id="video-background">
+        <video src="https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/%E5%8E%9F%E7%A5%9E%E9%A6%96%E9%A1%B5%E8%A7%86%E9%A2%91.mp4" autoplay="autoplay" muted="muted" loop="loop"></video>
+    </div>
+
+    <div id="black-hid">
+    </div>
+
+    <form id="login" class="login show">
+        <div class="login_box">
+            <div class="title">
+                <!-- <a class="QRcode" href=""><img src="login_resources/二维码 (1).png" alt=""></a> -->
+                <a class="logo" href=""><img src="login_resources/logo2.08ebb840.png" alt=""></a>
+                <a class="exit" href=""><img src="login_resources/关闭 (1).png" alt=""></a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="input"><input type="text" placeholder="输入手机号/邮箱"></div>
+            <div class="input"><input type="password" placeholder="输入密码"></div>
+        </div>
+        <div class="register-text">
+            <span>
+                <a href="" class="a1">没有账号？</a>
+                <a href="" class="a2" id="register_btn">立即注册</a>
+            </span>
+            <span><a href="" class="a3">忘记密码</a></span>
+        </div>
+        <div class="start">
+            <button>进入游戏</button>
+        </div>
+        <div class="other-login">
+            <span><a href="" class="a4">手机快捷登录</a></span>
+            <span><a href="" class="a5">TapTap</a></span>
+        </div>
+    </form>
+
+
+    <form id="register" class="register">
+        <div class="login_box">
+            <div class="title">
+                <a class="logo" href=""><img src="login_resources/logo2.08ebb840.png" alt=""></a>
+                <a class="exit" href=""><img src="login_resources/关闭 (1).png" alt=""></a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="input">
+                <span
+                    style="display: inline-block;width: 60px;height: 60px;font-size: 21px;font-weight: 800;color: black;line-height: 60px;text-align: center; ">
+                    +86</span>
+                <input style="width: 452px;float: right;" type="text" placeholder="输入手机号">
+                <a class="yanzhengma" href=""
+                    style="position: absolute; top: 43px;right: 60px;color: #d6c194;font-weight: 700;letter-spacing: 0.1em;">获取验证码</a>
+            </div>
+            <div class="input"><input type="text" placeholder="输入短信验证码"></div>
+        </div>
+        <div class="xieyi">
+            <input type="checkbox">
+            <span>已同意《用户协议》和《隐私权益》</span>
+        </div>
+        <div class="register-text">
+            <span>
+                <a href="" class="a2" id="login_btn">返回登录页面</a>
+            </span>
+
+        </div>
+        <div class="start" style="top: 370px;">
+            <button>注册并登录</button>
+        </div>
+
+    </form>
+
+
+    <script>
+        //点击网页后，播放音乐
+        function playAudio() {
+            var audioPlayer = document.getElementById('audio-player');
+            audioPlayer.play();
+        };
+
+        // 获取表单和链接的引用
+        const loginForm = document.getElementById('login');
+        const registerForm = document.getElementById('register');
+        const registerLink = document.getElementById('register_btn');
+        const loginLink = document.getElementById('login_btn');
+
+        // 点击"立即注册"链接时切换表单显示状态
+        registerLink.addEventListener('click', function (event) {
+            event.preventDefault(); // 阻止链接默认行为
+            loginForm.classList.remove('show');
+            registerForm.classList.add('show');
+        });
+
+        // 点击"返回登录界面"链接时切换表单显示状态
+        loginLink.addEventListener('click', function (event) {
+            event.preventDefault(); // 阻止链接默认行为
+            registerForm.classList.remove('show');
+            loginForm.classList.add('show');
+        });
+
+
+    </script>
+</body>
+
+</html>
