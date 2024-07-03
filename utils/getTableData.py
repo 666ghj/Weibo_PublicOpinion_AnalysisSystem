@@ -8,9 +8,9 @@ def getTableDataList(flag):
         for article in articeList:
             item = list(article)
             value = ''
-            if SnowNLP(item[5]).sentiments > 0.5:
+            if SnowNLP(item[5]).sentiments > 0.6:
                 value = '正面'
-            elif SnowNLP(item[5]).sentiments < 0.5:
+            elif SnowNLP(item[5]).sentiments < 0.4:
                 value = '负面'
             else:
                 value = '中性'
