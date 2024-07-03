@@ -89,3 +89,7 @@ def getAllHotWords():
         except:
             continue
     return data
+
+def getAllTopics():
+    data =[]
+    return data
