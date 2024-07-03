@@ -1,12 +1,12 @@
-from spiderContent import start as spiderContentStart
-from spiderComments import start as spiderCommentsStart
+from spiderContent import start as spiderContent
+from spiderComments import start as spiderComments
 from saveData import save_to_sql as saveData
 
 def main():
     print('正在爬取文章数据')
-    spiderContentStart(1,1)
+    spiderContent(1,1)
     print('正在爬取文章评论数据')
-    spiderCommentsStart()
+    spiderComments()
     print('正在存储数据')
     saveData()
     print("爬取数据更新")

@@ -20,12 +20,12 @@ def init():
                 'authorAvatar'
             ])
 
-def writerRow(row):
+def write(row):
     with open('./comments.csv', 'a', encoding='utf-8', newline='') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(row)
 
-def get_data(url,params):
+def fetchData(url,params):
     headers = {
         'Cookie':'SINAGLOBAL=2555941826014.1074.1676801766625; ULV=1719829459275:6:1:2:4660996305989.918.1719827559898:1719743122299; UOR=,,www.baidu.com; XSRF-TOKEN=VtLXviYSIs8lor7sz4iGyigL; SUB=_2A25LhvU9DeRhGeFH6FIX-S3MyD2IHXVo-gj1rDV8PUJbkNAGLRXMkW1Ne2nhI3Gle25QJK0Z99J3trq_NZn6YKJ-; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WW3Mv8V5EupQbbKh.vaZIwU5JpX5KzhUgL.FoM4e05c1Ke7e022dJLoIp7LxKML1KBLBKnLxKqL1hnLBoM41hz41hqReKqN; WBPSESS=Dt2hbAUaXfkVprjyrAZT_LRaDLsnxG-kIbeYwnBb5OUKZiwfVr_UrcYfWuqG-4ZVDM5HeU3HXkDNK_thfRfdS9Ao6ezT30jDksv-CpaVmlTAqGUHjJ7PYkH5aCK4HLxmRq14ZalmQNwzfWMPa4y0VNRLuYdg7L1s49ymNq_5v5vusoz0r4ki6u-MHGraF0fbUTgX14x0kHayEwOoxfLI-w==; SCF=AqmJWo31oFV5itnRgWNU1-wHQTL6PmkBLf3gDuqpdqAIfaWguDTMre6Oxjf5Uzs74JAh2r0DdV1sJ1g6m-wJ5NQ.; _s_tentry=-; Apache=4660996305989.918.1719827559898; PC_TOKEN=7955a7ab1f; appkey=; geetest_token=602cd4e3a7ed1898808f8adfe1a2048b; ALF=1722421868',
         'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0'
@@ -36,16 +36,16 @@ def get_data(url,params):
     else:
         return None
 
-def getAllArticleList():
-    artileList = []
+def getArticleList():
+    articleList = []
     with open('./article.csv','r',encoding='utf-8') as reader:
         readerCsv = csv.reader(reader)
         next(reader)
         for nav in readerCsv:
-            artileList.append(nav)
-    return artileList
+            articleList.append(nav)
+    return articleList
 
-def parse_json(response,artileId):
+def readJson(response,artileId):
     for comment in response:
         created_at = datetime.strptime(comment['created_at'],'%a %b %d %H:%M:%S %z %Y').strftime('%Y-%m-%d')
         likes_counts = comment['like_counts']
@@ -58,7 +58,7 @@ def parse_json(response,artileId):
         authorGender = comment['user']['gender']
         authorAddress = comment['user']['location']
         authorAvatar = comment['user']['avatar_large']
-        writerRow([
+        write([
             artileId,
             created_at,
             likes_counts,
@@ -73,7 +73,7 @@ def parse_json(response,artileId):
 def start():
     commentUrl = 'https://weibo.com/ajax/statuses/buildComments'
     init()
-    articleList = getAllArticleList()
+    articleList = getArticleList()
     for article in articleList:
         articleId = article[0]
         print('正在爬取id值为%s的文章评论' % articleId)
@@ -82,8 +82,8 @@ def start():
             'id':int(articleId),
             'is_show_bulletin':2
         }
-        response = get_data(commentUrl,params)
-        parse_json(response,articleId)
+        response = fetchData(commentUrl,params)
+        readJson(response,articleId)
 
 
 

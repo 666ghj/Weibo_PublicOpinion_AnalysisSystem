@@ -25,12 +25,12 @@ def init():
                 'isVip' # v_plus
             ])
 
-def writerRow(row):
+def write(row):
     with open('./article.csv', 'a', encoding='utf-8', newline='') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(row)
 
-def get_data(url,params):
+def fetchData(url,params):
     headers = {
         'Cookie':'SINAGLOBAL=2555941826014.1074.1676801766625; ULV=1719829459275:6:1:2:4660996305989.918.1719827559898:1719743122299; UOR=,,www.baidu.com; XSRF-TOKEN=VtLXviYSIs8lor7sz4iGyigL; SUB=_2A25LhvU9DeRhGeFH6FIX-S3MyD2IHXVo-gj1rDV8PUJbkNAGLRXMkW1Ne2nhI3Gle25QJK0Z99J3trq_NZn6YKJ-; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WW3Mv8V5EupQbbKh.vaZIwU5JpX5KzhUgL.FoM4e05c1Ke7e022dJLoIp7LxKML1KBLBKnLxKqL1hnLBoM41hz41hqReKqN; WBPSESS=Dt2hbAUaXfkVprjyrAZT_LRaDLsnxG-kIbeYwnBb5OUKZiwfVr_UrcYfWuqG-4ZVDM5HeU3HXkDNK_thfRfdS9Ao6ezT30jDksv-CpaVmlTAqGUHjJ7PYkH5aCK4HLxmRq14ZalmQNwzfWMPa4y0VNRLuYdg7L1s49ymNq_5v5vusoz0r4ki6u-MHGraF0fbUTgX14x0kHayEwOoxfLI-w==; SCF=AqmJWo31oFV5itnRgWNU1-wHQTL6PmkBLf3gDuqpdqAIfaWguDTMre6Oxjf5Uzs74JAh2r0DdV1sJ1g6m-wJ5NQ.; _s_tentry=-; Apache=4660996305989.918.1719827559898; PC_TOKEN=7955a7ab1f; appkey=; geetest_token=602cd4e3a7ed1898808f8adfe1a2048b; ALF=1722421868',
         'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0'
@@ -41,7 +41,7 @@ def get_data(url,params):
     else:
         return None
 
-def getAllTypeList():
+def getTypeList():
     typeList = []
     with open('./nav.csv','r',encoding='utf-8') as reader:
         readerCsv = csv.reader(reader)
@@ -50,7 +50,7 @@ def getAllTypeList():
             typeList.append(nav)
     return typeList
 
-def parse_json(response,type):
+def readJson(response,type):
     for artice in response:
         id = artice['id']
         likeNum = artice['attitudes_count']
@@ -72,7 +72,7 @@ def parse_json(response,type):
         authorName = artice['user']['screen_name']
         authorDetail = 'https://weibo.com/u/' + str(artice['user']['id'])
         isVip = artice['user']['v_plus']
-        writerRow([
+        write([
             id,
             likeNum,
             commentsLen,
@@ -92,7 +92,7 @@ def parse_json(response,type):
 def start(typeNum=1,pageNum=1):
     articleUrl = 'https://weibo.com/ajax/feed/hottimeline'
     init()
-    typeList = getAllTypeList()
+    typeList = getTypeList()
     typeNumCount = 0
     for type in typeList:
         if typeNumCount > typeNum:return
@@ -107,8 +107,8 @@ def start(typeNum=1,pageNum=1):
                 'count':10,
                 'extparam':'discover|new_feed'
             }
-            response = get_data(articleUrl,parmas)
-            parse_json(response,type[0])
+            response = fetchData(articleUrl,parmas)
+            readJson(response,type[0])
         typeNumCount += 1
 
 if __name__ == '__main__':
