@@ -5,8 +5,8 @@ import os
 from datetime import datetime
 
 def init():
-    if not os.path.exists('./articleComments.csv'):
-        with open('./articleComments.csv','w',encoding='utf-8',newline='') as csvFile:
+    if not os.path.exists('./comments.csv'):
+        with open('./comments.csv','w',encoding='utf-8',newline='') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow([
                 'articleId',
@@ -21,7 +21,7 @@ def init():
             ])
 
 def writerRow(row):
-    with open('./articleComments.csv', 'a', encoding='utf-8', newline='') as csvFile:
+    with open('./comments.csv', 'a', encoding='utf-8', newline='') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(row)
 
@@ -38,7 +38,7 @@ def get_data(url,params):
 
 def getAllArticleList():
     artileList = []
-    with open('./articleData.csv','r',encoding='utf-8') as reader:
+    with open('./article.csv','r',encoding='utf-8') as reader:
         readerCsv = csv.reader(reader)
         next(reader)
         for nav in readerCsv:
