@@ -1,21 +1,22 @@
 from utils.getPublicData import *
+from snownlp import SnowNLP
 articleList = getAllArticleData()
 commentList = getAllCommentsData()
 
-def getTypeList():# 返回爬取到的所有文章的类型（已去重）
+def getTypeList():
     return list(set([x[8] for x in getAllArticleData()]))
 
-def getArticleByType(type):# 根据特定文章类型筛选文章
+def getArticleByType(type):
     articles = []
     for i in articleList:
         if i[8] == type:
             articles.append(i)
     return articles
 
-def getArticleCharLikeCount(type):# 统计特定类型文章的点赞数分布
+def getArticleCharLikeCount(type):
     articles = getArticleByType(type)
     xData = ['0-100','100-1000','1000-5000','5000-15000','15000-30000','30000-50000','50000-~']
-    yData = [0 for x in range(len(xData))]# 初始化为长度和xData相同但是每一个元素都是零的列表
+    yData = [0 for x in range(len(xData))]
     for article in articles:
         likeCount = int(article[1])
         if likeCount < 100:
@@ -34,10 +35,10 @@ def getArticleCharLikeCount(type):# 统计特定类型文章的点赞数分布
             yData[6] += 1
     return xData,yData
 
-def getArticleCharCommentsLen(type):# 统计特定类型文章的评论数分布
+def getArticleCharCommentsLen(type):
     articles = getArticleByType(type)
     xData = ['0-100','100-500','500-1000','1000-1500','1500-3000','3000-5000','5000-10000','10000-15000','15000-~']
-    yData = [0 for x in range(len(xData))]# 初始化为长度和xData相同但是每一个元素都是零的列表
+    yData = [0 for x in range(len(xData))]
     for article in articles:
         commentLen = int(article[2])
         if commentLen < 100:
@@ -60,7 +61,7 @@ def getArticleCharCommentsLen(type):# 统计特定类型文章的评论数分布
             yData[8] += 1
     return xData,yData
 
-def getArticleCharRepotsLen(type):# 统计特定类型文章的转发数分布
+def getArticleCharRepotsLen(type):
     articles = getArticleByType(type)
     xData = ['0-100','100-300','300-500','500-1000','1000-2000','2000-3000','3000-4000','4000-5000','5000-10000','10000-15000','15000-30000','30000-70000','70000-~']
     yData = [0 for x in range(len(xData))]
@@ -92,14 +93,14 @@ def getArticleCharRepotsLen(type):# 统计特定类型文章的转发数分布
             yData[11] += 1
     return xData,yData
 
-def getIPCharByArticleRegion():#统计文章发布地域的分布情况
+def getIPCharByArticleRegion():
     articleRegionDic = {}
     for i in articleList:
-        if i[4] != '无':# 如果ip为确定值的话就进行下一步
-            if i[4] in articleRegionDic.keys():
-                articleRegionDic[i[4]] += 1
-            else:
+        if i[4] != '无':
+            if articleRegionDic.get(i[4],-1) == -1:
                 articleRegionDic[i[4]] = 1
+            else:
+                articleRegionDic[i[4]] += 1
     resultData = []
     for key,value in articleRegionDic.items():
         resultData.append({
@@ -108,14 +109,14 @@ def getIPCharByArticleRegion():#统计文章发布地域的分布情况
         })
     return resultData
 
-def getIPCharByCommentsRegion():#统计评论发布地域的分布情况
+def getIPCharByCommentsRegion():
     commentRegionDic = {}
     for i in commentList:
         if i[3] != '无':
-            if i[3] in commentRegionDic.keys():
-                commentRegionDic[i[3]] += 1
-            else:
+            if commentRegionDic.get(i[3],-1) == -1:
                 commentRegionDic[i[3]] = 1
+            else:
+                commentRegionDic[i[3]] += 1
     resultData = []
     for key,value in commentRegionDic.items():
         resultData.append({
@@ -124,35 +125,33 @@ def getIPCharByCommentsRegion():#统计评论发布地域的分布情况
         })
     return resultData
 
-def getCommentCharDataOne():# 统计评论点赞数的分布情况
+def getCommentCharDataOne():
     xData = []
     rangeNum = 20
-    for item in range(100):
+    for item in range(1,100):
         xData.append(str(rangeNum * item) + '-' + str(rangeNum * (item + 1)))
     yData = [0 for x in range(len(xData))]
     for comment in commentList:
-        for item in range(100):
-            if int(comment[2]) < rangeNum * (item + 1):
+        for item in range(99):
+            if int(comment[2]) < rangeNum * (item + 2):
                 yData[item] += 1
                 break
     return xData,yData
 
-def getCommentCharDataTwo():# 统计评论数据中不同性别的数量
+def getCommentCharDataTwo():
     genderDic = {}
     for i in commentList:
-        if i[6] in genderDic.keys():
-            genderDic[i[6]] += 1
-        else:
+        if genderDic.get(i[6],-1) == -1:
             genderDic[i[6]] = 1
-    resultData = []
-    for key,value in genderDic.items():
-        resultData.append({
-            'name':key,
-            'value':value
-        })
+        else:
+            genderDic[i[6]] += 1
+    resultData = [{
+        'name':x[0],
+        'value':x[1]
+    } for x in genderDic.items()]
     return resultData
 
-def getYuQingCharDataOne():# 统计热词中正面、中性、负面的数量
+def getYuQingCharDataOne():
     hotWordList = getAllHotWords()
     xData = ['正面','中性','负面']
     yData = [0,0,0]
@@ -164,19 +163,19 @@ def getYuQingCharDataOne():# 统计热词中正面、中性、负面的数量
             yData[1] += 1
         elif emotionValue < 0.5:
             yData[2] += 1
-    finalData = [{
+    bieData = [{
         'name':x,
         'value':yData[index]
     } for index,x in enumerate(xData)]
-    return xData,yData,finalData
+    return xData,yData,bieData
 
-def getYuQingCharDataTwo():# 统计评论列表和文章列表中的情感值
+def getYuQingCharDataTwo():
     xData = ['正面', '中性', '负面']
-    finalData1 = [{
+    bieData1 = [{
         'name':x,
         'value':0
     } for x in xData]
-    finalData2 = [{
+    bieData2 = [{
         'name': x,
         'value': 0
     } for x in xData]
@@ -184,27 +183,27 @@ def getYuQingCharDataTwo():# 统计评论列表和文章列表中的情感值
     for comment in commentList:
         emotionValue = SnowNLP(comment[4]).sentiments
         if emotionValue > 0.5:
-            finalData1[0]['value'] += 1
+            bieData1[0]['value'] += 1
         elif emotionValue == 0.5:
-            finalData1[1]['value'] += 1
+            bieData1[1]['value'] += 1
         elif emotionValue < 0.5:
-            finalData1[2]['value'] += 1
+            bieData1[2]['value'] += 1
     for artile in articleList:
         emotionValue = SnowNLP(artile[5]).sentiments
         if emotionValue > 0.5:
-            finalData2[0]['value'] += 1
+            bieData2[0]['value'] += 1
         elif emotionValue == 0.5:
-            finalData2[1]['value'] += 1
+            bieData2[1]['value'] += 1
         elif emotionValue < 0.5:
-            finalData2[2]['value'] += 1
-    return finalData1,finalData2
+            bieData2[2]['value'] += 1
+    return bieData1,bieData2
 
-def getYuQingCharDataThree():# 提取前10个热词及其对应的出现频率
+def getYuQingCharDataThree():
     hotWordList = getAllHotWords()
-    xData = []
-    yData = []
+    x1Data = []
+    y1Data = []
     for i in hotWordList[:10]:
-        xData.append(i[0])
-        yData.append(int(i[1]))
-    return xData,yData
+        x1Data.append(i[0])
+        y1Data.append(int(i[1]))
+    return x1Data,y1Data
 
