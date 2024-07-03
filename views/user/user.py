@@ -14,7 +14,7 @@ ub = Blueprint('user',
 @ub.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html')
+        return render_template('login_and_register.html')
     else:
 
         def filter_fn(user):
@@ -34,7 +34,7 @@ def login():
 @ub.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-        return render_template('register.html')
+        return render_template('login_and_register.html')
     else:
 
         def filter_fn(user):
