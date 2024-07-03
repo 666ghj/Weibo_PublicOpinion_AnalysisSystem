@@ -20,13 +20,13 @@ def save_to_sql():
         concatArticlePd.to_sql('article', con=engine, if_exists='replace', index=False)
         concatCommentsPd.to_sql('comments', con=engine, if_exists='replace', index=False)
     except:
-        articleNewPd = pd.read_csv('articleData.csv')
-        commentNewPd = pd.read_csv('articleComments.csv')
+        articleNewPd = pd.read_csv('article.csv')
+        commentNewPd = pd.read_csv('comments.csv')
         articleNewPd.to_sql('article',con=engine,if_exists='replace',index=False)
         commentNewPd.to_sql('comments',con=engine,if_exists='replace',index=False)
 
-    os.remove('./articleData.csv')
-    os.remove('./articleComments.csv')
+    os.remove('./article.csv')
+    os.remove('./comments.csv')
 
 if __name__ == '__main__':
     save_to_sql()
