@@ -1,5 +1,5 @@
 from pymysql import *
-conn = connect(host='localhost',port=3306,user='root',password='123456',database='weiboarticles')
+conn = connect(host='10.92.35.13',port=3306,user='XiaoXueQi',password='XiaoXueQi',database='Weibo_PublicOpinion_AnalysisSystem')
 cursor = conn.cursor()
 def query(sql,params,type="no_select"):
     params = tuple(params)
