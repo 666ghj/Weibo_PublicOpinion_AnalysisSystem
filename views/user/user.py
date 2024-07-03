@@ -2,7 +2,7 @@ import time
 from flask import Blueprint, redirect, render_template, request,Flask, session
 
 from utils.query import query
-from utils.errResp import errorResponse
+from utils.errorResponse import errorResponse
 
 
 ub = Blueprint('user',__name__,url_prefix='/user',template_folder='templates')
