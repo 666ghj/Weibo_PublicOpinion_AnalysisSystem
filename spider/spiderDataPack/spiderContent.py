@@ -5,8 +5,8 @@ import os
 from datetime import datetime
 
 def init():
-    if not os.path.exists('./articleData.csv'):
-        with open('./articleData.csv','w',encoding='utf-8',newline='') as csvFile:
+    if not os.path.exists('./article.csv'):
+        with open('./article.csv','w',encoding='utf-8',newline='') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow([
                 'id',
@@ -26,7 +26,7 @@ def init():
             ])
 
 def writerRow(row):
-    with open('./articleData.csv', 'a', encoding='utf-8', newline='') as csvFile:
+    with open('./article.csv', 'a', encoding='utf-8', newline='') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(row)
 
@@ -43,7 +43,7 @@ def get_data(url,params):
 
 def getAllTypeList():
     typeList = []
-    with open('./navData.csv','r',encoding='utf-8') as reader:
+    with open('./nav.csv','r',encoding='utf-8') as reader:
         readerCsv = csv.reader(reader)
         next(reader)
         for nav in readerCsv:
