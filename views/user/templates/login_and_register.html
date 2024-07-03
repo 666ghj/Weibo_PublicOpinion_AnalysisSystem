@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>原神登录</title>
+    <title>微博舆情分析系统 | 登录</title>
     <link rel="icon" href="../../../static/原神启动/favicon.ico">
 </head>
 
@@ -326,7 +326,7 @@
     <div id="black-hid">
     </div>
 
-    <form id="login" class="login show">
+    <form id="login" class="login show" method="POST" action="/user/login">
         <div class="login_box">
             <div class="title">
                 <!-- <a class="QRcode" href=""><img src="login_resources/二维码 (1).png" alt=""></a> -->
@@ -335,8 +335,8 @@
             </div>
         </div>
         <div class="content">
-            <div class="input"><input type="text" placeholder="输入手机号/邮箱"></div>
-            <div class="input"><input type="password" placeholder="输入密码"></div>
+            <div class="input"><input type="text" name="username" placeholder="输入账号/原神"></div>
+            <div class="input"><input type="password" name="password" placeholder="输入密码/始める！"></div>
         </div>
         <div class="register-text">
             <span>
@@ -355,7 +355,7 @@
     </form>
 
 
-    <form id="register" class="register">
+    <form id="register" class="register" method="POST" action="/user/register">
         <div class="login_box">
             <div class="title">
                 <a class="logo" href=""><img src="../../../static/原神启动//logo2.08ebb840.png" alt=""></a>
@@ -367,11 +367,11 @@
                 <span
                     style="display: inline-block;width: 60px;height: 60px;font-size: 21px;font-weight: 800;color: black;line-height: 60px;text-align: center; ">
                     +86</span>
-                <input style="width: 452px;float: right;" type="text" placeholder="输入手机号">
+                <input style="width: 452px;float: right;" type="text" name="username" placeholder="输入要注册的账号">
                 <a class="yanzhengma" href=""
-                    style="position: absolute; top: 43px;right: 60px;color: #d6c194;font-weight: 700;letter-spacing: 0.1em;">获取验证码</a>
+                    style="position: absolute; top: 43px;right: 60px;color: #d6c194;font-weight: 700;letter-spacing: 0.1em;">我是假按钮</a>
             </div>
-            <div class="input"><input type="text" placeholder="输入短信验证码"></div>
+            <div class="input"><input type="text" name="password" placeholder="设定密码"></div>
         </div>
         <div class="xieyi">
             <input type="checkbox">
