@@ -17,7 +17,8 @@ CREATE TABLE `article` (
   `authorAvatar` text,
   `authorName` text,
   `authorDetail` text,
-  `isVip` double DEFAULT NULL
+  `isVip` double DEFAULT NULL,
+  `topic` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
@@ -32,7 +33,8 @@ CREATE TABLE `comments` (
   `authorName` text,
   `authorGender` text,
   `authorAddress` text,
-  `authorAvatar` text
+  `authorAvatar` text,
+  `topic` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
