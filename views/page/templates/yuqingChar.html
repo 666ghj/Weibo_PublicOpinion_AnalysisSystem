@@ -1,0 +1,363 @@
+{% extends 'base_page.html' %}
+{% block title %}
+    舆情分析
+{% endblock %}
+{% block  nav %}
+<nav class="iq-sidebar-menu">
+                  <ul id="iq-sidebar-toggle" class="side-menu">
+                      <li class="px-3 pt-3 pb-2 ">
+                          <span class="text-uppercase small font-weight-bold">首页</span>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/home" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">首页</span>
+                          </a>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/hotWord" class="svg-icon ">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">热词统计</span>
+                          </a>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/tableData" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">微博舆情统计</span>
+                          </a>
+                      </li>
+                      <li class="px-3 pt-3 pb-2 ">
+                          <span class="text-uppercase small font-weight-bold">数据可视化</span>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/articleChar" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">文章分析</span>
+                          </a>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/ipChar" class="svg-icon">
+                              <i class="">
+                                  <svg class="icon line" width="18" id="receipt" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path d="M17,16V3L13,5,10,3,7,5,3,3V17.83A3.13,3.13,0,0,0,5.84,21,3,3,0,0,0,9,18V17a1,1,0,0,1,1-1H20a1,1,0,0,1,1,1v1a3,3,0,0,1-3,3H6" style="fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path>
+                                      <line x1="8" y1="10" x2="12" y2="10" style="fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></line>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">IP分析</span>
+                          </a>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/commentChar" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                                  </svg>
+                              </i><span class="ml-2">评论分析</span>
+                          </a>
+                      </li>
+                      <li class="active sidebar-layout">
+                          <a href="/page/yuqingChar" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">舆情分析</span>
+                          </a>
+                      </li>
+                      <li class="px-3 pt-3 pb-2">
+                          <span class="text-uppercase small font-weight-bold">词云图</span>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/articleCloud" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                  </svg>
+                              </i><span class="ml-2">文章内容词云图</span>
+                          </a>
+                      </li>
+                  </ul>
+              </nav>
+{% endblock %}
+
+{% block content %}
+          <div class="container-fluid">
+                <div class="row">
+              <div class="col-md-12 mb-4 mt-1">
+                 <div class="d-flex flex-wrap justify-content-between align-items-center">
+                     <h4 class="font-weight-bold">舆情分析</h4>
+                 </div>
+              </div>
+           </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                         <div class="card card-block">
+                            <div class="card-header d-flex justify-content-between pb-0">
+                               <div class="header-title">
+                                  <h4 class="card-title mb-0">热词情感趋势柱状图</h4>
+                               </div>
+                            </div>
+                            <div class="card-body">
+                               <div id="main" style="width: 100%;height: 450px"></div>
+                            </div>
+                         </div>
+                      </div>
+                    <div class="col-lg-6">
+                         <div class="card card-block">
+                            <div class="card-header d-flex justify-content-between pb-0">
+                               <div class="header-title">
+                                  <h4 class="card-title mb-0">热词情感趋势树形图</h4>
+                               </div>
+                            </div>
+                            <div class="card-body">
+                               <div id="mainTwo" style="width: 100%;height: 450px"></div>
+                            </div>
+                         </div>
+                      </div>
+                    <div class="col-lg-6">
+                         <div class="card card-block">
+                            <div class="card-header d-flex justify-content-between pb-0">
+                               <div class="header-title">
+                                  <h4 class="card-title mb-0">文章内容与评论内容舆情趋势饼状图</h4>
+                               </div>
+                            </div>
+                            <div class="card-body">
+                               <div id="mainThree" style="width: 100%;height: 450px"></div>
+                            </div>
+                         </div>
+                      </div>
+                    <div class="col-lg-6">
+                         <div class="card card-block">
+                            <div class="card-header d-flex justify-content-between pb-0">
+                               <div class="header-title">
+                                  <h4 class="card-title mb-0">热词TOP10</h4>
+                               </div>
+                            </div>
+                            <div class="card-body">
+                               <div id="mainFore" style="width: 100%;height: 450px"></div>
+                            </div>
+                         </div>
+                      </div>
+                </div>
+          </div>
+
+{% endblock %}
+
+{% block echarts %}
+    <script>
+            var chartDom = document.getElementById('main');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            var colors = ['#66CC99', '#FFCC66', '#FF6666'];
+            option = {
+              title: {
+                text: '热词情感分析柱状图'
+              },
+              tooltip: {
+                trigger: 'axis'
+              },
+              legend: {
+                data: ['Rainfall']
+              },
+              toolbox: {
+                show: true,
+                feature: {
+                  dataView: { show: true, readOnly: false },
+                  magicType: { show: true, type: ['line', 'bar'] },
+                  restore: { show: true },
+                  saveAsImage: { show: true }
+                }
+              },
+              calculable: true,
+              xAxis: [
+                {
+                  type: 'category',
+                  // prettier-ignore
+                  data: {{ xData | tojson }}
+                }
+              ],
+              yAxis: [
+                {
+                  type: 'value'
+                }
+              ],
+              series: [
+                {
+                  name: '舆情个数',
+                  type: 'bar',
+                  data: {{ yData }},
+                  markPoint: {
+                    data: [
+                      { type: 'max', name: 'Max' },
+                      { type: 'min', name: 'Min' }
+                    ]
+                  },
+                  markLine: {
+                    data: [{ type: 'average', name: 'Avg' }]
+                  },
+                  itemStyle: {
+                    color: function (parmas) {
+                      return colors[parmas.dataIndex % colors.length];
+                    }
+                  }
+                }
+              ]
+            };
+
+            option && myChart.setOption(option);
+
+    </script>
+    <script>
+        var chartDom = document.getElementById('mainTwo');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+          series: [
+            {
+              type: 'treemap',
+              data: {{ bieData | tojson }}
+            }
+          ]
+        };
+
+        option && myChart.setOption(option);
+
+    </script>
+    <script>
+    var chartDom = document.getElementById('mainThree');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b}: {c} ({d}%)'
+      },
+      legend: {
+        data: [
+          '正面',
+          '负面',
+          '中性'
+        ]
+      },
+      series: [
+        {
+          name: '评论舆情结果',
+          type: 'pie',
+          selectedMode: 'single',
+          radius: [0, '30%'],
+          label: {
+            position: 'inner',
+            fontSize: 14
+          },
+          labelLine: {
+            show: false
+          },
+          data: {{ bieData1 | tojson }}
+        },
+        {
+          name: '文章舆情结果',
+          type: 'pie',
+          radius: ['45%', '60%'],
+          labelLine: {
+            length: 30
+          },
+          label: {
+            formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+            backgroundColor: '#F6F8FC',
+            borderColor: '#8C8D8E',
+            borderWidth: 1,
+            borderRadius: 4,
+            rich: {
+              a: {
+                color: '#6E7079',
+                lineHeight: 22,
+                align: 'center'
+              },
+              hr: {
+                borderColor: '#8C8D8E',
+                width: '100%',
+                borderWidth: 1,
+                height: 0
+              },
+              b: {
+                color: '#4C5058',
+                fontSize: 14,
+                fontWeight: 'bold',
+                lineHeight: 33
+              },
+              per: {
+                color: '#fff',
+                backgroundColor: '#4C5058',
+                padding: [3, 4],
+                borderRadius: 4
+              }
+            }
+          },
+          data: {{ bieData2 | tojson }}
+        }
+      ]
+    };
+
+    option && myChart.setOption(option);
+
+    </script>
+    <script>
+        var chartDom = document.getElementById('mainFore');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          legend: {},
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+          },
+          yAxis: {
+            type: 'category',
+            data: {{ x1Data | tojson }}
+          },
+          series: [
+            {
+              name: '热词出现个数',
+              type: 'bar',
+              data:{{ y1Data }}
+            }
+          ]
+        };
+
+        option && myChart.setOption(option);
+
+    </script>
+{% endblock %}

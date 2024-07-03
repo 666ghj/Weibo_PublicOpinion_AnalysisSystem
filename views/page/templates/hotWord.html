@@ -1,0 +1,494 @@
+{% extends 'base_page.html' %}
+{% block title %}
+    热词统计
+{% endblock %}
+
+{% block  nav %}
+<nav class="iq-sidebar-menu">
+                  <ul id="iq-sidebar-toggle" class="side-menu">
+                      <li class="px-3 pt-3 pb-2 ">
+                          <span class="text-uppercase small font-weight-bold">首页</span>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/home" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">首页</span>
+                          </a>
+                      </li>
+                      <li class="active sidebar-layout">
+                          <a href="/page/hotWord" class="svg-icon ">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">热词统计</span>
+                          </a>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/tableData" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">微博舆情统计</span>
+                          </a>
+                      </li>
+                      <li class="px-3 pt-3 pb-2 ">
+                          <span class="text-uppercase small font-weight-bold">数据可视化</span>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/articleChar" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">文章分析</span>
+                          </a>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/ipChar" class="svg-icon">
+                              <i class="">
+                                  <svg class="icon line" width="18" id="receipt" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path d="M17,16V3L13,5,10,3,7,5,3,3V17.83A3.13,3.13,0,0,0,5.84,21,3,3,0,0,0,9,18V17a1,1,0,0,1,1-1H20a1,1,0,0,1,1,1v1a3,3,0,0,1-3,3H6" style="fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path>
+                                      <line x1="8" y1="10" x2="12" y2="10" style="fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></line>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">IP分析</span>
+                          </a>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/commentChar" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                                  </svg>
+                              </i><span class="ml-2">评论分析</span>
+                          </a>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/yuqingChar" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2">舆情分析</span>
+                          </a>
+                      </li>
+                      <li class="px-3 pt-3 pb-2">
+                          <span class="text-uppercase small font-weight-bold">词云图</span>
+                      </li>
+                      <li class=" sidebar-layout">
+                          <a href="/page/articleCloud" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                  </svg>
+                              </i><span class="ml-2">文章内容词云图</span>
+                          </a>
+                      </li>
+                  </ul>
+              </nav>
+{% endblock %}
+{% block content %}
+          <div class="container-fluid">
+   <div class="row">
+      <div class="col-md-12 mb-4 mt-1">
+         <div class="d-flex flex-wrap justify-content-between align-items-center">
+             <h4 class="font-weight-bold">热词统计页</h4>
+         </div>
+      </div>
+   </div>
+      <div class="row">
+          <div class="col-lg-12">
+         <div class="card card-block card-stretch card-height">
+            <div class="card-body">
+                     <div class="collapse" id="form-element-15">
+                           <div class="card"><kbd class="bg-dark"><pre id="select-size" class="text-white"><code>
+&lt;div class="form-group"&gt;
+   &lt;label&gt;Small&lt;/label&gt;
+   &lt;select class="form-control form-control-sm mb-3"&gt;
+      &lt;option selected=""&gt;Open this select menu&lt;/option&gt;
+      &lt;option value="1"&gt;One&lt;/option&gt;
+      &lt;option value="2"&gt;Two&lt;/option&gt;
+      &lt;option value="3"&gt;Three&lt;/option&gt;
+   &lt;/select&gt;
+&lt;/div&gt;
+&lt;div class="form-group"&gt;
+   &lt;label&gt;Default&lt;/label&gt;
+   &lt;select class="form-control mb-3"&gt;
+      &lt;option selected=""&gt;Open this select menu&lt;/option&gt;
+      &lt;option value="1"&gt;One&lt;/option&gt;
+      &lt;option value="2"&gt;Two&lt;/option&gt;
+      &lt;option value="3"&gt;Three&lt;/option&gt;
+   &lt;/select&gt;
+&lt;/div&gt;
+&lt;div class="form-group"&gt;
+   &lt;label&gt;Large&lt;/label&gt;
+   &lt;select class="form-control form-control-lg"&gt;
+      &lt;option selected=""&gt;Open this select menu&lt;/option&gt;
+      &lt;option value="1"&gt;One&lt;/option&gt;
+      &lt;option value="2"&gt;Two&lt;/option&gt;
+      &lt;option value="3"&gt;Three&lt;/option&gt;
+   &lt;/select&gt;
+&lt;/div&gt;
+</code></pre></kbd></div>
+                        </div>
+                     <div class="form-group">
+                        <label>热词选择</label>
+                        <select onchange="hotWordChange(event)" class="form-control mb-3">
+                            {% for i in hotWordList %}
+                                {% if defaultHotWord == i[0] %}
+                                                                                       <option selected value="{{ i[0] }}">{{ i[0] }}</option>
+                                {% else %}
+                                                                                       <option value="{{ i[0] }}">{{ i[0] }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                         <script>
+                             function hotWordChange(e){
+                                 window.location.href = 'http://127.0.0.1:5000/page/hotWord?hotWord=' + e.target.value
+                             }
+                         </script>
+                     </div>
+                  </div>
+         </div>
+
+      </div>
+      </div>
+          <div class="row" style="justify-content: center">
+                <div class="col-md-6 col-xl-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title font-size-16 mt-0">{{ defaultHotWord }}</h4>
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">热词名称：{{ defaultHotWord }}</li>
+                                            <li class="list-group-item">出现次数：{{ hotWordLen }}次</li>
+                                            <li class="list-group-item">热词情感：{{ sentences }}</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+        </div>
+          <div class="row">
+              <div class="col-lg-12">
+                  <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title font-size-16 mt-0">热词年份变化趋势</h4>
+                                        </div>
+                                        <div id="main" style="width:100%;height: 450px"></div>
+                                    </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-lg-12">
+                  <div class="card">
+                  <div class="card-header d-flex justify-content-between">
+                     <div class="header-title">
+                        <h4 class="card-title">热词查询表格</h4>
+                     </div>
+                  <div class="header-action">
+                           <i data-toggle="collapse" data-target="#datatable-1" aria-expanded="false">
+                              <svg width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                              </svg>
+                           </i>
+                        </div>
+                  </div>
+                  <div class="card-body">
+                     <div class="collapse" id="datatable-1">
+                           <div class="card"><kbd class="bg-dark">
+                               <pre id="bootstrap-datatables" class="text-white"><code>
+&lt;table id="datatable" class="table data-table table-striped table-bordered" &gt;
+   &lt;thead&gt;
+      &lt;tr&gt;
+         &lt;th&gt;Name&lt;/th&gt;
+         &lt;th&gt;Position&lt;/th&gt;
+         &lt;th&gt;Office&lt;/th&gt;
+         &lt;th&gt;Age&lt;/th&gt;
+         &lt;th&gt;Start date&lt;/th&gt;
+         &lt;th&gt;Salary&lt;/th&gt;
+      &lt;/tr&gt;
+   &lt;/thead&gt;
+   &lt;tbody&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Tiger Nixon&lt;/td&gt;
+         &lt;td&gt;System Architect&lt;/td&gt;
+         &lt;td&gt;Edinburgh&lt;/td&gt;
+         &lt;td&gt;61&lt;/td&gt;
+         &lt;td&gt;2011/04/25&lt;/td&gt;
+         &lt;td&gt;$320,800&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Garrett Winters&lt;/td&gt;
+         &lt;td&gt;Accountant&lt;/td&gt;
+         &lt;td&gt;Tokyo&lt;/td&gt;
+         &lt;td&gt;63&lt;/td&gt;
+         &lt;td&gt;2011/07/25&lt;/td&gt;
+         &lt;td&gt;$170,750&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Ashton Cox&lt;/td&gt;
+         &lt;td&gt;Junior Technical Author&lt;/td&gt;
+         &lt;td&gt;San Francisco&lt;/td&gt;
+         &lt;td&gt;66&lt;/td&gt;
+         &lt;td&gt;2009/01/12&lt;/td&gt;
+         &lt;td&gt;$86,000&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Cedric Kelly&lt;/td&gt;
+         &lt;td&gt;Senior Javascript Developer&lt;/td&gt;
+         &lt;td&gt;Edinburgh&lt;/td&gt;
+         &lt;td&gt;22&lt;/td&gt;
+         &lt;td&gt;2012/03/29&lt;/td&gt;
+         &lt;td&gt;$433,060&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Airi Satou&lt;/td&gt;
+         &lt;td&gt;Accountant&lt;/td&gt;
+         &lt;td&gt;Tokyo&lt;/td&gt;
+         &lt;td&gt;33&lt;/td&gt;
+         &lt;td&gt;2008/11/28&lt;/td&gt;
+         &lt;td&gt;$162,700&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Brielle Williamson&lt;/td&gt;
+         &lt;td&gt;Integration Specialist&lt;/td&gt;
+         &lt;td&gt;New York&lt;/td&gt;
+         &lt;td&gt;61&lt;/td&gt;
+         &lt;td&gt;2012/12/02&lt;/td&gt;
+         &lt;td&gt;$372,000&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Herrod Chandler&lt;/td&gt;
+         &lt;td&gt;Sales Assistant&lt;/td&gt;
+         &lt;td&gt;San Francisco&lt;/td&gt;
+         &lt;td&gt;59&lt;/td&gt;
+         &lt;td&gt;2012/08/06&lt;/td&gt;
+         &lt;td&gt;$137,500&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Rhona Davidson&lt;/td&gt;
+         &lt;td&gt;Integration Specialist&lt;/td&gt;
+         &lt;td&gt;Tokyo&lt;/td&gt;
+         &lt;td&gt;55&lt;/td&gt;
+         &lt;td&gt;2010/10/14&lt;/td&gt;
+         &lt;td&gt;$327,900&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Colleen Hurst&lt;/td&gt;
+         &lt;td&gt;Javascript Developer&lt;/td&gt;
+         &lt;td&gt;San Francisco&lt;/td&gt;
+         &lt;td&gt;39&lt;/td&gt;
+         &lt;td&gt;2009/09/15&lt;/td&gt;
+         &lt;td&gt;$205,500&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Sonya Frost&lt;/td&gt;
+         &lt;td&gt;Software Engineer&lt;/td&gt;
+         &lt;td&gt;Edinburgh&lt;/td&gt;
+         &lt;td&gt;23&lt;/td&gt;
+         &lt;td&gt;2008/12/13&lt;/td&gt;
+         &lt;td&gt;$103,600&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Jena Gaines&lt;/td&gt;
+         &lt;td&gt;Office Manager&lt;/td&gt;
+         &lt;td&gt;London&lt;/td&gt;
+         &lt;td&gt;30&lt;/td&gt;
+         &lt;td&gt;2008/12/19&lt;/td&gt;
+         &lt;td&gt;$90,560&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Quinn Flynn&lt;/td&gt;
+         &lt;td&gt;Support Lead&lt;/td&gt;
+         &lt;td&gt;Edinburgh&lt;/td&gt;
+         &lt;td&gt;22&lt;/td&gt;
+         &lt;td&gt;2013/03/03&lt;/td&gt;
+         &lt;td&gt;$342,000&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Charde Marshall&lt;/td&gt;
+         &lt;td&gt;Regional Director&lt;/td&gt;
+         &lt;td&gt;San Francisco&lt;/td&gt;
+         &lt;td&gt;36&lt;/td&gt;
+         &lt;td&gt;2008/10/16&lt;/td&gt;
+         &lt;td&gt;$470,600&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Haley Kennedy&lt;/td&gt;
+         &lt;td&gt;Senior Marketing Designer&lt;/td&gt;
+         &lt;td&gt;London&lt;/td&gt;
+         &lt;td&gt;43&lt;/td&gt;
+         &lt;td&gt;2012/12/18&lt;/td&gt;
+         &lt;td&gt;$313,500&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Tatyana Fitzpatrick&lt;/td&gt;
+         &lt;td&gt;Regional Director&lt;/td&gt;
+         &lt;td&gt;London&lt;/td&gt;
+         &lt;td&gt;19&lt;/td&gt;
+         &lt;td&gt;2010/03/17&lt;/td&gt;
+         &lt;td&gt;$385,750&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Michael Silva&lt;/td&gt;
+         &lt;td&gt;Marketing Designer&lt;/td&gt;
+         &lt;td&gt;London&lt;/td&gt;
+         &lt;td&gt;66&lt;/td&gt;
+         &lt;td&gt;2012/11/27&lt;/td&gt;
+         &lt;td&gt;$198,500&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Paul Byrd&lt;/td&gt;
+         &lt;td&gt;Chief Financial Officer (CFO)&lt;/td&gt;
+         &lt;td&gt;New York&lt;/td&gt;
+         &lt;td&gt;64&lt;/td&gt;
+         &lt;td&gt;2010/06/09&lt;/td&gt;
+         &lt;td&gt;$725,000&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Gloria Little&lt;/td&gt;
+         &lt;td&gt;Systems Administrator&lt;/td&gt;
+         &lt;td&gt;New York&lt;/td&gt;
+         &lt;td&gt;59&lt;/td&gt;
+         &lt;td&gt;2009/04/10&lt;/td&gt;
+         &lt;td&gt;$237,500&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Bradley Greer&lt;/td&gt;
+         &lt;td&gt;Software Engineer&lt;/td&gt;
+         &lt;td&gt;London&lt;/td&gt;
+         &lt;td&gt;41&lt;/td&gt;
+         &lt;td&gt;2012/10/13&lt;/td&gt;
+         &lt;td&gt;$132,000&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+         &lt;td&gt;Dai Rios&lt;/td&gt;
+         &lt;td&gt;Personnel Lead&lt;/td&gt;
+         &lt;td&gt;Edinburgh&lt;/td&gt;
+         &lt;td&gt;35&lt;/td&gt;
+         &lt;td&gt;2012/09/26&lt;/td&gt;
+         &lt;td&gt;$217,500&lt;/td&gt;
+      &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre></kbd></div>
+                        </div>
+                     <p>根据选择的热词从而查询出评论数据</p>
+                     <div class="table-responsive">
+                        <div id="datatable-1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                            <div class="row"><div class="col-sm-12"><table id="datatable-1" class="table data-table table-striped table-bordered dataTable" role="grid" aria-describedby="datatable-1_info">
+                           <thead>
+                              <tr role="row">
+                                  <th class="sorting sorting_asc" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 250.844px;">文章ID</th>
+                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 392.094px;">评论用户</th>
+                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 190.75px;">评论性别</th>
+                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 84.2656px;">评论地址</th>
+                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 172.594px;">评论内容</th>
+                                  <th class="text-right sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 158.453px;">点赞量</th></tr>
+                           </thead>
+                           <tbody>
+                                {% for i in comments %}
+                                <tr class="odd">
+                                     <td class="sorting_1">{{ i[0] }}</td>
+                                     <td>{{ i[5] }}</td>
+                                     <td>
+                                         {% if i[6]  =='f' %}
+                                             女生
+                                         {% else %}
+                                            男生
+                                         {% endif %}
+                                     </td>
+                                     <td>{{ i[3] }}</td>
+                                     <td>{{ i[4] }}</td>
+                                     <td class="text-right">👍{{ i[2] }}</td>
+                                  </tr>
+                               {% endfor %}
+                           </tbody>
+                        </table></div></div>
+                     </div>
+                  </div>
+               </div>
+              </div>
+          </div>
+</div>
+
+{% endblock %}
+
+{% block echarts %}
+    <script>
+    var chartDom = document.getElementById('main');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['热词出现时间分布个数']
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ['line', 'bar'] },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      calculable: true,
+      xAxis: [
+        {
+          type: 'category',
+          // prettier-ignore
+          data: {{ xData | tojson }}
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+        dataZoom: [
+        {
+          show: true,
+          start: 10,
+          end: 60
+        },
+        {
+          type: 'inside',
+          start: 10,
+          end: 60
+        }
+      ],
+      series: [
+        {
+          name: '热词出现时间分布个数',
+          type: 'bar',
+          data: {{ yData }},
+          markPoint: {
+            data: [
+              { type: 'max', name: 'Max' },
+              { type: 'min', name: 'Min' }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          }
+        }
+      ]
+    };
+
+    option && myChart.setOption(option);
+
+    </script>
+{% endblock %}
