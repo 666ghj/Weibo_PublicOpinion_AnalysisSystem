@@ -40,6 +40,7 @@ def model_train():
 
     # 计算模型准确度
     accuracy = accuracy_score(y_test, y_pred)
+    print(accuracy)
 
 if __name__ == "__main__":
     model_train()  # 训练模型并计算准确度
