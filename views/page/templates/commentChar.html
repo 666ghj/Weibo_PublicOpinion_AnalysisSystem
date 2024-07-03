@@ -150,3 +150,158 @@
 
 {% endblock %}
 
+{% block echarts %}
+    <script>
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+              title: {
+                text: '评论点赞量区间折线图',
+                left: '1%'
+              },
+              tooltip: {
+                trigger: 'axis'
+              },
+              grid: {
+                left: '5%',
+                right: '15%',
+                bottom: '10%'
+              },
+            legend:{},
+              xAxis: {
+                data: {{ xData | tojson }}
+              },
+              yAxis: {},
+              toolbox: {
+                right: 10,
+                feature: {
+                  dataZoom: {
+                    yAxisIndex: 'none'
+                  },
+                  restore: {},
+                  saveAsImage: {}
+                }
+              },
+              dataZoom: [
+                {
+                  show: true,
+                  start: 80,
+                  end: 100
+                },
+                {
+                  type: 'inside',
+                  start: 80,
+                  end: 100
+                }
+              ],
+              visualMap: {
+                top: 50,
+                right: 10,
+                pieces: [
+                  {
+                    gt: 0,
+                    lte: 50,
+                    color: '#93CE07'
+                  },
+                  {
+                    gt: 50,
+                    lte: 100,
+                    color: '#FBDB0F'
+                  },
+                  {
+                    gt: 100,
+                    lte: 150,
+                    color: '#FC7D02'
+                  },
+                  {
+                    gt: 150,
+                    lte: 200,
+                    color: '#FD0100'
+                  },
+                  {
+                    gt: 200,
+                    lte: 300,
+                    color: '#AA069F'
+                  },
+                  {
+                    gt: 300,
+                    color: '#AC3B2A'
+                  }
+                ],
+                outOfRange: {
+                  color: '#999'
+                }
+              },
+              series: {
+                name: '点赞个数',
+                type: 'line',
+                data: {{ yData }},
+                markLine: {
+                  silent: true,
+                  lineStyle: {
+                    color: '#333'
+                  },
+                  data: [
+                    {
+                      yAxis: 50
+                    },
+                    {
+                      yAxis: 100
+                    },
+                    {
+                      yAxis: 150
+                    },
+                    {
+                      yAxis: 200
+                    },
+                    {
+                      yAxis: 300
+                    }
+                  ]
+                }
+              }
+            }
+
+        option && myChart.setOption(option);
+
+    </script>
+    <script>
+        var chartDom = document.getElementById('mainTwo');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+          title: {
+            text: '评论性别占比饼图',
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left'
+          },
+          series: [
+            {
+              name: '性别个数',
+              type: 'pie',
+              radius: '50%',
+              data: {{ genderPieData | tojson }},
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        };
+
+        option && myChart.setOption(option);
+
+    </script>
+{% endblock %}
