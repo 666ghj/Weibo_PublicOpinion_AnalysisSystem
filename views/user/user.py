@@ -5,7 +5,6 @@ from flask import Blueprint, redirect, render_template, request, Flask, session
 from utils.query import query
 from utils.errorResponse import errorResponse
 
-hash_with_salt = hashlib.sha256('XiaoXueQi2024'.encode('utf-8'))
 ub = Blueprint('user',
                __name__,
                url_prefix='/user',
@@ -19,6 +18,7 @@ def login():
     else:
 
         def filter_fn(user):
+            hash_with_salt = hashlib.sha256('XiaoXueQi2024'.encode('utf-8'))
             hash_with_salt.update(request.form['password'].encode('utf-8'))
             return request.form[
                 'username'] in user and hash_with_salt.hexdigest in user
@@ -48,6 +48,7 @@ def register():
             return errorResponse('该用户名已被注册')
         else:
             time_tuple = time.localtime(time.time())
+            hash_with_salt = hashlib.sha256('XiaoXueQi2024'.encode('utf-8'))
             hash_with_salt.update(request.form['password'].encode('utf-8'))
             query(
                 '''
