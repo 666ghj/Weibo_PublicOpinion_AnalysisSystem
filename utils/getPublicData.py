@@ -79,7 +79,7 @@ def getAllArticleData():
 
 def getAllHotWords():
     data = []
-    df = pd.read_csv('./model/cipingTotal.csv',encoding='utf8')
+    df = pd.read_csv('./utils/cipingTotal.csv',encoding='utf8')
     for i in df.values:
         try:
             data.append([
