@@ -36,8 +36,6 @@ def register():
     if request.method == 'GET':
         return render_template('register.html')
     else:
-        if request.form['password'] != request.form['checkPassword']:
-            return errorResponse('两次密码不符合')
 
         def filter_fn(user):
             return request.form['username'] in user

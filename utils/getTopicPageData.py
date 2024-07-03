@@ -19,7 +19,7 @@ def getTopicPageCreatedAtCharData(topic):# 统计包含特定热词的评论在�
                 createdAt[i[1]] = 1
     return list(createdAt.keys()),list(createdAt.values())
 
-def getCommentFilterData(topic):# 筛选包含特定热词的评论并返回这些评论的数据
+def getCommentFilterDataTopic(topic):# 筛选包含特定热词的评论并返回这些评论的数据
     commentsList = getAllCommentsData()
     commentData = []
     for i in commentsList:
