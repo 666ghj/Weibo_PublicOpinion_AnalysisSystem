@@ -7,9 +7,9 @@ engine = create_engine('mysql+pymysql://XiaoXueQi:XiaoXueQi@10.92.35.13/Weibo_Pu
 def save_to_sql():
     try:
         artileOldPd = pd.read_sql('select * from article',engine)
-        articleNewPd = pd.read_csv('articleData.csv')
+        articleNewPd = pd.read_csv('article.csv')
         commentOldPd = pd.read_sql('select * from comments',engine)
-        commentNewPd = pd.read_csv('articleComments.csv')
+        commentNewPd = pd.read_csv('comments.csv')
 
         concatArticlePd = pd.concat([articleNewPd,artileOldPd],join='inner')
         concatCommentsPd = pd.concat([commentNewPd,commentOldPd],join='inner')
