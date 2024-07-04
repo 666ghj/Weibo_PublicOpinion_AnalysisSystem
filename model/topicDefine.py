@@ -39,7 +39,7 @@ def topicdefine():
     for x in articleList:
         label_article.append((x[0],predict_topic(x[5])))
     for x in commentList:
-        label_comments.append((x[8],predict_topic(x[4])))
+        label_comments.append((x[5],x[8],predict_topic(x[4])))
     return label_article,label_comments
 
 # 更新数据库
@@ -53,14 +53,14 @@ def update_data():
         params = [str(label),str(id)]
         query(sql, params)
     for row in label_comments:
-        id, label = row
-        sql = "UPDATE comments SET label = %s WHERE authorName = %s"
-        params = [str(label),str(id)]
+        id,image,label = row
+        sql = "UPDATE comments SET label = %s WHERE authorName=%s AND authorAvatar = %s"
+        params = [str(label),str(id),str(image)]
         query(sql, params)
 
 
 if __name__ == '__main__':
+    # drop_label()
+    # drop_label1()
     update_data()
 #删除文章和评论的标签列
-# drop_label()
-# drop_label1()
