@@ -1,2 +1,5 @@
 .conda
 *__pycache__/
+model2/*
+!model2/readme.md
+!model2/话题识别模型

@@ -9,7 +9,7 @@ def stopWordList():
     return [line.strip() for line in open('./model/stopWords.txt',encoding='utf8').readlines()]
 
 def get_img(field,tableName,targetImgSrc,resImgSrc):
-    con = connect(host='localhost',user='root',password='root',database='weiboarticles',port=3306,charset='utf8mb4')
+    con = connect(host='47.92.235.6',user='XiaoXueQi',password='XiaoXueQi',database='Weibo_PublicOpinion_AnalysisSystem',port=3306,charset='utf8mb4')
     cuser = con.cursor()
     sql = f'select {field} from {tableName}'
     cuser.execute(sql)

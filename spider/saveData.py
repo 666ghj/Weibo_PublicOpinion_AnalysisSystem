@@ -2,7 +2,7 @@ import os
 from sqlalchemy import create_engine
 import pandas as pd
 
-engine = create_engine('mysql+pymysql://XiaoXueQi:XiaoXueQi@10.92.35.13/Weibo_PublicOpinion_AnalysisSystem?charset=utf8mb4')
+engine = create_engine('mysql+pymysql://XiaoXueQi:XiaoXueQi@47.92.235.6/Weibo_PublicOpinion_AnalysisSystem?charset=utf8mb4')
 
 def save_to_sql():
     try:
