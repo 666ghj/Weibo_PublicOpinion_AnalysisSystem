@@ -128,12 +128,12 @@ def getIPCharByCommentsRegion():
 def getCommentCharDataOne():
     xData = []
     rangeNum = 20
-    for item in range(1,100):
+    for item in range(100):
         xData.append(str(rangeNum * item) + '-' + str(rangeNum * (item + 1)))
     yData = [0 for x in range(len(xData))]
     for comment in commentList:
-        for item in range(99):
-            if int(comment[2]) < rangeNum * (item + 2):
+        for item in range(100):
+            if int(comment[2]) < rangeNum * (item + 1):
                 yData[item] += 1
                 break
     return xData,yData
