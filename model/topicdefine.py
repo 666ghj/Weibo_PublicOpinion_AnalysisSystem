@@ -1,5 +1,6 @@
 from utils.query import query
 from utils.getPublicData import *
+from model2.model_use import *
 articleList = getAllArticleData()
 commentList = getAllCommentsData()
 
@@ -31,22 +32,14 @@ def drop_label1():# 删除标注列
     params = []
     query(sql, params)
 
-
 # 处理数据并添加标注
-def process_data(data):
-    processed_data =testmodel(data)
-    return processed_data
-
-def testmodel(test):
-    return "wicao"
-
 def topicdefine():
     label_article=[]
     label_comments=[]
     for x in articleList:
-        label_article.append((x[0],process_data(x[5])))
+        label_article.append((x[0],predict_topic(x[5])))
     for x in commentList:
-        label_comments.append((x[5],process_data(x[4])))
+        label_comments.append((x[5],predict_topic(x[4])))
     return label_article,label_comments
 
 # 更新数据库
