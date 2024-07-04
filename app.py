@@ -52,7 +52,7 @@ def run_script():
 
 if __name__ == '__main__':
     scheduler = BackgroundScheduler(timezone=utc)
-    scheduler.add_job(run_script, 'interval', minutes=1)
+    scheduler.add_job(run_script, 'interval', hours=5)
     scheduler.start()
 
     try:
