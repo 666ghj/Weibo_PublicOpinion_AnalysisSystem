@@ -1,5 +1,5 @@
 from flask import Flask, session, render_template, redirect, Blueprint, request
-from snownlp import SnowNLP
+from utils.mynlp import SnowNLP
 from utils.getHomePageData import *
 from utils.getHotWordPageData import *
 from utils.getTableData import *
