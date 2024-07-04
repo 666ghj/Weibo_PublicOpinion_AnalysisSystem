@@ -29,14 +29,30 @@ def before_reuqest():
 def catch_all(path):
     return render_template('404.html')
 
-def run_spider_script():
+def run_script():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     spider_script = os.path.join(current_dir, 'spider', 'main.py')
-    subprocess.run(['python', spider_script])
+    cutComments_script = os.path.join(current_dir, 'utils', 'cutComments.py')
+    cipingTotal_script = os.path.join(current_dir, 'utils', 'cipingTotal.py')
+
+    scripts = [
+        ("Spider Script", spider_script),
+        ("Cut Comments Script", cutComments_script),
+        ("Ciping Total Script", cipingTotal_script)
+    ]
+
+    for script_name, script_path in scripts:
+        try:
+            print(f"Running {script_name}...")
+            result = subprocess.run(['python', script_path], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            print(f"{script_name} finished successfully. Output:\n{result.stdout.decode()}")
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred while running {script_name}: {e.stderr.decode()}")
+
 
 if __name__ == '__main__':
     scheduler = BackgroundScheduler(timezone=utc)
-    scheduler.add_job(run_spider_script, 'interval', hours=5)
+    scheduler.add_job(run_script, 'interval', hours=5)
     scheduler.start()
 
     try:
