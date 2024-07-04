@@ -9,7 +9,7 @@ def spiderData():
         print('正在爬取导航栏数据')
         spiderNav()
     print('正在爬取文章数据')
-    spiderContent(1,1)
+    spiderContent(14,3)
     print('正在爬取文章评论数据')
     spiderComments()
 

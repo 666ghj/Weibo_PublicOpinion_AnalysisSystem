@@ -90,7 +90,7 @@ def readJson(response,type):
             isVip
         ])
 
-def start(typeNum=1,pageNum=1):
+def start(typeNum=14,pageNum=3):
     articleUrl = 'https://weibo.com/ajax/feed/hottimeline'
     init()
     typeList = getTypeList()
