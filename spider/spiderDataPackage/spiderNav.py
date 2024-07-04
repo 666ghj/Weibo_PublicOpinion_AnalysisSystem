@@ -2,7 +2,7 @@ import requests
 import csv
 import numpy as np
 import os
-from settings import navAddr
+from .settings import navAddr
 def init():
     if not os.path.exists(navAddr):
         with open(navAddr,'w',encoding='utf-8',newline='') as csvFile:

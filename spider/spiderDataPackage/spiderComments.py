@@ -3,7 +3,7 @@ import requests
 import csv
 import os
 from datetime import datetime
-from settings import articleAddr,commentsAddr
+from .settings import articleAddr,commentsAddr
 
 def init():
     if not os.path.exists(commentsAddr):

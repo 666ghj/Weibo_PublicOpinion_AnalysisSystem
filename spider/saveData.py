@@ -4,7 +4,7 @@ import pandas as pd
 
 engine = create_engine('mysql+pymysql://XiaoXueQi:XiaoXueQi@47.92.235.6/Weibo_PublicOpinion_AnalysisSystem?charset=utf8mb4')
 
-def save_to_sql():
+def saveData():
     try:
         oldArticle = pd.read_sql('select * from article',engine)
         newArticle = pd.read_csv('article.csv')
@@ -29,4 +29,4 @@ def save_to_sql():
     os.remove('./comments.csv')
 
 if __name__ == '__main__':
-    save_to_sql()
+    saveData()

@@ -1,5 +1,5 @@
 from spiderData import spiderData 
-from saveData import save_to_sql as saveData
+from saveData import saveData
 
 def main():
     print('正在爬取数据')
