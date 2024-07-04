@@ -44,15 +44,15 @@ def run_script():
     for script_name, script_path in scripts:
         try:
             print(f"Running {script_name}...")
-            result = subprocess.run(['python', script_path], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            print(f"{script_name} finished successfully. Output:\n{result.stdout.decode()}")
+            subprocess.run(['python', script_path], check=True)
+            print(f"{script_name} finished successfully.")
         except subprocess.CalledProcessError as e:
-            print(f"An error occurred while running {script_name}: {e.stderr.decode()}")
+            print(f"An error occurred while running {script_name}: {e}")
 
 
 if __name__ == '__main__':
     scheduler = BackgroundScheduler(timezone=utc)
-    scheduler.add_job(run_script, 'interval', hours=5)
+    scheduler.add_job(run_script, 'interval', minutes=1)
     scheduler.start()
 
     try:
