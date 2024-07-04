@@ -1,5 +1,5 @@
 from utils.getPublicData import *
-from snownlp import SnowNLP
+from utils.mynlp import SnowNLP
 articleList = getAllArticleData()
 commentList = getAllCommentsData()
 
@@ -157,12 +157,12 @@ def getYuQingCharDataOne():
     yData = [0,0,0]
     for word in hotWordList:
         emotionValue = SnowNLP(word[0]).sentiments
-        if emotionValue > 0.5:
+        if emotionValue > 0.4:
             yData[0] += 1
-        elif emotionValue == 0.5:
-            yData[1] += 1
-        elif emotionValue < 0.5:
+        elif emotionValue < 0.2:
             yData[2] += 1
+        else:
+            yData[1] += 1
     bieData = [{
         'name':x,
         'value':yData[index]
@@ -182,20 +182,20 @@ def getYuQingCharDataTwo():
 
     for comment in commentList:
         emotionValue = SnowNLP(comment[4]).sentiments
-        if emotionValue > 0.5:
+        if emotionValue > 0.4:
             bieData1[0]['value'] += 1
-        elif emotionValue == 0.5:
-            bieData1[1]['value'] += 1
-        elif emotionValue < 0.5:
+        elif emotionValue < 0.2:
             bieData1[2]['value'] += 1
+        else:
+            bieData1[1]['value'] += 1
     for artile in articleList:
         emotionValue = SnowNLP(artile[5]).sentiments
-        if emotionValue > 0.5:
+        if emotionValue > 0.4:
             bieData2[0]['value'] += 1
-        elif emotionValue == 0.5:
-            bieData2[1]['value'] += 1
-        elif emotionValue < 0.5:
+        elif emotionValue < 0.2:
             bieData2[2]['value'] += 1
+        else:
+            bieData2[1]['value'] += 1
     return bieData1,bieData2
 
 def getYuQingCharDataThree():
