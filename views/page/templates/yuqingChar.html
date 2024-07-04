@@ -234,7 +234,7 @@
           series: [
             {
               type: 'treemap',
-              data: {{ finaldata | tojson }}
+              data: {{ biedata | tojson }}
             }
           ]
         };
@@ -272,7 +272,7 @@
           labelLine: {
             show: false
           },
-          data: {{ finaldata1 | tojson }}
+          data: {{ biedata1 | tojson }}
         },
         {
           name: '文章舆情结果',
@@ -313,7 +313,7 @@
               }
             }
           },
-          data: {{ finaldata2 | tojson }}
+          data: {{ biedata2 | tojson }}
         }
       ]
     };

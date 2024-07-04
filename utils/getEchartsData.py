@@ -93,14 +93,14 @@ def getArticleRepotsLen(type):
             Y[11] += 1
     return X,Y
 
-def getIPCharByArticleRegion():
+def getIPByArticleRegion():
     articleRegionDic = {}
     for i in articleList:
         if i[4] != '无':
-            if articleRegionDic.get(i[4],-1) == -1:
-                articleRegionDic[i[4]] = 1
-            else:
+            if i[4] in articleRegionDic.keys():
                 articleRegionDic[i[4]] += 1
+            else:
+                articleRegionDic[i[4]] = 1
     resultData = []
     for key,value in articleRegionDic.items():
         resultData.append({
@@ -109,14 +109,14 @@ def getIPCharByArticleRegion():
         })
     return resultData
 
-def getIPCharByCommentsRegion():
+def getIPByCommentsRegion():
     commentRegionDic = {}
     for i in commentList:
         if i[3] != '无':
-            if commentRegionDic.get(i[3],-1) == -1:
-                commentRegionDic[i[3]] = 1
-            else:
+            if i[3] in commentRegionDic.keys():
                 commentRegionDic[i[3]] += 1
+            else:
+                commentRegionDic[i[3]] = 1
     resultData = []
     for key,value in commentRegionDic.items():
         resultData.append({
@@ -163,19 +163,19 @@ def getYuQingCharDataOne():
             Y[2] += 1
         else:
             Y[1] += 1
-    finaldata = [{
+    biedata = [{
         'name':x,
         'value':Y[index]
     } for index,x in enumerate(X)]
-    return X,Y,finaldata
+    return X,Y,biedata
 
 def getYuQingCharDataTwo():
     X = ['正面', '中性', '负面']
-    finaldata1 = [{
+    biedata1 = [{
         'name':x,
         'value':0
     } for x in X]
-    finaldata2 = [{
+    biedata2 = [{
         'name': x,
         'value': 0
     } for x in X]
@@ -183,20 +183,20 @@ def getYuQingCharDataTwo():
     for comment in commentList:
         emotionValue = SnowNLP(comment[4]).sentiments
         if emotionValue > 0.4:
-            finaldata1[0]['value'] += 1
+            biedata1[0]['value'] += 1
         elif emotionValue < 0.2:
-            finaldata1[2]['value'] += 1
+            biedata1[2]['value'] += 1
         else:
-            finaldata1[1]['value'] += 1
+            biedata1[1]['value'] += 1
     for artile in articleList:
         emotionValue = SnowNLP(artile[5]).sentiments
         if emotionValue > 0.4:
-            finaldata2[0]['value'] += 1
+            biedata2[0]['value'] += 1
         elif emotionValue < 0.2:
-            finaldata2[2]['value'] += 1
+            biedata2[2]['value'] += 1
         else:
-            finaldata2[1]['value'] += 1
-    return finaldata1,finaldata2
+            biedata2[1]['value'] += 1
+    return biedata1,biedata2
 
 def getYuQingCharDataThree():
     hotWordList = getAllHotWords()

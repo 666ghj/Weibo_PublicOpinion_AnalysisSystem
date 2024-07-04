@@ -28,8 +28,8 @@ def home():
                            likeCountMaxAuthorName=likeCountMaxAuthorName,
                            cityMax=cityMax,
                            commentsLikeCountTopFore=commentsLikeCountTopFore,
-                           X=X,
-                           Y=Y,
+                           xData=X,
+                           yData=Y,
                            typeChart=typeChart,
                            createAtChart=createAtChart)
 
@@ -59,8 +59,8 @@ def hotWord():
                            defaultHotWord=defaultHotWord,
                            hotWordLen=hotWordLen,
                            sentences=sentences,
-                           X=X,
-                           Y=Y,
+                           xData=X,
+                           yData=Y,
                            comments=comments)
 
 
@@ -84,8 +84,8 @@ def hotTopic():
                            defaultTopic=defaultTopic,
                            topicLen=topicLen,
                            sentences=sentences,
-                           X=X,
-                           Y=Y,
+                           xData=X,
+                           yData=Y,
                            comments=comments)
 
 
@@ -114,8 +114,8 @@ def articleChar():
                            username=username,
                            typeList=typeList,
                            defaultType=defaultType,
-                           X=X,
-                           Y=Y,
+                           xData=X,
+                           yData=Y,
                            x1Data=x1Data,
                            y1Data=y1Data,
                            x2Data=x2Data,
@@ -125,8 +125,8 @@ def articleChar():
 @pb.route('/ipChar')
 def ipChar():
     username = session.get('username')
-    articleRegionData = getIPCharByArticleRegion()
-    commentRegionData = getIPCharByCommentsRegion()
+    articleRegionData = getIPByArticleRegion()
+    commentRegionData = getIPByCommentsRegion()
     return render_template('ipChar.html',
                            username=username,
                            articleRegionData=articleRegionData,
@@ -140,24 +140,24 @@ def commentChar():
     genderPieData = getCommentDataTwo()
     return render_template('commentChar.html',
                            username=username,
-                           X=X,
-                           Y=Y,
+                           xData=X,
+                           yData=Y,
                            genderPieData=genderPieData)
 
 
 @pb.route('/yuqingChar')
 def yuqingChar():
     username = session.get('username')
-    X, Y, finaldata = getYuQingCharDataOne()
-    finaldata1, finaldata2 = getYuQingCharDataTwo()
+    X, Y, biedata = getYuQingCharDataOne()
+    biedata1, biedata2 = getYuQingCharDataTwo()
     x1Data, y1Data = getYuQingCharDataThree()
     return render_template('yuqingChar.html',
                            username=username,
-                           X=X,
-                           Y=Y,
-                           finaldata=finaldata,
-                           finaldata1=finaldata1,
-                           finaldata2=finaldata2,
+                           xData=X,
+                           yData=Y,
+                           biedata=biedata,
+                           biedata1=biedata1,
+                           biedata2=biedata2,
                            x1Data=x1Data,
                            y1Data=y1Data)
 
