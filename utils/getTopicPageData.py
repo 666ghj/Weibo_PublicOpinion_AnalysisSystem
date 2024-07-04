@@ -5,7 +5,7 @@ def getTopicLen(topic):# 统计特定话题下的评论数目
     topic_len = 0
     for i in commentsList:
         if i[9] == topic:
-            topicLen+=1
+            topic_len+=1
     return topic_len
 
 def getTopicPageCreatedAtCharData(topic):# 统计特定话题的评论在每个日期的数量，并返回日期和对应的评论数量
