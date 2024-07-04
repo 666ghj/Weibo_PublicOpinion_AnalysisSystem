@@ -69,13 +69,11 @@ def getTopicCreatedAtandpredictData(topic):# 统计特定话题的评论在每�
             else:
                 createdAt[i[1]] = 1
     createdAt = {k: createdAt[k] for k in sorted(createdAt, key=lambda date: datetime.datetime.strptime(date, "%Y-%m-%d"))}
-    print(createdAt)
     createdAt.update(predict_future_values(createdAt))
-    print(createdAt)
     sorted_data = {k: createdAt[k] for k in sorted(createdAt, key=lambda date: datetime.datetime.strptime(date, "%Y-%m-%d"))}
-    return topic,sorted_data
-    # return topic,list(createdAt.keys()),list(createdAt.values())
-    # return topic, createdAt.items()
+    result_list = [0] * (len(sorted_data) - 5) + [1] * 5
+    return topic,sorted_data,result_list
+    # return topic,list(createdAt.keys()),list(createdAt.values()),result_list
 
 def writeTopicsToCSV(topics, file_name):
     # 检查文件是否存在，如果存在则附加写入，否则新建一个
