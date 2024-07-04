@@ -18,7 +18,7 @@ def home():
     username = session.get('username')
     articleLenMax, likeCountMaxAuthorName, cityMax = getHomeTagsData()
     commentsLikeCountTopFore = getHomeCommentsLikeCountTopFore()
-    xData, yData = getHomeArticleCreatedAtChart()
+    X, Y = getHomeArticleCreatedAtChart()
     typeChart = getHomeTypeChart()
     createAtChart = getHomeCommentCreatedChart()
     # getUserNameWordCloud()
@@ -28,8 +28,8 @@ def home():
                            likeCountMaxAuthorName=likeCountMaxAuthorName,
                            cityMax=cityMax,
                            commentsLikeCountTopFore=commentsLikeCountTopFore,
-                           xData=xData,
-                           yData=yData,
+                           X=X,
+                           Y=Y,
                            typeChart=typeChart,
                            createAtChart=createAtChart)
 
@@ -42,7 +42,7 @@ def hotWord():
     if request.args.get('hotWord'):
         defaultHotWord = request.args.get('hotWord')
     hotWordLen = getHotWordLen(defaultHotWord)
-    xData, yData = getHotWordPageCreatedAtCharData(defaultHotWord)
+    X, Y = getHotWordPageCreatedAtCharData(defaultHotWord)
     sentences = ''
     value = SnowNLP(defaultHotWord).sentiments
     if value == 0.5:
@@ -59,8 +59,8 @@ def hotWord():
                            defaultHotWord=defaultHotWord,
                            hotWordLen=hotWordLen,
                            sentences=sentences,
-                           xData=xData,
-                           yData=yData,
+                           X=X,
+                           Y=Y,
                            comments=comments)
 
 
@@ -72,7 +72,7 @@ def hotTopic():
     if request.args.get('topic'):
         defaultTopic = request.args.get('topic')
     topicLen = getTopicLen(defaultTopic)
-    xData, yData = getTopicPageCreatedAtCharData()
+    X, Y = getTopicPageCreatedAtCharData()
     sentences = ''
     
     # ... 这里要嵌入 topic 相关内容（热度？）来填充 sentences
@@ -84,8 +84,8 @@ def hotTopic():
                            defaultTopic=defaultTopic,
                            topicLen=topicLen,
                            sentences=sentences,
-                           xData=xData,
-                           yData=yData,
+                           X=X,
+                           Y=Y,
                            comments=comments)
 
 
@@ -107,15 +107,15 @@ def articleChar():
     typeList = getTypeList()
     defaultType = typeList[0]
     if request.args.get('type'): defaultType = request.args.get('type')
-    xData, yData = getArticleCharLikeCount(defaultType)
-    x1Data, y1Data = getArticleCharCommentsLen(defaultType)
-    x2Data, y2Data = getArticleCharRepotsLen(defaultType)
+    X, Y = getArticleLikeCount(defaultType)
+    x1Data, y1Data = getArticleCommentsLen(defaultType)
+    x2Data, y2Data = getArticleRepotsLen(defaultType)
     return render_template('articleChar.html',
                            username=username,
                            typeList=typeList,
                            defaultType=defaultType,
-                           xData=xData,
-                           yData=yData,
+                           X=X,
+                           Y=Y,
                            x1Data=x1Data,
                            y1Data=y1Data,
                            x2Data=x2Data,
@@ -136,28 +136,28 @@ def ipChar():
 @pb.route('/commentChar')
 def commentChar():
     username = session.get('username')
-    xData, yData = getCommentCharDataOne()
-    genderPieData = getCommentCharDataTwo()
+    X, Y = getCommentDataOne()
+    genderPieData = getCommentDataTwo()
     return render_template('commentChar.html',
                            username=username,
-                           xData=xData,
-                           yData=yData,
+                           X=X,
+                           Y=Y,
                            genderPieData=genderPieData)
 
 
 @pb.route('/yuqingChar')
 def yuqingChar():
     username = session.get('username')
-    xData, yData, bieData = getYuQingCharDataOne()
-    bieData1, bieData2 = getYuQingCharDataTwo()
+    X, Y, finaldata = getYuQingCharDataOne()
+    finaldata1, finaldata2 = getYuQingCharDataTwo()
     x1Data, y1Data = getYuQingCharDataThree()
     return render_template('yuqingChar.html',
                            username=username,
-                           xData=xData,
-                           yData=yData,
-                           bieData=bieData,
-                           bieData1=bieData1,
-                           bieData2=bieData2,
+                           X=X,
+                           Y=Y,
+                           finaldata=finaldata,
+                           finaldata1=finaldata1,
+                           finaldata2=finaldata2,
                            x1Data=x1Data,
                            y1Data=y1Data)
 

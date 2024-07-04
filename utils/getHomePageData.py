@@ -27,14 +27,14 @@ def getHomeCommentsLikeCountTopFore():# 获取评论中点赞最高的前四条�
     return list(sorted(commentsList,key=lambda x:int(x[2]),reverse=True))[:4]
 
 def getHomeArticleCreatedAtChart():# 根据日期分别计算该日期的文章数
-    xData = list(set([x[7] for x in articleList]))
-    xData = list(sorted(xData,key=lambda x:datetime.strptime(x,'%Y-%m-%d').timestamp(),reverse=True))
-    yData = [0 for x in range(len(xData))]
+    X = list(set([x[7] for x in articleList]))
+    X = list(sorted(X,key=lambda x:datetime.strptime(x,'%Y-%m-%d').timestamp(),reverse=True))
+    Y = [0 for x in range(len(X))]
     for article in articleList:
-        for index,j in enumerate(xData):# 返回索引和值
+        for index,j in enumerate(X):# 返回索引和值
             if article[7] == j:
-                yData[index] += 1
-    return xData,yData
+                Y[index] += 1
+    return X,Y
 
 def getHomeTypeChart():# 统计每种类型的文章数量
     typeDic = {}

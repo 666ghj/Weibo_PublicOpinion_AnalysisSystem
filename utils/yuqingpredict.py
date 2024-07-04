@@ -50,9 +50,9 @@ def getTopicData():
     # 读取合并文件 merge.csv    # 取前十个话题
     top_10_topics = pd.read_csv('./merged_topics.csv').head(10)
     # 获取话题名称和对应的值
-    xData = top_10_topics['name'].tolist()
-    yData = top_10_topics['value'].tolist()
-    return xData, yData
+    X = top_10_topics['name'].tolist()
+    Y = top_10_topics['value'].tolist()
+    return X, Y
 
 def getTopicCreatedAtandpredictData(topic):# 统计特定话题的评论在每个日期的数量，并返回日期和对应的评论数量
     createdAt = {}
