@@ -32,13 +32,13 @@ def catch_all(path):
 def run_script():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     spider_script = os.path.join(current_dir, 'spider', 'main.py')
-    cutComments_script = os.path.join(current_dir, 'utils', 'cutComments.py')
-    cipingTotal_script = os.path.join(current_dir, 'utils', 'cipingTotal.py')
+    # cutComments_script = os.path.join(current_dir, 'utils', 'cutComments.py')
+    # cipingTotal_script = os.path.join(current_dir, 'utils', 'cipingTotal.py')
 
     scripts = [
         ("Spider Script", spider_script),
-        ("Cut Comments Script", cutComments_script),
-        ("Ciping Total Script", cipingTotal_script)
+        # ("Cut Comments Script", cutComments_script),
+        # ("Ciping Total Script", cipingTotal_script)
     ]
 
     for script_name, script_path in scripts:
