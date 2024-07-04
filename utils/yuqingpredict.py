@@ -1,4 +1,5 @@
 from utils.getPublicData import *
+from utils.predict import *
 articleList = getAllArticleData()
 commentList = getAllCommentsData()
 import csv
@@ -53,7 +54,7 @@ def getTopicData():
     yData = top_10_topics['value'].tolist()
     return xData, yData
 
-def getTopicPageCreatedAtCharData(topic):# 统计特定话题的评论在每个日期的数量，并返回日期和对应的评论数量
+def getTopicCreatedAtandpredictData(topic):# 统计特定话题的评论在每个日期的数量，并返回日期和对应的评论数量
     createdAt = {}
     for i in articleList:
         if i[14]==topic:
@@ -67,6 +68,10 @@ def getTopicPageCreatedAtCharData(topic):# 统计特定话题的评论在每个�
                 createdAt[i[1]] += 1
             else:
                 createdAt[i[1]] = 1
+    createdAt = {k: createdAt[k] for k in sorted(createdAt, key=lambda date: datetime.datetime.strptime(date, "%Y-%m-%d"))}
+    print(createdAt)
+    createdAt.update(predict_future_values(createdAt))
+    print(createdAt)
     sorted_data = {k: createdAt[k] for k in sorted(createdAt, key=lambda date: datetime.datetime.strptime(date, "%Y-%m-%d"))}
     return topic,sorted_data
     # return topic,list(createdAt.keys()),list(createdAt.values())
@@ -90,4 +95,4 @@ if __name__ == '__main__':
     # 将话题数据写入 CSV 文件
     # merged_topics = mergeTopics(getTopicByArticle(), getTopicByComments())
     # writeTopicsToCSV(merged_topics, 'merged_topics.csv')
-    print(getTopicPageCreatedAtCharData("生活"))
+    print(getTopicCreatedAtandpredictData("生活"))

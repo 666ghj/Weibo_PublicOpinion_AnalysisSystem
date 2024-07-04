@@ -2,6 +2,7 @@ import os
 from sqlalchemy import create_engine
 import pandas as pd
 from spiderDataPackage.settings import articleAddr,commentsAddr
+from model.topicDefine import *
 
 engine = create_engine('mysql+pymysql://XiaoXueQi:XiaoXueQi@47.92.235.6/Weibo_PublicOpinion_AnalysisSystem?charset=utf8mb4')
 
@@ -28,6 +29,7 @@ def saveData():
 
     os.remove(articleAddr)
     os.remove(commentsAddr)
+    update_data()
 
 if __name__ == '__main__':
     saveData()
