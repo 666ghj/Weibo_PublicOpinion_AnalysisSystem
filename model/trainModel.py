@@ -1,7 +1,7 @@
 import pandas as pd  # 用于数据处理
 import numpy as np  # 用于科学计算
 import csv  # 用于读取CSV文件
-from snownlp import SnowNLP  # 用于中文自然语言处理（此处未实际使用）
+# from utils.mynlp import SnowNLP  # 用于中文自然语言处理（此处未实际使用）
 from sklearn.feature_extraction.text import TfidfVectorizer  # 用于文本特征提取
 from sklearn.naive_bayes import MultinomialNB  # 用于多项式朴素贝叶斯分类
 from sklearn.model_selection import train_test_split  # 用于划分训练集和测试集
