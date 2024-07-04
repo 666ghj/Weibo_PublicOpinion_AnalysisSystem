@@ -43,7 +43,8 @@ def topicdefine():
     return label_article,label_comments
 
 # 更新数据库
-def update_data(label_article,label_comments):
+def update_data():
+    label_article,label_comments=topicdefine()
     add_label_comments()
     add_label_article()
     for row in label_article:
@@ -57,7 +58,9 @@ def update_data(label_article,label_comments):
         params = [str(label),str(id)]
         query(sql, params)
 
-# x,y=topicdefine()
-# update_data(x,y)
-drop_label()
-drop_label1()
+
+if __name__ == '__main__':
+    update_data()
+#删除文章和评论的标签列
+# drop_label()
+# drop_label1()
