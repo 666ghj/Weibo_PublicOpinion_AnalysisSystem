@@ -44,15 +44,22 @@ def mergeTopics(article_topics, comment_topics):# 合并话题
             merged_dict[topic['name']] += topic['value']
         else:
             merged_dict[topic['name']] = topic['value']
-    merged_list = [{'name': key, 'value': value} for key, value in merged_dict.items()]
+    merged_dict = sorted(merged_dict.items(), key=lambda item: item[1], reverse=True)
+    merged_list = [[key, str(value)] for key, value in merged_dict]
     return merged_list
-def getTopicData():
-    # 读取合并文件 merge.csv    # 取前十个话题
-    top_10_topics = pd.read_csv('./merged_topics.csv').head(10)
-    # 获取话题名称和对应的值
-    X = top_10_topics['name'].tolist()
-    Y = top_10_topics['value'].tolist()
-    return X, Y
+def getAllTopicData():
+    # 读取合并文件 merge.csv
+    # data = []
+    # df = pd.read_csv('./merged_topics.csv',encoding='utf8')
+    # for i in df.values:
+    #     try:
+    #         data.append([
+    #             re.search('[\u4e00-\u9fa5]+',str(i)).group(),
+    #             re.search('\d+',str(i)).group()
+    #         ])
+    #     except:
+    #         continue
+    return mergeTopics(getTopicByArticle(), getTopicByComments())
 
 def getTopicCreatedAtandpredictData(topic):# 统计特定话题的评论在每个日期的数量，并返回日期和对应的评论数量
     createdAt = {}
@@ -71,9 +78,9 @@ def getTopicCreatedAtandpredictData(topic):# 统计特定话题的评论在每�
     createdAt = {k: createdAt[k] for k in sorted(createdAt, key=lambda date: datetime.datetime.strptime(date, "%Y-%m-%d"))}
     createdAt.update(predict_future_values(createdAt))
     sorted_data = {k: createdAt[k] for k in sorted(createdAt, key=lambda date: datetime.datetime.strptime(date, "%Y-%m-%d"))}
-    result_list = [0] * (len(sorted_data) - 5) + [1] * 5
-    return topic,sorted_data,result_list
-    # return topic,list(createdAt.keys()),list(createdAt.values()),result_list
+    # result_list = [0] * (len(sorted_data) - 5) + [1] * 5
+    print(list(createdAt.keys()),list(createdAt.values()))
+    return list(createdAt.keys()),list(createdAt.values())
 
 def writeTopicsToCSV(topics, file_name):
     # 检查文件是否存在，如果存在则附加写入，否则新建一个
@@ -91,6 +98,7 @@ def writeTopicsToCSV(topics, file_name):
             writer.writerow(topic)
 if __name__ == '__main__':
     # 将话题数据写入 CSV 文件
-    # merged_topics = mergeTopics(getTopicByArticle(), getTopicByComments())
+    # print(mergeTopics(getTopicByArticle(), getTopicByComments()))
     # writeTopicsToCSV(merged_topics, 'merged_topics.csv')
-    print(getTopicCreatedAtandpredictData("生活"))
+    print(getAllTopicData())
+

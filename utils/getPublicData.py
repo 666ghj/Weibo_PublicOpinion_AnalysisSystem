@@ -93,3 +93,5 @@ def getAllHotWords():
 def getAllTopics():
     data =[]
     return data
+if __name__ == '__main__':
+    print(getAllHotWords())

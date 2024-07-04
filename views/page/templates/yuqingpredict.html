@@ -1,6 +1,6 @@
 {% extends 'base_page.html' %}
 {% block title %}
-    热词统计
+    舆情预测
 {% endblock %}
 {% block  nav %}
 <nav class="iq-sidebar-menu">
@@ -111,7 +111,7 @@
    <div class="row">
       <div class="col-md-12 mb-4 mt-1">
          <div class="d-flex flex-wrap justify-content-between align-items-center">
-             <h4 class="font-weight-bold">热词统计页</h4>
+             <h4 class="font-weight-bold">话题统计页</h4>
          </div>
       </div>
    </div>
@@ -151,7 +151,7 @@
 </code></pre></kbd></div>
                         </div>
                      <div class="form-group">
-                        <label>热词选择</label>
+                        <label>话题选择</label>
                         <select onchange="hotWordChange(event)" class="form-control mb-3">
                             {% for i in hotWordList %}
                                 {% if defaultHotWord == i[0] %}
@@ -163,7 +163,7 @@
                         </select>
                          <script>
                              function hotWordChange(e){
-                                 window.location.href = 'http://127.0.0.1:5000/page/hotWord?hotWord=' + e.target.value
+                                 window.location.href = 'http://127.0.0.1:5000/page/yuqingpredict?Topic=' + e.target.value
                              }
                          </script>
                      </div>
@@ -179,9 +179,9 @@
                                             <h4 class="card-title font-size-16 mt-0">{{ defaultHotWord }}</h4>
                                         </div>
                                         <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">热词名称：{{ defaultHotWord }}</li>
+                                            <li class="list-group-item">话题名称：{{ defaultHotWord }}</li>
                                             <li class="list-group-item">出现次数：{{ hotWordLen }}次</li>
-                                            <li class="list-group-item">热词情感：{{ sentences }}</li>
+                                            <li class="list-group-item">话题情感：{{ sentences }}</li>
                                         </ul>
                                     </div>
 
@@ -191,7 +191,7 @@
               <div class="col-lg-12">
                   <div class="card">
                                         <div class="card-body">
-                                            <h4 class="card-title font-size-16 mt-0">热词年份变化趋势</h4>
+                                            <h4 class="card-title font-size-16 mt-0">话题年份变化趋势</h4>
                                         </div>
                                         <div id="main" style="width:100%;height: 450px"></div>
                                     </div>
@@ -202,7 +202,7 @@
                   <div class="card">
                   <div class="card-header d-flex justify-content-between">
                      <div class="header-title">
-                        <h4 class="card-title">热词查询表格</h4>
+                        <h4 class="card-title">话题查询表格</h4>
                      </div>
                   <div class="header-action">
                            <i data-toggle="collapse" data-target="#datatable-1" aria-expanded="false">
@@ -391,7 +391,7 @@
 &lt;/table&gt;
 </code></pre></kbd></div>
                         </div>
-                     <p>根据选择的热词从而查询出评论数据</p>
+                     <p>根据选择的话题从而查询出评论数据</p>
                      <div class="table-responsive">
                         <div id="datatable-1_wrapper" class="dataTables_wrapper dt-bootstrap4">
                             <div class="row"><div class="col-sm-12"><table id="datatable-1" class="table data-table table-striped table-bordered dataTable" role="grid" aria-describedby="datatable-1_info">
@@ -400,7 +400,7 @@
                                   <th class="sorting sorting_asc" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 250.844px;">文章ID</th>
                                   <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 392.094px;">评论用户</th>
                                   <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 190.75px;">评论性别</th>
-                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 84.2656px;">评论地址</th>
+                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 84.2656px;">评论话题</th>
                                   <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 172.594px;">评论内容</th>
                                   <th class="text-right sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 158.453px;">点赞量</th></tr>
                            </thead>
@@ -416,7 +416,7 @@
                                             男生
                                          {% endif %}
                                      </td>
-                                     <td>{{ i[3] }}</td>
+                                     <td>{{ i[9] }}</td>
                                      <td>{{ i[4] }}</td>
                                      <td class="text-right">👍{{ i[2] }}</td>
                                   </tr>
@@ -433,71 +433,80 @@
 {% endblock %}
 
 {% block echarts %}
-    <script>
-    var chartDom = document.getElementById('main');
-    var myChart = echarts.init(chartDom);
-    var option;
+<script>
+  var yData = {{ yData | tojson }};
+  var xData = {{ xData | tojson }};
 
-    option = {
-      tooltip: {
-        trigger: 'axis'
-      },
-      legend: {
-        data: ['热词出现时间分布个数']
-      },
-      toolbox: {
+  var chartDom = document.getElementById('main');
+  var myChart = echarts.init(chartDom);
+  var option;
+
+  var lastFiveStartIndex = yData.length - 5; // 最后五个数据点的开始索引
+
+  option = {
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: ['话题出现时间分布个数', '话题预测时间分布个数']
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        dataView: { show: true, readOnly: false },
+        magicType: { show: true, type: ['line', 'bar'] },
+        restore: { show: true },
+        saveAsImage: { show: true }
+      }
+    },
+    calculable: true,
+    xAxis: [
+      {
+        type: 'category',
+        data: xData
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value'
+      }
+    ],
+    dataZoom: [
+      {
         show: true,
-        feature: {
-          dataView: { show: true, readOnly: false },
-          magicType: { show: true, type: ['line', 'bar'] },
-          restore: { show: true },
-          saveAsImage: { show: true }
-        }
+        start: 10,
+        end: 60
       },
-      calculable: true,
-      xAxis: [
-        {
-          type: 'category',
-          // prettier-ignore
-          data: {{ xData | tojson }}
-        }
-      ],
-      yAxis: [
-        {
-          type: 'value'
-        }
-      ],
-        dataZoom: [
-        {
-          show: true,
-          start: 10,
-          end: 60
-        },
-        {
-          type: 'inside',
-          start: 10,
-          end: 60
-        }
-      ],
-      series: [
-        {
-          name: '热词出现时间分布个数',
-          type: 'bar',
-          data: {{ yData }},
-          markPoint: {
-            data: [
-              { type: 'max', name: 'Max' },
-              { type: 'min', name: 'Min' }
-            ]
-          },
-          markLine: {
-            data: [{ type: 'average', name: 'Avg' }]
+      {
+        type: 'inside',
+        start: 10,
+        end: 60
+      }
+    ],
+    series: [
+      {
+        name: '话题预测时间分布个数',
+        type: 'bar',
+        data: yData.map((value, index) => ({
+          value: value,
+          itemStyle: {
+            color: index >= lastFiveStartIndex ? 'orange' : 'blue'
           }
+        })),
+        markPoint: {
+          data: [
+            { type: 'max', name: 'Max' },
+            { type: 'min', name: 'Min' }
+          ]
+        },
+        markLine: {
+          data: [{ type: 'average', name: 'Avg' }]
         }
-      ]
-    };
+      }
+    ]
+  };
 
-    option && myChart.setOption(option);
+  myChart.setOption(option);
+</script>
 
-    </script>
 {% endblock %}

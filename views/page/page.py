@@ -6,6 +6,8 @@ from utils.getTableData import *
 from utils.getPublicData import getAllHotWords, getAllTopics
 from utils.getEchartsData import *
 from utils.getTopicPageData import *
+from utils.yuqingpredict import *
+from utils.getPublicData import getAllHotWords
 
 pb = Blueprint('page',
                __name__,
@@ -38,6 +40,7 @@ def home():
 def hotWord():
     username = session.get('username')
     hotWordList = getAllHotWords()
+    print(hotWordList)
     defaultHotWord = hotWordList[0][0]
     if request.args.get('hotWord'):
         defaultHotWord = request.args.get('hotWord')
@@ -51,7 +54,6 @@ def hotWord():
         sentences = '正面'
     elif value < 0.5:
         sentences = '负面'
-
     comments = getCommentFilterData(defaultHotWord)
     return render_template('hotWord.html',
                            username=username,
@@ -160,6 +162,34 @@ def yuqingChar():
                            biedata2=biedata2,
                            x1Data=x1Data,
                            y1Data=y1Data)
+
+@pb.route('/yuqingpredict')
+def yuqingpredict():
+    username = session.get('username')
+    TopicList = getAllTopicData()
+    defaultTopic = TopicList[0][0]
+    if request.args.get('Topic'):
+        defaultTopic = request.args.get('Topic')
+    TopicLen = getTopicLen(defaultTopic)
+    X, Y = getTopicCreatedAtandpredictData(defaultTopic)
+    sentences = ''
+    value = SnowNLP(defaultTopic).sentiments
+    if value == 0.5:
+        sentences = '中性'
+    elif value > 0.5:
+        sentences = '正面'
+    elif value < 0.5:
+        sentences = '负面'
+    comments = getCommentFilterDataTopic(defaultTopic)
+    return render_template('yuqingpredict.html',
+                           username=username,
+                           hotWordList=TopicList,
+                           defaultHotWord=defaultTopic,
+                           hotWordLen=TopicLen,
+                           sentences=sentences,
+                           xData=X,
+                           yData=Y,
+                           comments=comments)
 
 
 @pb.route('/articleCloud')
