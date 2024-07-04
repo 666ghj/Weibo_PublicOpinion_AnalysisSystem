@@ -3,7 +3,7 @@ import requests
 import csv
 import os
 from datetime import datetime
-from settings import navAddr,articleAddr
+from .settings import navAddr,articleAddr
 
 def init():
     if not os.path.exists(articleAddr):

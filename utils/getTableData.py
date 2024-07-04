@@ -1,5 +1,5 @@
 from utils.getPublicData import getAllArticleData
-from snownlp import SnowNLP
+from utils.mynlp import SnowNLP
 
 def getTableDataList(flag):
     if flag:

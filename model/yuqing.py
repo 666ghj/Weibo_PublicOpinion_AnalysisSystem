@@ -1,4 +1,4 @@
-from snownlp import SnowNLP  # 引入SnowNLP库，用于中文情感分析
+
 import csv  # 用于处理CSV文件的读写操作
 import os  # 用于操作系统相关功能
 import sys
@@ -18,7 +18,7 @@ sys.path.append(project_root_dir)
 
 # 现在可以导入 utils 目录中的模块了
 from utils.getPublicData import getAllCommentsData  # 自定义函数，用于获取评论数据
-
+from utils.mynlp import SnowNLP  # 引入SnowNLP库，用于中文情感分析
 def targetFile():
     targetFile = 'target.csv'  # 定义目标文件名称
     commentsList = getAllCommentsData()  # 获取所有评论数据
