@@ -2,10 +2,10 @@ import requests
 import csv
 import numpy as np
 import os
-
+from settings import navAddr
 def init():
-    if not os.path.exists('./nav.csv'):
-        with open('./nav.csv','w',encoding='utf-8',newline='') as csvFile:
+    if not os.path.exists(navAddr):
+        with open(navAddr,'w',encoding='utf-8',newline='') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow([
                 'typeName',
@@ -14,7 +14,7 @@ def init():
             ])
 
 def write(row):
-    with open('./nav.csv', 'a', encoding='utf-8', newline='') as csvFile:
+    with open(navAddr, 'a', encoding='utf-8', newline='') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(row)
 
@@ -45,9 +45,11 @@ def readJson(response):
             containerid
         ])
 
-
-if __name__ == '__main__':
+def start():
     init()
     url = 'https://weibo.com/ajax/feed/allGroups'
     response = fetchData(url)
     readJson(response)
+
+if __name__ == '__main__':
+    start()

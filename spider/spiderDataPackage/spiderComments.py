@@ -3,10 +3,11 @@ import requests
 import csv
 import os
 from datetime import datetime
+from settings import articleAddr,commentsAddr
 
 def init():
-    if not os.path.exists('./comments.csv'):
-        with open('./comments.csv','w',encoding='utf-8',newline='') as csvFile:
+    if not os.path.exists(commentsAddr):
+        with open(commentsAddr,'w',encoding='utf-8',newline='') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow([
                 'articleId',
@@ -21,7 +22,7 @@ def init():
             ])
 
 def write(row):
-    with open('./comments.csv', 'a', encoding='utf-8', newline='') as csvFile:
+    with open(commentsAddr, 'a', encoding='utf-8', newline='') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(row)
 
@@ -38,7 +39,7 @@ def fetchData(url,params):
 
 def getArticleList():
     articleList = []
-    with open('./article.csv','r',encoding='utf-8') as reader:
+    with open(articleAddr,'r',encoding='utf-8') as reader:
         readerCsv = csv.reader(reader)
         next(reader)
         for nav in readerCsv:

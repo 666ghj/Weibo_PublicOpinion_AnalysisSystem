@@ -3,10 +3,11 @@ import requests
 import csv
 import os
 from datetime import datetime
+from settings import navAddr,articleAddr
 
 def init():
-    if not os.path.exists('./article.csv'):
-        with open('./article.csv','w',encoding='utf-8',newline='') as csvFile:
+    if not os.path.exists(articleAddr):
+        with open(articleAddr,'w',encoding='utf-8',newline='') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow([
                 'id',
@@ -26,7 +27,7 @@ def init():
             ])
 
 def write(row):
-    with open('./article.csv', 'a', encoding='utf-8', newline='') as csvFile:
+    with open(articleAddr, 'a', encoding='utf-8', newline='') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(row)
 
@@ -43,7 +44,7 @@ def fetchData(url,params):
 
 def getTypeList():
     typeList = []
-    with open('./nav.csv','r',encoding='utf-8') as reader:
+    with open(navAddr,'r',encoding='utf-8') as reader:
         readerCsv = csv.reader(reader)
         next(reader)
         for nav in readerCsv:
