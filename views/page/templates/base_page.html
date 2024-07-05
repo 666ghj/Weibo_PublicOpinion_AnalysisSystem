@@ -22,7 +22,7 @@
       <div class="iq-sidebar  sidebar-default  ">
           <div class="iq-sidebar-logo d-flex align-items-end justify-content-between">
                <a href="" class="header-logo">
-                  <img src="https://weibo.com/favicon.ico" class="img-fluid rounded-normal light-logo" alt="logo">
+                  <img src="https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/202407051027268.png" class="img-fluid rounded-normal light-logo" alt="logo">
                   <span>微博舆情分析系统</span>
               </a>
               <div class="side-menu-bt-sidebar-1">
@@ -35,9 +35,6 @@
               {% block nav %}
               <nav class="iq-sidebar-menu">
                   <ul id="iq-sidebar-toggle" class="side-menu">
-                      <li class="px-3 pt-3 pb-2 ">
-                          <span class="text-uppercase small font-weight-bold">首页</span>
-                      </li>
                       <li class=" sidebar-layout">
                           <a href="/page/home" class="svg-icon">
                               <i class="">
@@ -67,9 +64,6 @@
                               </i>
                               <span class="ml-2">微博舆情统计</span>
                           </a>
-                      </li>
-                      <li class="px-3 pt-3 pb-2 ">
-                          <span class="text-uppercase small font-weight-bold">数据可视化</span>
                       </li>
                       <li class=" sidebar-layout">
                           <a href="/page/articleChar" class="svg-icon">
@@ -121,9 +115,6 @@
                               <span class="ml-2">舆情预测</span>
                           </a>
                       </li>
-                      <li class="px-3 pt-3 pb-2">
-                          <span class="text-uppercase small font-weight-bold">词云图</span>
-                      </li>
                       <li class=" sidebar-layout">
                           <a href="/page/articleCloud" class="svg-icon">
                               <i class="">
@@ -139,58 +130,6 @@
               <div class="pt-5 pb-5"></div>
           </div>
       </div>
-       <div class="iq-top-navbar">
-          <div class="iq-navbar-custom">
-              <nav class="navbar navbar-expand-lg navbar-light p-0">
-                  <div class="side-menu-bt-sidebar">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="text-secondary wrapper-menu" width="30" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                      </svg>
-                  </div>
-                  <div class="d-flex align-items-center">
-                      <div class="change-mode">
-                          <div class="custom-control custom-switch custom-switch-icon custom-control-inline">
-                              <div class="custom-switch-inner">
-                                  <p class="mb-0"> </p>
-                                  <input type="checkbox" class="custom-control-input" id="dark-mode" data-active="true">
-                                  <label class="custom-control-label" for="dark-mode" data-mode="toggle">
-                                      <span class="switch-icon-right">
-                                          <svg xmlns="http://www.w3.org/2000/svg" id="h-moon" height="20" width="20" class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                                          </svg>
-                                      </span>
-                                      <span class="switch-icon-left">
-                                          <svg xmlns="http://www.w3.org/2000/svg" id="h-sun" height="20" width="20" class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                          </svg>
-                                      </span>
-                                  </label>
-                              </div>
-                          </div>
-                      </div>
-                      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="text-secondary" width="30" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                          </svg>
-                      </button>
-                      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                          <ul class="navbar-nav ml-auto navbar-list align-items-center">
-                              <li class="nav-item nav-icon dropdown">
-                                  <a href="#" class="nav-item nav-icon dropdown-toggle pr-0 search-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      <span class="mb-0 ml-2 user-name">{{ username }}</span>
-                                  </a>
-                                  <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                      <li class="dropdown-item  d-flex svg-icon ">
-                                          <a href="/user/logOut">退出登录</a>
-                                      </li>
-                                  </ul>
-                              </li>
-                          </ul>
-                      </div>
-                  </div>
-              </nav>
-          </div>
-      </div>
       <div class="content-page">
             {% block content %}
           <div class="container-fluid">
@@ -201,7 +140,7 @@
          </div>
       </div>
       <div class="col-lg-8 col-md-12">
-         <div class="row">
+        <div class="row">
             <div class="col-md-4">
                <div class="card">
                   <div class="card-body">
@@ -221,9 +160,9 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="">
-                            <p class="mb-2 text-secondary">最高点赞微博-作者</p>
+                            <p class="mb-2 text-secondary">文章爬取规则</p>
                             <div class="d-flex flex-wrap justify-content-start align-items-center">
-                               <h5 class="mb-0 font-weight-bold">{{ likeCountMaxAuthorName }}</h5>
+                               <h5 class="mb-0 font-weight-bold">每 5 小时更新一次爬取内容</h5>
                             </div>
                         </div>
                     </div>
@@ -235,9 +174,9 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="">
-                           <p class="mb-2 text-secondary">最多城市</p>
+                           <p class="mb-2 text-secondary">下次爬取时间</p>
                            <div class="d-flex flex-wrap justify-content-start align-items-center">
-                              <h5 class="mb-0 font-weight-bold">{{ cityMax }}</h5>
+                              <h5 class="mb-0 font-weight-bold">7-5-18:00</h5>
                            </div>
                         </div>
                     </div>
@@ -342,7 +281,7 @@
                 <div class="col-lg-6">
                 </div>
                 <div class="col-lg-6 text-right">
-                    <span class="mr-1">Copyright &copy; 2023.<a target="_blank" href="#">微博舆情数据分析</a></span>
+                    <span class="mr-1">网安小学期 &copy; 2024.<a target="_blank" href="#">郭航江</a></span>
                 </div>
             </div>
         </div>
@@ -391,7 +330,7 @@
             {
                 name:"日期个数",
               data: yRes,
-              type: 'line',
+              type: 'bar',
               areaStyle: {
                   color:"rgba(0,128,255,0.2)"
               },
@@ -526,3 +465,14 @@
     </script>
   </body>
 </html>
+
+<style>
+    body {
+      background-color: #add8e6; /* 浅蓝色 */
+    }
+
+    .dark .card {
+        background-color: #3a4d76;
+        border-radius: 0px;
+    }
+</style>
