@@ -5,4 +5,4 @@
 
 你可以扫描下方的二维码看到该项目的详细直观的介绍☺️
 
-![](https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/202407052000352.png)
+![](https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/202407052004351.png)
