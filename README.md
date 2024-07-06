@@ -6,3 +6,15 @@
 你可以扫描下方的二维码看到该项目的详细直观的介绍☺️
 
 ![](https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/202407052004351.png)
+
+下面是部分页面展示：
+
+![](https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/202407062005150.png)
+
+![](https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/202407062005644.png)
+
+![](https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/202407062005188.png)
+
+![](https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/202407062006366.png)
+
+![](https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/202407062006204.png)
