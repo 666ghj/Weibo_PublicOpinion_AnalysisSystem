@@ -3,3 +3,12 @@
 model2/*
 !model2/readme.md
 !model2/话题识别模型
+.idea
+*.ipynb_checkpoints
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+.vscode
