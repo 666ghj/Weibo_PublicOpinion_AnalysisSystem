@@ -1,6 +1,6 @@
 # Weibo Public Opinion Analysis System
 
-[English Version](#) | [中文版本](./README-CN.md)
+[English document](#) | [中文文档](./README-CN.md)
 
 This project is a **Social Network Public Opinion Analysis System** designed for monitoring, analyzing, and predicting public opinion trends using data from social media platforms such as Weibo.
 
