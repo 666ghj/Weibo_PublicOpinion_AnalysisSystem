@@ -8,7 +8,7 @@ from MHA import MultiHeadAttentionLayer
 from classifier import FinalClassifier
 from BERT_CTM import BERT_CTM_Model
 import os
-from tqdm import tqdm  # 导入 tqdm 库用于进度条
+from tqdm import tqdm_gui
 from sklearn.metrics import confusion_matrix
 
 
