@@ -43,9 +43,9 @@ BCAT is trained on the **COLD (Chinese Offensive Language Dataset)**, a publicly
 
 | Component Configuration                        | Precision | Recall | F1 Score |
 |------------------------------------------------|-----------|--------|----------|
-| BCAT (BERT + CTM + DPCNN + TextCNN + MHA)      | 87.35%    | 86.81% | 87.34%   |
-| BERT + DPCNN + TextCNN + MHA                   | 85.85%    | 85.34% | 85.35%   |
-| BERT + CTM + TextCNN + MHA                     | 84.66%    | 85.14% | 84.97%   |
+| BCAT (BERT + CTM + DPCNN + TextCNN + MHA)      | 89.35%    | 86.81% | 87.34%   |
+| BERT + DPCNN + TextCNN + MHA                   | 87.85%    | 85.34% | 85.35%   |
+| BERT + CTM + TextCNN + MHA                     | 86.66%    | 85.14% | 84.97%   |
 
 ## How to Use
 
