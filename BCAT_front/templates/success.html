@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>一切正常！</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            width: 600px;
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 28px; /* 和 main 的标题一致 */
+            margin-bottom: 20px;
+        }
+        .status-box {
+            margin-top: 20px;
+            padding: 20px;
+            font-size: 18px; /* 和 main 的字体大小一致 */
+            background-color: #e0f7e9;
+            color: #2e7d32;
+            border-radius: 10px;
+            border: 1px solid #2e7d32;
+        }
+        .stats-table {
+            margin-top: 30px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .stats-table th, .stats-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+        .stats-table th {
+            background-color: #f2f2f2;
+        }
+        a {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 18px;
+            background-color: #000;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>数据分析完毕！</h1>
+        <div class="status-box">
+            一切正常！
+        </div>
+        {% if stats %}
+            <h3>统计信息：</h3>
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>标签</th>
+                        <th>个数</th>
+                        <th>占比</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for label, info in stats.items() %}
+                        <tr>
+                            <td>{{ label }}</td>
+                            <td>{{ info.count }}</td>
+                            <td>{{ info.percentage }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>没有统计信息可显示。</p>
+        {% endif %}
+        <a href="/">返回首页</a>
+    </div>
+</body>
+</html>
