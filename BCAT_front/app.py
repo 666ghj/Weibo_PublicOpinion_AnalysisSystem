@@ -21,16 +21,56 @@ def upload_form():
     """显示文件上传表单"""
     return render_template('main.html')
 
-@app.route('/status/<filename>')
-def check_status(filename):
-    """检查文件处理状态，并返回状态和统计信息"""
-    status_info = processing_status.get(filename, {'status': 'processing', 'stats': None})
-    return json.dumps(status_info)
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    """处理文件上传和启动异步处理"""
+    if 'file' not in request.files:
+        flash('没有文件部分', 'error')
+        return redirect(url_for('upload_form'))
+
+    file = request.files['file']
+
+    if file.filename == '':
+        flash('未选择文件', 'error')
+        return redirect(url_for('upload_form'))
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        filepath = os.path.abspath(filepath)  # 转换为绝对路径
+
+        try:
+            file.save(filepath)
+            print(f'文件已保存到 {filepath}')
+
+            # 初始化处理状态
+            processing_status[filename] = {'status': 'processing', 'stats': None}
+
+            # 启动后台线程处理文件
+            thread = threading.Thread(target=handle_file_processing, args=(filepath, filename))
+            thread.start()
+
+            # 重定向到等待页面，并传递文件名以跟踪状态
+            return redirect(url_for('waiting_page', filename=filename))
+        except Exception as e:
+            flash(f'文件上传失败: {str(e)}', 'error')
+            return redirect(url_for('upload_failure'))
+    else:
+        flash('文件类型不允许', 'error')
+        return redirect(url_for('upload_form'))
+
 
 @app.route('/waiting/<filename>')
 def waiting_page(filename):
     """显示等待页面，并传递文件名"""
     return render_template('waiting.html', filename=filename)
+
+
+@app.route('/status/<filename>')
+def check_status(filename):
+    """检查文件处理状态，并返回状态和统计信息"""
+    status_info = processing_status.get(filename, {'status': 'processing', 'stats': None})
+    return json.dumps(status_info)
 
 @app.route('/upload-success')
 def upload_success():
@@ -97,40 +137,8 @@ def handle_file_processing(filepath, filename):
             'stats': None
         }
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    """处理文件上传和启动异步处理"""
-    if 'file' not in request.files:
-        flash('没有文件部分', 'error')
-        return redirect(url_for('upload_form'))
-
-    file = request.files['file']
-
-    if file.filename == '':
-        flash('未选择文件', 'error')
-        return redirect(url_for('upload_form'))
-
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        filepath = os.path.abspath(filepath)  # 转换为绝对路径
-
-        try:
-            file.save(filepath)
-            print(f'文件已保存到 {filepath}')
-
-            # 初始化处理状态
-            processing_status[filename] = {'status': 'processing', 'stats': None}
-
-            # 启动后台线程处理文件
-            thread = threading.Thread(target=handle_file_processing, args=(filepath, filename))
-            thread.start()
-
-            # 重定向到等待页面，并传递文件名以跟踪状态
-            return redirect(url_for('waiting_page', filename=filename))
-        except Exception as e:
-            flash(f'文件上传失败: {str(e)}', 'error')
-            return redirect(url_for('upload_failure'))
-    else:
-        flash('文件类型不允许', 'error')
-        return redirect(url_for('upload_form'))
+if __name__ == '__main__':
+    # 如果上传文件夹不存在，则创建
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
+    app.run(debug=True)
