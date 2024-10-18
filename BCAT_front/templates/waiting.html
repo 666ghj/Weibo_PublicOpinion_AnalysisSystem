@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>处理中</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            width: 600px; /* 调整容器宽度与 main.html 一致 */
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* 与 main.html 相同的阴影效果 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;  /* 水平居中 */
+        }
+        h1 {
+            font-size: 28px; /* 与 main.html 标题保持一致 */
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px; /* 与 main.html 副标题大小一致 */
+            color: #888;
+            margin-top: 20px;
+        }
+        .loading-icon {
+            margin-top: 20px;
+            width: 50px; /* 调整图标大小 */
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #4caf50;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>处理中，请稍候...</h1>
+        <div class="loading-icon"></div>
+        <p>您的文件正在分析中，请稍等片刻。</p>
+    </div>
+
+    <script>
+        function checkStatus() {
+            fetch('{{ url_for('check_status', filename=filename) }}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // 成功，跳转到成功页面，并传递文件名以获取统计信息
+                        window.location.href = "{{ url_for('upload_success') }}?filename=" + encodeURIComponent('{{ filename }}');
+                    } else if (data.status === 'failure') {
+                        // 失败，跳转到失败页面，并传递文件名以获取统计信息
+                        window.location.href = "{{ url_for('upload_failure') }}?filename=" + encodeURIComponent('{{ filename }}');
+                    } else {
+                        // 继续等待
+                        setTimeout(checkStatus, 2000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    setTimeout(checkStatus, 2000);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkStatus();
+        });
+    </script>
+</body>
+</html>
