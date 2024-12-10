@@ -45,7 +45,7 @@
 
 1. 克隆仓库：
    ```bash
-   git clone https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System.git
+   git clone https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem.git
    cd Weibo-Public-Opinion-Analysis-System
 
 1. 创建并激活虚拟环境（可选）：
@@ -103,17 +103,17 @@
 
 ## 📜 许可证
 
-本项目采用 [MIT License](https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System/blob/main/LICENSE) 许可证 - 详情请参阅 [LICENSE](https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System/blob/main/LICENSE) 文件。
+本项目采用 [GPL-2.0 License](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE) 许可证 - 详情请参阅 [LICENSE](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE) 文件。
 
 ## 🌟 支持一下
 
-如果您喜欢这个项目，请在 [GitHub](https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System) 上给它一个星 ⭐！
+如果您喜欢这个项目，请在 [GitHub](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem) 上给它一个星 ⭐！
 
 ## 📫 联系我们
 
 有任何问题或建议，欢迎通过以下方式联系我们：
 
-- GitHub Issues: [创建新问题](https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System/issues)
+- GitHub Issues: [创建新问题](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/issues)
 - 邮箱: your-email@example.com
 
 ## ✨ 贡献者
