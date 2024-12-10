@@ -119,3 +119,5 @@
 ## ✨ 贡献者
 
 感谢以下这些优秀的贡献者：
+
+[![Contributors](https://contrib.rocks/image?repo=LinJHS/AntiRec)](https://github.com/LinJHS/AntiRec/graphs/contributors)
