@@ -10,25 +10,42 @@ ub = Blueprint('user',
                url_prefix='/user',
                template_folder='templates')
 
-
+# 密码加密函数
+def hash_password(password: str, salt: str = 'XiaoXueQi2024') -> str:
+    """
+    使用 SHA256 对密码进行加盐哈希
+    :param password: 用户输入的密码
+    :param salt: 加盐值，默认值为 'XiaoXueQi2024'
+    :return: 哈希后的密码
+    """
+    hash_with_salt = hashlib.sha256(salt.encode('utf-8'))
+    hash_with_salt.update(password.encode('utf-8'))
+    return hash_with_salt.hexdigest()
+  
 @ub.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    处理用户登录请求
+    :return: 登录页面或重定向到主页
+    """
     if request.method == 'GET':
-        return render_template('login_and_register.html')
-    else:
+        return render_template('login_and_register.html')  # 显示登录页面
 
-        def filter_fn(user):
-            hash_with_salt = hashlib.sha256('XiaoXueQi2024'.encode('utf-8'))
-            hash_with_salt.update(request.form['password'].encode('utf-8'))
-            return request.form[
-                'username'] in user and hash_with_salt.hexdigest() in user
+    # 提取表单数据
+    username = request.form.get('username', '').strip()
+    password = hash_password(request.form.get('password', '').strip())
 
-        users = query('select * from user', [], 'select')
-        login_success = list(filter(filter_fn, users))
-        if not len(login_success): return errorResponse('账号或密码错误')
+    # 查询用户信息
+    user_query = 'SELECT * FROM user WHERE username = %s AND password = %s'
+    users = query(user_query, [username, password], 'select')
 
-        session['username'] = request.form['username']
-        return redirect('/page/home')
+    if not users:
+        # 登录失败，返回登录页面并显示错误信息
+        return render_template('login_and_register.html', error='账号或密码错误', username=username)
+
+    # 登录成功，设置会话并重定向
+    session['username'] = username
+    return redirect('/page/home')
 
 
 @ub.route('/register', methods=['GET', 'POST'])
