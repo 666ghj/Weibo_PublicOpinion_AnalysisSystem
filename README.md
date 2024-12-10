@@ -16,108 +16,108 @@
 
 ---
 
-**微博舆情分析预测系统** 是一个用于监控、分析和预测社交媒体平台（如微博）上的公众舆情趋势的**社交网络舆情分析系统**。该系统利用深度学习、自然语言处理（NLP）和机器学习技术，从大量社交媒体数据中提取有价值的舆情信息，帮助政府、企业及其他组织及时了解公众态度、应对突发事件并优化决策。📈
+**Weibo Public Opinion Analysis and Prediction System** is a **social network public opinion analysis system** designed to monitor, analyze, and predict public opinion trends on social media platforms such as Weibo. This system leverages deep learning, natural language processing (NLP), and machine learning technologies to extract valuable public opinion information from vast amounts of social media data, helping governments, enterprises, and other organizations promptly understand public attitudes, respond to emergencies, and optimize decision-making. 📈
 
-通过强大的数据采集与处理能力，微博舆情分析预测系统实现了实时数据收集、情感分析、话题分类和舆情预测等功能，确保用户能够在复杂多变的社交网络环境中获得准确、全面的舆情洞察。系统采用模块化设计，易于维护和扩展，旨在为用户提供一个高效、可靠的舆情分析工具，助力各类组织在信息化时代做出明智决策。
+Through powerful data collection and processing capabilities, the Weibo Public Opinion Analysis and Prediction System achieves real-time data collection, sentiment analysis, topic classification, and public opinion prediction, ensuring that users can obtain accurate and comprehensive insights into public opinion in the complex and changing social network environment. The system adopts a modular design, making it easy to maintain and expand, aiming to provide users with an efficient and reliable public opinion analysis tool, assisting various organizations in making informed decisions in the information age.
 
-## ✨ 功能
+## ✨ Features
 
-- **实时数据采集**：通过网络爬虫技术，从微博等社交平台实时获取用户生成内容。
-- **数据清洗与处理**：对采集到的数据进行预处理，包括分词、去停用词、表情符号和网址的去除等。
-- **话题分类**：利用机器学习和自然语言处理技术，对帖子和评论进行自动话题分类。
-- **情感分析**：分析文本中的情感倾向（正面、中性、负面），帮助理解公众情绪。
-- **舆情监控与预测**：实时监控舆情变化，并基于历史数据预测未来的舆情趋势。
-- **数据可视化**：通过图表和图形直观展示分析结果，便于用户理解和决策。
-- **用户管理**：提供用户注册、登录和会话管理功能，确保系统的安全性和个性化服务。
+- **Real-time Data Collection**: Utilize web scraping technologies to obtain user-generated content from social platforms like Weibo in real-time.
+- **Data Cleaning and Processing**: Preprocess collected data, including tokenization, removal of stop words, emojis, and URLs.
+- **Topic Classification**: Automatically classify posts and comments into topics using machine learning and natural language processing techniques.
+- **Sentiment Analysis**: Analyze the sentiment orientation (positive, neutral, negative) within texts to understand public emotions.
+- **Public Opinion Monitoring and Prediction**: Monitor changes in public opinion in real-time and predict future trends based on historical data.
+- **Data Visualization**: Display analysis results through charts and graphics for easy understanding and decision-making.
+- **User Management**: Provide user registration, login, and session management features to ensure system security and personalized services.
 
-## 🚀 开始使用
+## 🚀 Getting Started
 
-按照以下步骤在您的系统上运行该项目。
+Follow the steps below to run the project on your system.
 
-### 前提条件
+### Prerequisites
 
-- [Python](https://www.python.org/) 3.7 或更高版本
-- [MySQL](https://www.mysql.com/) 数据库
-- [Conda](https://docs.conda.io/en/latest/)（可选，用于环境管理）
-- 合法的微博账号（用于数据采集）
+- [Python](https://www.python.org/) 3.7 or higher
+- [MySQL](https://www.mysql.com/) Database
+- [Conda](https://docs.conda.io/en/latest/) (optional, for environment management)
+- A valid Weibo account (for data collection)
 
-### 安装步骤
+### Installation Steps
 
-1. 克隆仓库：
+1. Clone the repository:
    ```bash
    git clone https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem.git
    cd Weibo-Public-Opinion-Analysis-System
 
-1. 创建并激活虚拟环境（可选）：
+2. Create and activate a virtual environment (optional):
 
    ```bash
    conda create -n weibo_opinion_analysis python=3.8
    conda activate weibo_opinion_analysis
    ```
 
-2. 安装依赖：
+3. Install dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-3. 配置MySQL数据库：
+4. Configure the MySQL database:
 
-   - 运行 `createTables.sql` 创建所需的数据库表。
-   - 修改 `config.py` 中的数据库连接配置，确保与您的MySQL设置匹配。
+   - Run `createTables.sql` to create the necessary database tables.
+   - Modify the database connection settings in `config.py` to match your MySQL configuration.
 
-4. 启动Flask应用：
+5. Start the Flask application:
 
    ```bash
    python app.py
    ```
 
-5. 访问应用： 打开浏览器，访问 `http://localhost:5000` 以使用系统。
+6. Access the application: Open your browser and navigate to http://localhost:5000 to use the system.
 
-## 🛠️ 技术栈
+## 🛠️ Technology Stack
 
-微博舆情分析预测系统采用了一系列现代技术，以确保其高效性和可扩展性：
+The Weibo Public Opinion Analysis and Prediction System employs a range of modern technologies to ensure efficiency and scalability:
 
-- **Flask** - 轻量级的Web应用框架。
-- **[MySQL](https://www.mysql.com/)** - 关系型数据库，用于存储采集和处理的数据。
-- **[Scrapy](https://scrapy.org/)** - 强大的网络爬虫框架，用于数据采集。
-- **[Jieba](https://github.com/fxsjy/jieba)** - 中文分词工具，用于文本预处理。
-- **[SnowNLP](https://github.com/isnowfy/snownlp)** - 中文自然语言处理库，用于情感分析。
-- **[BERT](https://github.com/google-research/bert)** - 预训练的语言模型，用于话题分类。
-- **Pandas** - 数据分析和处理库。
-- **[Matplotlib](https://matplotlib.org/)** - 数据可视化库。
-- **[Scikit-learn](https://scikit-learn.org/)** - 机器学习库，用于模型训练和评估。
-- **[TensorFlow](https://www.tensorflow.org/)** 或 **[PyTorch](https://pytorch.org/)** - 深度学习框架，用于高级模型开发。
+- **[Flask](https://flask.palletsprojects.com/en/stable/)** - A lightweight web application framework.
+- **[MySQL](https://www.mysql.com/)** - A relational database used to store collected and processed data.
+- **[Scrapy](https://scrapy.org/)** - A powerful web scraping framework used for data collection.
+- **[Jieba](https://github.com/fxsjy/jieba)** - A Chinese text segmentation tool used for text preprocessing.
+- **[SnowNLP](https://github.com/isnowfy/snownlp)** - A Chinese natural language processing library used for sentiment analysis.
+- **[BERT](https://github.com/google-research/bert)** - A pre-trained language model used for topic classification.
+- **[Pandas](https://pandas.pydata.org/)** - A data analysis and manipulation library.
+- **[Matplotlib](https://matplotlib.org/)** - A data visualization library.
+- **[Scikit-learn](https://scikit-learn.org/)** - A machine learning library used for model training and evaluation.
+- **[TensorFlow](https://www.tensorflow.org/)** 或 **[PyTorch](https://pytorch.org/)** - Deep learning frameworks used for advanced model development.
 
 ## 🤝 贡献
 
-我们欢迎您的贡献！以下是参与项目的步骤：
+We welcome your contributions! Follow the steps below to participate in the project:
 
-1. Fork 本仓库。
-2. 创建您的功能分支 (`git checkout -b feature/新功能`)。
-3. 提交您的更改 (`git commit -m '添加新功能'`)。
-4. 推送到分支 (`git push origin feature/新功能`)。
-5. 打开一个 Pull Request。
+1. Fork this repository.
+2. Create your feature branch (`git checkout -b feature/your-feature`).
+3. Commit your changes (`git commit -m 'Add some feature'`).
+4. Push to the branch (`git push origin feature/your-feature`).
+5. Open a Pull Request.
 
-请确保在提交之前运行所有测试，并遵循项目的编码规范。
+Please ensure that all tests pass before submitting and follow the project's coding standards.
 
-## 📜 许可证
+## 📜 License
 
-本项目采用 [GPL-2.0 License](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE) 许可证 - 详情请参阅 [LICENSE](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE) 文件。
+This project is licensed under the [GPL-2.0 License](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE) - see the [LICENSE](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE) file for details.
 
-## 🌟 支持一下
+## 🌟 Show Your Support
 
-如果您喜欢这个项目，请在 [GitHub](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem) 上给它一个星 ⭐！
+If you like this project, please give it a star ⭐ on [GitHub](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem)!
 
-## 📫 联系我们
+## 📫 Contact Us
 
-有任何问题或建议，欢迎通过以下方式联系我们：
+If you have any questions or suggestions, feel free to contact us through the following methods:
 
-- GitHub Issues: [创建新问题](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/issues)
-- 邮箱: your-email@example.com
+- GitHub Issues: [Create a new issue](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/issues)
+- Email: 670939375@qq.com
 
-## ✨ 贡献者
+## ✨ Contributors
 
-感谢以下这些优秀的贡献者：
+Thanks to the following contributors:
 
 [![Contributors](https://contrib.rocks/image?repo=666ghj/Weibo_PublicOpinion_AnalysisSystem)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/graphs/contributors)
