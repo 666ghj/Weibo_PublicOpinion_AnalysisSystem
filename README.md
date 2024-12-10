@@ -120,4 +120,4 @@
 
 感谢以下这些优秀的贡献者：
 
-[![Contributors](https://contrib.rocks/image?repo=LinJHS/AntiRec)](https://github.com/LinJHS/AntiRec/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=666ghj/Weibo_PublicOpinion_AnalysisSystem)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/graphs/contributors)
