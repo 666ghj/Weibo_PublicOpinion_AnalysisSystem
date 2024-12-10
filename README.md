@@ -2,13 +2,13 @@
 
   <!-- # 📊 Weibo Public Opinion Analysis System  -->
 
-  <img src="https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System/blob/main/images/logo.png" alt="Weibo Public Opinion Analysis System Logo" width="500">
+  <img src="https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/images/logo.png" alt="Weibo Public Opinion Analysis System Logo" width="500">
 
-  [![GitHub Stars](https://img.shields.io/github/stars/YourUsername/Weibo-Public-Opinion-Analysis-System?style=flat-square)](https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System/stargazers)
-  [![GitHub Forks](https://img.shields.io/github/forks/YourUsername/Weibo-Public-Opinion-Analysis-System?style=flat-square)](https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System/network)
-  [![GitHub Issues](https://img.shields.io/github/issues/YourUsername/Weibo-Public-Opinion-Analysis-System?style=flat-square)](https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System/issues)
-  [![GitHub Contributors](https://img.shields.io/github/contributors/YourUsername/Weibo-Public-Opinion-Analysis-System?style=flat-square)](https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System/graphs/contributors)
-  [![GitHub License](https://img.shields.io/github/license/YourUsername/Weibo-Public-Opinion-Analysis-System?style=flat-square)](https://github.com/YourUsername/Weibo-Public-Opinion-Analysis-System/blob/main/LICENSE)
+  [![GitHub Stars](https://img.shields.io/github/stars/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/stargazers)
+  [![GitHub Forks](https://img.shields.io/github/forks/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/network)
+  [![GitHub Issues](https://img.shields.io/github/issues/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/issues)
+  [![GitHub Contributors](https://img.shields.io/github/contributors/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/graphs/contributors)
+  [![GitHub License](https://img.shields.io/github/license/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE)
 
 
   [English](./README.md) | [中文文档](./README-CN.md)
