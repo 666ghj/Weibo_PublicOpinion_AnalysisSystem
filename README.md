@@ -2,7 +2,7 @@
 
   <!-- # 📊 Weibo Public Opinion Analysis System  -->
 
-  <img src="https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="500">
+  <img src="https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="800">
 
   [![GitHub Stars](https://img.shields.io/github/stars/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/stargazers)
   [![GitHub Forks](https://img.shields.io/github/forks/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/network)
