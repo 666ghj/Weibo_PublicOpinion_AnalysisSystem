@@ -4,6 +4,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import subprocess
 import os
 from pytz import utc
+import logging
 
 app = Flask(__name__)
 app.secret_key = 'this is secret_key you know ?'
@@ -17,6 +18,7 @@ app.register_blueprint(user.ub)
 def hello_world():  # put application's code here
     return session.clear()
 
+"""
 @app.before_request
 def before_reuqest():
     pat = re.compile(r'^/static')
@@ -24,6 +26,21 @@ def before_reuqest():
     elif request.path == '/user/login' or request.path == '/user/register':return
     elif session.get('username'):return
     return redirect('/user/login')
+"""
+#中间件代码逻辑可以优化，以减少重复的 return 语句，并提高可读性：
+@app.before_request
+def before_request():
+    # 静态文件路径允许直接访问
+    if request.path.startswith('/static'):
+        return
+    
+    # 登录和注册页面无需验证会话
+    if request.path in ['/user/login', '/user/register']:
+        return
+    
+    # 验证用户是否登录
+    if not session.get('username'):
+        return redirect('/user/login')
 
 @app.route('/<path:path>')
 def catch_all(path):
@@ -59,3 +76,9 @@ if __name__ == '__main__':
         app.run()
     finally:
         scheduler.shutdown()
+
+#为了更好地调试和监控，建议为应用添加日志记录，捕获用户请求和错误：
+logging.basicConfig(level=logging.INFO)
+@app.before_request
+def log_request_info():
+    logging.info(f"Request: {request.method} {request.path}")
