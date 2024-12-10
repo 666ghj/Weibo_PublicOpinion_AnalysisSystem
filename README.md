@@ -89,7 +89,7 @@ The Weibo Public Opinion Analysis and Prediction System employs a range of moder
 - **[Scikit-learn](https://scikit-learn.org/)** - A machine learning library used for model training and evaluation.
 - **[TensorFlow](https://www.tensorflow.org/)** 或 **[PyTorch](https://pytorch.org/)** - Deep learning frameworks used for advanced model development.
 
-## 🤝 贡献
+## 🤝 Contribution
 
 We welcome your contributions! Follow the steps below to participate in the project:
 
