@@ -2,54 +2,64 @@ import requests
 import csv
 import numpy as np
 import os
+import random
 from .settings import navAddr
+from requests.exceptions import RequestException
+
+# 初始化导航数据文件
 def init():
     if not os.path.exists(navAddr):
-        with open(navAddr,'w',encoding='utf-8',newline='') as csvFile:
+        with open(navAddr, 'w', encoding='utf-8', newline='') as csvFile:
             writer = csv.writer(csvFile)
-            writer.writerow([
-                'typeName',
-                'gid',
-                'containerid'
-            ])
+            writer.writerow(['typeName', 'gid', 'containerid'])
 
+# 写入导航数据
 def write(row):
     with open(navAddr, 'a', encoding='utf-8', newline='') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerow(row)
 
-def fetchData(url):
-    headers = {
-        'Cookie':'SINAGLOBAL=2555941826014.1074.1676801766625; ULV=1719829459275:6:1:2:4660996305989.918.1719827559898:1719743122299; UOR=,,www.baidu.com; XSRF-TOKEN=VtLXviYSIs8lor7sz4iGyigL; SUB=_2A25LhvU9DeRhGeFH6FIX-S3MyD2IHXVo-gj1rDV8PUJbkNAGLRXMkW1Ne2nhI3Gle25QJK0Z99J3trq_NZn6YKJ-; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WW3Mv8V5EupQbbKh.vaZIwU5JpX5KzhUgL.FoM4e05c1Ke7e022dJLoIp7LxKML1KBLBKnLxKqL1hnLBoM41hz41hqReKqN; WBPSESS=Dt2hbAUaXfkVprjyrAZT_LRaDLsnxG-kIbeYwnBb5OUKZiwfVr_UrcYfWuqG-4ZVDM5HeU3HXkDNK_thfRfdS9Ao6ezT30jDksv-CpaVmlTAqGUHjJ7PYkH5aCK4HLxmRq14ZalmQNwzfWMPa4y0VNRLuYdg7L1s49ymNq_5v5vusoz0r4ki6u-MHGraF0fbUTgX14x0kHayEwOoxfLI-w==; SCF=AqmJWo31oFV5itnRgWNU1-wHQTL6PmkBLf3gDuqpdqAIfaWguDTMre6Oxjf5Uzs74JAh2r0DdV1sJ1g6m-wJ5NQ.; _s_tentry=-; Apache=4660996305989.918.1719827559898; PC_TOKEN=7955a7ab1f; appkey=; geetest_token=602cd4e3a7ed1898808f8adfe1a2048b; ALF=1722421868',
-        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0'
-    }
-    params = {
-        'is_new_segment':1,
-        'fetch_hot':1
-    }
-    response = requests.get(url,headers=headers,params=params)
-    if response.status_code == 200:
-        return response.json()
-    else:
+# 获取数据，支持多账号
+def fetchData(url, headers_list):
+    headers = random.choice(headers_list)
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        if response.status_code == 200:
+            return response.json()['data']['modules']
+        else:
+            return None
+    except RequestException as e:
+        print(f"请求失败：{e}")
         return None
 
+# 解析导航数据
 def readJson(response):
-    navList = np.append(response['groups'][3]['group'],response['groups'][4]['group'])
-    for nav in navList:
-        navName = nav['title']
-        gid = nav['gid']
-        containerid = nav['containerid']
-        write([
-            navName,
-            gid,
-            containerid
-        ])
+    for module in response:
+        if 'type' in module and 'typeName' in module:
+            typeName = module['typeName']
+            for submodule in module['modules']:
+                if 'id' in submodule and 'containerid' in submodule:
+                    gid = submodule['id']
+                    containerid = submodule['containerid']
+                    write([typeName, gid, containerid])
 
-def start():
+# 启动爬虫
+def start(headers_list):
+    navUrl = 'https://weibo.com/ajax/side/hot'
     init()
-    url = 'https://weibo.com/ajax/feed/allGroups'
-    response = fetchData(url)
-    readJson(response)
+    response = fetchData(navUrl, headers_list)
+    if response:
+        readJson(response)
 
 if __name__ == '__main__':
-    start()
+    headers_list = [
+        {
+            'Cookie': 'your_cookie_here',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0'
+        },
+        {
+            'Cookie': 'another_cookie_here',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0'
+        }
+    ]
+    start(headers_list)
