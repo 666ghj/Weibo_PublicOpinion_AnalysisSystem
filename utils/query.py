@@ -2,7 +2,7 @@ import getpass
 import pymysql
 import logging
 
-# ÅäÖÃÈÕÖ¾
+# é…ç½®æ—¥å¿—
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
@@ -14,24 +14,24 @@ logging.basicConfig(
 
 def get_db_connection_interactive():
     """
-    Í¨¹ıÖÕ¶Ë½»»¥»ñÈ¡Êı¾İ¿âÁ¬½Ó²ÎÊı£¬Èô°´»Ø³µÔòÊ¹ÓÃÄ¬ÈÏÖµ¡£
-    ·µ»ØÒ»¸öÁ¬½Ó¶ÔÏó¡£
+    é€šè¿‡ç»ˆç«¯äº¤äº’è·å–æ•°æ®åº“è¿æ¥å‚æ•°ï¼Œè‹¥æŒ‰å›è½¦åˆ™ä½¿ç”¨é»˜è®¤å€¼ã€‚
+    è¿”å›ä¸€ä¸ªè¿æ¥å¯¹è±¡ã€‚
     """
-    print("ÇëÒÀ´ÎÊäÈëÊı¾İ¿âÁ¬½ÓĞÅÏ¢£¨Ö±½Ó°´»Ø³µÊ¹ÓÃÄ¬ÈÏÖµ£©£º")
+    print("è¯·ä¾æ¬¡è¾“å…¥æ•°æ®åº“è¿æ¥ä¿¡æ¯ï¼ˆç›´æ¥æŒ‰å›è½¦ä½¿ç”¨é»˜è®¤å€¼ï¼‰ï¼š")
     
-    host = input(" 1. Ö÷»ú (Ä¬ÈÏ: localhost): ") or "localhost"
-    port_str = input(" 2. ¶Ë¿Ú (Ä¬ÈÏ: 3306): ") or "3306"
+    host = input(" 1. ä¸»æœº (é»˜è®¤: localhost): ") or "localhost"
+    port_str = input(" 2. ç«¯å£ (é»˜è®¤: 3306): ") or "3306"
     try:
         port = int(port_str)
     except ValueError:
-        logging.warning("¶Ë¿ÚºÅÎŞĞ§£¬Ê¹ÓÃÄ¬ÈÏ¶Ë¿Ú 3306¡£")
+        logging.warning("ç«¯å£å·æ— æ•ˆï¼Œä½¿ç”¨é»˜è®¤ç«¯å£ 3306ã€‚")
         port = 3306
     
-    user = input(" 3. ÓÃ»§Ãû (Ä¬ÈÏ: root): ") or "root"
-    password = getpass.getpass(" 4. ÃÜÂë (Ä¬ÈÏ: 312517): ") or "312517"
-    db_name = input(" 5. Êı¾İ¿âÃû (Ä¬ÈÏ: Weibo_PublicOpinion_AnalysisSystem): ") or "Weibo_PublicOpinion_AnalysisSystem"
+    user = input(" 3. ç”¨æˆ·å (é»˜è®¤: root): ") or "root"
+    password = getpass.getpass(" 4. å¯†ç  (é»˜è®¤: 12345678): ") or "12345678"
+    db_name = input(" 5. æ•°æ®åº“å (é»˜è®¤: Weibo_PublicOpinion_AnalysisSystem): ") or "Weibo_PublicOpinion_AnalysisSystem"
     
-    logging.info(f"³¢ÊÔÁ¬½Óµ½Êı¾İ¿â: {user}@{host}:{port}/{db_name}")
+    logging.info(f"å°è¯•è¿æ¥åˆ°æ•°æ®åº“: {user}@{host}:{port}/{db_name}")
     
     try:
         connection = pymysql.connect(
@@ -41,29 +41,29 @@ def get_db_connection_interactive():
             password=password,
             database=db_name,
             charset='utf8mb4',
-            cursorclass=pymysql.cursors.DictCursor  # ·µ»Ø×Öµä¸ñÊ½
+            cursorclass=pymysql.cursors.DictCursor  # è¿”å›å­—å…¸æ ¼å¼
         )
-        logging.info("Êı¾İ¿âÁ¬½Ó³É¹¦¡£")
+        logging.info("æ•°æ®åº“è¿æ¥æˆåŠŸã€‚")
         return connection
     except pymysql.MySQLError as e:
-        logging.error(f"Êı¾İ¿âÁ¬½ÓÊ§°Ü: {e}")
+        logging.error(f"æ•°æ®åº“è¿æ¥å¤±è´¥: {e}")
         exit(1)
 
-# »ñÈ¡Êı¾İ¿âÁ¬½Ó
+# è·å–æ•°æ®åº“è¿æ¥
 conn = get_db_connection_interactive()
 
-# »ñÈ¡ÓÎ±ê
+# è·å–æ¸¸æ ‡
 cursor = conn.cursor()
 
 def query(sql, params=None, query_type="no_select"):
     """
-    Ö´ĞĞSQL²éÑ¯»ò²Ù×÷¡£
+    æ‰§è¡ŒSQLæŸ¥è¯¢æˆ–æ“ä½œã€‚
     
-    :param sql: SQLÓï¾ä
-    :param params: SQL²ÎÊı£¨¿ÉÑ¡£©
-    :param query_type: ²éÑ¯ÀàĞÍ£¬Ä¬ÈÏÎª "no_select"
-                       Èç¹û²»ÊÇ "no_select"£¬ÔòÖ´ĞĞ fetch ²Ù×÷
-    :return: Èç¹ûÊÇ²éÑ¯²Ù×÷£¬·µ»ØÊı¾İÁĞ±í£»·ñÔò·µ»Ø None
+    :param sql: SQLè¯­å¥
+    :param params: SQLå‚æ•°ï¼ˆå¯é€‰ï¼‰
+    :param query_type: æŸ¥è¯¢ç±»å‹ï¼Œé»˜è®¤ä¸º "no_select"
+                       å¦‚æœä¸æ˜¯ "no_select"ï¼Œåˆ™æ‰§è¡Œ fetch æ“ä½œ
+    :return: å¦‚æœæ˜¯æŸ¥è¯¢æ“ä½œï¼Œè¿”å›æ•°æ®åˆ—è¡¨ï¼›å¦åˆ™è¿”å› None
     """
     try:
         if params:
@@ -72,43 +72,43 @@ def query(sql, params=None, query_type="no_select"):
         else:
             cursor.execute(sql)
         
-        # È·±£Á¬½Ó±£³Ö»îÔ¾
+        # ç¡®ä¿è¿æ¥ä¿æŒæ´»è·ƒ
         conn.ping(reconnect=True)
         
         if query_type != "no_select":
             data_list = cursor.fetchall()
             conn.commit()
-            logging.info("²éÑ¯³É¹¦£¬ÒÑ»ñÈ¡Êı¾İ¡£")
+            logging.info("æŸ¥è¯¢æˆåŠŸï¼Œå·²è·å–æ•°æ®ã€‚")
             return data_list
         else:
             conn.commit()
-            logging.info("²Ù×÷³É¹¦£¬ÒÑÌá½»ÊÂÎñ¡£")
+            logging.info("æ“ä½œæˆåŠŸï¼Œå·²æäº¤äº‹åŠ¡ã€‚")
     except pymysql.MySQLError as e:
-        logging.error(f"Ö´ĞĞSQLÊ±³ö´í: {e}")
+        logging.error(f"æ‰§è¡ŒSQLæ—¶å‡ºé”™: {e}")
         conn.rollback()
         return None
 
 def main():
-    # Ê¾ÀıÓÃ·¨
+    # ç¤ºä¾‹ç”¨æ³•
     
-    # Ö´ĞĞ²éÑ¯²Ù×÷
+    # æ‰§è¡ŒæŸ¥è¯¢æ“ä½œ
     select_sql = "SELECT * FROM article LIMIT 5"
     articles = query(select_sql, query_type="select")
     if articles:
         for article in articles:
             print(article)
     
-    # Ö´ĞĞ²åÈë²Ù×÷£¨¸ù¾İÊµ¼Ê±í½á¹¹ĞŞ¸Ä£©
+    # æ‰§è¡Œæ’å…¥æ“ä½œï¼ˆæ ¹æ®å®é™…è¡¨ç»“æ„ä¿®æ”¹ï¼‰
     insert_sql = "INSERT INTO article (id, content) VALUES (%s, %s)"
-    new_article = (12345, "ÕâÊÇÒ»ÌõĞÂµÄÎÄÕÂÄÚÈİ¡£")
+    new_article = (12345, "è¿™æ˜¯ä¸€æ¡æ–°çš„æ–‡ç« å†…å®¹ã€‚")
     result = query(insert_sql, params=new_article, query_type="no_select")
     if result is None:
-        logging.info("²åÈë²Ù×÷Íê³É¡£")
+        logging.info("æ’å…¥æ“ä½œå®Œæˆã€‚")
     
-    # ¹Ø±ÕÓÎ±êºÍÁ¬½Ó
+    # å…³é—­æ¸¸æ ‡å’Œè¿æ¥
     cursor.close()
     conn.close()
-    logging.info("Êı¾İ¿âÁ¬½ÓÒÑ¹Ø±Õ¡£")
+    logging.info("æ•°æ®åº“è¿æ¥å·²å…³é—­ã€‚")
 
 if __name__ == '__main__':
     main()

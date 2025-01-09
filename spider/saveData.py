@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from getpass import getpass
 import logging
 
-# ÅäÖÃÈÕÖ¾
+# é…ç½®æ—¥å¿—
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
@@ -14,95 +14,95 @@ logging.basicConfig(
     ]
 )
 
-# ¼ÙÉè articleAddr ºÍ commentsAddr ÊÇ¾ø¶ÔÂ·¾¶»òÏà¶ÔÓÚ½Å±¾µÄÂ·¾¶
+# å‡è®¾ articleAddr å’Œ commentsAddr æ˜¯ç»å¯¹è·¯å¾„æˆ–ç›¸å¯¹äºè„šæœ¬çš„è·¯å¾„
 from spiderDataPackage.settings import articleAddr, commentsAddr
 
 def get_db_connection_interactive():
     """
-    Í¨¹ıÖÕ¶Ë½»»¥»ñÈ¡Êı¾İ¿âÁ¬½Ó²ÎÊı£¬Èô°´»Ø³µÔòÊ¹ÓÃÄ¬ÈÏÖµ¡£
-    ·µ»Ø SQLAlchemy µÄÊı¾İ¿âÒıÇæ¡£
+    é€šè¿‡ç»ˆç«¯äº¤äº’è·å–æ•°æ®åº“è¿æ¥å‚æ•°ï¼Œè‹¥æŒ‰å›è½¦åˆ™ä½¿ç”¨é»˜è®¤å€¼ã€‚
+    è¿”å› SQLAlchemy çš„æ•°æ®åº“å¼•æ“ã€‚
     """
-    print("ÇëÒÀ´ÎÊäÈëÊı¾İ¿âÁ¬½ÓĞÅÏ¢£¨Ö±½Ó°´»Ø³µÊ¹ÓÃÄ¬ÈÏÖµ£©£º")
+    print("è¯·ä¾æ¬¡è¾“å…¥æ•°æ®åº“è¿æ¥ä¿¡æ¯ï¼ˆç›´æ¥æŒ‰å›è½¦ä½¿ç”¨é»˜è®¤å€¼ï¼‰ï¼š")
     
-    host = input(" 1. Ö÷»ú (Ä¬ÈÏ: localhost): ") or "localhost"
-    port_str = input(" 2. ¶Ë¿Ú (Ä¬ÈÏ: 3306): ") or "3306"
+    host = input(" 1. ä¸»æœº (é»˜è®¤: localhost): ") or "localhost"
+    port_str = input(" 2. ç«¯å£ (é»˜è®¤: 3306): ") or "3306"
     try:
         port = int(port_str)
     except ValueError:
-        logging.warning("¶Ë¿ÚºÅÎŞĞ§£¬Ê¹ÓÃÄ¬ÈÏ¶Ë¿Ú 3306¡£")
+        logging.warning("ç«¯å£å·æ— æ•ˆï¼Œä½¿ç”¨é»˜è®¤ç«¯å£ 3306ã€‚")
         port = 3306
     
-    user = input(" 3. ÓÃ»§Ãû (Ä¬ÈÏ: root): ") or "root"
-    password = getpass(" 4. ÃÜÂë (Ä¬ÈÏ: 12345678): ") or "12345678"
-    db_name = input(" 5. Êı¾İ¿âÃû (Ä¬ÈÏ: Weibo_PublicOpinion_AnalysisSystem): ") or "Weibo_PublicOpinion_AnalysisSystem"
+    user = input(" 3. ç”¨æˆ·å (é»˜è®¤: root): ") or "root"
+    password = getpass(" 4. å¯†ç  (é»˜è®¤: 12345678): ") or "12345678"
+    db_name = input(" 5. æ•°æ®åº“å (é»˜è®¤: Weibo_PublicOpinion_AnalysisSystem): ") or "Weibo_PublicOpinion_AnalysisSystem"
     
-    # ¹¹½¨Êı¾İ¿âÁ¬½Ó×Ö·û´®
+    # æ„å»ºæ•°æ®åº“è¿æ¥å­—ç¬¦ä¸²
     connection_str = f"mysql+pymysql://{user}:{password}@{host}:{port}/{db_name}?charset=utf8mb4"
     
     try:
         engine = create_engine(connection_str)
-        # ²âÊÔÁ¬½Ó
+        # æµ‹è¯•è¿æ¥
         with engine.connect() as connection:
-            logging.info(f"³É¹¦Á¬½Óµ½Êı¾İ¿â: {user}@{host}:{port}/{db_name}")
+            logging.info(f"æˆåŠŸè¿æ¥åˆ°æ•°æ®åº“: {user}@{host}:{port}/{db_name}")
         return engine
     except Exception as e:
-        logging.error(f"ÎŞ·¨Á¬½Óµ½Êı¾İ¿â: {e}")
+        logging.error(f"æ— æ³•è¿æ¥åˆ°æ•°æ®åº“: {e}")
         exit(1)
 
 def saveData(engine):
     """
-    ´ÓÊı¾İ¿âºÍCSVÎÄ¼ş¶ÁÈ¡Êı¾İ£¬ºÏ²¢ºóÈ¥ÖØ²¢±£´æ»ØÊı¾İ¿â¡£
-    ×îºóÉ¾³ıCSVÎÄ¼ş¡£
+    ä»æ•°æ®åº“å’ŒCSVæ–‡ä»¶è¯»å–æ•°æ®ï¼Œåˆå¹¶åå»é‡å¹¶ä¿å­˜å›æ•°æ®åº“ã€‚
+    æœ€ååˆ é™¤CSVæ–‡ä»¶ã€‚
     """
     try:
-        # ¶ÁÈ¡¾ÉÊı¾İ
+        # è¯»å–æ—§æ•°æ®
         oldArticle = pd.read_sql('SELECT * FROM article', engine)
         oldComment = pd.read_sql('SELECT * FROM comments', engine)
-        logging.info("³É¹¦´ÓÊı¾İ¿â¶ÁÈ¡¾ÉµÄÎÄÕÂºÍÆÀÂÛÊı¾İ¡£")
+        logging.info("æˆåŠŸä»æ•°æ®åº“è¯»å–æ—§çš„æ–‡ç« å’Œè¯„è®ºæ•°æ®ã€‚")
         
-        # ¶ÁÈ¡ĞÂÊı¾İ
+        # è¯»å–æ–°æ•°æ®
         newArticle = pd.read_csv(articleAddr)
         newComment = pd.read_csv(commentsAddr)
-        logging.info("³É¹¦´ÓCSVÎÄ¼ş¶ÁÈ¡ĞÂµÄÎÄÕÂºÍÆÀÂÛÊı¾İ¡£")
+        logging.info("æˆåŠŸä»CSVæ–‡ä»¶è¯»å–æ–°çš„æ–‡ç« å’Œè¯„è®ºæ•°æ®ã€‚")
         
-        # ºÏ²¢Êı¾İ
+        # åˆå¹¶æ•°æ®
         mergeArticle = pd.concat([newArticle, oldArticle], ignore_index=True, sort=False)
         mergeComment = pd.concat([newComment, oldComment], ignore_index=True, sort=False)
-        logging.info("³É¹¦ºÏ²¢ĞÂ¾ÉÎÄÕÂºÍÆÀÂÛÊı¾İ¡£")
+        logging.info("æˆåŠŸåˆå¹¶æ–°æ—§æ–‡ç« å’Œè¯„è®ºæ•°æ®ã€‚")
         
-        # È¥ÖØ
+        # å»é‡
         mergeArticle.drop_duplicates(subset='id', keep='last', inplace=True)
         mergeComment.drop_duplicates(subset='content', keep='last', inplace=True)
-        logging.info("³É¹¦È¥³ıÖØ¸´µÄÎÄÕÂºÍÆÀÂÛÊı¾İ¡£")
+        logging.info("æˆåŠŸå»é™¤é‡å¤çš„æ–‡ç« å’Œè¯„è®ºæ•°æ®ã€‚")
         
-        # ±£´æ»ØÊı¾İ¿â
+        # ä¿å­˜å›æ•°æ®åº“
         mergeArticle.to_sql('article', con=engine, if_exists='replace', index=False)
         mergeComment.to_sql('comments', con=engine, if_exists='replace', index=False)
-        logging.info("³É¹¦½«ºÏ²¢ºóµÄÊı¾İ±£´æ»ØÊı¾İ¿â¡£")
+        logging.info("æˆåŠŸå°†åˆå¹¶åçš„æ•°æ®ä¿å­˜å›æ•°æ®åº“ã€‚")
         
     except pd.errors.EmptyDataError as e:
-        logging.error(f"¶ÁÈ¡CSVÎÄ¼şÊ±³ö´í: {e}")
+        logging.error(f"è¯»å–CSVæ–‡ä»¶æ—¶å‡ºé”™: {e}")
     except Exception as e:
-        logging.error(f"±£´æÊı¾İÊ±³ö´í: {e}")
+        logging.error(f"ä¿å­˜æ•°æ®æ—¶å‡ºé”™: {e}")
     else:
-        # É¾³ıCSVÎÄ¼ş
+        # åˆ é™¤CSVæ–‡ä»¶
         try:
             os.remove(articleAddr)
             os.remove(commentsAddr)
-            logging.info("³É¹¦É¾³ıCSVÎÄ¼ş¡£")
+            logging.info("æˆåŠŸåˆ é™¤CSVæ–‡ä»¶ã€‚")
         except Exception as e:
-            logging.warning(f"É¾³ıCSVÎÄ¼şÊ±³ö´í: {e}")
+            logging.warning(f"åˆ é™¤CSVæ–‡ä»¶æ—¶å‡ºé”™: {e}")
 
 def main():
-    # »ñÈ¡Êı¾İ¿âÁ¬½Ó
+    # è·å–æ•°æ®åº“è¿æ¥
     engine = get_db_connection_interactive()
     
-    # ±£´æÊı¾İ
+    # ä¿å­˜æ•°æ®
     saveData(engine)
     
-    # ¹Ø±ÕÒıÇæ£¨¿ÉÑ¡£¬ÒòÎªSQLAlchemyÒıÇæ»á×Ô¶¯¹ÜÀíÁ¬½Ó³Ø£©
+    # å…³é—­å¼•æ“ï¼ˆå¯é€‰ï¼Œå› ä¸ºSQLAlchemyå¼•æ“ä¼šè‡ªåŠ¨ç®¡ç†è¿æ¥æ± ï¼‰
     engine.dispose()
-    logging.info("Êı¾İ¿âÁ¬½ÓÒÑ¹Ø±Õ¡£")
+    logging.info("æ•°æ®åº“è¿æ¥å·²å…³é—­ã€‚")
 
 if __name__ == '__main__':
     main()
