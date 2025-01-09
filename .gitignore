@@ -12,3 +12,4 @@ model2/*
 *.pyz
 *.pywz
 .vscode
+.VSCodeCounter
