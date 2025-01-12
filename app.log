@@ -1,2 +1,0 @@
-2025-01-09 23:29:06,246 [INFO] 尝试连接到数据库: root@localhost:3306/Weibo_PublicOpinion_AnalysisSystem
-2025-01-09 23:29:06,346 [ERROR] 数据库连接失败: (1045, "Access denied for user 'root'@'localhost' (using password: YES)")
