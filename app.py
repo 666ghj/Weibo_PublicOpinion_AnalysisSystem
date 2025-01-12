@@ -7,6 +7,8 @@ import subprocess
 from flask import Flask, session, request, redirect, render_template
 from apscheduler.schedulers.background import BackgroundScheduler
 from pytz import utc
+from datetime import datetime, timedelta
+import time
 
 # 初始化日志记录
 logging.basicConfig(
@@ -153,11 +155,90 @@ def run_script():
     # 执行所有脚本
     for script_name, script_path in scripts:
         try:
-            print(f"Running {script_name}...")  # 打印运行开始的信息
+            logging.info(f"Running {script_name}...")
             subprocess.run(['python', script_path], check=True)  # 使用 subprocess 执行脚本
-            print(f"{script_name} finished successfully.")  # 打印脚本成功完成的消息
+            logging.info(f"{script_name} finished successfully.")
         except subprocess.CalledProcessError as e:
-            print(f"An error occurred while running {script_name}: {e}")  # 打印错误信息
+            logging.error(f"An error occurred while running {script_name}: {e}")
+
+# 新增功能：动态调度爬虫脚本
+def check_database_empty():
+    """
+    检查数据库中的指定表是否为空。
+    
+    :return: 如果表为空则返回 True，否则返回 False
+    """
+    try:
+        connection = pymysql.connect(**DB_CONFIG)
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT COUNT(*) as count FROM article")
+            result = cursor.fetchone()
+            count = result['count'] if result and 'count' in result else 0
+            logging.info(f"数据库中共有 {count} 条记录。")
+            return count == 0
+    except pymysql.MySQLError as e:
+        logging.error(f"检查数据库失败: {e}")
+        return True  # 连接失败时假设数据库为空，以防止阻塞
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+def dynamic_crawl():
+    """
+    执行爬取任务并根据爬取耗时和获取的数据量动态调度下次爬取时间。
+    """
+    try:
+        start_time = time.time()
+        logging.info("开始爬取数据。")
+        
+        run_script()  # 执行爬虫脚本
+        
+        end_time = time.time()
+        duration = end_time - start_time  # 爬取耗时
+        
+        # 获取爬取后数据库中记录的数量作为数据量
+        try:
+            connection = pymysql.connect(**DB_CONFIG)
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT COUNT(*) as count FROM article")
+                result = cursor.fetchone()
+                data_fetched = result['count'] if result and 'count' in result else 0
+                logging.info(f"爬取完成，耗时 {duration:.2f} 秒，数据库中共有 {data_fetched} 条记录。")
+        except pymysql.MySQLError as e:
+            logging.error(f"获取数据量失败: {e}")
+            data_fetched = 0
+        finally:
+            if 'connection' in locals():
+                connection.close()
+        
+        # 根据爬取耗时和数据量调整下次爬取时间
+        base_interval = 5 * 60 * 60  # 5小时的基础时间间隔（秒）
+        
+        if duration > 3600:  # 爬取耗时超过1小时
+            next_interval = base_interval + duration
+            logging.info(f"检测到长时间爬取。下次爬取将在 {next_interval/3600:.2f} 小时后执行。")
+        elif data_fetched < 50:  # 获取的数据量少于50条
+            next_interval = base_interval / 2
+            logging.info(f"获取数据量较少。下次爬取将在 {next_interval/60:.2f} 分钟后执行。")
+        else:
+            next_interval = base_interval
+            logging.info(f"标准爬取完成。下次爬取将在 {next_interval/3600:.2f} 小时后执行。")
+        
+        # 安排下次爬取任务
+        scheduler.add_job(dynamic_crawl, 'date', run_date=datetime.now() + timedelta(seconds=next_interval), id='dynamic_crawl')
+    
+    except Exception as e:
+        logging.error(f"动态爬取过程中发生错误: {e}")
+
+# 数据库配置，用于动态调度功能
+DB_CONFIG = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': '12345678',
+    'database': 'Weibo_PublicOpinion_AnalysisSystem',
+    'port': 3306,
+    'charset': 'utf8mb4'
+}
 
 # 主程序入口
 if __name__ == '__main__':
@@ -174,11 +255,19 @@ if __name__ == '__main__':
         connection.close()
         logging.info("数据库连接已关闭。")
     
-    # 设置定时任务，定期执行爬虫脚本
+    # 设置定时任务，动态执行爬虫脚本
     scheduler = BackgroundScheduler(timezone=utc)  # 创建后台任务调度器
-    scheduler.add_job(run_script, 'interval', hours=5)  # 每5小时执行一次爬虫脚本
     scheduler.start()  # 启动调度器
-
+    
+    # 初始化调度：如果数据库为空，立即爬取；否则，按照基础时间间隔安排首次爬取
+    if check_database_empty():
+        logging.info("数据库为空。立即开始初始爬取。")
+        dynamic_crawl()
+    else:
+        logging.info("数据库已有数据。安排首次爬取。")
+        base_interval = 5 * 60 * 60  # 5小时
+        scheduler.add_job(dynamic_crawl, 'date', run_date=datetime.now() + timedelta(seconds=base_interval), id='dynamic_crawl')
+    
     try:
         app.run()  # 启动 Flask 应用
     finally:
