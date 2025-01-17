@@ -14,6 +14,8 @@
   [English](./README.md) | [中文文档](./README-CN.md)
 </div>
 
+https://starchart.cc/666ghj/Weibo_PublicOpinion_AnalysisSystem.svg
+
 **Weibo Public Opinion Analysis and Prediction System** is a **social network public opinion analysis system** designed to monitor, analyze, and predict public opinion trends on social media platforms such as Weibo. This system leverages deep learning, natural language processing (NLP), and machine learning technologies to extract valuable public opinion information from vast amounts of social media data, helping governments, enterprises, and other organizations promptly understand public attitudes, respond to emergencies, and optimize decision-making. 📈
 
 Through powerful data collection and processing capabilities, the Weibo Public Opinion Analysis and Prediction System achieves real-time data collection, sentiment analysis, topic classification, and public opinion prediction, ensuring that users can obtain accurate and comprehensive insights into public opinion in the complex and changing social network environment. The system adopts a modular design, making it easy to maintain and expand, aiming to provide users with an efficient and reliable public opinion analysis tool, assisting various organizations in making informed decisions in the information age.
