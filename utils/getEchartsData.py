@@ -1,209 +1,155 @@
-from utils.getPublicData import *
-from utils.mynlp import SnowNLP
-articleList = getAllArticleData()
-commentList = getAllCommentsData()
+from utils.getPublicData import *  # Import utility functions for data retrieval
+from utils.mynlp import SnowNLP  # Import SnowNLP for sentiment analysis
+from collections import Counter  # Import Counter for counting occurrences
+
+articleList = getAllArticleData()  # Retrieve all article data
+commentList = getAllCommentsData()  # Retrieve all comment data
 
 def getTypeList():
-    return list(set([x[8] for x in getAllArticleData()]))
+    # Return a list of unique article types
+    return list(set([x[8] for x in articleList]))
 
 def getArticleByType(type):
-    articles = []
-    for i in articleList:
-        if i[8] == type:
-            articles.append(i)
-    return articles
+    # Return a list of articles that match the specified type
+    return [article for article in articleList if article[8] == type]
 
 def getArticleLikeCount(type):
+    # Categorize articles by the number of likes they have
     articles = getArticleByType(type)
-    X = ['0-100','100-1000','1000-5000','5000-15000','15000-30000','30000-50000','50000-~']
-    Y = [0 for x in range(len(X))]
+    intervals = [(0, 100), (100, 1000), (1000, 5000), (5000, 15000),
+                 (15000, 30000), (30000, 50000), (50000, float('inf'))]
+    X = ['0-100','100-1000','1000-5000','5000-15000','15000-30000',
+         '30000-50000','50000-~']
+    Y = [0] * len(intervals)
     for article in articles:
         likeCount = int(article[1])
-        if likeCount < 100:
-            Y[0] += 1
-        elif likeCount < 1000:
-            Y[1] += 1
-        elif likeCount < 5000:
-            Y[2] += 1
-        elif likeCount < 15000:
-            Y[3] += 1
-        elif likeCount < 30000:
-            Y[4] += 1
-        elif likeCount < 50000:
-            Y[5] += 1
-        elif likeCount >= 50000:
-            Y[6] += 1
-    return X,Y
+        for i, (lower, upper) in enumerate(intervals):
+            if lower <= likeCount < upper:
+                Y[i] += 1
+                break
+    return X, Y
 
 def getArticleCommentsLen(type):
+    # Categorize articles by the length of comments they have
     articles = getArticleByType(type)
-    X = ['0-100','100-500','500-1000','1000-1500','1500-3000','3000-5000','5000-10000','10000-15000','15000-~']
-    Y = [0 for x in range(len(X))]
+    intervals = [(0, 100), (100, 500), (500, 1000), (1000, 1500),
+                 (1500, 3000), (3000, 5000), (5000, 10000),
+                 (10000, 15000), (15000, float('inf'))]
+    X = ['0-100','100-500','500-1000','1000-1500','1500-3000',
+         '3000-5000','5000-10000','10000-15000','15000-~']
+    Y = [0] * len(intervals)
     for article in articles:
         commentLen = int(article[2])
-        if commentLen < 100:
-            Y[0] += 1
-        elif commentLen < 500:
-            Y[1] += 1
-        elif commentLen < 5000:
-            Y[2] += 1
-        elif commentLen < 1000:
-            Y[3] += 1
-        elif commentLen < 1500:
-            Y[4] += 1
-        elif commentLen < 3000:
-            Y[5] += 1
-        elif commentLen < 5000:
-            Y[6] += 1
-        elif commentLen < 10000:
-            Y[7] += 1
-        elif commentLen >= 15000:
-            Y[8] += 1
-    return X,Y
+        for i, (lower, upper) in enumerate(intervals):
+            if lower <= commentLen < upper:
+                Y[i] += 1
+                break
+    return X, Y
 
 def getArticleRepotsLen(type):
+    # Categorize articles by the number of reposts
     articles = getArticleByType(type)
-    X = ['0-100','100-300','300-500','500-1000','1000-2000','2000-3000','3000-4000','4000-5000','5000-10000','10000-15000','15000-30000','30000-70000','70000-~']
-    Y = [0 for x in range(len(X))]
+    intervals = [(0, 100), (100, 300), (300, 500), (500, 1000),
+                 (1000, 2000), (2000, 3000), (3000, 4000),
+                 (4000, 5000), (5000, 10000), (10000, 15000),
+                 (15000, 30000), (30000, 70000), (70000, float('inf'))]
+    X = ['0-100','100-300','300-500','500-1000','1000-2000','2000-3000',
+         '3000-4000','4000-5000','5000-10000','10000-15000','15000-30000',
+         '30000-70000','70000-~']
+    Y = [0] * len(intervals)
     for article in articles:
         repostsCount = int(article[3])
-        if repostsCount < 100:
-            Y[0] += 1
-        elif repostsCount < 300:
-            Y[1] += 1
-        elif repostsCount < 500:
-            Y[2] += 1
-        elif repostsCount < 1000:
-            Y[3] += 1
-        elif repostsCount < 3000:
-            Y[4] += 1
-        elif repostsCount < 4000:
-            Y[5] += 1
-        elif repostsCount < 5000:
-            Y[6] += 1
-        elif repostsCount < 10000:
-            Y[7] += 1
-        elif repostsCount < 15000:
-            Y[8] += 1
-        elif repostsCount < 30000:
-            Y[9] += 1
-        elif repostsCount < 70000:
-            Y[10] += 1
-        elif repostsCount >= 70000:
-            Y[11] += 1
-    return X,Y
+        for i, (lower, upper) in enumerate(intervals):
+            if lower <= repostsCount < upper:
+                Y[i] += 1
+                break
+    return X, Y
 
 def getIPByArticleRegion():
-    articleRegionDic = {}
-    for i in articleList:
-        if i[4] != '无':
-            if i[4] in articleRegionDic.keys():
-                articleRegionDic[i[4]] += 1
-            else:
-                articleRegionDic[i[4]] = 1
-    resultData = []
-    for key,value in articleRegionDic.items():
-        resultData.append({
-            'name':key,
-            'value':value
-        })
+    # Count articles by their regions, excluding '无'
+    regions = [article[4] for article in articleList if article[4] != '无']
+    region_counts = Counter(regions)
+    resultData = [{'name': key, 'value': value} for key, value in region_counts.items()]
     return resultData
 
 def getIPByCommentsRegion():
-    commentRegionDic = {}
-    for i in commentList:
-        if i[3] != '无':
-            if i[3] in commentRegionDic.keys():
-                commentRegionDic[i[3]] += 1
-            else:
-                commentRegionDic[i[3]] = 1
-    resultData = []
-    for key,value in commentRegionDic.items():
-        resultData.append({
-            'name':key,
-            'value':value
-        })
+    # Count comments by their regions, excluding '无'
+    regions = [comment[3] for comment in commentList if comment[3] != '无']
+    region_counts = Counter(regions)
+    resultData = [{'name': key, 'value': value} for key, value in region_counts.items()]
     return resultData
 
 def getCommentDataOne():
-    X = []
+    # Categorize comments based on some numerical value, possibly length or count
     rangeNum = 20
-    for item in range(100):
-        X.append(str(rangeNum * item) + '-' + str(rangeNum * (item + 1)))
-    Y = [0 for x in range(len(X))]
+    intervals = [(rangeNum * i, rangeNum * (i + 1)) for i in range(100)]
+    X = [f"{lower}-{upper}" for lower, upper in intervals]
+    Y = [0] * len(intervals)
     for comment in commentList:
-        for item in range(100):
-            if int(comment[2]) < rangeNum * (item + 1):
-                Y[item] += 1
+        comment_value = int(comment[2])
+        for i, (lower, upper) in enumerate(intervals):
+            if lower <= comment_value < upper:
+                Y[i] += 1
                 break
-    return X,Y
+    return X, Y
 
 def getCommentDataTwo():
-    genderDic = {}
-    for i in commentList:
-        if i[6] in genderDic.keys():
-            genderDic[i[6]] += 1
-        else:
-            genderDic[i[6]] = 1
-    resultData = [{
-        'name':x[0],
-        'value':x[1]
-    } for x in genderDic.items()]
+    # Count comments by gender
+    genders = [comment[6] for comment in commentList]
+    gender_counts = Counter(genders)
+    resultData = [{'name': key, 'value': value} for key, value in gender_counts.items()]
     return resultData
 
 def getYuQingCharDataOne():
+    # Analyze sentiment of hot words
     hotWordList = getAllHotWords()
-    X = ['正面','中性','负面']
-    Y = [0,0,0]
+    sentiments = []
     for word in hotWordList:
         emotionValue = SnowNLP(word[0]).sentiments
         if emotionValue > 0.4:
-            Y[0] += 1
+            sentiments.append('正面')
         elif emotionValue < 0.2:
-            Y[2] += 1
+            sentiments.append('负面')
         else:
-            Y[1] += 1
-    biedata = [{
-        'name':x,
-        'value':Y[index]
-    } for index,x in enumerate(X)]
-    return X,Y,biedata
+            sentiments.append('中性')
+    counts = Counter(sentiments)
+    X = ['正面','中性','负面']
+    Y = [counts.get(sentiment, 0) for sentiment in X]
+    biedata = [{'name': x, 'value': y} for x, y in zip(X, Y)]
+    return X, Y, biedata
 
 def getYuQingCharDataTwo():
-    X = ['正面', '中性', '负面']
-    biedata1 = [{
-        'name':x,
-        'value':0
-    } for x in X]
-    biedata2 = [{
-        'name': x,
-        'value': 0
-    } for x in X]
-
+    # Analyze sentiment of comments and articles
+    comment_sentiments = []
     for comment in commentList:
         emotionValue = SnowNLP(comment[4]).sentiments
         if emotionValue > 0.4:
-            biedata1[0]['value'] += 1
+            comment_sentiments.append('正面')
         elif emotionValue < 0.2:
-            biedata1[2]['value'] += 1
+            comment_sentiments.append('负面')
         else:
-            biedata1[1]['value'] += 1
-    for artile in articleList:
-        emotionValue = SnowNLP(artile[5]).sentiments
+            comment_sentiments.append('中性')
+    comment_counts = Counter(comment_sentiments)
+    
+    article_sentiments = []
+    for article in articleList:
+        emotionValue = SnowNLP(article[5]).sentiments
         if emotionValue > 0.4:
-            biedata2[0]['value'] += 1
+            article_sentiments.append('正面')
         elif emotionValue < 0.2:
-            biedata2[2]['value'] += 1
+            article_sentiments.append('负面')
         else:
-            biedata2[1]['value'] += 1
-    return biedata1,biedata2
+            article_sentiments.append('中性')
+    article_counts = Counter(article_sentiments)
+    
+    X = ['正面', '中性', '负面']
+    biedata1 = [{'name': x, 'value': comment_counts.get(x, 0)} for x in X]
+    biedata2 = [{'name': x, 'value': article_counts.get(x, 0)} for x in X]
+    return biedata1, biedata2
 
 def getYuQingCharDataThree():
+    # Retrieve top 10 hot words and their counts
     hotWordList = getAllHotWords()
-    x1Data = []
-    y1Data = []
-    for i in hotWordList[:10]:
-        x1Data.append(i[0])
-        y1Data.append(int(i[1]))
-    return x1Data,y1Data
-
+    x1Data = [word[0] for word in hotWordList[:10]]
+    y1Data = [int(word[1]) for word in hotWordList[:10]]
+    return x1Data, y1Data
