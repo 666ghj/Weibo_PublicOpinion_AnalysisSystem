@@ -1,6 +1,5 @@
 import os
 import re
-import logging
 import getpass
 import pymysql
 import subprocess
@@ -9,16 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from pytz import utc
 from datetime import datetime, timedelta
 import time
-
-# 初始化日志记录
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    handlers=[
-        logging.FileHandler("app.log"),
-        logging.StreamHandler()
-    ]
-)
+from utils.logger import app_logger as logging
 
 def get_db_connection_interactive():
     """

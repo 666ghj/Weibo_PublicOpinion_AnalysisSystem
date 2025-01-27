@@ -2,17 +2,7 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 from getpass import getpass
-import logging
-
-# 配置日志
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    handlers=[
-        logging.FileHandler("save_data.log"),
-        logging.StreamHandler()
-    ]
-)
+from utils.logger import spider_logger as logging
 
 # 假设 articleAddr 和 commentsAddr 是绝对路径或相对于脚本的路径
 from spiderDataPackage.settings import articleAddr, commentsAddr

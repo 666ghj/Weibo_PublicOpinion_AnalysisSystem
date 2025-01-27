@@ -1,0 +1,4 @@
+2025-01-27 17:10:23 [weibo_analysis] [INFO] 普通信息
+2025-01-27 17:10:23 [weibo_analysis] [WARNING] 警告信息
+2025-01-27 17:10:23 [weibo_analysis] [ERROR] 错误信息
+2025-01-27 17:10:23 [weibo_analysis] [CRITICAL] 严重错误

@@ -5,17 +5,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
 import pymysql
-import logging
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    handlers=[
-        logging.FileHandler("wordcloud_generator.log"),
-        logging.StreamHandler()
-    ]
-)
+from utils.logger import app_logger as logging
 
 # Global cache for stop words
 STOP_WORDS = set()

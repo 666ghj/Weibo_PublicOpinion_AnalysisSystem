@@ -3,11 +3,11 @@ from utils.mynlp import SnowNLP
 from utils.getHomePageData import *
 from utils.getHotWordPageData import *
 from utils.getTableData import *
-from utils.getPublicData import getAllHotWords, getAllTopics
+from utils.getPublicData import getAllHotWords, getAllTopics, getArticleByType, getArticleById
 from utils.getEchartsData import *
 from utils.getTopicPageData import *
 from utils.yuqingpredict import *
-from utils.getPublicData import getAllHotWords
+from utils.logger import app_logger as logging
 
 pb = Blueprint('page',
                __name__,
@@ -196,3 +196,40 @@ def yuqingpredict():
 def articleCloud():
     username = session.get('username')
     return render_template('articleContentCloud.html', username=username)
+
+
+@pb.route('/page/index')
+def index():
+    """首页路由"""
+    try:
+        hotWordList = getAllHotWords()
+        logging.info("成功获取热词列表")
+        return render_template('index.html', hotWordList=hotWordList)
+    except Exception as e:
+        logging.error(f"渲染首页时发生错误: {e}")
+        return render_template('error.html', error_message="加载首页失败")
+
+@pb.route('/page/article/<type>')
+def article(type):
+    """文章列表页路由"""
+    try:
+        articleList = getArticleByType(type)
+        logging.info(f"成功获取类型为 {type} 的文章列表")
+        return render_template('article.html', articleList=articleList)
+    except Exception as e:
+        logging.error(f"获取文章列表时发生错误: {e}")
+        return render_template('error.html', error_message="加载文章列表失败")
+
+@pb.route('/page/articleChar/<id>')
+def articleChar(id):
+    """文章详情页路由"""
+    try:
+        article = getArticleById(id)
+        if not article:
+            logging.warning(f"未找到ID为 {id} 的文章")
+            return render_template('error.html', error_message="文章不存在")
+        logging.info(f"成功获取ID为 {id} 的文章详情")
+        return render_template('articleChar.html', article=article)
+    except Exception as e:
+        logging.error(f"获取文章详情时发生错误: {e}")
+        return render_template('error.html', error_message="加载文章详情失败")

@@ -1,10 +1,11 @@
-import time
 import requests
-import csv
+import pandas as pd
+import time
 import os
 import random
 from datetime import datetime
-from .settings import articleAddr, commentsAddr
+from .settings import articleAddr, commentsAddr, commentsUrl
+from utils.logger import spider_logger as logging
 from requests.exceptions import RequestException
 
 # 初始化，创建评论数据文件
@@ -59,19 +60,65 @@ def readJson(response, articleId):
         authorAvatar = comment['user']['avatar_large']
         write([articleId, created_at, likes_counts, region, content, authorName, authorGender, authorAddress, authorAvatar])
 
-# 启动爬虫
-def start(headers_list, delay=2):
-    commentUrl = 'https://weibo.com/ajax/statuses/buildComments'
-    init()
-    articleList = getArticleList()
-    for article in articleList:
-        articleId = article[0]
-        print(f'正在爬取id值为{articleId}的文章评论')
-        time.sleep(random.uniform(1, delay))  # 随机延时，避免频繁访问
-        params = {'id': int(articleId), 'is_show_bulletin': 2}
-        response = fetchData(commentUrl, params, headers_list)
-        if response:
-            readJson(response, articleId)
+def getComments(articleId):
+    """
+    获取指定文章的评论数据
+    """
+    try:
+        # 构建请求URL和头部
+        url = f"{commentsUrl}{articleId}"
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        
+        # 解析响应数据
+        data = response.json()
+        if data['code'] == 200:
+            return data['data']
+        else:
+            logging.error(f"获取评论失败，状态码：{data['code']}")
+            return None
+            
+    except requests.RequestException as e:
+        logging.error(f"请求失败：{e}")
+        return None
+
+def start():
+    """
+    开始爬取评论数据
+    """
+    try:
+        # 读取文章数据
+        article_df = pd.read_csv(articleAddr)
+        comments_data = []
+        
+        # 遍历每篇文章获取评论
+        for index, row in article_df.iterrows():
+            article_id = row['id']
+            logging.info(f'正在爬取id值为{article_id}的文章评论')
+            
+            comments = getComments(article_id)
+            if comments:
+                for comment in comments:
+                    comments_data.append({
+                        'article_id': article_id,
+                        'content': comment.get('content', ''),
+                        'created_at': comment.get('created_at', ''),
+                        'like_count': comment.get('like_count', 0)
+                    })
+            
+            # 避免请求过于频繁
+            time.sleep(1)
+        
+        # 保存评论数据
+        if comments_data:
+            comments_df = pd.DataFrame(comments_data)
+            comments_df.to_csv(commentsAddr, index=False, encoding='utf-8')
+            logging.info(f"成功保存{len(comments_data)}条评论数据")
+        else:
+            logging.warning("未获取到任何评论数据")
+            
+    except Exception as e:
+        logging.error(f"爬取评论数据时发生错误：{e}")
 
 if __name__ == '__main__':
     # 这里的headers_list应该包含多个账号的cookie
@@ -85,4 +132,4 @@ if __name__ == '__main__':
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0'
         }
     ]
-    start(headers_list)
+    start()

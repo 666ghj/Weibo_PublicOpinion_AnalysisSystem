@@ -1,6 +1,6 @@
-import getpass
 import pymysql
-import logging
+from getpass import getpass
+from utils.logger import app_logger as logging
 
 # 配置日志
 logging.basicConfig(
@@ -28,7 +28,7 @@ def get_db_connection_interactive():
         port = 3306
     
     user = input(" 3. 用户名 (默认: root): ") or "root"
-    password = getpass.getpass(" 4. 密码 (默认: 12345678): ") or "12345678"
+    password = getpass(" 4. 密码 (默认: 12345678): ") or "12345678"
     db_name = input(" 5. 数据库名 (默认: Weibo_PublicOpinion_AnalysisSystem): ") or "Weibo_PublicOpinion_AnalysisSystem"
     
     logging.info(f"尝试连接到数据库: {user}@{host}:{port}/{db_name}")

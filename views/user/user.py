@@ -4,6 +4,7 @@ from flask import Blueprint, redirect, render_template, request, Flask, session
 
 from utils.query import query
 from utils.errorResponse import errorResponse
+from utils.logger import app_logger as logging
 
 ub = Blueprint('user',
                __name__,
@@ -31,21 +32,29 @@ def login():
     if request.method == 'GET':
         return render_template('login_and_register.html')  # 显示登录页面
 
-    # 提取表单数据
-    username = request.form.get('username', '').strip()
-    password = hash_password(request.form.get('password', '').strip())
-
-    # 查询用户信息
-    user_query = 'SELECT * FROM user WHERE username = %s AND password = %s'
-    users = query(user_query, [username, password], 'select')
-
-    if not users:
-        # 登录失败，返回登录页面并显示错误信息
-        return render_template('login_and_register.html', error='账号或密码错误', username=username)
-
-    # 登录成功，设置会话并重定向
-    session['username'] = username
-    return redirect('/page/home')
+    try:
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if not username or not password:
+            logging.warning("登录失败：用户名或密码为空")
+            return render_template('login_and_register.html', msg='用户名和密码不能为空')
+        
+        # 查询用户
+        sql = "SELECT * FROM user WHERE username = %s AND password = %s"
+        result = query(sql, [username, password], "select")
+        
+        if result:
+            session['username'] = username
+            logging.info(f"用户 {username} 登录成功")
+            return redirect('/page/home')
+        else:
+            logging.warning(f"用户 {username} 登录失败：用户名或密码错误")
+            return render_template('login_and_register.html', msg='用户名或密码错误')
+            
+    except Exception as e:
+        logging.error(f"登录过程发生错误: {e}")
+        return render_template('login_and_register.html', msg='登录失败，请稍后重试')
 
 
 @ub.route('/register', methods=['GET', 'POST'])
@@ -82,3 +91,15 @@ def register():
 def logOut():
     session.clear()
     return redirect('/user/login')
+
+@ub.route('/user/logout')
+def logout():
+    """用户登出"""
+    try:
+        username = session.get('username')
+        session.clear()
+        logging.info(f"用户 {username} 成功登出")
+        return redirect('/user/login')
+    except Exception as e:
+        logging.error(f"登出过程发生错误: {e}")
+        return redirect('/user/login')
