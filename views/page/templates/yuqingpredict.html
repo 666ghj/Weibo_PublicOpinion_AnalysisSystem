@@ -155,18 +155,35 @@
                         <select onchange="hotWordChange(event)" class="form-control mb-3">
                             {% for i in hotWordList %}
                                 {% if defaultHotWord == i[0] %}
-                                                                                       <option selected value="{{ i[0] }}">{{ i[0] }}</option>
+                                    <option selected value="{{ i[0] }}">{{ i[0] }}</option>
                                 {% else %}
-                                                                                       <option value="{{ i[0] }}">{{ i[0] }}</option>
+                                    <option value="{{ i[0] }}">{{ i[0] }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
+                     </div>
+                     <div class="form-group">
+                        <label>模型选择</label>
+                        <select onchange="modelChange(event)" class="form-control mb-3">
+                            {% if model_type == 'basic' %}
+                                <option selected value="basic">基础模型</option>
+                                <option value="pro">改进模型</option>
+                            {% else %}
+                                <option value="basic">基础模型</option>
+                                <option selected value="pro">改进模型</option>
+                            {% endif %}
+                        </select>
+                     </div>
                          <script>
                              function hotWordChange(e){
-                                 window.location.href = 'http://127.0.0.1:5000/page/yuqingpredict?Topic=' + e.target.value
+                                 const model = document.querySelector('select[onchange="modelChange(event)"]').value;
+                                 window.location.href = 'http://127.0.0.1:5000/page/yuqingpredict?Topic=' + e.target.value + '&model=' + model;
+                             }
+                             function modelChange(e){
+                                 const topic = document.querySelector('select[onchange="hotWordChange(event)"]').value;
+                                 window.location.href = 'http://127.0.0.1:5000/page/yuqingpredict?Topic=' + topic + '&model=' + e.target.value;
                              }
                          </script>
-                     </div>
                   </div>
          </div>
 

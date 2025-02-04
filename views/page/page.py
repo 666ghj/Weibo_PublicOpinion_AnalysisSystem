@@ -199,8 +199,11 @@ def commentChar():
 @pb.route('/yuqingChar')
 def yuqingChar():
     username = session.get('username')
+    # 获取模型选择参数
+    model_type = request.args.get('model', 'pro')  # 默认使用改进模型
+    
     X, Y, biedata = getYuQingCharDataOne()
-    biedata1, biedata2 = getYuQingCharDataTwo()
+    biedata1, biedata2 = getYuQingCharDataTwo(model_type)
     x1Data, y1Data = getYuQingCharDataThree()
     return render_template('yuqingChar.html',
                            username=username,
@@ -210,7 +213,8 @@ def yuqingChar():
                            biedata1=biedata1,
                            biedata2=biedata2,
                            x1Data=x1Data,
-                           y1Data=y1Data)
+                           y1Data=y1Data,
+                           model_type=model_type)
 
 @pb.route('/yuqingpredict')
 def yuqingpredict():
@@ -222,13 +226,26 @@ def yuqingpredict():
     TopicLen = getTopicLen(defaultTopic)
     X, Y = getTopicCreatedAtandpredictData(defaultTopic)
     
-    # 使用改进版模型进行情感预测
-    predicted_label, confidence = predict_sentiment(defaultTopic)
-    if predicted_label is not None:
-        sentences = '良好' if predicted_label == 0 else '不良'
-        sentences = f"{sentences} (置信度: {confidence:.2f})"
+    # 获取模型选择参数
+    model_type = request.args.get('model', 'pro')  # 默认使用改进模型
+    
+    if model_type == 'basic':
+        # 使用基础模型（SnowNLP）
+        value = SnowNLP(defaultTopic).sentiments
+        if value == 0.5:
+            sentences = '中性'
+        elif value > 0.5:
+            sentences = '正面'
+        elif value < 0.5:
+            sentences = '负面'
     else:
-        sentences = '预测失败'
+        # 使用改进模型
+        predicted_label, confidence = predict_sentiment(defaultTopic)
+        if predicted_label is not None:
+            sentences = '良好' if predicted_label == 0 else '不良'
+            sentences = f"{sentences} (置信度: {confidence:.2f})"
+        else:
+            sentences = '预测失败'
     
     comments = getCommentFilterDataTopic(defaultTopic)
     return render_template('yuqingpredict.html',
@@ -239,7 +256,8 @@ def yuqingpredict():
                            sentences=sentences,
                            xData=X,
                            yData=Y,
-                           comments=comments)
+                           comments=comments,
+                           model_type=model_type)
 
 
 @pb.route('/articleCloud')

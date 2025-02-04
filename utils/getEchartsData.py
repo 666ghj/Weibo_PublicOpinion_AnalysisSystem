@@ -167,24 +167,44 @@ def getYuQingCharDataOne():
     biedata = [{'name': x, 'value': y} for x, y in zip(X, Y)]
     return X, Y, biedata
 
-def getYuQingCharDataTwo():
-    # 分析评论和文章的情感
+def getYuQingCharDataTwo(model_type='pro'):
+    """
+    分析评论和文章的情感
+    :param model_type: 使用的模型类型，'basic' 为基础模型，'pro' 为改进模型
+    """
     comment_texts = [comment[4] for comment in commentList]
     article_texts = [article[5] for article in articleList]
     
-    # 预测评论情感
-    comment_predictions = predict_sentiment(comment_texts)
-    if comment_predictions is not None:
-        comment_sentiments = ['良好' if pred == 0 else '不良' for pred in comment_predictions]
-    else:
+    if model_type == 'basic':
+        # 使用基础模型（SnowNLP）
         comment_sentiments = []
-    
-    # 预测文章情感
-    article_predictions = predict_sentiment(article_texts)
-    if article_predictions is not None:
-        article_sentiments = ['良好' if pred == 0 else '不良' for pred in article_predictions]
-    else:
+        for text in comment_texts:
+            value = SnowNLP(text).sentiments
+            if value > 0.6:
+                comment_sentiments.append('良好')
+            else:
+                comment_sentiments.append('不良')
+        
         article_sentiments = []
+        for text in article_texts:
+            value = SnowNLP(text).sentiments
+            if value > 0.6:
+                article_sentiments.append('良好')
+            else:
+                article_sentiments.append('不良')
+    else:
+        # 使用改进模型
+        comment_predictions = predict_sentiment(comment_texts)
+        if comment_predictions is not None:
+            comment_sentiments = ['良好' if pred == 0 else '不良' for pred in comment_predictions]
+        else:
+            comment_sentiments = []
+        
+        article_predictions = predict_sentiment(article_texts)
+        if article_predictions is not None:
+            article_sentiments = ['良好' if pred == 0 else '不良' for pred in article_predictions]
+        else:
+            article_sentiments = []
     
     # 统计结果
     comment_counts = Counter(comment_sentiments)
