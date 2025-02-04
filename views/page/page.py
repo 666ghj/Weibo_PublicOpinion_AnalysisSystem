@@ -8,12 +8,61 @@ from utils.getEchartsData import *
 from utils.getTopicPageData import *
 from utils.yuqingpredict import *
 from utils.logger import app_logger as logging
+import torch
+from model_pro.MHA import MultiHeadAttentionLayer
+from model_pro.classifier import FinalClassifier
+from model_pro.BERT_CTM import BERT_CTM_Model
 
 pb = Blueprint('page',
                __name__,
                url_prefix='/page',
                template_folder='templates')
 
+# 设置设备
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# 加载模型（全局变量，避免重复加载）
+model_save_path = 'model_pro/final_model.pt'
+bert_model_path = 'model_pro/bert_model'
+ctm_tokenizer_path = 'model_pro/sentence_bert_model'
+
+try:
+    classifier_model = torch.load(model_save_path, map_location=device)
+    classifier_model.eval()
+    attention_model = MultiHeadAttentionLayer(embed_size=768, num_heads=8)
+    attention_model.to(device)
+    attention_model.eval()
+    bert_ctm_model = BERT_CTM_Model(
+        bert_model_path=bert_model_path,
+        ctm_tokenizer_path=ctm_tokenizer_path
+    )
+except Exception as e:
+    print(f"模型加载失败: {e}")
+
+def predict_sentiment(text):
+    """使用改进版模型预测单个文本的情感"""
+    try:
+        # 获取文本嵌入
+        embeddings = bert_ctm_model.get_bert_embeddings([text])
+        
+        # 转换为tensor
+        batch_x = torch.tensor(embeddings, dtype=torch.float32).to(device)
+        batch_x = torch.mean(batch_x, dim=1)
+        
+        with torch.no_grad():
+            # 使用注意力机制
+            attention_output = attention_model(batch_x, batch_x, batch_x)
+            # 获取分类结果
+            outputs = classifier_model(attention_output)
+            outputs = torch.mean(outputs, dim=1)
+            # 获取预测标签和概率
+            probabilities = torch.softmax(outputs, dim=1)
+            _, predicted = torch.max(outputs, 1)
+            
+        return predicted.item(), probabilities[0][predicted.item()].item()
+    except Exception as e:
+        print(f"预测过程中出现错误: {e}")
+        return None, None
 
 @pb.route('/home')
 def home():
@@ -172,14 +221,15 @@ def yuqingpredict():
         defaultTopic = request.args.get('Topic')
     TopicLen = getTopicLen(defaultTopic)
     X, Y = getTopicCreatedAtandpredictData(defaultTopic)
-    sentences = ''
-    value = SnowNLP(defaultTopic).sentiments
-    if value == 0.5:
-        sentences = '中性'
-    elif value > 0.5:
-        sentences = '正面'
-    elif value < 0.5:
-        sentences = '负面'
+    
+    # 使用改进版模型进行情感预测
+    predicted_label, confidence = predict_sentiment(defaultTopic)
+    if predicted_label is not None:
+        sentences = '良好' if predicted_label == 0 else '不良'
+        sentences = f"{sentences} (置信度: {confidence:.2f})"
+    else:
+        sentences = '预测失败'
+    
     comments = getCommentFilterDataTopic(defaultTopic)
     return render_template('yuqingpredict.html',
                            username=username,
