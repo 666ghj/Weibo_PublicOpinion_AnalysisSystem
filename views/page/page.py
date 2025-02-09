@@ -8,6 +8,7 @@ from utils.getEchartsData import *
 from utils.getTopicPageData import *
 from utils.yuqingpredict import *
 from utils.logger import app_logger as logging
+from utils.cache_manager import prediction_cache
 import torch
 from BCAT_front.predict import model_manager
 
@@ -207,24 +208,34 @@ def yuqingpredict():
         # 获取模型选择参数
         model_type = request.args.get('model', 'pro')  # 默认使用改进模型
         
-        if model_type == 'basic':
-            # 使用基础模型（SnowNLP）
-            value = SnowNLP(defaultTopic).sentiments
-            if value == 0.5:
-                sentences = '中性'
-            elif value > 0.5:
-                sentences = '正面'
-            elif value < 0.5:
-                sentences = '负面'
+        # 尝试从缓存获取预测结果
+        cache_key = f"{defaultTopic}_{model_type}"
+        cached_result = prediction_cache.get(cache_key)
+        
+        if cached_result is not None:
+            sentences = cached_result
         else:
-            # 使用改进模型
-            predicted_label, confidence = predict_sentiment(defaultTopic)
-            if predicted_label is not None:
-                sentences = '良好' if predicted_label == 0 else '不良'
-                sentences = f"{sentences} (置信度: {confidence:.2%})"
+            if model_type == 'basic':
+                # 使用基础模型（SnowNLP）
+                value = SnowNLP(defaultTopic).sentiments
+                if value == 0.5:
+                    sentences = '中性'
+                elif value > 0.5:
+                    sentences = '正面'
+                elif value < 0.5:
+                    sentences = '负面'
             else:
-                sentences = '预测失败，请稍后重试'
-                logging.error(f"预测失败，话题: {defaultTopic}")
+                # 使用改进模型
+                predicted_label, confidence = predict_sentiment(defaultTopic)
+                if predicted_label is not None:
+                    sentences = '良好' if predicted_label == 0 else '不良'
+                    sentences = f"{sentences} (置信度: {confidence:.2%})"
+                else:
+                    sentences = '预测失败，请稍后重试'
+                    logging.error(f"预测失败，话题: {defaultTopic}")
+            
+            # 将结果存入缓存
+            prediction_cache.set(cache_key, sentences)
         
         comments = getCommentFilterDataTopic(defaultTopic)
         return render_template('yuqingpredict.html',
