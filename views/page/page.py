@@ -9,6 +9,11 @@ from utils.getTopicPageData import *
 from utils.yuqingpredict import *
 from utils.logger import app_logger as logging
 from utils.cache_manager import prediction_cache
+from utils.ai_analyzer import ai_analyzer
+from models.ai_analysis import AIAnalysis
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine
+import asyncio
 import torch
 from BCAT_front.predict import model_manager
 
@@ -30,6 +35,11 @@ try:
     model_manager.load_models(model_save_path, bert_model_path, ctm_tokenizer_path)
 except Exception as e:
     logging.error(f"模型加载失败: {e}")
+
+# 数据库配置
+DATABASE_URL = "sqlite:///ai_analysis.db"
+engine = create_engine(DATABASE_URL)
+AIAnalysis.metadata.create_all(engine)
 
 def predict_sentiment(text):
     """使用改进版模型预测单个文本的情感"""
@@ -294,3 +304,99 @@ def articleChar(id):
     except Exception as e:
         logging.error(f"获取文章详情时发生错误: {e}")
         return render_template('error.html', error_message="加载文章详情失败")
+
+@pb.route('/api/analyze_messages', methods=['POST'])
+async def analyze_messages():
+    try:
+        # 获取最近50条消息
+        messages = getRecentMessages(50)  # 需要实现这个函数
+        
+        # 调用AI进行分析
+        analysis_results = await ai_analyzer.analyze_messages(messages)
+        
+        # 保存到数据库
+        with Session(engine) as session:
+            for result in analysis_results:
+                analysis = AIAnalysis(
+                    message_id=result['message_id'],
+                    sentiment=result['sentiment'],
+                    sentiment_score=float(result['sentiment_score']),
+                    keywords=result['keywords'],
+                    key_points=result['key_points'],
+                    influence_analysis=result['influence_analysis'],
+                    risk_level=result['risk_level']
+                )
+                session.add(analysis)
+            session.commit()
+        
+        # 格式化结果用于显示
+        display_results = [
+            ai_analyzer.format_analysis_for_display(result)
+            for result in analysis_results
+        ]
+        
+        return jsonify({
+            'success': True,
+            'data': display_results
+        })
+    
+    except Exception as e:
+        logging.error(f"AI分析过程出错: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@pb.route('/api/get_analysis/<int:message_id>')
+def get_message_analysis(message_id):
+    """获取特定消息的分析结果"""
+    try:
+        with Session(engine) as session:
+            analysis = session.query(AIAnalysis)\
+                .filter(AIAnalysis.message_id == message_id)\
+                .order_by(AIAnalysis.created_at.desc())\
+                .first()
+            
+            if analysis:
+                return jsonify({
+                    'success': True,
+                    'data': analysis.to_dict()
+                })
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': '未找到分析结果'
+                }), 404
+    
+    except Exception as e:
+        logging.error(f"获取分析结果时出错: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+def getRecentMessages(limit=50):
+    """获取最近的消息"""
+    # 这里需要根据你的数据库结构实现具体的查询逻辑
+    messages = []
+    try:
+        # 示例查询逻辑
+        with Session(engine) as session:
+            results = session.execute(
+                """
+                SELECT id, content 
+                FROM comments 
+                ORDER BY created_at DESC 
+                LIMIT :limit
+                """,
+                {'limit': limit}
+            ).fetchall()
+            
+            messages = [
+                {'id': row[0], 'content': row[1]}
+                for row in results
+            ]
+    except Exception as e:
+        logging.error(f"获取最近消息时出错: {e}")
+    
+    return messages

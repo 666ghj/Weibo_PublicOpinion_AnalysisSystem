@@ -445,7 +445,156 @@
                </div>
               </div>
           </div>
+
+<!-- AI分析结果展示区域 -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title">AI深度分析</h4>
+                </div>
+                <button class="btn btn-primary" onclick="requestAIAnalysis()">
+                    开始AI分析
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="ai-analysis-results" class="analysis-container">
+                    <!-- 分析结果将在这里动态显示 -->
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- 添加必要的CSS样式 -->
+<style>
+.analysis-container {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.analysis-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.analysis-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.risk-level {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.risk-low {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.risk-medium {
+    background-color: #fff3e0;
+    color: #f57c00;
+}
+
+.risk-high {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.keywords-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.keyword-tag {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 8px;
+    border-radius: 16px;
+    font-size: 0.9em;
+}
+</style>
+
+<!-- 添加必要的JavaScript代码 -->
+<script>
+async function requestAIAnalysis() {
+    try {
+        const response = await fetch('/page/api/analyze_messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            displayAnalysisResults(result.data);
+        } else {
+            alert('分析失败: ' + result.error);
+        }
+    } catch (error) {
+        console.error('AI分析请求失败:', error);
+        alert('请求失败，请稍后重试');
+    }
+}
+
+function displayAnalysisResults(results) {
+    const container = document.getElementById('ai-analysis-results');
+    container.innerHTML = ''; // 清空现有结果
+    
+    results.forEach(analysis => {
+        const card = document.createElement('div');
+        card.className = 'analysis-card';
+        
+        const riskLevelClass = 
+            analysis.risk_level === '高' ? 'risk-high' :
+            analysis.risk_level === '中' ? 'risk-medium' : 'risk-low';
+        
+        card.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-2">消息ID: ${analysis.id}</h5>
+                <span class="risk-level ${riskLevelClass}">
+                    风险等级: ${analysis.risk_level}
+                </span>
+            </div>
+            <div class="mb-2">
+                <strong>情感倾向:</strong> ${analysis.sentiment}
+                <span class="ml-2">(${analysis.sentiment_score})</span>
+            </div>
+            <div class="keywords-container">
+                ${analysis.keywords.split(',').map(keyword => 
+                    `<span class="keyword-tag">${keyword.trim()}</span>`
+                ).join('')}
+            </div>
+            <div class="mb-2">
+                <strong>核心观点:</strong>
+                <p class="mb-1">${analysis.key_points}</p>
+            </div>
+            <div class="mb-2">
+                <strong>影响分析:</strong>
+                <p class="mb-1">${analysis.influence}</p>
+            </div>
+            <div class="text-muted">
+                分析时间: ${analysis.analysis_time}
+            </div>
+        `;
+        
+        container.appendChild(card);
+    });
+}
+
+// 页面加载完成后自动请求一次AI分析
+document.addEventListener('DOMContentLoaded', requestAIAnalysis);
+</script>
 
 {% endblock %}
 
