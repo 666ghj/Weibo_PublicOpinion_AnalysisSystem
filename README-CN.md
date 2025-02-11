@@ -42,7 +42,10 @@
 - [MySQL](https://www.mysql.com/) 数据库
 - [Conda](https://docs.conda.io/en/latest/)（可选，用于环境管理）
 - 合法的微博账号（用于数据采集）
-- OpenAI API密钥或Anthropic（Claude）API密钥（用于AI分析功能）
+- 以下API密钥中至少需要一个（用于AI分析功能）：
+  - OpenAI API密钥
+  - Anthropic（Claude）API密钥
+  - DeepSeek API密钥
 
 ### 安装步骤
 
@@ -78,9 +81,17 @@
    
    # Anthropic API配置（使用Claude模型必需）
    export ANTHROPIC_API_KEY="你的anthropic密钥"
+   
+   # DeepSeek API配置（使用DeepSeek模型必需）
+   export DEEPSEEK_API_KEY="你的deepseek密钥"
    ```
    
    注意：至少需要配置一个API密钥才能使用AI分析功能。
+   
+   支持的AI模型：
+   - OpenAI：GPT-3.5-Turbo、GPT-4
+   - Anthropic：Claude-3（Opus、Sonnet、Haiku）
+   - DeepSeek：DeepSeek-V3（deepseek-chat）、DeepSeek-R1（deepseek-reasoner）
 
 5. 启动Flask应用：
 
@@ -106,6 +117,7 @@
 - **[TensorFlow](https://www.tensorflow.org/)** 或 **[PyTorch](https://pytorch.org/)** - 深度学习框架，用于高级模型开发。
 - **[OpenAI GPT](https://openai.com/)** - 先进的语言模型，用于文本分析。
 - **[Anthropic Claude](https://www.anthropic.com/)** - 智能AI模型，用于复杂文本分析。
+- **[DeepSeek](https://deepseek.com/)** - 先进的中英双语AI模型。
 
 ## 🤝 贡献
 

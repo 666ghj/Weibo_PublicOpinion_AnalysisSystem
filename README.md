@@ -40,7 +40,10 @@ Follow the steps below to run the project on your system.
 - [MySQL](https://www.mysql.com/) Database
 - [Conda](https://docs.conda.io/en/latest/) (optional, for environment management)
 - A valid Weibo account (for data collection)
-- OpenAI API key or Anthropic (Claude) API key for AI analysis features
+- At least one of the following API keys for AI analysis features:
+  - OpenAI API key
+  - Anthropic (Claude) API key
+  - DeepSeek API key
 
 ### Installation Steps
 
@@ -76,9 +79,17 @@ Follow the steps below to run the project on your system.
    
    # For Anthropic API (Required for Claude models)
    export ANTHROPIC_API_KEY="your-anthropic-key"
+   
+   # For DeepSeek API (Required for DeepSeek models)
+   export DEEPSEEK_API_KEY="your-deepseek-key"
    ```
    
    Note: At least one API key must be configured to use AI analysis features.
+   
+   Supported AI Models:
+   - OpenAI: GPT-3.5-Turbo, GPT-4
+   - Anthropic: Claude-3 (Opus, Sonnet, Haiku)
+   - DeepSeek: DeepSeek-V3 (deepseek-chat), DeepSeek-R1 (deepseek-reasoner)
 
 6. Start the Flask application:
 
@@ -104,6 +115,7 @@ The Weibo Public Opinion Analysis and Prediction System employs a range of moder
 - **[TensorFlow](https://www.tensorflow.org/)** 或 **[PyTorch](https://pytorch.org/)** - Deep learning frameworks used for advanced model development.
 - **[OpenAI GPT](https://openai.com/)** - Advanced language models for text analysis.
 - **[Anthropic Claude](https://www.anthropic.com/)** - AI models for sophisticated text analysis.
+- **[DeepSeek](https://deepseek.com/)** - Advanced Chinese-English bilingual AI models.
 
 ## 🤝 Contribution
 

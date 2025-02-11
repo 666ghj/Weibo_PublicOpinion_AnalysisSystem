@@ -11,14 +11,21 @@ class AIAnalyzer:
         # 从环境变量获取API密钥
         self.openai_key = os.getenv('OPENAI_API_KEY')
         self.claude_key = os.getenv('ANTHROPIC_API_KEY')
+        self.deepseek_key = os.getenv('DEEPSEEK_API_KEY')
         
-        if not self.openai_key and not self.claude_key:
-            raise ValueError("请至少设置一个API密钥 (OPENAI_API_KEY 或 ANTHROPIC_API_KEY)")
+        if not any([self.openai_key, self.claude_key, self.deepseek_key]):
+            raise ValueError("请至少设置一个API密钥 (OPENAI_API_KEY, ANTHROPIC_API_KEY 或 DEEPSEEK_API_KEY)")
         
         if self.openai_key:
             openai.api_key = self.openai_key
         if self.claude_key:
             self.claude_client = anthropic.Anthropic(api_key=self.claude_key)
+        if self.deepseek_key:
+            # 配置DeepSeek API
+            self.deepseek_client = openai.OpenAI(
+                api_key=self.deepseek_key,
+                base_url="https://api.deepseek.com/v1"
+            )
         
         # 支持的模型列表
         self.supported_models = {
@@ -35,7 +42,11 @@ class AIAnalyzer:
             'claude-3-haiku-20240307': {'provider': 'anthropic', 'max_tokens': 2000, 'cost_per_1k': 0.0025},
             'claude-2.1': {'provider': 'anthropic', 'max_tokens': 100000, 'cost_per_1k': 0.008},
             'claude-2.0': {'provider': 'anthropic', 'max_tokens': 100000, 'cost_per_1k': 0.008},
-            'claude-instant-1.2': {'provider': 'anthropic', 'max_tokens': 100000, 'cost_per_1k': 0.0015}
+            'claude-instant-1.2': {'provider': 'anthropic', 'max_tokens': 100000, 'cost_per_1k': 0.0015},
+            
+            # DeepSeek 模型
+            'deepseek-chat': {'provider': 'deepseek', 'max_tokens': 4000, 'cost_per_1k': 0.002},  # DeepSeek-V3
+            'deepseek-reasoner': {'provider': 'deepseek', 'max_tokens': 4000, 'cost_per_1k': 0.003}  # DeepSeek-R1
         }
         
         # 不同深度的分析提示词
@@ -129,11 +140,18 @@ class AIAnalyzer:
                         model_type, 
                         max_tokens
                     )
-                else:  # anthropic
+                elif provider == 'anthropic':
                     result = await self._analyze_with_claude(
                         messages_text, 
                         system_prompt, 
                         model_type, 
+                        max_tokens
+                    )
+                elif provider == 'deepseek':
+                    result = await self._analyze_with_deepseek(
+                        messages_text,
+                        system_prompt,
+                        model_type,
                         max_tokens
                     )
                 
@@ -233,6 +251,32 @@ class AIAnalyzer:
                 
         except Exception as e:
             logging.error(f"Claude API调用失败: {e}")
+            return []
+    
+    async def _analyze_with_deepseek(self, messages_text: str, system_prompt: str, 
+                                   model: str, max_tokens: int) -> List[Dict]:
+        """使用DeepSeek API进行分析"""
+        try:
+            response = await self.deepseek_client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": f"请分析以下消息:\n{messages_text}"}
+                ],
+                temperature=0.3,
+                max_tokens=max_tokens,
+                response_format={"type": "json_object"}  # 强制JSON响应格式
+            )
+            
+            result = json.loads(response.choices[0].message.content)
+            if isinstance(result, dict) and 'analysis_results' in result:
+                return result['analysis_results']
+            else:
+                logging.error(f"DeepSeek API返回格式不正确: {response.choices[0].message.content}")
+                return []
+                
+        except Exception as e:
+            logging.error(f"DeepSeek API调用失败: {e}")
             return []
     
     def format_analysis_for_display(self, analysis: Dict) -> Dict:
