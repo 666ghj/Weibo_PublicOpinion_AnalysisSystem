@@ -308,11 +308,33 @@ def articleChar(id):
 @pb.route('/api/analyze_messages', methods=['POST'])
 async def analyze_messages():
     try:
-        # 获取最近50条消息
-        messages = getRecentMessages(50)  # 需要实现这个函数
+        # 获取请求参数
+        data = request.get_json()
+        batch_size = data.get('batch_size', 50)
+        model_type = data.get('model_type', 'gpt-3.5-turbo')
+        analysis_depth = data.get('analysis_depth', 'standard')
+        
+        # 获取最近的消息
+        messages = getRecentMessages(batch_size)
+        if not messages:
+            return jsonify({
+                'success': False,
+                'error': '没有找到需要分析的消息'
+            }), 404
         
         # 调用AI进行分析
-        analysis_results = await ai_analyzer.analyze_messages(messages)
+        analysis_results = await ai_analyzer.analyze_messages(
+            messages=messages,
+            batch_size=batch_size,
+            model_type=model_type,
+            analysis_depth=analysis_depth
+        )
+        
+        if not analysis_results:
+            return jsonify({
+                'success': False,
+                'error': '分析过程中出现错误'
+            }), 500
         
         # 保存到数据库
         with Session(engine) as session:
@@ -337,7 +359,14 @@ async def analyze_messages():
         
         return jsonify({
             'success': True,
-            'data': display_results
+            'data': display_results,
+            'meta': {
+                'total_messages': len(messages),
+                'analyzed_messages': len(analysis_results),
+                'batch_size': batch_size,
+                'model_type': model_type,
+                'analysis_depth': analysis_depth
+            }
         })
     
     except Exception as e:

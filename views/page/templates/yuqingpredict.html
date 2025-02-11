@@ -454,11 +454,74 @@
                 <div class="header-title">
                     <h4 class="card-title">AI深度分析</h4>
                 </div>
-                <button class="btn btn-primary" onclick="requestAIAnalysis()">
-                    开始AI分析
-                </button>
+                <div class="analysis-controls">
+                    <!-- 批量处理设置 -->
+                    <div class="d-flex align-items-center">
+                        <div class="form-group mx-2 mb-0">
+                            <select id="batchSize" class="form-control form-control-sm">
+                                <option value="10">每批10条</option>
+                                <option value="20">每批20条</option>
+                                <option value="50" selected>每批50条</option>
+                                <option value="100">每批100条</option>
+                            </select>
+                        </div>
+                        <div class="form-group mx-2 mb-0">
+                            <select id="modelType" class="form-control form-control-sm">
+                                <option value="gpt-3.5-turbo" selected>GPT-3.5</option>
+                                <option value="gpt-4">GPT-4</option>
+                            </select>
+                        </div>
+                        <div class="form-group mx-2 mb-0">
+                            <select id="analysisDepth" class="form-control form-control-sm">
+                                <option value="basic">基础分析</option>
+                                <option value="standard" selected>标准分析</option>
+                                <option value="deep">深度分析</option>
+                            </select>
+                        </div>
+                        <div class="custom-control custom-switch mx-2">
+                            <input type="checkbox" class="custom-control-input" id="autoUpdate">
+                            <label class="custom-control-label" for="autoUpdate">自动更新</label>
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="requestAIAnalysis()">
+                            开始分析
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
+                <!-- 进度显示 -->
+                <div id="analysis-progress" class="mb-3" style="display: none;">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <small class="text-muted mt-1 d-block">正在分析: <span id="progress-text">0/0</span></small>
+                </div>
+                
+                <!-- 分析结果过滤器 -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="form-group mb-0 mr-2">
+                            <input type="text" class="form-control form-control-sm" id="keywordFilter" placeholder="按关键词过滤">
+                        </div>
+                        <div class="form-group mb-0 mr-2">
+                            <select class="form-control form-control-sm" id="sentimentFilter">
+                                <option value="">全部情感</option>
+                                <option value="积极">积极</option>
+                                <option value="消极">消极</option>
+                                <option value="中性">中性</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <select class="form-control form-control-sm" id="riskFilter">
+                                <option value="">全部风险等级</option>
+                                <option value="高">高风险</option>
+                                <option value="中">中风险</option>
+                                <option value="低">低风险</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
                 <div id="ai-analysis-results" class="analysis-container">
                     <!-- 分析结果将在这里动态显示 -->
                 </div>
@@ -467,7 +530,7 @@
     </div>
 </div>
 
-<!-- 添加必要的CSS样式 -->
+<!-- 更新CSS样式 -->
 <style>
 .analysis-container {
     max-height: 600px;
@@ -481,10 +544,12 @@
     margin-bottom: 15px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
 }
 
 .analysis-card:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
 }
 
 .risk-level {
@@ -521,30 +586,165 @@
     padding: 4px 8px;
     border-radius: 16px;
     font-size: 0.9em;
+    transition: all 0.2s ease;
+}
+
+.keyword-tag:hover {
+    background-color: #1976d2;
+    color: #fff;
+}
+
+.sentiment-score {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    margin-left: 8px;
+}
+
+.sentiment-positive {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.sentiment-negative {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.sentiment-neutral {
+    background-color: #f5f5f5;
+    color: #616161;
+}
+
+.progress {
+    height: 0.5rem;
+}
+
+.analysis-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .analysis-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 </style>
 
-<!-- 添加必要的JavaScript代码 -->
+<!-- 更新JavaScript代码 -->
 <script>
+let currentAnalysis = {
+    inProgress: false,
+    totalMessages: 0,
+    processedMessages: 0,
+    autoUpdateInterval: null
+};
+
 async function requestAIAnalysis() {
+    if (currentAnalysis.inProgress) {
+        return;
+    }
+    
     try {
+        currentAnalysis.inProgress = true;
+        showProgress();
+        
+        const batchSize = parseInt(document.getElementById('batchSize').value);
+        const modelType = document.getElementById('modelType').value;
+        const analysisDepth = document.getElementById('analysisDepth').value;
+        
         const response = await fetch('/page/api/analyze_messages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+                batch_size: batchSize,
+                model_type: modelType,
+                analysis_depth: analysisDepth
+            })
         });
         
         const result = await response.json();
         if (result.success) {
             displayAnalysisResults(result.data);
+            setupAutoUpdate();
         } else {
-            alert('分析失败: ' + result.error);
+            showError(result.error);
         }
     } catch (error) {
         console.error('AI分析请求失败:', error);
-        alert('请求失败，请稍后重试');
+        showError('请求失败，请稍后重试');
+    } finally {
+        currentAnalysis.inProgress = false;
+        hideProgress();
     }
+}
+
+function showProgress() {
+    const progressDiv = document.getElementById('analysis-progress');
+    progressDiv.style.display = 'block';
+    updateProgress(0, 100);
+}
+
+function hideProgress() {
+    const progressDiv = document.getElementById('analysis-progress');
+    progressDiv.style.display = 'none';
+}
+
+function updateProgress(current, total) {
+    const progressBar = document.querySelector('.progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const percentage = (current / total) * 100;
+    
+    progressBar.style.width = `${percentage}%`;
+    progressText.textContent = `${current}/${total}`;
+}
+
+function setupAutoUpdate() {
+    const autoUpdate = document.getElementById('autoUpdate').checked;
+    if (autoUpdate && !currentAnalysis.autoUpdateInterval) {
+        currentAnalysis.autoUpdateInterval = setInterval(requestAIAnalysis, 300000); // 5分钟更新一次
+    } else if (!autoUpdate && currentAnalysis.autoUpdateInterval) {
+        clearInterval(currentAnalysis.autoUpdateInterval);
+        currentAnalysis.autoUpdateInterval = null;
+    }
+}
+
+function filterResults() {
+    const keyword = document.getElementById('keywordFilter').value.toLowerCase();
+    const sentiment = document.getElementById('sentimentFilter').value;
+    const risk = document.getElementById('riskFilter').value;
+    
+    const cards = document.querySelectorAll('.analysis-card');
+    cards.forEach(card => {
+        let show = true;
+        
+        // 关键词过滤
+        if (keyword) {
+            const content = card.textContent.toLowerCase();
+            show = show && content.includes(keyword);
+        }
+        
+        // 情感过滤
+        if (sentiment) {
+            const cardSentiment = card.querySelector('.sentiment-text').textContent;
+            show = show && cardSentiment.includes(sentiment);
+        }
+        
+        // 风险等级过滤
+        if (risk) {
+            const cardRisk = card.querySelector('.risk-level').textContent;
+            show = show && cardRisk.includes(risk);
+        }
+        
+        card.style.display = show ? 'block' : 'none';
+    });
 }
 
 function displayAnalysisResults(results) {
@@ -558,6 +758,10 @@ function displayAnalysisResults(results) {
         const riskLevelClass = 
             analysis.risk_level === '高' ? 'risk-high' :
             analysis.risk_level === '中' ? 'risk-medium' : 'risk-low';
+            
+        const sentimentClass = 
+            analysis.sentiment === '积极' ? 'sentiment-positive' :
+            analysis.sentiment === '消极' ? 'sentiment-negative' : 'sentiment-neutral';
         
         card.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
@@ -567,8 +771,9 @@ function displayAnalysisResults(results) {
                 </span>
             </div>
             <div class="mb-2">
-                <strong>情感倾向:</strong> ${analysis.sentiment}
-                <span class="ml-2">(${analysis.sentiment_score})</span>
+                <strong>情感倾向:</strong> 
+                <span class="sentiment-text">${analysis.sentiment}</span>
+                <span class="sentiment-score ${sentimentClass}">${analysis.sentiment_score}</span>
             </div>
             <div class="keywords-container">
                 ${analysis.keywords.split(',').map(keyword => 
@@ -590,10 +795,28 @@ function displayAnalysisResults(results) {
         
         container.appendChild(card);
     });
+    
+    // 应用当前的过滤器
+    filterResults();
 }
 
-// 页面加载完成后自动请求一次AI分析
-document.addEventListener('DOMContentLoaded', requestAIAnalysis);
+function showError(message) {
+    alert(message);
+}
+
+// 设置事件监听器
+document.addEventListener('DOMContentLoaded', () => {
+    // 自动更新切换
+    document.getElementById('autoUpdate').addEventListener('change', setupAutoUpdate);
+    
+    // 过滤器变化监听
+    document.getElementById('keywordFilter').addEventListener('input', filterResults);
+    document.getElementById('sentimentFilter').addEventListener('change', filterResults);
+    document.getElementById('riskFilter').addEventListener('change', filterResults);
+    
+    // 首次加载时请求分析
+    requestAIAnalysis();
+});
 </script>
 
 {% endblock %}
