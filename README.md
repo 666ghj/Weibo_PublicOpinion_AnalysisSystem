@@ -40,6 +40,7 @@ Follow the steps below to run the project on your system.
 - [MySQL](https://www.mysql.com/) Database
 - [Conda](https://docs.conda.io/en/latest/) (optional, for environment management)
 - A valid Weibo account (for data collection)
+- OpenAI API key or Anthropic (Claude) API key for AI analysis features
 
 ### Installation Steps
 
@@ -66,13 +67,26 @@ Follow the steps below to run the project on your system.
    - Run `createTables.sql` to create the necessary database tables.
    - Modify the database connection settings in `config.py` to match your MySQL configuration.
 
-5. Start the Flask application:
+5. Configure AI Analysis (Optional):
+   
+   Set up environment variables for AI analysis features:
+   ```bash
+   # For OpenAI API (Required for GPT models)
+   export OPENAI_API_KEY="your-openai-key"
+   
+   # For Anthropic API (Required for Claude models)
+   export ANTHROPIC_API_KEY="your-anthropic-key"
+   ```
+   
+   Note: At least one API key must be configured to use AI analysis features.
+
+6. Start the Flask application:
 
    ```bash
    python app.py
    ```
 
-6. Access the application: Open your browser and navigate to http://localhost:5000 to use the system.
+7. Access the application: Open your browser and navigate to http://localhost:5000 to use the system.
 
 ## 🛠️ Technology Stack
 
@@ -88,6 +102,8 @@ The Weibo Public Opinion Analysis and Prediction System employs a range of moder
 - **[Matplotlib](https://matplotlib.org/)** - A data visualization library.
 - **[Scikit-learn](https://scikit-learn.org/)** - A machine learning library used for model training and evaluation.
 - **[TensorFlow](https://www.tensorflow.org/)** 或 **[PyTorch](https://pytorch.org/)** - Deep learning frameworks used for advanced model development.
+- **[OpenAI GPT](https://openai.com/)** - Advanced language models for text analysis.
+- **[Anthropic Claude](https://www.anthropic.com/)** - AI models for sophisticated text analysis.
 
 ## 🤝 Contribution
 

@@ -42,6 +42,7 @@
 - [MySQL](https://www.mysql.com/) 数据库
 - [Conda](https://docs.conda.io/en/latest/)（可选，用于环境管理）
 - 合法的微博账号（用于数据采集）
+- OpenAI API密钥或Anthropic（Claude）API密钥（用于AI分析功能）
 
 ### 安装步骤
 
@@ -68,7 +69,20 @@
    - 运行 `createTables.sql` 创建所需的数据库表。
    - 修改 `config.py` 中的数据库连接配置，确保与您的MySQL设置匹配。
 
-4. 启动Flask应用：
+4. 配置AI分析功能（可选）：
+   
+   设置AI分析功能所需的环境变量：
+   ```bash
+   # OpenAI API配置（使用GPT模型必需）
+   export OPENAI_API_KEY="你的openai密钥"
+   
+   # Anthropic API配置（使用Claude模型必需）
+   export ANTHROPIC_API_KEY="你的anthropic密钥"
+   ```
+   
+   注意：至少需要配置一个API密钥才能使用AI分析功能。
+
+5. 启动Flask应用：
 
    ```bash
    python app.py
@@ -90,6 +104,8 @@
 - **[Matplotlib](https://matplotlib.org/)** - 数据可视化库。
 - **[Scikit-learn](https://scikit-learn.org/)** - 机器学习库，用于模型训练和评估。
 - **[TensorFlow](https://www.tensorflow.org/)** 或 **[PyTorch](https://pytorch.org/)** - 深度学习框架，用于高级模型开发。
+- **[OpenAI GPT](https://openai.com/)** - 先进的语言模型，用于文本分析。
+- **[Anthropic Claude](https://www.anthropic.com/)** - 智能AI模型，用于复杂文本分析。
 
 ## 🤝 贡献
 

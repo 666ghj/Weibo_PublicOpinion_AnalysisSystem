@@ -467,8 +467,21 @@
                         </div>
                         <div class="form-group mx-2 mb-0">
                             <select id="modelType" class="form-control form-control-sm">
-                                <option value="gpt-3.5-turbo" selected>GPT-3.5</option>
-                                <option value="gpt-4">GPT-4</option>
+                                <optgroup label="OpenAI 模型">
+                                    <option value="gpt-3.5-turbo">GPT-3.5-Turbo ($0.0015/1K tokens)</option>
+                                    <option value="gpt-3.5-turbo-16k">GPT-3.5-Turbo-16K ($0.003/1K tokens)</option>
+                                    <option value="gpt-4">GPT-4 ($0.03/1K tokens)</option>
+                                    <option value="gpt-4-32k">GPT-4-32K ($0.06/1K tokens)</option>
+                                    <option value="gpt-4-turbo-preview">GPT-4-Turbo ($0.01/1K tokens)</option>
+                                </optgroup>
+                                <optgroup label="Claude 模型">
+                                    <option value="claude-3-opus-20240229">Claude-3 Opus ($0.015/1K tokens)</option>
+                                    <option value="claude-3-sonnet-20240229">Claude-3 Sonnet ($0.003/1K tokens)</option>
+                                    <option value="claude-3-haiku-20240307">Claude-3 Haiku ($0.0025/1K tokens)</option>
+                                    <option value="claude-2.1">Claude-2.1 ($0.008/1K tokens)</option>
+                                    <option value="claude-2.0">Claude-2.0 ($0.008/1K tokens)</option>
+                                    <option value="claude-instant-1.2">Claude Instant ($0.0015/1K tokens)</option>
+                                </optgroup>
                             </select>
                         </div>
                         <div class="form-group mx-2 mb-0">
