@@ -162,26 +162,37 @@
                             {% endfor %}
                         </select>
                      </div>
-                     <div class="form-group">
-                        <label>模型选择</label>
-                        <select onchange="modelChange(event)" class="form-control mb-3">
-                            {% if model_type == 'basic' %}
-                                <option selected value="basic">基础模型</option>
-                                <option value="pro">改进模型</option>
-                            {% else %}
-                                <option value="basic">基础模型</option>
-                                <option selected value="pro">改进模型</option>
-                            {% endif %}
-                        </select>
+                     <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="modelSelect">选择分析模型：</label>
+                            <select class="form-control" id="modelSelect" onchange="updateModel(this.value)">
+                                <optgroup label="基础模型">
+                                    <option value="basic" {% if model_type == 'basic' %}selected{% endif %}>SnowNLP</option>
+                                </optgroup>
+                                <optgroup label="OpenAI 模型">
+                                    <option value="gpt-3.5-turbo" {% if model_type == 'gpt-3.5-turbo' %}selected{% endif %}>GPT-3.5-Turbo</option>
+                                    <option value="gpt-4" {% if model_type == 'gpt-4' %}selected{% endif %}>GPT-4</option>
+                                </optgroup>
+                                <optgroup label="Claude 模型">
+                                    <option value="claude-3-opus-20240229" {% if model_type == 'claude-3-opus-20240229' %}selected{% endif %}>Claude-3 Opus</option>
+                                    <option value="claude-3-sonnet-20240229" {% if model_type == 'claude-3-sonnet-20240229' %}selected{% endif %}>Claude-3 Sonnet</option>
+                                    <option value="claude-3-haiku-20240307" {% if model_type == 'claude-3-haiku-20240307' %}selected{% endif %}>Claude-3 Haiku</option>
+                                </optgroup>
+                                <optgroup label="DeepSeek 模型">
+                                    <option value="deepseek-chat" {% if model_type == 'deepseek-chat' %}selected{% endif %}>DeepSeek-V3</option>
+                                    <option value="deepseek-reasoner" {% if model_type == 'deepseek-reasoner' %}selected{% endif %}>DeepSeek-R1</option>
+                                </optgroup>
+                            </select>
+                        </div>
                      </div>
                          <script>
                              function hotWordChange(e){
-                                 const model = document.querySelector('select[onchange="modelChange(event)"]').value;
+                                 const model = document.querySelector('select[onchange="updateModel(this.value)"]').value;
                                  window.location.href = 'http://127.0.0.1:5000/page/yuqingpredict?Topic=' + e.target.value + '&model=' + model;
                              }
-                             function modelChange(e){
+                             function updateModel(value) {
                                  const topic = document.querySelector('select[onchange="hotWordChange(event)"]').value;
-                                 window.location.href = 'http://127.0.0.1:5000/page/yuqingpredict?Topic=' + topic + '&model=' + e.target.value;
+                                 window.location.href = 'http://127.0.0.1:5000/page/yuqingpredict?Topic=' + topic + '&model=' + value;
                              }
                          </script>
                   </div>

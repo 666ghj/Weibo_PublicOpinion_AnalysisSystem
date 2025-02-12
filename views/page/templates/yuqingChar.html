@@ -166,6 +166,29 @@
                          </div>
                       </div>
                 </div>
+                <div class="col-lg-12 mb-3">
+                    <div class="form-group">
+                        <label for="modelSelect">选择分析模型：</label>
+                        <select class="form-control" id="modelSelect" onchange="updateModel(this.value)">
+                            <optgroup label="基础模型">
+                                <option value="basic" {% if model_type == 'basic' %}selected{% endif %}>SnowNLP</option>
+                            </optgroup>
+                            <optgroup label="OpenAI 模型">
+                                <option value="gpt-3.5-turbo" {% if model_type == 'gpt-3.5-turbo' %}selected{% endif %}>GPT-3.5-Turbo</option>
+                                <option value="gpt-4" {% if model_type == 'gpt-4' %}selected{% endif %}>GPT-4</option>
+                            </optgroup>
+                            <optgroup label="Claude 模型">
+                                <option value="claude-3-opus-20240229" {% if model_type == 'claude-3-opus-20240229' %}selected{% endif %}>Claude-3 Opus</option>
+                                <option value="claude-3-sonnet-20240229" {% if model_type == 'claude-3-sonnet-20240229' %}selected{% endif %}>Claude-3 Sonnet</option>
+                                <option value="claude-3-haiku-20240307" {% if model_type == 'claude-3-haiku-20240307' %}selected{% endif %}>Claude-3 Haiku</option>
+                            </optgroup>
+                            <optgroup label="DeepSeek 模型">
+                                <option value="deepseek-chat" {% if model_type == 'deepseek-chat' %}selected{% endif %}>DeepSeek-V3</option>
+                                <option value="deepseek-reasoner" {% if model_type == 'deepseek-reasoner' %}selected{% endif %}>DeepSeek-R1</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
           </div>
 
 {% endblock %}
@@ -369,5 +392,10 @@
 
         option && myChart.setOption(option);
 
+    </script>
+    <script>
+    function updateModel(value) {
+        window.location.href = '/page/yuqingChar?model=' + value;
+    }
     </script>
 {% endblock %}
