@@ -10,7 +10,7 @@ from utils.yuqingpredict import *
 from utils.logger import app_logger as logging
 from utils.cache_manager import prediction_cache
 from utils.ai_analyzer import ai_analyzer
-from models.ai_analysis import AIAnalysis
+from utils.ai_analysis import AIAnalysis
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 import asyncio
