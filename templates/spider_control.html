@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爬虫控制面板</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        .topic-item {
+            margin: 5px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: #f8f9fa;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .topic-item.selected {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .custom-topic-input {
+            margin: 10px 0;
+        }
+        .parameter-section {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">爬虫控制面板</h2>
+        
+        <!-- 话题选择区域 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">选择话题类型</h5>
+            </div>
+            <div class="card-body">
+                <div id="predefinedTopics" class="mb-3">
+                    <!-- 预定义话题将通过JavaScript动态加载 -->
+                </div>
+                
+                <div class="custom-topic-input">
+                    <h6>添加自定义话题</h6>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="customTopic" placeholder="输入自定义话题">
+                        <button class="btn btn-primary" onclick="addCustomTopic()">
+                            <i class="fas fa-plus"></i> 添加
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="selectedTopics" class="mt-3">
+                    <h6>已选择的话题：</h6>
+                    <div id="selectedTopicsList" class="mt-2">
+                        <!-- 已选择的话题将在这里显示 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 爬虫参数配置 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">爬虫参数配置</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="crawlDepth" class="form-label">爬取深度</label>
+                            <input type="number" class="form-control" id="crawlDepth" value="3" min="1" max="10">
+                            <small class="text-muted">每个话题爬取的页数（1-10）</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="interval" class="form-label">爬取间隔(秒)</label>
+                            <input type="number" class="form-control" id="interval" value="5" min="1">
+                            <small class="text-muted">每次请求之间的间隔时间</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="maxRetries" class="form-label">最大重试次数</label>
+                            <input type="number" class="form-control" id="maxRetries" value="3" min="1">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="timeout" class="form-label">请求超时时间(秒)</label>
+                            <input type="number" class="form-control" id="timeout" value="30" min="1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="d-flex justify-content-between mb-5">
+            <button class="btn btn-primary" onclick="startCrawling()">
+                <i class="fas fa-play"></i> 开始爬取
+            </button>
+            <button class="btn btn-secondary" onclick="saveConfig()">
+                <i class="fas fa-save"></i> 保存配置
+            </button>
+        </div>
+
+        <!-- 爬虫状态和日志 -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">爬虫状态</h5>
+            </div>
+            <div class="card-body">
+                <div class="progress mb-3">
+                    <div id="crawlProgress" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                </div>
+                <div class="border p-3 bg-light" style="height: 200px; overflow-y: auto;">
+                    <pre id="crawlLog" class="mb-0"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 预定义话题列表
+        const predefinedTopics = [
+            '热门', '社会', '科技', '娱乐', '体育', '财经', 
+            '教育', '健康', '军事', '文化', '汽车', '美食'
+        ];
+
+        // 已选择的话题
+        let selectedTopics = new Set();
+
+        // 初始化页面
+        window.onload = function() {
+            loadPredefinedTopics();
+        };
+
+        // 加载预定义话题
+        function loadPredefinedTopics() {
+            const topicsDiv = document.getElementById('predefinedTopics');
+            predefinedTopics.forEach(topic => {
+                const topicElement = document.createElement('span');
+                topicElement.className = 'topic-item';
+                topicElement.textContent = topic;
+                topicElement.onclick = () => toggleTopic(topic, topicElement);
+                topicsDiv.appendChild(topicElement);
+            });
+        }
+
+        // 切换话题选择状态
+        function toggleTopic(topic, element) {
+            if (selectedTopics.has(topic)) {
+                selectedTopics.delete(topic);
+                element.classList.remove('selected');
+            } else {
+                selectedTopics.add(topic);
+                element.classList.add('selected');
+            }
+            updateSelectedTopicsList();
+        }
+
+        // 添加自定义话题
+        function addCustomTopic() {
+            const input = document.getElementById('customTopic');
+            const topic = input.value.trim();
+            if (topic) {
+                selectedTopics.add(topic);
+                input.value = '';
+                updateSelectedTopicsList();
+            }
+        }
+
+        // 更新已选择的话题列表
+        function updateSelectedTopicsList() {
+            const listDiv = document.getElementById('selectedTopicsList');
+            listDiv.innerHTML = '';
+            selectedTopics.forEach(topic => {
+                const topicElement = document.createElement('span');
+                topicElement.className = 'topic-item selected';
+                topicElement.textContent = topic;
+                topicElement.onclick = () => {
+                    selectedTopics.delete(topic);
+                    updateSelectedTopicsList();
+                };
+                listDiv.appendChild(topicElement);
+            });
+        }
+
+        // 开始爬取
+        function startCrawling() {
+            if (selectedTopics.size === 0) {
+                alert('请至少选择一个话题！');
+                return;
+            }
+
+            const config = {
+                topics: Array.from(selectedTopics),
+                parameters: {
+                    crawlDepth: parseInt(document.getElementById('crawlDepth').value),
+                    interval: parseInt(document.getElementById('interval').value),
+                    maxRetries: parseInt(document.getElementById('maxRetries').value),
+                    timeout: parseInt(document.getElementById('timeout').value)
+                }
+            };
+
+            // 发送爬虫配置到后端
+            fetch('/api/spider/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(config)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCrawlLog('爬虫任务已启动...');
+                } else {
+                    updateCrawlLog('启动失败：' + data.message);
+                }
+            })
+            .catch(error => {
+                updateCrawlLog('错误：' + error.message);
+            });
+        }
+
+        // 保存配置
+        function saveConfig() {
+            const config = {
+                topics: Array.from(selectedTopics),
+                parameters: {
+                    crawlDepth: parseInt(document.getElementById('crawlDepth').value),
+                    interval: parseInt(document.getElementById('interval').value),
+                    maxRetries: parseInt(document.getElementById('maxRetries').value),
+                    timeout: parseInt(document.getElementById('timeout').value)
+                }
+            };
+
+            fetch('/api/spider/save-config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(config)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('配置已保存！');
+                } else {
+                    alert('保存失败：' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('保存出错：' + error.message);
+            });
+        }
+
+        // 更新爬虫日志
+        function updateCrawlLog(message) {
+            const log = document.getElementById('crawlLog');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `[${timestamp}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // WebSocket连接用于实时更新爬虫状态
+        const ws = new WebSocket(`ws://${window.location.host}/ws/spider-status`);
+        
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.type === 'progress') {
+                document.getElementById('crawlProgress').style.width = data.value + '%';
+            } else if (data.type === 'log') {
+                updateCrawlLog(data.message);
+            }
+        };
+    </script>
+</body>
+</html> 

@@ -99,8 +99,10 @@ app.secret_key = 'this is secret_key you know ?'  # 设置 Flask 的密钥，用
 # 导入蓝图
 from views.page import page
 from views.user import user
+from views.spider_control import spider_bp
 app.register_blueprint(page.pb)  # 注册页面蓝图
 app.register_blueprint(user.ub)    # 注册用户蓝图
+app.register_blueprint(spider_bp)  # 注册爬虫控制蓝图
 
 # 首页路由，清空 session
 @app.route('/')
