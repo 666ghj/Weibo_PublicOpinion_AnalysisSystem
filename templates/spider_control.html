@@ -103,6 +103,39 @@
             </div>
         </div>
 
+        <!-- AI配置助手 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-robot"></i> AI配置助手
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="aiPrompt" class="form-label">用自然语言描述您的爬虫需求</label>
+                    <textarea class="form-control" id="aiPrompt" rows="3" 
+                        placeholder="例如：我想爬取最近一周关于人工智能的热门微博，重点关注转发量超过1000的内容，每个话题爬取前5页内容。"></textarea>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-primary" onclick="generateConfig()">
+                        <i class="fas fa-magic"></i> 生成配置
+                    </button>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="autoApply" checked>
+                        <label class="form-check-label" for="autoApply">
+                            自动应用生成的配置
+                        </label>
+                    </div>
+                </div>
+                <div id="aiResponse" class="mt-3" style="display: none;">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">AI助手建议：</h6>
+                        <p id="aiSuggestion" class="mb-0"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- 操作按钮 -->
         <div class="d-flex justify-content-between mb-5">
             <button class="btn btn-primary" onclick="startCrawling()">
@@ -286,6 +319,63 @@
                 updateCrawlLog(data.message);
             }
         };
+
+        // AI配置生成
+        async function generateConfig() {
+            const prompt = document.getElementById('aiPrompt').value.trim();
+            if (!prompt) {
+                alert('请输入您的爬虫需求描述！');
+                return;
+            }
+
+            const aiResponse = document.getElementById('aiResponse');
+            const aiSuggestion = document.getElementById('aiSuggestion');
+            
+            try {
+                const response = await fetch('/api/spider/ai-config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ prompt })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    // 显示AI建议
+                    aiSuggestion.textContent = data.suggestion;
+                    aiResponse.style.display = 'block';
+
+                    // 如果选择自动应用配置
+                    if (document.getElementById('autoApply').checked) {
+                        // 清除现有选择
+                        selectedTopics.clear();
+                        
+                        // 应用新的话题
+                        data.config.topics.forEach(topic => {
+                            selectedTopics.add(topic);
+                        });
+                        
+                        // 更新参数
+                        document.getElementById('crawlDepth').value = data.config.parameters.crawlDepth;
+                        document.getElementById('interval').value = data.config.parameters.interval;
+                        document.getElementById('maxRetries').value = data.config.parameters.maxRetries;
+                        document.getElementById('timeout').value = data.config.parameters.timeout;
+                        
+                        // 更新UI
+                        updateSelectedTopicsList();
+                        
+                        // 添加提示
+                        updateCrawlLog('AI配置已自动应用');
+                    }
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                aiSuggestion.textContent = '生成配置时出错：' + error.message;
+                aiResponse.style.display = 'block';
+            }
+        }
     </script>
 </body>
 </html> 
