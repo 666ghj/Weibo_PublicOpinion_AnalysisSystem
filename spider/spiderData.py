@@ -10,6 +10,7 @@ import logging
 from bs4 import BeautifulSoup
 from datetime import datetime
 from utils.logger import spider_logger as logging
+from utils.db_manager import DatabaseManager
 
 def spiderData():
     if not os.path.exists(navAddr):
@@ -26,6 +27,7 @@ class SpiderData:
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         }
         self.base_url = 'https://s.weibo.com'
+        self.db = DatabaseManager()
     
     def crawl_topic(self, topic, depth=3, interval=5, max_retries=3, timeout=30):
         """
@@ -37,7 +39,17 @@ class SpiderData:
         :param max_retries: 最大重试次数
         :param timeout: 请求超时时间（秒）
         """
-        logging.info(f"开始爬取话题: {topic}")
+        # 参数验证
+        if not isinstance(depth, int) or depth < 1 or depth > 10:
+            raise ValueError("爬取深度必须在1-10页之间")
+        if not isinstance(interval, int) or interval < 3 or interval > 30:
+            raise ValueError("请求间隔必须在3-30秒之间")
+        if not isinstance(max_retries, int) or max_retries < 1 or max_retries > 5:
+            raise ValueError("最大重试次数必须在1-5次之间")
+        if not isinstance(timeout, int) or timeout < 10 or timeout > 60:
+            raise ValueError("请求超时时间必须在10-60秒之间")
+        
+        logging.info(f"开始爬取话题: {topic}, 参数: depth={depth}, interval={interval}, max_retries={max_retries}, timeout={timeout}")
         
         for page in range(1, depth + 1):
             retries = 0
@@ -140,11 +152,34 @@ class SpiderData:
         
         :param data: 要保存的数据字典
         """
+        connection = None
         try:
-            # TODO: 实现数据库保存逻辑
-            logging.info(f"保存数据: {data}")
+            connection = self.db.get_connection()
+            
+            with connection.cursor() as cursor:
+                # 插入文章数据
+                sql = """
+                INSERT INTO article (content, user_name, publish_time, forward_count, 
+                                   comment_count, like_count, crawl_time)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                """
+                cursor.execute(sql, (
+                    data['content'],
+                    data['user_name'],
+                    data['publish_time'],
+                    data['forward_count'],
+                    data['comment_count'],
+                    data['like_count'],
+                    data['crawl_time']
+                ))
+                
+                connection.commit()
+                logging.info(f"成功保存微博数据: {data['content'][:30]}...")
+                
         except Exception as e:
             logging.error(f"保存数据时出错: {e}")
+            if connection:
+                connection.rollback()
 
 if __name__ == '__main__':
     spiderData()

@@ -9,6 +9,7 @@ from pytz import utc
 from datetime import datetime, timedelta
 import time
 from utils.logger import app_logger as logging
+from utils.db_manager import DatabaseManager
 
 def get_db_connection_interactive():
     """
@@ -231,6 +232,9 @@ DB_CONFIG = {
     'port': 3306,
     'charset': 'utf8mb4'
 }
+
+# 初始化数据库管理器
+DatabaseManager.initialize(DB_CONFIG)
 
 # 主程序入口
 if __name__ == '__main__':

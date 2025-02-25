@@ -73,6 +73,15 @@ def spider_worker(topics, parameters):
     total_topics = len(topics)
     completed_topics = 0
     
+    async def send_message(message):
+        """异步发送消息的包装函数"""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            await broadcast_message(message)
+        finally:
+            loop.close()
+    
     try:
         spider = SpiderData()
         
@@ -80,13 +89,13 @@ def spider_worker(topics, parameters):
             try:
                 # 更新进度
                 progress = int((completed_topics / total_topics) * 100)
-                asyncio.run(broadcast_message({
+                asyncio.run(send_message({
                     'type': 'progress',
                     'value': progress
                 }))
                 
                 # 发送开始爬取的日志
-                asyncio.run(broadcast_message({
+                asyncio.run(send_message({
                     'type': 'log',
                     'message': f'开始爬取话题: {topic}'
                 }))
@@ -103,33 +112,33 @@ def spider_worker(topics, parameters):
                 completed_topics += 1
                 
                 # 发送完成爬取的日志
-                asyncio.run(broadcast_message({
+                asyncio.run(send_message({
                     'type': 'log',
                     'message': f'话题 {topic} 爬取完成'
                 }))
                 
             except Exception as e:
                 # 发送错误日志
-                asyncio.run(broadcast_message({
+                asyncio.run(send_message({
                     'type': 'log',
                     'message': f'爬取话题 {topic} 时出错: {str(e)}'
                 }))
         
         # 更新最终进度
-        asyncio.run(broadcast_message({
+        asyncio.run(send_message({
             'type': 'progress',
             'value': 100
         }))
         
         # 发送完成消息
-        asyncio.run(broadcast_message({
+        asyncio.run(send_message({
             'type': 'log',
             'message': '所有话题爬取完成'
         }))
         
     except Exception as e:
         # 发送错误日志
-        asyncio.run(broadcast_message({
+        asyncio.run(send_message({
             'type': 'log',
             'message': f'爬虫任务执行出错: {str(e)}'
         }))
@@ -196,23 +205,27 @@ def save_spider_config():
         })
 
 @spider_bp.websocket('/ws/spider-status')
-async def spider_status_socket():
+async def spider_status_socket(websocket):
     """WebSocket连接处理"""
     try:
-        websocket = websockets.WebSocketServerProtocol()
         websocket_connections.add(websocket)
+        logging.info("新的WebSocket连接已建立")
         
         try:
             while True:
-                # 保持连接活跃
-                await websocket.ping()
-                await asyncio.sleep(30)
+                # 等待消息，保持连接活跃
+                message = await websocket.receive()
+                if message is None:
+                    break
         except websockets.exceptions.ConnectionClosed:
-            pass
+            logging.info("WebSocket连接已关闭")
         finally:
             websocket_connections.remove(websocket)
+            logging.info("WebSocket连接已移除")
     except Exception as e:
         logger.error(f"WebSocket连接处理失败: {e}")
+        if websocket in websocket_connections:
+            websocket_connections.remove(websocket)
 
 def get_ai_client():
     """获取可用的AI客户端"""
