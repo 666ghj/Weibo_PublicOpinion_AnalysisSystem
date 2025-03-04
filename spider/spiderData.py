@@ -11,6 +11,9 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from utils.logger import spider_logger as logging
 from utils.db_manager import DatabaseManager
+from cachetools import TTLCache, LRUCache
+from typing import List, Dict, Any
+import pandas as pd
 
 def spiderData():
     if not os.path.exists(navAddr):
@@ -28,17 +31,70 @@ class SpiderData:
         }
         self.base_url = 'https://s.weibo.com'
         self.db = DatabaseManager()
-    
-    def crawl_topic(self, topic, depth=3, interval=5, max_retries=3, timeout=30):
-        """
-        爬取指定话题的微博内容
         
-        :param topic: 要爬取的话题
-        :param depth: 爬取深度（页数）
-        :param interval: 请求间隔时间（秒）
-        :param max_retries: 最大重试次数
-        :param timeout: 请求超时时间（秒）
-        """
+        # 初始化缓存
+        self.data_cache = TTLCache(maxsize=1000, ttl=3600)  # 1小时TTL缓存
+        self.html_cache = LRUCache(maxsize=100)  # LRU缓存最近的100个页面
+        
+        # 批量插入缓冲区
+        self.insert_buffer = []
+        self.buffer_size = 50  # 每50条数据批量插入一次
+    
+    def _get_cached_page(self, url: str) -> str:
+        """获取缓存的页面内容"""
+        return self.html_cache.get(url)
+    
+    def _cache_page(self, url: str, content: str):
+        """缓存页面内容"""
+        self.html_cache[url] = content
+    
+    def _get_cached_data(self, key: str) -> Dict[str, Any]:
+        """获取缓存的数据"""
+        return self.data_cache.get(key)
+    
+    def _cache_data(self, key: str, data: Dict[str, Any]):
+        """缓存数据"""
+        self.data_cache[key] = data
+    
+    def _flush_buffer(self):
+        """将缓冲区数据批量插入数据库"""
+        if not self.insert_buffer:
+            return
+        
+        try:
+            connection = self.db.get_connection()
+            with connection.cursor() as cursor:
+                # 使用pandas进行高效的批量插入
+                df = pd.DataFrame(self.insert_buffer)
+                
+                # 构建批量插入SQL
+                columns = ', '.join(df.columns)
+                values = ', '.join(['%s'] * len(df.columns))
+                sql = f"""
+                INSERT INTO article ({columns})
+                VALUES ({values})
+                ON DUPLICATE KEY UPDATE
+                forward_count = VALUES(forward_count),
+                comment_count = VALUES(comment_count),
+                like_count = VALUES(like_count),
+                crawl_time = VALUES(crawl_time)
+                """
+                
+                # 执行批量插入
+                cursor.executemany(sql, df.values.tolist())
+                connection.commit()
+                
+                logging.info(f"成功批量插入 {len(self.insert_buffer)} 条数据")
+                self.insert_buffer.clear()
+                
+        except Exception as e:
+            logging.error(f"批量插入数据失败: {e}")
+            if connection:
+                connection.rollback()
+    
+    def crawl_topic(self, topic: str, depth: int = 3, interval: int = 5,
+                    max_retries: int = 3, timeout: int = 30):
+        """爬取指定话题的微博内容"""
         # 参数验证
         if not isinstance(depth, int) or depth < 1 or depth > 10:
             raise ValueError("爬取深度必须在1-10页之间")
@@ -56,9 +112,19 @@ class SpiderData:
             while retries < max_retries:
                 try:
                     url = f"{self.base_url}/weibo?q={topic}&page={page}"
+                    
+                    # 检查缓存
+                    cached_content = self._get_cached_page(url)
+                    if cached_content:
+                        self._parse_page(cached_content)
+                        logging.info(f"使用缓存数据: {topic} 第 {page} 页")
+                        break
+                    
                     response = requests.get(url, headers=self.headers, timeout=timeout)
                     
                     if response.status_code == 200:
+                        # 缓存页面内容
+                        self._cache_page(url, response.text)
                         self._parse_page(response.text)
                         logging.info(f"成功爬取话题 {topic} 第 {page} 页")
                         break
@@ -84,13 +150,12 @@ class SpiderData:
                 sleep_time = interval * (1 + random.random())
                 logging.info(f"等待 {sleep_time:.2f} 秒后继续...")
                 time.sleep(sleep_time)
-    
-    def _parse_page(self, html_content):
-        """
-        解析页面内容并保存数据
         
-        :param html_content: 页面HTML内容
-        """
+        # 最后刷新缓冲区
+        self._flush_buffer()
+    
+    def _parse_page(self, html_content: str):
+        """解析页面内容并保存数据"""
         try:
             soup = BeautifulSoup(html_content, 'html.parser')
             weibo_items = soup.find_all('div', class_='card-wrap')
@@ -124,8 +189,12 @@ class SpiderData:
                         'crawl_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     }
                     
-                    # 保存到数据库
-                    self._save_to_database(weibo_data)
+                    # 添加到插入缓冲区
+                    self.insert_buffer.append(weibo_data)
+                    
+                    # 如果缓冲区达到阈值，执行批量插入
+                    if len(self.insert_buffer) >= self.buffer_size:
+                        self._flush_buffer()
                     
                 except Exception as e:
                     logging.error(f"解析微博项时出错: {e}")
@@ -134,52 +203,12 @@ class SpiderData:
         except Exception as e:
             logging.error(f"解析页面时出错: {e}")
     
-    def _extract_number(self, text):
-        """
-        从文本中提取数字
-        
-        :param text: 包含数字的文本
-        :return: 提取的数字，如果没有找到则返回0
-        """
+    def _extract_number(self, text: str) -> int:
+        """从文本中提取数字"""
         try:
             return int(''.join(filter(str.isdigit, text)))
         except ValueError:
             return 0
-    
-    def _save_to_database(self, data):
-        """
-        将数据保存到数据库
-        
-        :param data: 要保存的数据字典
-        """
-        connection = None
-        try:
-            connection = self.db.get_connection()
-            
-            with connection.cursor() as cursor:
-                # 插入文章数据
-                sql = """
-                INSERT INTO article (content, user_name, publish_time, forward_count, 
-                                   comment_count, like_count, crawl_time)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-                """
-                cursor.execute(sql, (
-                    data['content'],
-                    data['user_name'],
-                    data['publish_time'],
-                    data['forward_count'],
-                    data['comment_count'],
-                    data['like_count'],
-                    data['crawl_time']
-                ))
-                
-                connection.commit()
-                logging.info(f"成功保存微博数据: {data['content'][:30]}...")
-                
-        except Exception as e:
-            logging.error(f"保存数据时出错: {e}")
-            if connection:
-                connection.rollback()
 
 if __name__ == '__main__':
     spiderData()

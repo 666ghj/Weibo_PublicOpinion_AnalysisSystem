@@ -10,6 +10,10 @@ import logging
 from spider.spiderData import SpiderData
 from openai import OpenAI
 from anthropic import Anthropic
+import aiohttp
+from concurrent.futures import ThreadPoolExecutor
+from ratelimit import limits, sleep_and_retry
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 # 创建蓝图
 spider_bp = Blueprint('spider', __name__)
@@ -24,124 +28,137 @@ websocket_connections = set()
 # 创建消息队列
 message_queue = Queue()
 
+# 创建线程池
+thread_pool = ThreadPoolExecutor(max_workers=3)
+
+# 创建异步事件循环
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
+
 # 默认配置
 DEFAULT_CONFIG = {
     'crawlDepth': 3,
     'interval': 5,
     'maxRetries': 3,
-    'timeout': 30
+    'timeout': 30,
+    'maxConcurrent': 2
 }
 
-def load_config():
-    """加载爬虫配置"""
-    config_path = os.path.join(os.path.dirname(__file__), '../spider/config.json')
-    try:
-        if os.path.exists(config_path):
-            with open(config_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-    except Exception as e:
-        logger.error(f"加载配置文件失败: {e}")
-    return DEFAULT_CONFIG
+# 限流装饰器
+@sleep_and_retry
+@limits(calls=100, period=60)  # 每分钟最多100个请求
+def rate_limited_request():
+    pass
 
-def save_config(config):
-    """保存爬虫配置"""
-    config_path = os.path.join(os.path.dirname(__file__), '../spider/config.json')
-    try:
-        with open(config_path, 'w', encoding='utf-8') as f:
-            json.dump(config, f, ensure_ascii=False, indent=4)
-        return True
-    except Exception as e:
-        logger.error(f"保存配置文件失败: {e}")
-        return False
+class SpiderWorker:
+    def __init__(self, topics, parameters):
+        self.topics = topics
+        self.parameters = parameters
+        self.total_topics = len(topics)
+        self.completed_topics = 0
+        self.spider = SpiderData()
+        self.message_buffer = []
+        self.message_buffer_size = 10
+        self.semaphore = asyncio.Semaphore(parameters.get('maxConcurrent', DEFAULT_CONFIG['maxConcurrent']))
+    
+    async def send_message(self, message):
+        """异步发送消息，使用缓冲区优化"""
+        self.message_buffer.append(message)
+        if len(self.message_buffer) >= self.message_buffer_size:
+            await self.flush_messages()
+    
+    async def flush_messages(self):
+        """刷新消息缓冲区"""
+        if not self.message_buffer:
+            return
+        
+        try:
+            await broadcast_message(self.message_buffer)
+            self.message_buffer.clear()
+        except Exception as e:
+            logger.error(f"发送消息失败: {e}")
+    
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
+    async def crawl_single_topic(self, topic):
+        """爬取单个话题"""
+        try:
+            rate_limited_request()
+            
+            await self.send_message({
+                'type': 'log',
+                'message': f'开始爬取话题: {topic}'
+            })
+            
+            async with self.semaphore:
+                await asyncio.get_event_loop().run_in_executor(
+                    thread_pool,
+                    self.spider.crawl_topic,
+                    topic,
+                    self.parameters['crawlDepth'],
+                    self.parameters['interval'],
+                    self.parameters['maxRetries'],
+                    self.parameters['timeout']
+                )
+            
+            self.completed_topics += 1
+            progress = int((self.completed_topics / self.total_topics) * 100)
+            
+            await self.send_message({
+                'type': 'progress',
+                'value': progress
+            })
+            
+            await self.send_message({
+                'type': 'log',
+                'message': f'话题 {topic} 爬取完成'
+            })
+            
+        except Exception as e:
+            logger.error(f"爬取话题 {topic} 失败: {e}")
+            await self.send_message({
+                'type': 'log',
+                'message': f'爬取话题 {topic} 时出错: {str(e)}'
+            })
+            raise
+    
+    async def run(self):
+        """运行爬虫任务"""
+        try:
+            tasks = [self.crawl_single_topic(topic) for topic in self.topics]
+            await asyncio.gather(*tasks)
+            await self.flush_messages()
+            
+            await self.send_message({
+                'type': 'log',
+                'message': '所有话题爬取完成'
+            })
+            
+        except Exception as e:
+            logger.error(f"爬虫任务执行出错: {e}")
+            await self.send_message({
+                'type': 'log',
+                'message': f'爬虫任务执行出错: {str(e)}'
+            })
+        finally:
+            await self.flush_messages()
 
-async def broadcast_message(message):
+async def broadcast_message(messages):
     """广播消息到所有WebSocket连接"""
     if not websocket_connections:
         return
     
     for websocket in websocket_connections.copy():
         try:
-            await websocket.send(json.dumps(message))
+            if isinstance(messages, list):
+                for message in messages:
+                    await websocket.send(json.dumps(message))
+            else:
+                await websocket.send(json.dumps(messages))
         except websockets.exceptions.ConnectionClosed:
             websocket_connections.remove(websocket)
         except Exception as e:
             logger.error(f"发送WebSocket消息失败: {e}")
             websocket_connections.remove(websocket)
-
-def spider_worker(topics, parameters):
-    """爬虫工作线程"""
-    total_topics = len(topics)
-    completed_topics = 0
-    
-    async def send_message(message):
-        """异步发送消息的包装函数"""
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        try:
-            await broadcast_message(message)
-        finally:
-            loop.close()
-    
-    try:
-        spider = SpiderData()
-        
-        for topic in topics:
-            try:
-                # 更新进度
-                progress = int((completed_topics / total_topics) * 100)
-                asyncio.run(send_message({
-                    'type': 'progress',
-                    'value': progress
-                }))
-                
-                # 发送开始爬取的日志
-                asyncio.run(send_message({
-                    'type': 'log',
-                    'message': f'开始爬取话题: {topic}'
-                }))
-                
-                # 执行爬取
-                spider.crawl_topic(
-                    topic=topic,
-                    depth=parameters['crawlDepth'],
-                    interval=parameters['interval'],
-                    max_retries=parameters['maxRetries'],
-                    timeout=parameters['timeout']
-                )
-                
-                completed_topics += 1
-                
-                # 发送完成爬取的日志
-                asyncio.run(send_message({
-                    'type': 'log',
-                    'message': f'话题 {topic} 爬取完成'
-                }))
-                
-            except Exception as e:
-                # 发送错误日志
-                asyncio.run(send_message({
-                    'type': 'log',
-                    'message': f'爬取话题 {topic} 时出错: {str(e)}'
-                }))
-        
-        # 更新最终进度
-        asyncio.run(send_message({
-            'type': 'progress',
-            'value': 100
-        }))
-        
-        # 发送完成消息
-        asyncio.run(send_message({
-            'type': 'log',
-            'message': '所有话题爬取完成'
-        }))
-        
-    except Exception as e:
-        # 发送错误日志
-        asyncio.run(send_message({
-            'type': 'log',
-            'message': f'爬虫任务执行出错: {str(e)}'
-        }))
 
 @spider_bp.route('/spider/control')
 def spider_control():
@@ -149,12 +166,12 @@ def spider_control():
     return render_template('spider_control.html')
 
 @spider_bp.route('/api/spider/start', methods=['POST'])
-def start_spider():
+async def start_spider():
     """启动爬虫任务"""
     try:
         data = request.get_json()
         topics = data.get('topics', [])
-        parameters = data.get('parameters', DEFAULT_CONFIG)
+        parameters = {**DEFAULT_CONFIG, **data.get('parameters', {})}
         
         if not topics:
             return jsonify({
@@ -162,13 +179,11 @@ def start_spider():
                 'message': '请选择至少一个话题'
             })
         
-        # 启动爬虫线程
-        thread = threading.Thread(
-            target=spider_worker,
-            args=(topics, parameters),
-            daemon=True
-        )
-        thread.start()
+        # 创建爬虫工作器
+        worker = SpiderWorker(topics, parameters)
+        
+        # 在事件循环中运行爬虫任务
+        asyncio.create_task(worker.run())
         
         return jsonify({
             'success': True,
