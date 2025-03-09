@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>微博舆情分析系统 | 登录</title>
     <link rel="icon" href="../../../static/原神启动/favicon.ico" />
+    <script src="/static/js/i18n.js"></script>
   </head>
 
   <style>
@@ -287,9 +288,31 @@
     .yanzhengma:hover {
       color: #aa863e;
     }
+
+    /* 添加语言切换按钮样式 */
+    .language-switcher {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      z-index: 1000;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    
+    .language-switcher:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
   </style>
 
   <body onclick="playAudio()">
+    <div class="language-switcher" id="language-switcher">
+      <span id="language-text">切换语言</span>
+    </div>
+
     <audio id="audio-player" autoplay class="hide-player">
       <source
         src="https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/%E5%8E%9F%E7%A5%9E%E9%A6%96%E9%A1%B5%E8%83%8C%E6%99%AF%E9%9F%B3.mp4"

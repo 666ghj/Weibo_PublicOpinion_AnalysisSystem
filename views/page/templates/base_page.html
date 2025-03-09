@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -9,6 +8,7 @@
       <link rel="stylesheet" href="/static/css/backend-plugin.min.css">
       <link rel="stylesheet" href="/static/css/backend.css">
         <meta name="referrer" content="no-referrer" />
+      <script src="/static/js/i18n.js"></script>
   </head>
   <body class="  ">
     <!-- loader Start -->
@@ -23,7 +23,7 @@
           <div class="iq-sidebar-logo d-flex align-items-end justify-content-between">
                <a href="" class="header-logo">
                   <img src="https://lovexl-oss.oss-cn-beijing.aliyuncs.com/bed/202407051027268.png" class="img-fluid rounded-normal light-logo" alt="logo">
-                  <span>微博舆情分析系统</span>
+                  <span data-i18n="weiboSystem">微博舆情分析系统</span>
               </a>
               <div class="side-menu-bt-sidebar-1">
                       <svg xmlns="http://www.w3.org/2000/svg" class="text-light wrapper-menu" width="30" fill="none" viewbox="0 0 24 24" stroke="currentColor">
@@ -42,7 +42,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">首页</span>
+                              <span class="ml-2" data-i18n="home">首页</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -52,7 +52,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">热词统计</span>
+                              <span class="ml-2" data-i18n="hotWord">热词统计</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -62,7 +62,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">微博舆情统计</span>
+                              <span class="ml-2" data-i18n="tableData">微博舆情统计</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -72,7 +72,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">文章分析</span>
+                              <span class="ml-2" data-i18n="articleChar">文章分析</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -83,7 +83,7 @@
                                       <line x1="8" y1="10" x2="12" y2="10" style="fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></line>
                                   </svg>
                               </i>
-                              <span class="ml-2">IP分析</span>
+                              <span class="ml-2" data-i18n="ipChar">IP分析</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -92,7 +92,7 @@
                                   <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                                   </svg>
-                              </i><span class="ml-2">评论分析</span>
+                              </i><span class="ml-2" data-i18n="commentChar">评论分析</span>
                           </a>
                       </li>
                       <li class="active sidebar-layout">
@@ -102,7 +102,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">舆情分析</span>
+                              <span class="ml-2" data-i18n="yuqingChar">舆情分析</span>
                           </a>
                       </li>
                       <li class="active sidebar-layout">
@@ -112,7 +112,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">舆情预测</span>
+                              <span class="ml-2" data-i18n="yuqingpredict">舆情预测</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -121,7 +121,17 @@
                                   <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                   </svg>
-                              </i><span class="ml-2">文章内容词云图</span>
+                              </i><span class="ml-2" data-i18n="articleCloud">文章内容词云图</span>
+                          </a>
+                      </li>
+                      <li class="sidebar-layout">
+                          <a href="javascript:void(0)" id="language-switcher" class="svg-icon">
+                              <i class="">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                                  </svg>
+                              </i>
+                              <span class="ml-2" id="language-text">切换语言</span>
                           </a>
                       </li>
                   </ul>
@@ -136,7 +146,7 @@
    <div class="row">
       <div class="col-md-12 mb-4 mt-1">
          <div class="d-flex flex-wrap justify-content-between align-items-center">
-             <h4 class="font-weight-bold">首页</h4>
+             <h4 class="font-weight-bold" data-i18n="home">首页</h4>
          </div>
       </div>
       <div class="col-lg-8 col-md-12">
@@ -146,7 +156,7 @@
                   <div class="card-body">
                      <div class="d-flex align-items-center">
                         <div class="">
-                            <p class="mb-2 text-secondary">文章个数</p>
+                            <p class="mb-2 text-secondary" data-i18n="articleCount">文章个数</p>
                             <div class="d-flex flex-wrap justify-content-start align-items-center">
                                <h5 class="mb-0 font-weight-bold">{{ articleLenMax }}个</h5>
                             </div>
@@ -160,7 +170,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="">
-                            <p class="mb-2 text-secondary">文章爬取规则</p>
+                            <p class="mb-2 text-secondary" data-i18n="articleCrawlRule">文章爬取规则</p>
                             <div class="d-flex flex-wrap justify-content-start align-items-center">
                                <h5 class="mb-0 font-weight-bold">每 5 小时更新一次爬取内容</h5>
                             </div>
@@ -174,7 +184,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="">
-                           <p class="mb-2 text-secondary">下次爬取时间</p>
+                           <p class="mb-2 text-secondary" data-i18n="nextCrawlTime">下次爬取时间</p>
                            <div class="d-flex flex-wrap justify-content-start align-items-center">
                               <h5 class="mb-0 font-weight-bold">7-5-18:00</h5>
                            </div>
@@ -187,7 +197,7 @@
             <div class="card">
                 <div class="card-body">
                   <div class="d-flex justify-content-between align-items-center flex-wrap">
-                     <h4 class="font-weight-bold">文章发布时间个数</h4>
+                     <h4 class="font-weight-bold" data-i18n="articlePublishTimeCount">文章发布时间个数</h4>
                   </div>
                    <div id="main" style="width:100%;height: 350px" class="custom-chart"></div>
                 </div>
@@ -199,7 +209,7 @@
          <div class="card card-block card-stretch card-height">
             <div class="card-header card-header-border d-flex justify-content-between">
                <div class="header-title">
-                  <h4 class="card-title">评论点赞量 Top Fore</h4>
+                  <h4 class="card-title" data-i18n="commentLikeCountTopFore">评论点赞量 Top Fore</h4>
                </div>
             </div>
             <div class="card-body-list">
@@ -220,7 +230,7 @@
                   </li>
                    {% endfor %}
                     <div class="d-flex justify-content-end align-items-center border-top-table p-3">
-                         <a href="/page/tableData" class="btn btn-secondary btn-sm">查看全部</a>
+                         <a href="/page/tableData" class="btn btn-secondary btn-sm" data-i18n="viewAll">查看全部</a>
                       </div>
                </ul>
             </div>
@@ -231,7 +241,7 @@
          <div class="card card-block card-stretch card-height">
             <div class="card-header d-flex justify-content-between">
                <div class="header-title">
-                  <h4 class="card-title">文章类型占比</h4>
+                  <h4 class="card-title" data-i18n="articleTypeRatio">文章类型占比</h4>
                </div>
             </div>
             <div class="card-body p-0">
@@ -245,7 +255,7 @@
          <div class="card card-block card-stretch card-height">
             <div class="card-header d-flex justify-content-between">
                <div class="header-title">
-                  <h4 class="card-title">评论用户名词云图</h4>
+                  <h4 class="card-title" data-i18n="commentUserWordCloud">评论用户名词云图</h4>
                </div>
             </div>
             <div class="card-body p-0">
@@ -259,7 +269,7 @@
          <div class="card card-block card-stretch card-height">
             <div class="card-header d-flex justify-content-between">
                <div class="header-title">
-                  <h4 class="card-title">评论用户时间占比</h4>
+                  <h4 class="card-title" data-i18n="commentUserTimeRatio">评论用户时间占比</h4>
                </div>
             </div>
             <div class="card-body p-0">
@@ -281,13 +291,30 @@
                 <div class="col-lg-6">
                 </div>
                 <div class="col-lg-6 text-right">
-                    <span class="mr-1">网安小学期 &copy; 2024.<a target="_blank" href="#">郭航江</a></span>
+                    <span class="mr-1"><span data-i18n="semester">网安小学期</span> &copy; 2024.<a target="_blank" href="#">郭航江</a></span>
                 </div>
             </div>
         </div>
     </footer>
     <script src="/static/echarts.min.js"></script>
     <script src="/static/china.js"></script>
+    <!-- 添加语言切换脚本 -->
+    <script>
+        // 页面加载完成后初始化语言切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新语言切换按钮文本
+            updateLanguageSwitcherText();
+        });
+        
+        // 更新语言切换按钮文本
+        function updateLanguageSwitcherText() {
+            const currentLang = getCurrentLanguage();
+            const langText = document.getElementById('language-text');
+            if (langText) {
+                langText.textContent = currentLang === 'zh' ? '切换到英文' : 'Switch to Chinese';
+            }
+        }
+    </script>
     {% block echarts %}
         <script>
         var chartDom = document.getElementById('main');

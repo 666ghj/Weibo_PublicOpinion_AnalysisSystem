@@ -1,12 +1,12 @@
 {% extends 'base_page.html' %}
 {% block title %}
-    热词统计
+    <span data-i18n="hotWord">热词统计</span>
 {% endblock %}
 {% block  nav %}
 <nav class="iq-sidebar-menu">
                   <ul id="iq-sidebar-toggle" class="side-menu">
                       <li class="px-3 pt-3 pb-2 ">
-                          <span class="text-uppercase small font-weight-bold">首页</span>
+                          <span class="text-uppercase small font-weight-bold" data-i18n="home">首页</span>
                       </li>
                       <li class=" sidebar-layout">
                           <a href="/page/home" class="svg-icon">
@@ -15,7 +15,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">首页</span>
+                              <span class="ml-2" data-i18n="home">首页</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -25,7 +25,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">热词统计</span>
+                              <span class="ml-2" data-i18n="hotWord">热词统计</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -35,11 +35,11 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">微博舆情统计</span>
+                              <span class="ml-2" data-i18n="tableData">微博舆情统计</span>
                           </a>
                       </li>
                       <li class="px-3 pt-3 pb-2 ">
-                          <span class="text-uppercase small font-weight-bold">数据可视化</span>
+                          <span class="text-uppercase small font-weight-bold" data-i18n="dataVisualization">数据可视化</span>
                       </li>
                       <li class=" sidebar-layout">
                           <a href="/page/articleChar" class="svg-icon">
@@ -48,7 +48,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">文章分析</span>
+                              <span class="ml-2" data-i18n="articleChar">文章分析</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -59,7 +59,7 @@
                                       <line x1="8" y1="10" x2="12" y2="10" style="fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></line>
                                   </svg>
                               </i>
-                              <span class="ml-2">IP分析</span>
+                              <span class="ml-2" data-i18n="ipChar">IP分析</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -68,7 +68,7 @@
                                   <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                                   </svg>
-                              </i><span class="ml-2">评论分析</span>
+                              </i><span class="ml-2" data-i18n="commentChar">评论分析</span>
                           </a>
                       </li>
                       <li class="active sidebar-layout">
@@ -78,7 +78,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">舆情分析</span>
+                              <span class="ml-2" data-i18n="yuqingChar">舆情分析</span>
                           </a>
                       </li>
                       <li class="active sidebar-layout">
@@ -88,11 +88,11 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">舆情预测</span>
+                              <span class="ml-2" data-i18n="yuqingpredict">舆情预测</span>
                           </a>
                       </li>
                       <li class="px-3 pt-3 pb-2">
-                          <span class="text-uppercase small font-weight-bold">词云图</span>
+                          <span class="text-uppercase small font-weight-bold" data-i18n="wordCloud">词云图</span>
                       </li>
                       <li class=" sidebar-layout">
                           <a href="/page/articleCloud" class="svg-icon">
@@ -100,7 +100,7 @@
                                   <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                   </svg>
-                              </i><span class="ml-2">文章内容词云图</span>
+                              </i><span class="ml-2" data-i18n="articleCloud">文章内容词云图</span>
                           </a>
                       </li>
                   </ul>
@@ -111,7 +111,7 @@
    <div class="row">
       <div class="col-md-12 mb-4 mt-1">
          <div class="d-flex flex-wrap justify-content-between align-items-center">
-             <h4 class="font-weight-bold">热词统计页</h4>
+             <h4 class="font-weight-bold" data-i18n="hotWordStatistics">热词统计页</h4>
          </div>
       </div>
    </div>
@@ -151,7 +151,7 @@
 </code></pre></kbd></div>
                         </div>
                      <div class="form-group">
-                        <label>热词选择</label>
+                        <label data-i18n="hotWordSelection">热词选择</label>
                         <select onchange="hotWordChange(event)" class="form-control mb-3">
                             {% for i in hotWordList %}
                                 {% if defaultHotWord == i[0] %}
@@ -179,9 +179,9 @@
                                             <h4 class="card-title font-size-16 mt-0">{{ defaultHotWord }}</h4>
                                         </div>
                                         <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">热词名称：{{ defaultHotWord }}</li>
-                                            <li class="list-group-item">出现次数：{{ hotWordLen }}次</li>
-                                            <li class="list-group-item">热词情感：{{ sentences }}</li>
+                                            <li class="list-group-item"><span data-i18n="hotWordName">热词名称</span>：{{ defaultHotWord }}</li>
+                                            <li class="list-group-item"><span data-i18n="occurrenceCount">出现次数</span>：{{ hotWordLen }}次</li>
+                                            <li class="list-group-item"><span data-i18n="hotWordSentiment">热词情感</span>：{{ sentences }}</li>
                                         </ul>
                                     </div>
 
@@ -191,7 +191,7 @@
               <div class="col-lg-12">
                   <div class="card">
                                         <div class="card-body">
-                                            <h4 class="card-title font-size-16 mt-0">热词年份变化趋势</h4>
+                                            <h4 class="card-title font-size-16 mt-0" data-i18n="hotWordYearTrend">热词年份变化趋势</h4>
                                         </div>
                                         <div id="main" style="width:100%;height: 450px"></div>
                                     </div>
@@ -202,7 +202,7 @@
                   <div class="card">
                   <div class="card-header d-flex justify-content-between">
                      <div class="header-title">
-                        <h4 class="card-title">热词查询表格</h4>
+                        <h4 class="card-title" data-i18n="hotWordRanking">热词查询表格</h4>
                      </div>
                   <div class="header-action">
                            <i data-toggle="collapse" data-target="#datatable-1" aria-expanded="false">
@@ -391,18 +391,18 @@
 &lt;/table&gt;
 </code></pre></kbd></div>
                         </div>
-                     <p>根据选择的热词从而查询出评论数据</p>
+                     <p data-i18n="queryCommentsByHotWord">根据选择的热词从而查询出评论数据</p>
                      <div class="table-responsive">
                         <div id="datatable-1_wrapper" class="dataTables_wrapper dt-bootstrap4">
                             <div class="row"><div class="col-sm-12"><table id="datatable-1" class="table data-table table-striped table-bordered dataTable" role="grid" aria-describedby="datatable-1_info">
                            <thead>
                               <tr role="row">
-                                  <th class="sorting sorting_asc" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 250.844px;">文章ID</th>
-                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 392.094px;">评论用户</th>
-                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 190.75px;">评论性别</th>
-                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 84.2656px;">评论地址</th>
-                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 172.594px;">评论内容</th>
-                                  <th class="text-right sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 158.453px;">点赞量</th></tr>
+                                  <th class="sorting sorting_asc" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 250.844px;" data-i18n="articleId">文章ID</th>
+                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 392.094px;" data-i18n="commentUser">评论用户</th>
+                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 190.75px;" data-i18n="commentGender">评论性别</th>
+                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 84.2656px;" data-i18n="commentAddress">评论地址</th>
+                                  <th class="sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 172.594px;" data-i18n="commentContent">评论内容</th>
+                                  <th class="text-right sorting" tabindex="0" aria-controls="datatable-1" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 158.453px;" data-i18n="likeCount">点赞量</th></tr>
                            </thead>
                            <tbody>
                                 {% for i in comments %}
@@ -443,7 +443,7 @@
         trigger: 'axis'
       },
       legend: {
-        data: ['热词出现时间分布个数']
+        data: [t('hotWordTimeDistribution')]
       },
       toolbox: {
         show: true,
@@ -481,7 +481,7 @@
       ],
       series: [
         {
-          name: '热词出现时间分布个数',
+          name: t('hotWordTimeDistribution'),
           type: 'bar',
           data: {{ yData }},
           markPoint: {
