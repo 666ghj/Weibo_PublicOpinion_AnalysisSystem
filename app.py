@@ -142,15 +142,27 @@ def not_found_error(error):
 
 @app.errorhandler(500)
 def internal_error(error):
-    return render_template('500.html'), 500
+    return render_template('error.html', 
+                          error_code=500, 
+                          error_title='服务器错误', 
+                          error_message='服务器遇到了一个问题，请稍后再试。',
+                          error_i18n_key='serverError'), 500
 
 @app.errorhandler(403)
 def forbidden_error(error):
-    return render_template('403.html'), 403
+    return render_template('error.html', 
+                          error_code=403, 
+                          error_title='禁止访问', 
+                          error_message='您没有权限访问此页面。',
+                          error_i18n_key='forbidden'), 403
 
 @app.errorhandler(400)
 def bad_request_error(error):
-    return render_template('400.html'), 400
+    return render_template('error.html', 
+                          error_code=400, 
+                          error_title='错误请求', 
+                          error_message='服务器无法理解您的请求。',
+                          error_i18n_key='badRequest'), 400
 
 # 数据库配置
 DB_CONFIG = {

@@ -1,29 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>404页面</title>
-      <link rel="stylesheet" href="/static/css/backend-plugin.min.css">
-      <link rel="stylesheet" href="/static/css/backend.css">  </head>
-  <body class=" ">
-
-
-      <div class="wrapper">
-      <div class="container">
-         <div class="row no-gutters height-self-center">
-            <div class="col-sm-12 text-center align-self-center">
-               <div class="iq-error position-relative">
-                     <img src="/static/picture/Datum_404.png" class="img-fluid iq-error-img iq-error-img-dark mx-auto" alt="">
-                     <img src="/static/picture/Datum_404.png" class="img-fluid iq-error-img mb-0" alt="">
-                     <h2 class="mb-0">噢！该页面没有找到..</h2>
-                     <p>本次请求没有任何反应.</p>
-                     <a class="btn btn-primary d-inline-flex align-items-center mt-3" href="/user/login"><i class="ri-home-4-line mr-2"></i>回到登录页</a>
-               </div>
-            </div>
-         </div>
-   </div>
-      </div>
-   /
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - 页面未找到</title>
+    <link rel="stylesheet" href="/static/css/backend.css">
+    <!-- 添加语言支持脚本 -->
+    <script src="/static/js/i18n.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        .error-container {
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-code {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        .error-message {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <div class="error-message" data-i18n="pageNotFound">页面未找到</div>
+        <p>您请求的页面不存在或已被移除。</p>
+        <a href="/" class="back-link" data-i18n="backToHome">返回首页</a>
+    </div>
+    
+    <!-- 初始化语言支持 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTranslations();
+        });
+    </script>
+</body>
 </html>
