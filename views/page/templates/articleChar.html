@@ -1,13 +1,13 @@
 {% extends 'base_page.html' %}
 {% block title %}
-    文章分析
+    <span data-i18n="articleChar">文章分析</span>
 {% endblock %}
 
 {% block  nav %}
 <nav class="iq-sidebar-menu">
                   <ul id="iq-sidebar-toggle" class="side-menu">
                       <li class="px-3 pt-3 pb-2 ">
-                          <span class="text-uppercase small font-weight-bold">首页</span>
+                          <span class="text-uppercase small font-weight-bold" data-i18n="home">首页</span>
                       </li>
                       <li class=" sidebar-layout">
                           <a href="/page/home" class="svg-icon">
@@ -16,7 +16,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                                   </svg>
                               </i>
-                              <span class="ml-2">首页</span>
+                              <span class="ml-2" data-i18n="home">首页</span>
                           </a>
                       </li>
                       <li class=" sidebar-layout">
@@ -101,7 +101,7 @@
                                   <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewbox="0 0 24 24" stroke="currentColor">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                   </svg>
-                              </i><span class="ml-2">文章内容词云图</span>
+                              </i><span class="ml-2" data-i18n="articleCloud">文章内容词云图</span>
                           </a>
                       </li>
                   </ul>
@@ -113,7 +113,7 @@
                 <div class="row">
               <div class="col-md-12 mb-4 mt-1">
                  <div class="d-flex flex-wrap justify-content-between align-items-center">
-                     <h4 class="font-weight-bold">文章分析页</h4>
+                     <h4 class="font-weight-bold" data-i18n="articleCharPage">文章分析页</h4>
                  </div>
               </div>
            </div>
@@ -122,7 +122,7 @@
                      <div class="card card-block card-stretch card-height">
                         <div class="card-body">
                                  <div class="form-group">
-                                    <label>类型选择</label>
+                                    <label data-i18n="typeSelection">类型选择</label>
                                     <select onchange="typeChange(event)" class="form-control mb-3">
                                         {% for i in typeList %}
                                             {% if defaultType == i %}
@@ -147,7 +147,7 @@
                          <div class="card card-block">
                             <div class="card-header d-flex justify-content-between pb-0">
                                <div class="header-title">
-                                  <h4 class="card-title mb-0">文章点赞量分析 👍</h4>
+                                  <h4 class="card-title mb-0" data-i18n="articleLikeAnalysis">文章点赞量分析 👍</h4>
                                </div>
                             </div>
                             <div class="card-body">
@@ -159,7 +159,7 @@
                          <div class="card card-block">
                             <div class="card-header d-flex justify-content-between pb-0">
                                <div class="header-title">
-                                  <h4 class="card-title mb-0">文章评论量分析 🔥</h4>
+                                  <h4 class="card-title mb-0" data-i18n="articleCommentAnalysis">文章评论量分析 🔥</h4>
                                </div>
                             </div>
                             <div class="card-body">
@@ -171,7 +171,7 @@
                          <div class="card card-block">
                             <div class="card-header d-flex justify-content-between pb-0">
                                <div class="header-title">
-                                  <h4 class="card-title mb-0">文章转发量分析 🥇</h4>
+                                  <h4 class="card-title mb-0" data-i18n="articleForwardAnalysis">文章转发量分析 🥇</h4>
                                </div>
                             </div>
                             <div class="card-body">
@@ -191,13 +191,13 @@
     var colors = ['#66cc99','#ffcc66','#ff6666','#6699cc']
         option = {
           title: {
-            text: '点赞区间统计'
+            text: t('likeRangeStatistics')
           },
           tooltip: {
             trigger: 'axis'
           },
           legend: {
-            data: ['区间个数']
+            data: [t('rangeCount')]
           },
           toolbox: {
             show: true,
