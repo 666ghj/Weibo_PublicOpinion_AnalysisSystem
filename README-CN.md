@@ -14,7 +14,12 @@
   [English](./README.md) | [中文文档](./README-CN.md)
 </div>
 
----
+🚀最新2.0版本已全面升级AI模式，欢迎体验！🚀
+
+<div style="display: flex; justify-content: center; align-items: center; gap: 10px; width: 90%; margin: auto;">
+    <img src="https://github.com/user-attachments/assets/7ea3f84c-4e08-448e-b2f5-35e1a1e4fbba" style="width: 45%; height: auto;">
+    <img src="https://github.com/user-attachments/assets/37c69bb2-c579-4a81-86d4-a38522cebd73" style="width: 45%; height: auto;">
+</div>
 
 **微博舆情分析预测系统** 是一个用于监控、分析和预测社交媒体平台（如微博）上的公众舆情趋势的**社交网络舆情分析系统**。该系统利用深度学习、自然语言处理（NLP）和机器学习技术，从大量社交媒体数据中提取有价值的舆情信息，帮助政府、企业及其他组织及时了解公众态度、应对突发事件并优化决策。📈
 
