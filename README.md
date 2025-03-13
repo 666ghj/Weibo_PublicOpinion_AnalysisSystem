@@ -14,7 +14,7 @@
   [English](./README.md) | [中文文档](./README-CN.md)
 </div>
 
-🚀The latest 2.0 version has fully upgraded AI modes—welcome to experience it!🚀
+🚀The latest 2.0 version has fully upgraded AI modes—welcome to experience it!⬇️
 
 <div style="display: flex; justify-content: center; align-items: center; gap: 10px; width: 90%; margin: auto;">
     <img src="https://github.com/user-attachments/assets/7ea3f84c-4e08-448e-b2f5-35e1a1e4fbba" style="width: 45%; height: auto;">
