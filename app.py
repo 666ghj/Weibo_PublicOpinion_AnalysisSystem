@@ -83,9 +83,11 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)
 from views.page import page
 from views.user import user
 from views.spider_control import spider_bp
+from views.workflow_api import workflow_bp
 app.register_blueprint(page.pb)
 app.register_blueprint(user.ub)
 app.register_blueprint(spider_bp)
+app.register_blueprint(workflow_bp)  # 注册工作流蓝图
 
 # 首页路由
 @app.route('/')
