@@ -10,7 +10,6 @@
   [![GitHub Contributors](https://img.shields.io/github/contributors/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/graphs/contributors)
   [![GitHub License](https://img.shields.io/github/license/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE)
 
-
   [English](./README.md) | [中文文档](./README-CN.md)
 </div>
 
@@ -18,7 +17,7 @@
 
 <div style="display: flex; justify-content: center; align-items: center; gap: 10px; width: 90%; margin: auto;">
     <img src="https://github.com/user-attachments/assets/7ea3f84c-4e08-448e-b2f5-35e1a1e4fbba" style="width: 45%; height: auto;">
-    <img src="https://github.com/user-attachments/assets/37c69bb2-c579-4a81-86d4-a38522cebd73" style="width: 45%; height: auto;">
+    <img src="https://github.com/user-attachments/assets/796b047d-53e6-4573-a387-9a30ac44ab89" style="width: 45%; height: auto;">
 </div>
 
 **Weibo Public Opinion Analysis and Prediction System** is a **social network public opinion analysis system** designed to monitor, analyze, and predict public opinion trends on social media platforms such as Weibo. This system leverages deep learning, natural language processing (NLP), and machine learning technologies to extract valuable public opinion information from vast amounts of social media data, helping governments, enterprises, and other organizations promptly understand public attitudes, respond to emergencies, and optimize decision-making. 📈
