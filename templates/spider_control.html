@@ -103,6 +103,214 @@
             </div>
         </div>
 
+        <!-- 内容筛选配置 -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">内容筛选配置</h5>
+                <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filterHelp">
+                    <i class="fas fa-question-circle"></i> 帮助
+                </button>
+            </div>
+            <div class="collapse" id="filterHelp">
+                <div class="card-body bg-light">
+                    <h6>筛选条件说明：</h6>
+                    <ul>
+                        <li>数值条件：设置大于某个值进行筛选，如点赞数>1000</li>
+                        <li>正则匹配：使用正则表达式匹配内容，如包含特定关键词</li>
+                        <li>多个条件之间是"与"的关系，即同时满足才会保留</li>
+                    </ul>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> 提示：合理设置筛选条件可以提高数据质量
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- 互动数据筛选 -->
+                <h6 class="mb-3">互动数据筛选</h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">点赞数大于</label>
+                            <input type="number" class="form-control" id="minLikes" value="0" min="0">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">评论数大于</label>
+                            <input type="number" class="form-control" id="minComments" value="0" min="0">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">转发数大于</label>
+                            <input type="number" class="form-control" id="minReposts" value="0" min="0">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">阅读数大于</label>
+                            <input type="number" class="form-control" id="minReads" value="0" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 内容正则筛选 -->
+                <h6 class="mb-3 mt-4">内容正则筛选</h6>
+                <div id="regexFilters">
+                    <!-- 正则表达式筛选器列表 -->
+                </div>
+                <button class="btn btn-outline-primary btn-sm mt-2" onclick="addRegexFilter()">
+                    <i class="fas fa-plus"></i> 添加正则筛选
+                </button>
+
+                <!-- 高级筛选选项 -->
+                <h6 class="mb-3 mt-4">高级选项</h6>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="filterOriginal">
+                    <label class="form-check-label" for="filterOriginal">
+                        仅爬取原创内容
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="filterWithMedia">
+                    <label class="form-check-label" for="filterWithMedia">
+                        必须包含图片或视频
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="filterVerified">
+                    <label class="form-check-label" for="filterVerified">
+                        仅认证用户的内容
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 账号配置 -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">账号配置</h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary me-2" type="button" data-bs-toggle="collapse" data-bs-target="#accountHelp">
+                        <i class="fas fa-question-circle"></i> 帮助
+                    </button>
+                    <button class="btn btn-sm btn-success" onclick="addAccount()">
+                        <i class="fas fa-plus"></i> 添加账号
+                    </button>
+                </div>
+            </div>
+            <div class="collapse" id="accountHelp">
+                <div class="card-body bg-light">
+                    <h6>如何获取Cookie？</h6>
+                    <ol>
+                        <li>登录微博网页版</li>
+                        <li>按F12打开开发者工具</li>
+                        <li>切换到Network标签页</li>
+                        <li>刷新页面，找到请求头中的Cookie值</li>
+                    </ol>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> 注意：请勿泄露您的Cookie信息！
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> 提示：添加多个账号可以提高爬取效率，系统会自动在账号间轮换。
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="accountsList">
+                    <!-- 账号列表将通过JavaScript动态生成 -->
+                </div>
+                <div class="alert alert-warning mt-3" id="noAccountsWarning" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i> 请至少添加一个账号
+                </div>
+            </div>
+        </div>
+
+        <!-- 并行配置 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">并行配置</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="maxConcurrent" class="form-label">最大并行数</label>
+                            <input type="number" class="form-control" id="maxConcurrent" value="2" min="1" max="5">
+                            <small class="text-muted">同时进行爬取的最大话题数（1-5）</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="requestsPerMinute" class="form-label">每分钟请求数限制</label>
+                            <input type="number" class="form-control" id="requestsPerMinute" value="60" min="30" max="120">
+                            <small class="text-muted">避免请求过于频繁（30-120）</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据库配置 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">数据库配置</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="dbType" class="form-label">数据库类型</label>
+                            <select class="form-select" id="dbType">
+                                <option value="mysql">MySQL</option>
+                                <option value="postgresql">PostgreSQL</option>
+                                <option value="mongodb">MongoDB</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="dbHost" class="form-label">主机地址</label>
+                            <input type="text" class="form-control" id="dbHost" value="localhost">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="dbPort" class="form-label">端口</label>
+                            <input type="number" class="form-control" id="dbPort" value="3306">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="dbName" class="form-label">数据库名</label>
+                            <input type="text" class="form-control" id="dbName" value="weibo_data">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="dbUser" class="form-label">用户名</label>
+                            <input type="text" class="form-control" id="dbUser">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="dbPassword" class="form-label">密码</label>
+                            <input type="password" class="form-control" id="dbPassword">
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary" onclick="testDbConnection()">
+                        <i class="fas fa-database"></i> 测试连接
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- AI配置助手 -->
         <div class="card mb-4">
             <div class="card-header">
@@ -237,13 +445,43 @@
                 return;
             }
 
+            // 验证必要的配置
+            if (!validateConfig()) {
+                return;
+            }
+
             const config = {
                 topics: Array.from(selectedTopics),
                 parameters: {
                     crawlDepth: parseInt(document.getElementById('crawlDepth').value),
                     interval: parseInt(document.getElementById('interval').value),
                     maxRetries: parseInt(document.getElementById('maxRetries').value),
-                    timeout: parseInt(document.getElementById('timeout').value)
+                    timeout: parseInt(document.getElementById('timeout').value),
+                    maxConcurrent: parseInt(document.getElementById('maxConcurrent').value),
+                    requestsPerMinute: parseInt(document.getElementById('requestsPerMinute').value)
+                },
+                filters: {
+                    interaction: {
+                        minLikes: parseInt(document.getElementById('minLikes').value) || 0,
+                        minComments: parseInt(document.getElementById('minComments').value) || 0,
+                        minReposts: parseInt(document.getElementById('minReposts').value) || 0,
+                        minReads: parseInt(document.getElementById('minReads').value) || 0
+                    },
+                    regex: getRegexFilters(),
+                    options: {
+                        originalOnly: document.getElementById('filterOriginal').checked,
+                        withMediaOnly: document.getElementById('filterWithMedia').checked,
+                        verifiedOnly: document.getElementById('filterVerified').checked
+                    }
+                },
+                accounts: getAccountsConfig(),
+                database: {
+                    type: document.getElementById('dbType').value,
+                    host: document.getElementById('dbHost').value,
+                    port: parseInt(document.getElementById('dbPort').value),
+                    name: document.getElementById('dbName').value,
+                    user: document.getElementById('dbUser').value,
+                    password: document.getElementById('dbPassword').value
                 }
             };
 
@@ -267,6 +505,335 @@
                 updateCrawlLog('错误：' + error.message);
             });
         }
+
+        // 账号管理相关函数
+        let accounts = [];
+        let accountIdCounter = 0;
+
+        function createAccountElement(account) {
+            const accountDiv = document.createElement('div');
+            accountDiv.className = 'border rounded p-3 mb-3 position-relative account-item';
+            accountDiv.dataset.id = account.id;
+
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-2';
+            deleteButton.innerHTML = '<i class="fas fa-times"></i>';
+            deleteButton.onclick = () => removeAccount(account.id);
+
+            const content = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">用户名</label>
+                            <input type="text" class="form-control account-username" value="${account.username || ''}" placeholder="微博用户名">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">密码</label>
+                            <input type="password" class="form-control account-password" value="${account.password || ''}" placeholder="微博密码">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Cookie</label>
+                    <textarea class="form-control account-cookie" rows="2" placeholder="请输入微博Cookie">${account.cookie || ''}</textarea>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input account-save-cookie" type="checkbox" ${account.saveCookie ? 'checked' : ''}>
+                    <label class="form-check-label">
+                        保存Cookie（加密存储）
+                    </label>
+                </div>
+                <div class="account-status alert alert-info">
+                    状态：待验证
+                    <button class="btn btn-sm btn-outline-primary ms-2" onclick="validateAccount(${account.id})">
+                        <i class="fas fa-check-circle"></i> 验证账号
+                    </button>
+                </div>
+            `;
+
+            accountDiv.innerHTML = content;
+            accountDiv.appendChild(deleteButton);
+            return accountDiv;
+        }
+
+        function addAccount() {
+            const account = {
+                id: accountIdCounter++,
+                username: '',
+                password: '',
+                cookie: '',
+                saveCookie: false,
+                status: 'pending'
+            };
+            accounts.push(account);
+            
+            const accountsList = document.getElementById('accountsList');
+            accountsList.appendChild(createAccountElement(account));
+            updateAccountsWarning();
+        }
+
+        function removeAccount(id) {
+            accounts = accounts.filter(account => account.id !== id);
+            const accountElement = document.querySelector(`.account-item[data-id="${id}"]`);
+            if (accountElement) {
+                accountElement.remove();
+            }
+            updateAccountsWarning();
+        }
+
+        function updateAccountsWarning() {
+            const warning = document.getElementById('noAccountsWarning');
+            warning.style.display = accounts.length === 0 ? 'block' : 'none';
+        }
+
+        function getAccountsConfig() {
+            return accounts.map(account => {
+                const accountElement = document.querySelector(`.account-item[data-id="${account.id}"]`);
+                return {
+                    username: accountElement.querySelector('.account-username').value,
+                    password: accountElement.querySelector('.account-password').value,
+                    cookie: accountElement.querySelector('.account-cookie').value,
+                    saveCookie: accountElement.querySelector('.account-save-cookie').checked
+                };
+            });
+        }
+
+        async function validateAccount(id) {
+            const accountElement = document.querySelector(`.account-item[data-id="${id}"]`);
+            const statusElement = accountElement.querySelector('.account-status');
+            const cookie = accountElement.querySelector('.account-cookie').value.trim();
+
+            if (!cookie) {
+                statusElement.className = 'account-status alert alert-danger';
+                statusElement.innerHTML = '状态：验证失败 - Cookie不能为空';
+                return;
+            }
+
+            statusElement.className = 'account-status alert alert-warning';
+            statusElement.innerHTML = '状态：验证中...';
+
+            try {
+                const response = await fetch('/api/spider/validate-account', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        cookie: cookie
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    statusElement.className = 'account-status alert alert-success';
+                    statusElement.innerHTML = '状态：验证成功';
+                } else {
+                    statusElement.className = 'account-status alert alert-danger';
+                    statusElement.innerHTML = `状态：验证失败 - ${data.message}`;
+                }
+            } catch (error) {
+                statusElement.className = 'account-status alert alert-danger';
+                statusElement.innerHTML = `状态：验证失败 - ${error.message}`;
+            }
+        }
+
+        // 正则筛选器管理
+        let regexFilters = [];
+        let regexFilterIdCounter = 0;
+
+        function createRegexFilterElement(filter) {
+            const filterDiv = document.createElement('div');
+            filterDiv.className = 'border rounded p-3 mb-3 position-relative regex-filter-item';
+            filterDiv.dataset.id = filter.id;
+
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-2';
+            deleteButton.innerHTML = '<i class="fas fa-times"></i>';
+            deleteButton.onclick = () => removeRegexFilter(filter.id);
+
+            const content = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">正则表达式</label>
+                            <input type="text" class="form-control regex-pattern" value="${filter.pattern || ''}" placeholder="输入正则表达式">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">匹配目标</label>
+                            <select class="form-select regex-target">
+                                <option value="content" ${filter.target === 'content' ? 'selected' : ''}>微博内容</option>
+                                <option value="author" ${filter.target === 'author' ? 'selected' : ''}>作者名</option>
+                                <option value="location" ${filter.target === 'location' ? 'selected' : ''}>发布位置</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input regex-inverse" type="checkbox" ${filter.inverse ? 'checked' : ''}>
+                    <label class="form-check-label">
+                        反向匹配（不包含匹配项）
+                    </label>
+                </div>
+            `;
+
+            filterDiv.innerHTML = content;
+            filterDiv.appendChild(deleteButton);
+            return filterDiv;
+        }
+
+        function addRegexFilter() {
+            const filter = {
+                id: regexFilterIdCounter++,
+                pattern: '',
+                target: 'content',
+                inverse: false
+            };
+            regexFilters.push(filter);
+            
+            const filtersList = document.getElementById('regexFilters');
+            filtersList.appendChild(createRegexFilterElement(filter));
+        }
+
+        function removeRegexFilter(id) {
+            regexFilters = regexFilters.filter(filter => filter.id !== id);
+            const filterElement = document.querySelector(`.regex-filter-item[data-id="${id}"]`);
+            if (filterElement) {
+                filterElement.remove();
+            }
+        }
+
+        function getRegexFilters() {
+            return regexFilters.map(filter => {
+                const filterElement = document.querySelector(`.regex-filter-item[data-id="${filter.id}"]`);
+                return {
+                    pattern: filterElement.querySelector('.regex-pattern').value,
+                    target: filterElement.querySelector('.regex-target').value,
+                    inverse: filterElement.querySelector('.regex-inverse').checked
+                };
+            }).filter(filter => filter.pattern.trim() !== '');
+        }
+
+        // 验证配置
+        function validateConfig() {
+            // 验证正则表达式
+            const invalidRegex = regexFilters.some(filter => {
+                const filterElement = document.querySelector(`.regex-filter-item[data-id="${filter.id}"]`);
+                const pattern = filterElement.querySelector('.regex-pattern').value.trim();
+                if (pattern !== '') {
+                    try {
+                        new RegExp(pattern);
+                        return false;
+                    } catch (e) {
+                        alert(`正则表达式 "${pattern}" 格式无效！`);
+                        return true;
+                    }
+                }
+                return false;
+            });
+
+            if (invalidRegex) {
+                return false;
+            }
+
+            // 验证是否有账号配置
+            if (accounts.length === 0) {
+                alert('请至少添加一个账号！');
+                return false;
+            }
+
+            // 验证每个账号是否都有Cookie
+            const invalidAccounts = accounts.filter(account => {
+                const accountElement = document.querySelector(`.account-item[data-id="${account.id}"]`);
+                return !accountElement.querySelector('.account-cookie').value.trim();
+            });
+
+            if (invalidAccounts.length > 0) {
+                alert('存在未配置Cookie的账号，请检查！');
+                return false;
+            }
+
+            // 验证并行配置
+            const maxConcurrent = parseInt(document.getElementById('maxConcurrent').value);
+            const requestsPerMinute = parseInt(document.getElementById('requestsPerMinute').value);
+            if (maxConcurrent < 1 || maxConcurrent > 5) {
+                alert('最大并行数必须在1-5之间！');
+                return false;
+            }
+            if (requestsPerMinute < 30 || requestsPerMinute > 120) {
+                alert('每分钟请求数必须在30-120之间！');
+                return false;
+            }
+
+            // 验证数据库配置
+            const dbConfig = {
+                host: document.getElementById('dbHost').value.trim(),
+                port: document.getElementById('dbPort').value.trim(),
+                name: document.getElementById('dbName').value.trim(),
+                user: document.getElementById('dbUser').value.trim(),
+                password: document.getElementById('dbPassword').value.trim()
+            };
+
+            if (!dbConfig.host || !dbConfig.port || !dbConfig.name || !dbConfig.user || !dbConfig.password) {
+                alert('请完整填写数据库配置信息！');
+                return false;
+            }
+
+            return true;
+        }
+
+        // 测试数据库连接
+        async function testDbConnection() {
+            const dbConfig = {
+                type: document.getElementById('dbType').value,
+                host: document.getElementById('dbHost').value,
+                port: parseInt(document.getElementById('dbPort').value),
+                name: document.getElementById('dbName').value,
+                user: document.getElementById('dbUser').value,
+                password: document.getElementById('dbPassword').value
+            };
+
+            try {
+                const response = await fetch('/api/spider/test-db', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dbConfig)
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('数据库连接测试成功！');
+                } else {
+                    alert('数据库连接测试失败：' + data.message);
+                }
+            } catch (error) {
+                alert('测试连接时发生错误：' + error.message);
+            }
+        }
+
+        // 监听数据库类型变化
+        document.getElementById('dbType').addEventListener('change', function() {
+            const dbType = this.value;
+            const portInput = document.getElementById('dbPort');
+            
+            // 根据数据库类型设置默认端口
+            switch(dbType) {
+                case 'mysql':
+                    portInput.value = '3306';
+                    break;
+                case 'postgresql':
+                    portInput.value = '5432';
+                    break;
+                case 'mongodb':
+                    portInput.value = '27017';
+                    break;
+            }
+        });
 
         // 保存配置
         function saveConfig() {

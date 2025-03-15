@@ -93,8 +93,20 @@ class SpiderData:
                 connection.rollback()
     
     def crawl_topic(self, topic: str, depth: int = 3, interval: int = 5,
-                    max_retries: int = 3, timeout: int = 30):
-        """爬取指定话题的微博内容"""
+                    max_retries: int = 3, timeout: int = 30, cookie: str = None,
+                    filter_callback = None):
+        """
+        爬取指定话题的微博内容
+        
+        Args:
+            topic: 话题关键词
+            depth: 爬取深度（页数）
+            interval: 请求间隔（秒）
+            max_retries: 最大重试次数
+            timeout: 请求超时时间（秒）
+            cookie: 用户Cookie
+            filter_callback: 筛选回调函数，返回True表示保留该条微博
+        """
         # 参数验证
         if not isinstance(depth, int) or depth < 1 or depth > 10:
             raise ValueError("爬取深度必须在1-10页之间")
@@ -104,6 +116,10 @@ class SpiderData:
             raise ValueError("最大重试次数必须在1-5次之间")
         if not isinstance(timeout, int) or timeout < 10 or timeout > 60:
             raise ValueError("请求超时时间必须在10-60秒之间")
+        
+        # 更新请求头中的Cookie
+        if cookie:
+            self.headers['Cookie'] = cookie
         
         logging.info(f"开始爬取话题: {topic}, 参数: depth={depth}, interval={interval}, max_retries={max_retries}, timeout={timeout}")
         
@@ -116,7 +132,7 @@ class SpiderData:
                     # 检查缓存
                     cached_content = self._get_cached_page(url)
                     if cached_content:
-                        self._parse_page(cached_content)
+                        self._parse_page(cached_content, filter_callback)
                         logging.info(f"使用缓存数据: {topic} 第 {page} 页")
                         break
                     
@@ -125,7 +141,7 @@ class SpiderData:
                     if response.status_code == 200:
                         # 缓存页面内容
                         self._cache_page(url, response.text)
-                        self._parse_page(response.text)
+                        self._parse_page(response.text, filter_callback)
                         logging.info(f"成功爬取话题 {topic} 第 {page} 页")
                         break
                     else:
@@ -154,8 +170,14 @@ class SpiderData:
         # 最后刷新缓冲区
         self._flush_buffer()
     
-    def _parse_page(self, html_content: str):
-        """解析页面内容并保存数据"""
+    def _parse_page(self, html_content: str, filter_callback = None):
+        """
+        解析页面内容并保存数据
+        
+        Args:
+            html_content: HTML页面内容
+            filter_callback: 筛选回调函数
+        """
         try:
             soup = BeautifulSoup(html_content, 'html.parser')
             weibo_items = soup.find_all('div', class_='card-wrap')
@@ -178,6 +200,19 @@ class SpiderData:
                     # 提取互动数据
                     actions = item.find_all('li', class_='action')
                     
+                    # 提取用户认证状态
+                    user_verified = bool(item.find('i', class_='icon-vip'))
+                    
+                    # 提取是否原创
+                    is_original = not bool(item.find('span', class_='repost'))
+                    
+                    # 提取是否包含媒体
+                    has_media = bool(item.find('div', class_='media'))
+                    
+                    # 提取发布位置
+                    location = item.find('a', class_='location')
+                    location_text = location.text.strip() if location else ''
+                    
                     # 构建数据字典
                     weibo_data = {
                         'content': content.text.strip(),
@@ -186,15 +221,22 @@ class SpiderData:
                         'forward_count': self._extract_number(actions[0].text) if len(actions) > 0 else 0,
                         'comment_count': self._extract_number(actions[1].text) if len(actions) > 1 else 0,
                         'like_count': self._extract_number(actions[2].text) if len(actions) > 2 else 0,
+                        'read_count': self._extract_number(actions[3].text) if len(actions) > 3 else 0,
+                        'user_verified': user_verified,
+                        'is_original': is_original,
+                        'has_media': has_media,
+                        'location': location_text,
                         'crawl_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     }
                     
-                    # 添加到插入缓冲区
-                    self.insert_buffer.append(weibo_data)
-                    
-                    # 如果缓冲区达到阈值，执行批量插入
-                    if len(self.insert_buffer) >= self.buffer_size:
-                        self._flush_buffer()
+                    # 如果有筛选回调函数，则进行筛选
+                    if filter_callback is None or filter_callback(weibo_data):
+                        # 添加到插入缓冲区
+                        self.insert_buffer.append(weibo_data)
+                        
+                        # 如果缓冲区达到阈值，执行批量插入
+                        if len(self.insert_buffer) >= self.buffer_size:
+                            self._flush_buffer()
                     
                 except Exception as e:
                     logging.error(f"解析微博项时出错: {e}")
