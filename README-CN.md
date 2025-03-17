@@ -17,7 +17,7 @@
 🚀最新2.0版本已全面升级AI模式，欢迎体验！⬇️
 
 <div style="display: flex; justify-content: center; align-items: center; gap: 10px; width: 90%; margin: auto;">
-    <img src="https://github.com/user-attachments/assets/7ea3f84c-4e08-448e-b2f5-35e1a1e4fbba" style="width: 45%; height: auto;">
+    <img src="https://github.com/user-attachments/assets/52d07a31-111a-47e7-86f2-a1bafccfe0a5" style="width: 45%; height: auto;">
     <img src="https://github.com/user-attachments/assets/33a8baf7-e365-4eaf-9620-4f6e9a23fa89" style="width: 45%; height: auto;">
 </div>
 
