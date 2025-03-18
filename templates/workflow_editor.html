@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>工作流编辑器 - 微博舆情分析系统</title>
+    <title data-i18n="page-title">工作流编辑器 - 微博舆情分析系统</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/jsoneditor@9.5.0/dist/jsoneditor.min.css" rel="stylesheet">
@@ -359,7 +359,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <i class="fas fa-project-diagram me-2"></i>工作流编辑器
+                <i class="fas fa-project-diagram me-2"></i><span data-i18n="navbar-brand">工作流编辑器</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -367,21 +367,31 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">可视化编辑</a>
+                        <a class="nav-link active" href="#"><span data-i18n="nav-visual-editor">可视化编辑</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">模板管理</a>
+                        <a class="nav-link" href="#"><span data-i18n="nav-template-mgmt">模板管理</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">任务列表</a>
+                        <a class="nav-link" href="#"><span data-i18n="nav-task-list">任务列表</span></a>
                     </li>
                 </ul>
                 <div class="d-flex">
+                    <!-- 添加语言切换按钮 -->
+                    <div class="dropdown me-2">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-language me-1"></i><span id="currentLanguage">中文</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                            <li><button class="dropdown-item language-option" data-lang="zh-CN">中文</button></li>
+                            <li><button class="dropdown-item language-option" data-lang="en-US">English</button></li>
+                        </ul>
+                    </div>
                     <button id="saveWorkflowBtn" class="btn btn-success me-2">
-                        <i class="fas fa-save me-1"></i>保存
+                        <i class="fas fa-save me-1"></i><span data-i18n="btn-save">保存</span>
                     </button>
                     <button id="runWorkflowBtn" class="btn btn-primary">
-                        <i class="fas fa-play me-1"></i>运行
+                        <i class="fas fa-play me-1"></i><span data-i18n="btn-run">运行</span>
                     </button>
                 </div>
             </div>
@@ -394,72 +404,72 @@
             <div class="col-md-3 col-lg-2 d-md-block sidebar">
                 <div class="d-flex justify-content-center mb-4">
                     <div class="btn-group">
-                        <button class="btn btn-outline-primary active" id="componentsTabBtn">组件</button>
-                        <button class="btn btn-outline-primary" id="templatesTabBtn">模板</button>
+                        <button class="btn btn-outline-primary active" id="componentsTabBtn"><span data-i18n="tab-components">组件</span></button>
+                        <button class="btn btn-outline-primary" id="templatesTabBtn"><span data-i18n="tab-templates">模板</span></button>
                     </div>
                 </div>
                 
                 <!-- 组件面板保持不变 -->
                 <div id="componentsPanel">
                     <div class="component-container">
-                        <h6><i class="fas fa-database me-2"></i>数据源</h6>
+                        <h6><i class="fas fa-database me-2"></i><span data-i18n="comp-data-source">数据源</span></h6>
                         <div class="component-list">
                             <div class="component-item" data-type="data_source" data-subtype="database">
-                                <i class="fas fa-table me-2"></i>数据库
+                                <i class="fas fa-table me-2"></i><span data-i18n="comp-database">数据库</span>
                             </div>
                             <div class="component-item" data-type="data_source" data-subtype="file">
-                                <i class="fas fa-file-alt me-2"></i>文件
+                                <i class="fas fa-file-alt me-2"></i><span data-i18n="comp-file">文件</span>
                             </div>
                             <div class="component-item" data-type="data_source" data-subtype="crawler">
-                                <i class="fas fa-spider me-2"></i>爬虫
+                                <i class="fas fa-spider me-2"></i><span data-i18n="comp-crawler">爬虫</span>
                             </div>
                         </div>
                     </div>
                     
                     <div class="component-container">
-                        <h6><i class="fas fa-filter me-2"></i>数据处理</h6>
+                        <h6><i class="fas fa-filter me-2"></i><span data-i18n="comp-data-processing">数据处理</span></h6>
                         <div class="component-list">
                             <div class="component-item" data-type="preprocessing" data-subtype="filter">
-                                <i class="fas fa-filter me-2"></i>过滤
+                                <i class="fas fa-filter me-2"></i><span data-i18n="comp-filter">过滤</span>
                             </div>
                             <div class="component-item" data-type="preprocessing" data-subtype="sort">
-                                <i class="fas fa-sort me-2"></i>排序
+                                <i class="fas fa-sort me-2"></i><span data-i18n="comp-sort">排序</span>
                             </div>
                             <div class="component-item" data-type="preprocessing" data-subtype="aggregate">
-                                <i class="fas fa-layer-group me-2"></i>聚合
+                                <i class="fas fa-layer-group me-2"></i><span data-i18n="comp-aggregate">聚合</span>
                             </div>
                         </div>
                     </div>
                     
                     <div class="component-container">
-                        <h6><i class="fas fa-brain me-2"></i>模型分析</h6>
+                        <h6><i class="fas fa-brain me-2"></i><span data-i18n="comp-model-analysis">模型分析</span></h6>
                         <div class="component-list">
                             <div class="component-item" data-type="model" data-subtype="sentiment">
-                                <i class="fas fa-smile me-2"></i>情感分析
+                                <i class="fas fa-smile me-2"></i><span data-i18n="comp-sentiment">情感分析</span>
                             </div>
                             <div class="component-item" data-type="model" data-subtype="topic">
-                                <i class="fas fa-tags me-2"></i>话题分类
+                                <i class="fas fa-tags me-2"></i><span data-i18n="comp-topic">话题分类</span>
                             </div>
                             <div class="component-item" data-type="model" data-subtype="keywords">
-                                <i class="fas fa-key me-2"></i>关键词提取
+                                <i class="fas fa-key me-2"></i><span data-i18n="comp-keywords">关键词提取</span>
                             </div>
                             <div class="component-item" data-type="model" data-subtype="summarize">
-                                <i class="fas fa-compress-alt me-2"></i>文本摘要
+                                <i class="fas fa-compress-alt me-2"></i><span data-i18n="comp-summarize">文本摘要</span>
                             </div>
                         </div>
                     </div>
                     
                     <div class="component-container">
-                        <h6><i class="fas fa-chart-bar me-2"></i>可视化</h6>
+                        <h6><i class="fas fa-chart-bar me-2"></i><span data-i18n="comp-visualization">可视化</span></h6>
                         <div class="component-list">
                             <div class="component-item" data-type="visualization" data-subtype="chart">
-                                <i class="fas fa-chart-line me-2"></i>图表
+                                <i class="fas fa-chart-line me-2"></i><span data-i18n="comp-chart">图表</span>
                             </div>
                             <div class="component-item" data-type="visualization" data-subtype="table">
-                                <i class="fas fa-table me-2"></i>表格
+                                <i class="fas fa-table me-2"></i><span data-i18n="comp-table">表格</span>
                             </div>
                             <div class="component-item" data-type="visualization" data-subtype="wordcloud">
-                                <i class="fas fa-cloud me-2"></i>词云
+                                <i class="fas fa-cloud me-2"></i><span data-i18n="comp-wordcloud">词云</span>
                             </div>
                         </div>
                     </div>
@@ -469,9 +479,9 @@
                 <div id="templatesPanel" style="display: none;">
                     <div class="mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="mb-0">爬虫模板</h6>
+                            <h6 class="mb-0"><span data-i18n="templates-crawler">爬虫模板</span></h6>
                             <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-plus"></i> 新建
+                                <i class="fas fa-plus"></i> <span data-i18n="btn-create-new">新建</span>
                             </button>
                         </div>
                         <div class="templates-wrapper">
@@ -483,9 +493,9 @@
                     
                     <div class="mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="mb-0">分析流程模板</h6>
+                            <h6 class="mb-0"><span data-i18n="templates-analysis">分析流程模板</span></h6>
                             <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-plus"></i> 新建
+                                <i class="fas fa-plus"></i> <span data-i18n="btn-create-new">新建</span>
                             </button>
                         </div>
                         <div class="templates-wrapper">
@@ -502,30 +512,30 @@
                 <!-- 添加工作流工具栏 -->
                 <div class="d-flex justify-content-between align-items-center mb-3" id="workflowToolbar">
                     <div class="btn-group">
-                        <button id="undoBtn" class="btn btn-sm btn-outline-secondary" title="撤销">
+                        <button id="undoBtn" class="btn btn-sm btn-outline-secondary" title="撤销" data-i18n-title="btn-undo">
                             <i class="fas fa-undo"></i>
                         </button>
-                        <button id="redoBtn" class="btn btn-sm btn-outline-secondary" title="重做">
+                        <button id="redoBtn" class="btn btn-sm btn-outline-secondary" title="重做" data-i18n-title="btn-redo">
                             <i class="fas fa-redo"></i>
                         </button>
-                        <button id="zoomInBtn" class="btn btn-sm btn-outline-secondary" title="放大">
+                        <button id="zoomInBtn" class="btn btn-sm btn-outline-secondary" title="放大" data-i18n-title="btn-zoom-in">
                             <i class="fas fa-search-plus"></i>
                         </button>
-                        <button id="zoomOutBtn" class="btn btn-sm btn-outline-secondary" title="缩小">
+                        <button id="zoomOutBtn" class="btn btn-sm btn-outline-secondary" title="缩小" data-i18n-title="btn-zoom-out">
                             <i class="fas fa-search-minus"></i>
                         </button>
-                        <button id="fitViewBtn" class="btn btn-sm btn-outline-secondary" title="适应视图">
+                        <button id="fitViewBtn" class="btn btn-sm btn-outline-secondary" title="适应视图" data-i18n-title="btn-fit-view">
                             <i class="fas fa-expand"></i>
                         </button>
                     </div>
                     <div>
-                        <button id="validateWorkflowBtn" class="btn btn-sm btn-outline-primary" title="验证工作流">
-                            <i class="fas fa-check-circle"></i> 验证
+                        <button id="validateWorkflowBtn" class="btn btn-sm btn-outline-primary" title="验证工作流" data-i18n-title="btn-validate">
+                            <i class="fas fa-check-circle"></i> <span data-i18n="btn-validate">验证</span>
                         </button>
-                        <button id="exportWorkflowBtn" class="btn btn-sm btn-outline-secondary" title="导出工作流">
+                        <button id="exportWorkflowBtn" class="btn btn-sm btn-outline-secondary" title="导出工作流" data-i18n-title="btn-export">
                             <i class="fas fa-file-export"></i>
                         </button>
-                        <button id="importWorkflowBtn" class="btn btn-sm btn-outline-secondary" title="导入工作流">
+                        <button id="importWorkflowBtn" class="btn btn-sm btn-outline-secondary" title="导入工作流" data-i18n-title="btn-import">
                             <i class="fas fa-file-import"></i>
                         </button>
                     </div>
@@ -540,12 +550,12 @@
                 
                 <!-- 添加工作流状态栏 -->
                 <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded mt-3" id="workflowStatusBar" style="display: none !important;">
-                    <div id="workflowStatusMessage" class="text-muted">
+                    <div id="workflowStatusMessage" class="text-muted" data-i18n="workflow-status-message">
                         工作流就绪。拖拽左侧组件到画布创建节点。
                     </div>
                     <div class="d-flex">
-                        <div class="me-3">节点: <span id="nodeCount">0</span></div>
-                        <div>连接: <span id="connectionCount">0</span></div>
+                        <div class="me-3"><span data-i18n="nodes">节点</span>: <span id="nodeCount">0</span></div>
+                        <div><span data-i18n="connections">连接</span>: <span id="connectionCount">0</span></div>
                     </div>
                 </div>
             </div>
@@ -555,7 +565,7 @@
     <!-- 属性面板 -->
     <div class="properties-panel" id="propertiesPanel">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0">组件属性</h5>
+            <h5 class="mb-0"><span data-i18n="properties-title">组件属性</span></h5>
             <button class="btn-close" id="closePropertiesBtn"></button>
         </div>
         <div id="propertiesContent">
@@ -568,35 +578,35 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">保存为模板</h5>
+                    <h5 class="modal-title" data-i18n="modal-save-template">保存为模板</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="saveTemplateForm">
                         <div class="mb-3">
-                            <label for="templateName" class="form-label">模板名称</label>
+                            <label for="templateName" class="form-label" data-i18n="template-name">模板名称</label>
                             <input type="text" class="form-control" id="templateName" required>
                         </div>
                         <div class="mb-3">
-                            <label for="templateDescription" class="form-label">描述</label>
+                            <label for="templateDescription" class="form-label" data-i18n="template-description">描述</label>
                             <textarea class="form-control" id="templateDescription" rows="3"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="templateIcon" class="form-label">图标</label>
+                            <label for="templateIcon" class="form-label" data-i18n="template-icon">图标</label>
                             <select class="form-select" id="templateIcon">
-                                <option value="chart-line">📊 图表</option>
-                                <option value="filter">🔍 过滤</option>
-                                <option value="spider">🕸️ 爬虫</option>
-                                <option value="brain">🧠 AI分析</option>
-                                <option value="database">💾 数据库</option>
-                                <option value="cloud">☁️ 词云</option>
+                                <option value="chart-line">📊 <span data-i18n="icon-chart">图表</span></option>
+                                <option value="filter">🔍 <span data-i18n="icon-filter">过滤</span></option>
+                                <option value="spider">🕸️ <span data-i18n="icon-crawler">爬虫</span></option>
+                                <option value="brain">🧠 <span data-i18n="icon-ai">AI分析</span></option>
+                                <option value="database">💾 <span data-i18n="icon-database">数据库</span></option>
+                                <option value="cloud">☁️ <span data-i18n="icon-wordcloud">词云</span></option>
                             </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="saveTemplateBtn">保存</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="btn-cancel">取消</button>
+                    <button type="button" class="btn btn-primary" id="saveTemplateBtn" data-i18n="btn-save">保存</button>
                 </div>
             </div>
         </div>
@@ -606,21 +616,21 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">运行工作流</h5>
+                    <h5 class="modal-title" data-i18n="modal-run-workflow">运行工作流</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p>确认要运行当前工作流吗？</p>
+                    <p data-i18n="run-workflow-confirm">确认要运行当前工作流吗？</p>
                     <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" id="saveBeforeRun" checked>
-                        <label class="form-check-label" for="saveBeforeRun">
+                        <label class="form-check-label" for="saveBeforeRun" data-i18n="save-before-run">
                             运行前保存工作流
                         </label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="confirmRunBtn">运行</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="btn-cancel">取消</button>
+                    <button type="button" class="btn btn-primary" id="confirmRunBtn" data-i18n="btn-run">运行</button>
                 </div>
             </div>
         </div>
@@ -630,13 +640,13 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">任务执行状态</h5>
+                    <h5 class="modal-title" data-i18n="modal-task-status">任务执行状态</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
                         <h6 class="d-flex align-items-center">
-                            <i class="fas fa-tasks me-2"></i>进度
+                            <i class="fas fa-tasks me-2"></i><span data-i18n="task-progress">进度</span>
                             <div class="ms-auto" id="taskProgressPercentage">0%</div>
                         </h6>
                         <div class="progress" style="height: 10px;">
@@ -645,46 +655,46 @@
                     </div>
                     <div class="mb-3">
                         <h6 class="d-flex align-items-center">
-                            <i class="fas fa-info-circle me-2"></i>状态信息
-                            <span id="taskStatusBadge" class="ms-2 badge bg-info">等待中</span>
+                            <i class="fas fa-info-circle me-2"></i><span data-i18n="task-status-info">状态信息</span>
+                            <span id="taskStatusBadge" class="ms-2 badge bg-info" data-i18n="task-waiting">等待中</span>
                         </h6>
                         <div id="taskStatusInfo" class="p-3 bg-light rounded border">
                             <div class="row g-2">
                                 <div class="col-md-6">
-                                    <p class="mb-1"><strong>任务ID:</strong> <span id="taskIdDisplay">-</span></p>
-                                    <p class="mb-1"><strong>状态:</strong> <span id="taskStatusDisplay">-</span></p>
+                                    <p class="mb-1"><strong data-i18n="task-id">任务ID:</strong> <span id="taskIdDisplay">-</span></p>
+                                    <p class="mb-1"><strong data-i18n="task-status">状态:</strong> <span id="taskStatusDisplay">-</span></p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="mb-1"><strong>开始时间:</strong> <span id="taskStartTimeDisplay">-</span></p>
-                                    <p class="mb-1"><strong>完成时间:</strong> <span id="taskCompleteTimeDisplay">-</span></p>
+                                    <p class="mb-1"><strong data-i18n="task-start-time">开始时间:</strong> <span id="taskStartTimeDisplay">-</span></p>
+                                    <p class="mb-1"><strong data-i18n="task-complete-time">完成时间:</strong> <span id="taskCompleteTimeDisplay">-</span></p>
                                 </div>
                             </div>
                             <div class="mt-2" id="taskDetailsContainer">
-                                <p class="mb-1"><strong>当前步骤:</strong> <span id="taskCurrentStepDisplay">等待开始</span></p>
-                                <p class="mb-0"><strong>耗时:</strong> <span id="taskElapsedTimeDisplay">0秒</span></p>
+                                <p class="mb-1"><strong data-i18n="task-current-step">当前步骤:</strong> <span id="taskCurrentStepDisplay" data-i18n="waiting-to-start">等待开始</span></p>
+                                <p class="mb-0"><strong data-i18n="task-elapsed-time">耗时:</strong> <span id="taskElapsedTimeDisplay">0秒</span></p>
                             </div>
                         </div>
                     </div>
                     <div>
                         <h6 class="d-flex align-items-center">
-                            <i class="fas fa-chart-bar me-2"></i>结果预览
-                            <button class="btn btn-sm btn-outline-secondary ms-auto" id="refreshPreviewBtn" title="刷新预览">
+                            <i class="fas fa-chart-bar me-2"></i><span data-i18n="task-result-preview">结果预览</span>
+                            <button class="btn btn-sm btn-outline-secondary ms-auto" id="refreshPreviewBtn" title="刷新预览" data-i18n-title="refresh-preview">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
                         </h6>
                         <div id="taskResultPreview" class="p-3 bg-light rounded border" style="max-height: 300px; overflow: auto;">
                             <div class="text-center py-4" id="previewLoadingIndicator">
                                 <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">加载中...</span>
+                                    <span class="visually-hidden" data-i18n="loading">加载中...</span>
                                 </div>
-                                <p class="text-muted mt-2">任务运行中，正在准备预览数据...</p>
+                                <p class="text-muted mt-2" data-i18n="task-running-preparing">任务运行中，正在准备预览数据...</p>
                             </div>
                             <div id="previewContent" style="display: none;">
-                                <p class="text-muted">任务完成后将显示结果预览...</p>
+                                <p class="text-muted" data-i18n="preview-after-task">任务完成后将显示结果预览...</p>
                             </div>
                             <div id="previewError" class="alert alert-danger" style="display: none;">
                                 <i class="fas fa-exclamation-triangle me-2"></i>
-                                <span id="errorMessage">加载预览时发生错误</span>
+                                <span id="errorMessage" data-i18n="preview-error">加载预览时发生错误</span>
                             </div>
                         </div>
                         <div class="mt-2 text-end">
@@ -695,13 +705,13 @@
                 <div class="modal-footer d-flex justify-content-between">
                     <div>
                         <button type="button" class="btn btn-danger" id="cancelTaskBtn">
-                            <i class="fas fa-stop-circle me-1"></i>取消任务
+                            <i class="fas fa-stop-circle me-1"></i><span data-i18n="btn-cancel-task">取消任务</span>
                         </button>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="btn-close">关闭</button>
                         <button type="button" class="btn btn-primary" id="viewResultBtn">
-                            <i class="fas fa-external-link-alt me-1"></i>查看完整结果
+                            <i class="fas fa-external-link-alt me-1"></i><span data-i18n="btn-view-full-result">查看完整结果</span>
                         </button>
                     </div>
                 </div>
@@ -715,6 +725,10 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsoneditor@9.5.0/dist/jsoneditor.min.js"></script>
+    <!-- 添加i18next库 -->
+    <script src="https://cdn.jsdelivr.net/npm/i18next@21.8.10/i18next.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-i18next@1.2.1/jquery-i18next.min.js"></script>
+    <script src="\static\js\i18n\translations.js"></script>
     <script src="\static\js\workflow_editor.js"></script>
 </body>
 </html>

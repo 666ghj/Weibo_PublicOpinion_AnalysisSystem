@@ -384,6 +384,7 @@
 
         // 初始化页面
         window.onload = function() {
+            updateLanguage();  // 设置初始语言
             loadPredefinedTopics();
         };
 
@@ -807,12 +808,12 @@
 
                 const data = await response.json();
                 if (data.success) {
-                    alert('数据库连接测试成功！');
+                    alert(currentLang === 'zh' ? '数据库连接测试成功！' : 'Database connection test successful!');
                 } else {
-                    alert('数据库连接测试失败：' + data.message);
+                    alert((currentLang === 'zh' ? '数据库连接测试失败：' : 'Database connection test failed: ') + data.message);
                 }
             } catch (error) {
-                alert('测试连接时发生错误：' + error.message);
+                alert((currentLang === 'zh' ? '测试连接时发生错误：' : 'Error during connection test: ') + error.message);
             }
         }
 
@@ -857,13 +858,13 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('配置已保存！');
+                    alert(currentLang === 'zh' ? '配置已保存！' : 'Configuration saved!');
                 } else {
-                    alert('保存失败：' + data.message);
+                    alert((currentLang === 'zh' ? '保存失败：' : 'Save failed: ') + data.message);
                 }
             })
             .catch(error => {
-                alert('保存出错：' + error.message);
+                alert((currentLang === 'zh' ? '保存出错：' : 'Error saving: ') + error.message);
             });
         }
 
@@ -891,7 +892,7 @@
         async function generateConfig() {
             const prompt = document.getElementById('aiPrompt').value.trim();
             if (!prompt) {
-                alert('请输入您的爬虫需求描述！');
+                alert(currentLang === 'zh' ? '请输入您的爬虫需求描述！' : 'Please enter your crawler requirements!');
                 return;
             }
 
@@ -933,13 +934,13 @@
                         updateSelectedTopicsList();
                         
                         // 添加提示
-                        updateCrawlLog('AI配置已自动应用');
+                        updateCrawlLog(currentLang === 'zh' ? 'AI配置已自动应用' : 'AI configuration automatically applied');
                     }
                 } else {
                     throw new Error(data.message);
                 }
             } catch (error) {
-                aiSuggestion.textContent = '生成配置时出错：' + error.message;
+                aiSuggestion.textContent = (currentLang === 'zh' ? '生成配置时出错：' : 'Error generating configuration: ') + error.message;
                 aiResponse.style.display = 'block';
             }
         }

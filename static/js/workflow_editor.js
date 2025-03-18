@@ -1,5 +1,65 @@
 let workflowEditorInitialized = false;
 
+// 初始化i18next多语言支持
+function initializeI18n() {
+    // 获取浏览器语言，默认为中文
+    const browserLang = navigator.language || 'zh-CN';
+    const defaultLang = browserLang.startsWith('zh') ? 'zh-CN' : 'en-US';
+    
+    // 初始化i18next
+    i18next.init({
+        lng: localStorage.getItem('preferred_language') || defaultLang,
+        resources: i18nResources,
+        fallbackLng: 'zh-CN',
+    }).then(function(t) {
+        // 更新当前语言显示
+        updateLanguageDisplay();
+        
+        // 应用翻译到所有元素
+        applyTranslations();
+    });
+}
+
+// 更新语言显示
+function updateLanguageDisplay() {
+    const currentLang = i18next.language;
+    const displayName = currentLang === 'zh-CN' ? '中文' : 'English';
+    document.getElementById('currentLanguage').textContent = displayName;
+}
+
+// 应用翻译到所有元素
+function applyTranslations() {
+    // 翻译data-i18n属性的元素
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        element.textContent = i18next.t(key);
+    });
+    
+    // 翻译title属性
+    document.querySelectorAll('[data-i18n-title]').forEach(element => {
+        const key = element.getAttribute('data-i18n-title');
+        element.title = i18next.t(key);
+    });
+    
+    // 更新页面标题
+    document.title = i18next.t('page-title');
+}
+
+// 切换语言
+function switchLanguage(lang) {
+    // 保存语言偏好到本地存储
+    localStorage.setItem('preferred_language', lang);
+    
+    // 更改i18next语言
+    i18next.changeLanguage(lang).then(() => {
+        // 更新语言显示
+        updateLanguageDisplay();
+        
+        // 应用翻译
+        applyTranslations();
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // 检查是否已初始化，防止多次执行
     if (workflowEditorInitialized) {
@@ -7,6 +67,17 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     workflowEditorInitialized = true;
+    
+    // 初始化多语言支持
+    initializeI18n();
+    
+    // 添加语言切换事件
+    document.querySelectorAll('.language-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const lang = this.getAttribute('data-lang');
+            switchLanguage(lang);
+        });
+    });
     
     // 工作流编辑器的主要元素
     const workflowCanvas = document.getElementById('workflowCanvas');
