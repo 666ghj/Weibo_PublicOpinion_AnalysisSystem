@@ -4,17 +4,26 @@ import time
 import uuid
 import logging
 from datetime import datetime, timedelta
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, render_template
 from utils.db_manager import DatabaseManager
 from utils.sensitive_filter import filter_dict
 from utils.cache_manager import CacheManager
 
-workflow_bp = Blueprint('workflow', __name__, url_prefix='/api/workflow')
+# 创建两个蓝图：一个用于页面渲染，一个用于API
+workflow_bp = Blueprint('workflow', __name__, url_prefix='/workflow')
+workflow_api_bp = Blueprint('workflow_api', __name__, url_prefix='/api/workflow')
+
 logger = logging.getLogger('workflow_api')
 logger.setLevel(logging.INFO)
 
 # 缓存管理器
 workflow_cache = CacheManager(name="workflows", memory_capacity=100, cache_duration=1)
+
+# 添加工作流编辑器页面路由
+@workflow_bp.route('/editor', methods=['GET'])
+def workflow_editor():
+    """渲染工作流编辑器页面"""
+    return render_template('workflow_editor.html')
 
 # 默认爬虫配置模板
 DEFAULT_CRAWLER_TEMPLATES = [
@@ -363,7 +372,7 @@ AVAILABLE_COMPONENTS = {
     ]
 }
 
-@workflow_bp.route('/crawler-templates', methods=['GET'])
+@workflow_api_bp.route('/crawler-templates', methods=['GET'])
 def get_crawler_templates():
     """获取爬虫配置模板列表"""
     # 从缓存获取
@@ -392,7 +401,7 @@ def get_crawler_templates():
         'data': filter_dict(templates)
     })
 
-@workflow_bp.route('/crawler-templates/<template_id>', methods=['GET'])
+@workflow_api_bp.route('/crawler-templates/<template_id>', methods=['GET'])
 def get_crawler_template(template_id):
     """获取指定爬虫配置模板"""
     # 查找默认模板
@@ -425,7 +434,7 @@ def get_crawler_template(template_id):
         'data': filter_dict(template)
     })
 
-@workflow_bp.route('/crawler-templates', methods=['POST'])
+@workflow_api_bp.route('/crawler-templates', methods=['POST'])
 def create_crawler_template():
     """创建爬虫配置模板"""
     data = request.json
@@ -491,7 +500,7 @@ def create_crawler_template():
     finally:
         cursor.close()
 
-@workflow_bp.route('/crawler-templates/<template_id>', methods=['PUT'])
+@workflow_api_bp.route('/crawler-templates/<template_id>', methods=['PUT'])
 def update_crawler_template(template_id):
     """更新爬虫配置模板"""
     data = request.json
@@ -552,7 +561,7 @@ def update_crawler_template(template_id):
     finally:
         cursor.close()
 
-@workflow_bp.route('/crawler-templates/<template_id>', methods=['DELETE'])
+@workflow_api_bp.route('/crawler-templates/<template_id>', methods=['DELETE'])
 def delete_crawler_template(template_id):
     """删除爬虫配置模板"""
     # 验证模板是否存在
@@ -597,7 +606,7 @@ def delete_crawler_template(template_id):
     finally:
         cursor.close()
 
-@workflow_bp.route('/analysis-templates', methods=['GET'])
+@workflow_api_bp.route('/analysis-templates', methods=['GET'])
 def get_analysis_templates():
     """获取分析流程模板列表"""
     # 从缓存获取
@@ -626,7 +635,7 @@ def get_analysis_templates():
         'data': filter_dict(templates)
     })
 
-@workflow_bp.route('/analysis-templates/<template_id>', methods=['GET'])
+@workflow_api_bp.route('/analysis-templates/<template_id>', methods=['GET'])
 def get_analysis_template(template_id):
     """获取指定分析流程模板"""
     # 查找默认模板
@@ -659,7 +668,7 @@ def get_analysis_template(template_id):
         'data': filter_dict(template)
     })
 
-@workflow_bp.route('/analysis-templates', methods=['POST'])
+@workflow_api_bp.route('/analysis-templates', methods=['POST'])
 def create_analysis_template():
     """创建分析流程模板"""
     data = request.json
@@ -727,7 +736,7 @@ def create_analysis_template():
     finally:
         cursor.close()
 
-@workflow_bp.route('/analysis-templates/<template_id>', methods=['PUT'])
+@workflow_api_bp.route('/analysis-templates/<template_id>', methods=['PUT'])
 def update_analysis_template(template_id):
     """更新分析流程模板"""
     data = request.json
@@ -790,7 +799,7 @@ def update_analysis_template(template_id):
     finally:
         cursor.close()
 
-@workflow_bp.route('/analysis-templates/<template_id>', methods=['DELETE'])
+@workflow_api_bp.route('/analysis-templates/<template_id>', methods=['DELETE'])
 def delete_analysis_template(template_id):
     """删除分析流程模板"""
     # 验证模板是否存在
@@ -835,7 +844,7 @@ def delete_analysis_template(template_id):
     finally:
         cursor.close()
 
-@workflow_bp.route('/components', methods=['GET'])
+@workflow_api_bp.route('/components', methods=['GET'])
 def get_available_components():
     """获取可用组件列表"""
     return jsonify({
@@ -843,7 +852,7 @@ def get_available_components():
         'data': filter_dict(AVAILABLE_COMPONENTS)
     })
 
-@workflow_bp.route('/run-workflow', methods=['POST'])
+@workflow_api_bp.route('/run-workflow', methods=['POST'])
 def run_workflow():
     """执行工作流"""
     data = request.json
@@ -874,7 +883,7 @@ def run_workflow():
         }
     })
 
-@workflow_bp.route('/task-status/<task_id>', methods=['GET'])
+@workflow_api_bp.route('/task-status/<task_id>', methods=['GET'])
 def get_task_status(task_id):
     """获取任务执行状态"""
     # 这里是获取任务状态的占位符
@@ -893,4 +902,19 @@ def get_task_status(task_id):
     return jsonify({
         'success': True,
         'data': status
-    }) 
+    })
+
+@workflow_api_bp.route('/save', methods=['POST'])
+def save_workflow():
+    """保存工作流"""
+    # ... existing code ...
+
+@workflow_api_bp.route('/<workflow_id>', methods=['GET'])
+def get_workflow(workflow_id):
+    """获取工作流"""
+    # ... existing code ...
+
+@workflow_api_bp.route('/<workflow_id>', methods=['DELETE'])
+def delete_workflow(workflow_id):
+    """删除工作流"""
+    # ... existing code ... 
