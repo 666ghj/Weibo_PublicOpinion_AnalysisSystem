@@ -20,6 +20,7 @@ from functools import wraps
 import bleach
 import re
 from datetime import datetime, timedelta
+from model_pro.lstm_predict import lstm_predictor
 
 pb = Blueprint('page',
                __name__,
@@ -75,12 +76,15 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # 设置模型路径
 model_save_path = 'model_pro/final_model.pt'
+lstm_model_path = 'model_pro/lstm_model.pt'
 bert_model_path = 'model_pro/bert_model'
 ctm_tokenizer_path = 'model_pro/sentence_bert_model'
 
 # 初始化模型
 try:
     model_manager.load_models(model_save_path, bert_model_path, ctm_tokenizer_path)
+    # 同时初始化LSTM模型
+    lstm_predictor.load_models(lstm_model_path, bert_model_path)
 except Exception as e:
     logging.error(f"模型加载失败: {e}")
 
@@ -315,7 +319,7 @@ def yuqingpredict():
         X, Y = getTopicCreatedAtandpredictData(defaultTopic)
         
         model_type = sanitize_input(request.args.get('model', 'pro'))
-        if model_type not in ['pro', 'basic']:
+        if model_type not in ['pro', 'basic', 'lstm']:
             return abort(400, "无效的模型类型")
         
         # 尝试从缓存获取预测结果
@@ -333,6 +337,14 @@ def yuqingpredict():
                     sentences = '正面'
                 elif value < 0.5:
                     sentences = '负面'
+            elif model_type == 'lstm':
+                predicted_label, confidence = lstm_predictor.predict(defaultTopic)
+                if predicted_label is not None:
+                    sentences = '良好' if predicted_label == 0 else '不良'
+                    sentences = f"{sentences} (LSTM置信度: {confidence[predicted_label]:.2%})"
+                else:
+                    sentences = 'LSTM预测失败，请稍后重试'
+                    logging.error(f"LSTM预测失败，话题: {defaultTopic}")
             else:
                 predicted_label, confidence = predict_sentiment(defaultTopic)
                 if predicted_label is not None:
