@@ -1,4 +1,4 @@
-from flask import request, redirect
+from flask import request, redirect, url_for
 from functools import wraps
 import bleach
 from utils.logger import app_logger as logging
@@ -23,9 +23,18 @@ def require_https():
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            if not request.is_secure and not request.is_localhost:
-                url = request.url.replace('http://', 'https://', 1)
-                return redirect(url, code=301)
+            if not request.is_secure and not getattr(request, 'is_localhost', False):
+                # 使用 _external=True 和 _scheme='https' 生成完整的 HTTPS URL
+                secure_url = url_for(
+                    request.endpoint,
+                    _external=True,
+                    _scheme='https',
+                    **request.view_args
+                )
+                # 添加查询参数
+                if request.query_string:
+                    secure_url = f"{secure_url}?{request.query_string.decode('utf-8')}"
+                return redirect(secure_url, code=301)
             return f(*args, **kwargs)
         return decorated_function
     return decorator
