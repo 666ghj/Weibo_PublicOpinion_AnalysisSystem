@@ -308,6 +308,10 @@ class LSTMModelManager:
         return loss + self.alpha * loss_adv
     
     def train_logistic_regression(self, train_texts, train_labels, val_texts=None, val_labels=None):
+        """训练逻辑回归基线模型"""
+        # 设置随机种子以确保可重现性
+        np.random.seed(self.random_seed)
+        
         vectorizer = TfidfVectorizer(max_features=5000)
         X_train = vectorizer.fit_transform(train_texts)
         
@@ -323,7 +327,8 @@ class LSTMModelManager:
         
         lr_model = LogisticRegression(
             class_weight='balanced',
-            random_state=self.random_seed  # 添加随机种子
+            random_state=self.random_seed,  # 添加随机种子
+            max_iter=1000  # 增加最大迭代次数以确保收敛
         )
         lr_model.fit(X_train, y_train)
         
