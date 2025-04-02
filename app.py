@@ -4,7 +4,10 @@ import pymysql
 import subprocess
 from flask import Flask, session, request, redirect
 from apscheduler.schedulers.background import BackgroundScheduler
-from pytz import utc
+try:
+    from zoneinfo import ZoneInfo  # Python 3.9+
+except ImportError:
+    from backports.zoneinfo import ZoneInfo  # Python < 3.9
 from datetime import datetime, timedelta
 import secrets
 from dotenv import load_dotenv
@@ -156,7 +159,7 @@ if __name__ == '__main__':
 
     # 设置定时任务
     try:
-        scheduler = BackgroundScheduler(timezone=utc)
+        scheduler = BackgroundScheduler(timezone=ZoneInfo("UTC"))
         scheduler.start()
 
         if check_database_empty():
