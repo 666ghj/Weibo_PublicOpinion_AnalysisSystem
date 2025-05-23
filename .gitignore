@@ -41,8 +41,7 @@ logs/
 *.sqlite
 *.db
 *.sql
-!createTables.sql
-!createTables8.0.sql
+!createTable.sql
 
 # 敏感配置文件
 .env
