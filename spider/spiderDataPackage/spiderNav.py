@@ -21,7 +21,11 @@ def write(row):
 
 # 获取数据，支持多账号
 def fetchData(url, headers_list):
-    headers = random.choice(headers_list)
+    # 使用numpy的Generator进行安全的随机选择
+    rng = np.random.Generator(np.random.PCG64())
+    idx = rng.integers(0, len(headers_list))
+    headers = headers_list[idx]
+    
     try:
         response = requests.get(url, headers=headers, timeout=10)
         if response.status_code == 200:
@@ -43,8 +47,17 @@ def readJson(response):
                     containerid = submodule['containerid']
                     write([typeName, gid, containerid])
 
-# 启动爬虫
-def start(headers_list):
+# 启动爬虫，添加默认参数
+def start(headers_list=None):
+    if headers_list is None:
+        # 提供默认的headers_list
+        headers_list = [
+            {
+                'Cookie': 'your_cookie_here',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36'
+            }
+        ]
+    
     navUrl = 'https://weibo.com/ajax/side/hot'
     init()
     response = fetchData(navUrl, headers_list)
