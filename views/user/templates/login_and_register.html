@@ -67,7 +67,7 @@
     form {
       position: relative;
       width: 642.03px;
-      height: 477.28px;
+      height: 600px;
       background-color: #fff;
       margin: auto;
       top: 20%;
@@ -120,7 +120,7 @@
       left: 50%;
       transform: translateX(-50%);
       margin-top: 15px;
-      transition: opacity 0.5s ease; /* 添加过渡效果 */
+      transition: opacity 0.5s ease;
     }
 
     .logo img {
@@ -131,7 +131,7 @@
     .content {
       position: absolute;
       width: 612px;
-      height: 150px;
+      height: 220px;
       top: 80px;
       left: 50%;
       transform: translateX(-50%);
@@ -141,8 +141,10 @@
       height: 60px;
       width: 522px;
       margin-top: 25px;
+      margin-bottom: 10px;
       margin-left: 40px;
       border: none;
+      position: relative;
     }
 
     .content input {
@@ -167,9 +169,11 @@
       position: absolute;
       width: 522px;
       height: 30px;
-      top: 270px;
+      top: 350px;
       left: 50%;
       transform: translateX(-50%);
+      display: flex;
+      justify-content: space-between;
     }
 
     .register-text a {
@@ -195,14 +199,12 @@
     }
 
     .a3 {
-      position: absolute;
-      right: 0;
       color: #d6c194;
     }
 
     .start {
       position: absolute;
-      top: 320px;
+      top: 400px;
       width: 612px;
       height: 60px;
       left: 50%;
@@ -244,12 +246,13 @@
 
     .other-login {
       position: absolute;
-      width: 612px;
+      width: 522px;
       height: 80px;
-      top: 400px;
+      top: 480px;
       left: 50%;
       transform: translateX(-50%);
-      padding-left: 80px;
+      display: flex;
+      justify-content: space-between;
       font-size: 18px;
       letter-spacing: 0.1em;
       font-weight: 700;
@@ -259,30 +262,23 @@
       color: rgb(15, 15, 15);
     }
 
-    .other-login span:first-child {
-      margin-left: 15px;
-    }
-
-    .other-login span:last-child {
-      position: absolute;
-      right: 80px;
-    }
-
     .xieyi {
       position: absolute;
-      width: 612px;
+      width: 522px;
       height: 40px;
       line-height: 40px;
       left: 50%;
       transform: translateX(-50%);
-      top: 310px;
+      top: 350px;
       font-size: 18px;
       font-weight: 700;
       color: #8d8c8b;
+      display: flex;
+      align-items: center;
     }
 
     .xieyi input {
-      margin-left: 45px;
+      margin-right: 10px;
     }
 
     .yanzhengma:hover {
@@ -305,6 +301,16 @@
     
     .language-switcher:hover {
       background-color: rgba(255, 255, 255, 1);
+    }
+
+    /* 修复注册表单中的按钮位置 */
+    #register .start {
+      top: 450px;
+    }
+
+    /* 为注册表单增加特定样式，避免与登录表单冲突 */
+    #register .register-text {
+      top: 400px;
     }
   </style>
 
@@ -332,6 +338,7 @@
     <div id="black-hid"></div>
 
     <form id="login" class="login show" method="POST" action="/user/login">
+      <input type="hidden" name="csrf_token" value="{{ session.get('csrf_token', '') }}">
       <div class="login_box">
         <div class="title">
           <a class="QRcode" href=""
@@ -356,24 +363,28 @@
             placeholder="输入密码/始める！"
           />
         </div>
+        <div class="input">
+          <input type="email" name="email" placeholder="输入邮箱" />
+        </div>
       </div>
       <div class="register-text">
-        <span>
+        <div>
           <a href="" class="a1">没有账号？</a>
           <a href="" class="a2" id="register_btn">立即注册</a>
-        </span>
-        <span><a href="" class="a3">忘记密码</a></span>
+        </div>
+        <div><a href="" class="a3">忘记密码</a></div>
       </div>
       <div class="start">
         <button>进入系统</button>
       </div>
       <div class="other-login">
-        <span><a href="" class="a4">手机快捷登录</a></span>
-        <span><a href="" class="a5">TapTap</a></span>
+        <div><a href="" class="a4">手机快捷登录</a></div>
+        <div><a href="" class="a5">TapTap</a></div>
       </div>
     </form>
 
     <form id="register" class="register" method="POST" action="/user/register">
+      <input type="hidden" name="csrf_token" value="{{ session.get('csrf_token', '') }}">
       <div class="login_box">
         <div class="title">
           <a class="logo" href=""
@@ -411,8 +422,8 @@
             href=""
             style="
               position: absolute;
-              top: 43px;
-              right: 60px;
+              top: 20px;
+              right: 20px;
               color: #d6c194;
               font-weight: 700;
               letter-spacing: 0.1em;
@@ -423,17 +434,20 @@
         <div class="input">
           <input type="text" name="password" placeholder="设定密码" />
         </div>
+        <div class="input">
+          <input type="email" name="email" placeholder="输入邮箱地址" />
+        </div>
       </div>
       <div class="xieyi">
         <input type="checkbox" />
         <span>已同意《用户协议》和《隐私权益》</span>
       </div>
       <div class="register-text">
-        <span>
+        <div>
           <a href="" class="a2" id="login_btn">返回登录页面</a>
-        </span>
+        </div>
       </div>
-      <div class="start" style="top: 370px">
+      <div class="start" style="top: 450px">
         <button>注册并返回</button>
       </div>
     </form>

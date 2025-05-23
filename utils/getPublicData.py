@@ -1,4 +1,5 @@
 from utils.query import query
+from utils.logger import app_logger as logging
 import re
 import sys
 import pandas as pd
@@ -70,25 +71,110 @@ cityList = [
             ]
 
 def getAllCommentsData():
-    commentList = query('select * from comments',[],'select')
-    return commentList
+    """
+    获取所有评论数据
+    """
+    try:
+        commentList = query('select * from comments', query_type="select")
+        if not commentList:
+            logging.warning("未找到评论数据，返回空列表")
+            return []
+        return commentList
+    except Exception as e:
+        logging.error(f"获取评论数据时发生错误: {e}")
+        return []
 
 def getAllArticleData():
-    articleList = query('select * from article',[],'select')
-    return articleList
+    """
+    获取所有文章数据
+    """
+    try:
+        articleList = query('select * from article', query_type="select")
+        if not articleList:
+            logging.warning("未找到文章数据，返回空列表")
+            return []
+        return articleList
+    except Exception as e:
+        logging.error(f"获取文章数据时发生错误: {e}")
+        return []
+
+def getArticleByType(article_type):
+    """
+    根据文章类型获取文章列表
+    
+    :param article_type: 文章类型
+    :return: 符合指定类型的文章列表
+    """
+    try:
+        sql = "SELECT * FROM article WHERE type = %s"
+        params = [article_type]
+        articles = query(sql, query_type="select", params=params)
+        return articles if articles else []
+    except Exception as e:
+        logging.error(f"按类型获取文章时发生错误: {e}")
+        return []
+
+def getArticleById(article_id):
+    """
+    根据文章ID获取单篇文章
+    
+    :param article_id: 文章ID
+    :return: 指定ID的文章信息，如果不存在则返回None
+    """
+    sql = "SELECT * FROM article WHERE id = %s"
+    params = [article_id]
+    articles = query(sql, params, 'select')
+    if articles and len(articles) > 0:
+        return articles[0]  # 返回第一条记录
+    return None
 
 def getAllHotWords():
-    data = []
-    df = pd.read_csv('./utils/cipingTotal.csv',encoding='utf8')
-    for i in df.values:
-        try:
-            data.append([
-                re.search('[\u4e00-\u9fa5]+',str(i)).group(),
-                re.search('\d+',str(i)).group()
-            ])
-        except:
-            continue
-    return data
+    """
+    获取所有热词列表
+    """
+    try:
+        sql = """
+        SELECT 
+            word, 
+            COUNT(*) as count
+        FROM (
+            SELECT 
+                TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(content, ' ', n.n), ' ', -1)) as word
+            FROM 
+                comments,
+                (SELECT 1 as n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) as n
+            WHERE 
+                LENGTH(content) - LENGTH(REPLACE(content, ' ', '')) >= n.n - 1
+                AND LENGTH(TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(content, ' ', n.n), ' ', -1))) > 1
+        ) words
+        GROUP BY 
+            word
+        HAVING 
+            COUNT(*) > 5
+        ORDER BY 
+            count DESC
+        LIMIT 50
+        """
+        result = query(sql, query_type="select")
+        
+        if not result or len(result) == 0:
+            logging.warning("未找到热词数据")
+            # 返回一些默认热词
+            return [['微博'], ['热搜'], ['新闻'], ['视频'], ['转发']]
+            
+        # 将查询结果转换为列表格式
+        hot_words = [[row['word']] for row in result if row['word'] and len(row['word'].strip()) > 1]
+        
+        if not hot_words:
+            logging.warning("处理后热词列表为空，使用默认值")
+            return [['微博'], ['热搜'], ['新闻'], ['视频'], ['转发']]
+            
+        logging.info(f"成功获取热词列表，共{len(hot_words)}个热词")
+        return hot_words
+    except Exception as e:
+        logging.error(f"获取热词列表出错: {e}")
+        # 返回一些默认热词
+        return [['微博'], ['热搜'], ['新闻'], ['视频'], ['转发']]
 
 def getAllTopics():
     data =[]

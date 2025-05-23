@@ -1,3 +1,4 @@
+import httpx
 import openai
 import anthropic
 import json
@@ -7,6 +8,9 @@ import asyncio
 import math
 from datetime import datetime
 from utils.logger import app_logger as logging
+import re
+from utils.api_debug import log_api_request, log_api_response
+import time
 
 class AIAnalyzer:
     def __init__(self):
@@ -34,13 +38,17 @@ class AIAnalyzer:
         
         # 配置各API客户端
         if self.openai_key:
-            openai.api_key = self.openai_key
+            # 使用新版API创建客户端
+            self.openai_client = openai.OpenAI(
+                api_key=self.openai_key
+            )
         if self.claude_key:
             self.claude_client = anthropic.Anthropic(api_key=self.claude_key)
         if self.deepseek_key:
             self.deepseek_client = openai.OpenAI(
                 api_key=self.deepseek_key,
-                base_url="https://api.deepseek.com/v1"
+                base_url="https://api.deepseek.com/v1",
+                http_client=httpx.Client()
             )
         
         # 支持的模型列表（增加了最新的 ChatGPT 和 Claude 模型）
@@ -204,7 +212,7 @@ class AIAnalyzer:
             elif provider == 'anthropic':
                 result = await self._analyze_with_claude(messages_text, system_prompt, model_type, max_tokens)
             elif provider == 'deepseek':
-                result = await self._analyze_with_deepseek(messages_text, system_prompt, model_type, max_tokens)
+                result = self._analyze_with_deepseek(messages_text, system_prompt, model_type, max_tokens)
             else:
                 logging.error(f"未知的API供应商: {provider}")
                 return ([], 0.0)
@@ -241,7 +249,7 @@ class AIAnalyzer:
                                    model: str, max_tokens: int) -> List[Dict]:
         """使用 OpenAI API 进行分析"""
         try:
-            response = await openai.ChatCompletion.acreate(
+            response = await self.openai_client.chat.completions.create(
                 model=model,
                 messages=[
                     {"role": "system", "content": system_prompt},
@@ -284,53 +292,257 @@ class AIAnalyzer:
             logging.error(f"Claude API调用失败: {e}", exc_info=True)
             return []
     
-    async def _analyze_with_deepseek(self, messages_text: str, system_prompt: str, 
-                                     model: str, max_tokens: int) -> List[Dict]:
+    def _analyze_with_deepseek(self, messages_text: str, system_prompt: str, 
+                                model: str, max_tokens: int) -> List[Dict]:
         """使用 DeepSeek API 进行分析"""
+        start_time = time.time()
+        request_data = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"请分析以下消息:\n{messages_text}"}
+            ],
+            "temperature": 0.3,
+            "max_tokens": max_tokens
+        }
+        
+        # 记录请求
+        log_api_request("DeepSeek", request_data, model_type=model)
+        
         try:
-            response = await self.deepseek_client.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"请分析以下消息:\n{messages_text}"}
-                ],
-                temperature=0.3,
-                max_tokens=max_tokens
-            )
+            # DeepSeek API 客户端不支持异步调用，需要使用同步方式
+            response = self.deepseek_client.chat.completions.create(**request_data)
+            
+            elapsed_time = time.time() - start_time
+            
+            # 检查响应是否有效
+            if not response or not hasattr(response, 'choices') or not response.choices:
+                logging.error("DeepSeek API返回了空响应或无效响应")
+                log_api_response("DeepSeek", "空响应或无效响应", elapsed_time, status="error")
+                return self._generate_default_results(messages_text)
+            
+            # 获取响应内容
             content = response.choices[0].message.content
-            result = json.loads(content)
-            if isinstance(result, dict) and 'analysis_results' in result:
-                return result['analysis_results']
-            else:
-                logging.error(f"DeepSeek API返回格式不正确: {content}")
-                return []
+            
+            # 记录响应
+            log_api_response("DeepSeek", content, elapsed_time, status="success")
+            
+            if not content:
+                logging.error("DeepSeek API返回的内容为空")
+                return self._generate_default_results(messages_text)
+            
+            # 处理响应数据
+            try:
+                # 首先尝试在内容中查找可能的JSON结构
+                json_match = re.search(r'```json(.*?)```|(\{.*\})', content, re.DOTALL)
+                if json_match:
+                    json_content = json_match.group(1) or json_match.group(2)
+                    json_content = json_content.strip()
+                    result = json.loads(json_content)
+                else:
+                    # 直接尝试解析整个内容
+                    result = json.loads(content)
+                
+                if isinstance(result, dict) and 'analysis_results' in result:
+                    return result['analysis_results']
+                
+                # 尝试其他格式
+                if isinstance(result, dict):
+                    # 单个结果对象
+                    if 'sentiment' in result:
+                        # 为单个结果添加timestamp
+                        if 'timestamp' not in result:
+                            result['timestamp'] = time.time()
+                        return [result]
+                
+                # 如果直接返回了结果数组
+                if isinstance(result, list) and result and isinstance(result[0], dict):
+                    # 检查列表中的项目是否是分析结果
+                    if 'sentiment' in result[0]:
+                        # 为每个结果添加timestamp
+                        for item in result:
+                            if 'timestamp' not in item:
+                                item['timestamp'] = time.time()
+                        return result
+                
+                # 如果无法识别格式，生成默认结果
+                logging.warning(f"DeepSeek API返回未识别的格式")
+                return self._generate_default_results(messages_text)
+                
+            except json.JSONDecodeError:
+                # 如果不是JSON格式，尝试生成一个结果
+                logging.warning("DeepSeek API未返回JSON格式数据，尝试生成结果")
+                
+                # 从内容中提取情感倾向
+                sentiment = "中性"
+                if "积极" in content or "正面" in content:
+                    sentiment = "积极"
+                elif "消极" in content or "负面" in content:
+                    sentiment = "消极"
+                
+                # 从内容中提取可能的关键词
+                keywords = []
+                keyword_matches = re.findall(r'关键词[：:]\s*(.*?)(?:\n|$)', content)
+                if keyword_matches:
+                    keywords = [k.strip() for k in re.split(r'[,，、]', keyword_matches[0]) if k.strip()]
+                
+                # 生成一个默认结果
+                result = [{
+                    "message_id": "deepseek-1",
+                    "sentiment": sentiment,
+                    "sentiment_score": 0.5 if sentiment == "中性" else (0.8 if sentiment == "积极" else 0.2),
+                    "keywords": keywords or ["自动生成"],
+                    "key_points": content[:100].replace("\n", " "),
+                    "influence_analysis": "基于API返回内容自动生成的分析",
+                    "risk_level": "中",
+                    "timestamp": time.time()
+                }]
+                
+                return result
         except Exception as e:
+            elapsed_time = time.time() - start_time
             logging.error(f"DeepSeek API调用失败: {e}", exc_info=True)
+            log_api_response("DeepSeek", f"调用失败: {str(e)}", elapsed_time, status="error")
+            return self._generate_default_results(messages_text)
+
+    def _extract_results_from_text(self, text: str) -> List[Dict]:
+        """从文本中尝试提取JSON结果"""
+        try:
+            # 尝试找到JSON部分的开始和结束
+            json_pattern = r'(\{[\s\S]*\})'
+            matches = re.findall(json_pattern, text)
+            for match in matches:
+                try:
+                    result = json.loads(match)
+                    if isinstance(result, dict):
+                        if 'analysis_results' in result:
+                            return result['analysis_results']
+                        # 单个结果
+                        if any(key in result for key in ['message_id', 'sentiment', 'keywords']):
+                            return [result]
+                except:
+                    continue
+                
+            # 尝试寻找数组形式的JSON
+            array_pattern = r'(\[[\s\S]*\])'
+            matches = re.findall(array_pattern, text)
+            for match in matches:
+                try:
+                    result = json.loads(match)
+                    if isinstance(result, list) and len(result) > 0:
+                        return result
+                except:
+                    continue
+                
             return []
+        except Exception as e:
+            logging.error(f"从文本提取JSON失败: {e}")
+            return []
+        
+    def _generate_default_results(self, messages_text: str) -> List[Dict]:
+        """生成默认分析结果"""
+        # 从消息文本中提取ID和内容
+        messages = []
+        try:
+            # 尝试解析消息文本分割每条消息
+            for msg_text in messages_text.split("\n---\n"):
+                lines = msg_text.strip().split('\n')
+                msg_id = None
+                content = ""
+                
+                for line in lines:
+                    if line.startswith("消息ID:"):
+                        msg_id = line.replace("消息ID:", "").strip()
+                    elif line.startswith("内容:"):
+                        content = line.replace("内容:", "").strip()
+                
+                if msg_id and content:
+                    messages.append({"id": msg_id, "content": content})
+        except:
+            # 如果解析失败，创建一个默认消息
+            messages = [{"id": "default-1", "content": "默认内容"}]
+        
+        # 为每条消息生成一个默认分析结果
+        results = []
+        for i, msg in enumerate(messages):
+            # 生成一个简单的情感分析结果
+            sentiment = "中性"
+            if "好" in msg["content"] or "喜欢" in msg["content"] or "赞" in msg["content"]:
+                sentiment = "积极"
+            elif "差" in msg["content"] or "不" in msg["content"] or "烂" in msg["content"]:
+                sentiment = "消极"
+            
+            results.append({
+                "message_id": msg["id"],
+                "sentiment": sentiment,
+                "sentiment_score": 0.5 if sentiment == "中性" else (0.8 if sentiment == "积极" else 0.2),
+                "keywords": ["默认", "关键词"],
+                "key_points": "由于API调用失败，这是系统生成的默认分析结果。",
+                "influence_analysis": "无法进行影响分析，请稍后重试。",
+                "risk_level": "中",
+                "timestamp": datetime.now().timestamp()
+            })
+        
+        return results
     
     def format_analysis_for_display(self, analysis: Dict) -> Dict:
         """将分析结果格式化为前端显示格式"""
-        base_result = {
-            'id': analysis.get('message_id', ''),
-            'sentiment': analysis.get('sentiment', ''),
-            'sentiment_score': f"{float(analysis.get('sentiment_score', 0)):.2%}",
-            'keywords': ', '.join(analysis.get('keywords', [])),
-            'key_points': analysis.get('key_points', ''),
-            'influence': analysis.get('influence_analysis', ''),
-            'risk_level': analysis.get('risk_level', ''),
-            'analysis_time': datetime.fromtimestamp(
-                float(analysis.get('timestamp', 0))
-            ).strftime('%Y-%m-%d %H:%M:%S')
-        }
-        
-        # 如果是深度分析，添加额外信息
-        if 'risk_factors' in analysis:
-            base_result.update({
-                'risk_factors': analysis.get('risk_factors', []),
-                'suggestions': analysis.get('suggestions', [])
-            })
+        try:
+            # 处理时间戳格式 - 支持多种格式
+            timestamp = analysis.get('timestamp')
+            formatted_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 默认值
             
-        return base_result
+            if timestamp:
+                try:
+                    if isinstance(timestamp, (int, float)):
+                        # 如果是数字时间戳
+                        formatted_time = datetime.fromtimestamp(float(timestamp)).strftime('%Y-%m-%d %H:%M:%S')
+                    elif isinstance(timestamp, str):
+                        # 如果是ISO格式字符串
+                        if 'T' in timestamp and ('Z' in timestamp or '+' in timestamp):
+                            # 移除可能的时区标识
+                            iso_time = timestamp.replace('Z', '+00:00') if 'Z' in timestamp else timestamp
+                            # 解析ISO格式
+                            formatted_time = datetime.fromisoformat(iso_time.replace('T', ' ').split('+')[0]).strftime('%Y-%m-%d %H:%M:%S')
+                        else:
+                            # 尝试直接解析
+                            formatted_time = timestamp
+                            
+                except Exception as e:
+                    logging.warning(f"时间戳格式转换失败: {e}，使用默认时间")
+                
+            base_result = {
+                'id': analysis.get('message_id', ''),
+                'sentiment': analysis.get('sentiment', ''),
+                'sentiment_score': f"{float(analysis.get('sentiment_score', 0)):.2%}",
+                'keywords': ', '.join(analysis.get('keywords', [])) if isinstance(analysis.get('keywords', []), list) else analysis.get('keywords', ''),
+                'key_points': analysis.get('key_points', ''),
+                'influence': analysis.get('influence_analysis', ''),
+                'risk_level': analysis.get('risk_level', ''),
+                'analysis_time': formatted_time
+            }
+            
+            # 如果是深度分析，添加额外信息
+            if 'risk_factors' in analysis:
+                base_result.update({
+                    'risk_factors': analysis.get('risk_factors', []),
+                    'suggestions': analysis.get('suggestions', [])
+                })
+                
+            return base_result
+        except Exception as e:
+            logging.error(f"格式化分析结果出错: {e}", exc_info=True)
+            # 提供回退的基本格式
+            return {
+                'id': analysis.get('message_id', 'unknown'),
+                'sentiment': analysis.get('sentiment', '中性'),
+                'sentiment_score': "50%",
+                'keywords': analysis.get('keywords', '关键词解析失败'),
+                'key_points': analysis.get('key_points', '无核心观点'),
+                'influence': analysis.get('influence_analysis', '无影响分析'),
+                'risk_level': analysis.get('risk_level', '低'),
+                'analysis_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }
 
 # 创建全局 AI 分析器实例
 ai_analyzer = AIAnalyzer()

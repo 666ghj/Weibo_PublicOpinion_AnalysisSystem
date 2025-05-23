@@ -191,12 +191,30 @@
                 <div class="col-md-6 col-xl-6">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h4 class="card-title font-size-16 mt-0">{{ defaultHotWord }}</h4>
+                                            <h4 class="card-title font-size-16 mt-0">{{ defaultHotWord }} - 预测结果</h4>
                                         </div>
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item">话题名称：{{ defaultHotWord }}</li>
                                             <li class="list-group-item">出现次数：{{ hotWordLen }}次</li>
-                                            <li class="list-group-item">话题情感：{{ sentences }}</li>
+                                            <li class="list-group-item">AI预测结果：{{ sentences }}</li>
+                                            {% if full_prediction %}
+                                            <li class="list-group-item">
+                                                <strong>风险因素：</strong>
+                                                <ul>
+                                                    {% for factor in full_prediction.key_factors %}
+                                                    <li>{{ factor }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <strong>建议对策：</strong>
+                                                <ul>
+                                                    {% for action in full_prediction.suggested_actions %}
+                                                    <li>{{ action }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                            {% endif %}
                                         </ul>
                                     </div>
 
@@ -668,6 +686,7 @@ async function requestAIAnalysis() {
         const batchSize = parseInt(document.getElementById('batchSize').value);
         const modelType = document.getElementById('modelType').value;
         const analysisDepth = document.getElementById('analysisDepth').value;
+        const topic = document.querySelector('select[onchange="hotWordChange(event)"]').value;
         
         const response = await fetch('/page/api/analyze_messages', {
             method: 'POST',
@@ -677,7 +696,8 @@ async function requestAIAnalysis() {
             body: JSON.stringify({
                 batch_size: batchSize,
                 model_type: modelType,
-                analysis_depth: analysisDepth
+                analysis_depth: analysisDepth,
+                topic: topic // 发送当前话题进行分析
             })
         });
         
