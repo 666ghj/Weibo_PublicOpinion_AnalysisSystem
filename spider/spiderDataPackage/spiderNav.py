@@ -3,7 +3,7 @@ import csv
 import numpy as np
 import os
 import random
-from .settings import navAddr
+from spider.spiderDataPackage.settings import navAddr
 from requests.exceptions import RequestException
 
 # 初始化导航数据文件

@@ -7,6 +7,9 @@ import asyncio
 import math
 from datetime import datetime
 from utils.logger import app_logger as logging
+import re
+from utils.api_debug import log_api_request, log_api_response
+import time
 
 class AIAnalyzer:
     def __init__(self):
@@ -34,13 +37,17 @@ class AIAnalyzer:
         
         # 配置各API客户端
         if self.openai_key:
-            openai.api_key = self.openai_key
+            # 使用新版API创建客户端
+            self.openai_client = openai.OpenAI(
+                api_key=self.openai_key
+            )
         if self.claude_key:
             self.claude_client = anthropic.Anthropic(api_key=self.claude_key)
         if self.deepseek_key:
             self.deepseek_client = openai.OpenAI(
                 api_key=self.deepseek_key,
-                base_url="https://api.deepseek.com/v1"
+                base_url="https://api.deepseek.com/v1",
+                http_client=httpx.Client()
             )
         
         # 支持的模型列表（增加了最新的 ChatGPT 和 Claude 模型）
@@ -204,7 +211,7 @@ class AIAnalyzer:
             elif provider == 'anthropic':
                 result = await self._analyze_with_claude(messages_text, system_prompt, model_type, max_tokens)
             elif provider == 'deepseek':
-                result = await self._analyze_with_deepseek(messages_text, system_prompt, model_type, max_tokens)
+                result = self._analyze_with_deepseek(messages_text, system_prompt, model_type, max_tokens)
             else:
                 logging.error(f"未知的API供应商: {provider}")
                 return ([], 0.0)
@@ -241,7 +248,7 @@ class AIAnalyzer:
                                    model: str, max_tokens: int) -> List[Dict]:
         """使用 OpenAI API 进行分析"""
         try:
-            response = await openai.ChatCompletion.acreate(
+            response = await self.openai_client.chat.completions.create(
                 model=model,
                 messages=[
                     {"role": "system", "content": system_prompt},

@@ -152,20 +152,11 @@
                         </div>
                      <div class="form-group">
                         <label data-i18n="hotWordSelection">热词选择</label>
-                        <select onchange="hotWordChange(event)" class="form-control mb-3">
-                            {% for i in hotWordList %}
-                                {% if defaultHotWord == i[0] %}
-                                                                                       <option selected value="{{ i[0] }}">{{ i[0] }}</option>
-                                {% else %}
-                                                                                       <option value="{{ i[0] }}">{{ i[0] }}</option>
-                                {% endif %}
+                        <select class="form-control" id="hotWordSelect">
+                            {% for hotword in hotWordList %}
+                            <option value="{{ hotword }}" {% if hotword == defaultHotWord %}selected{% endif %}>{{ hotword }}</option>
                             {% endfor %}
                         </select>
-                         <script>
-                             function hotWordChange(e){
-                                 window.location.href = 'http://127.0.0.1:5000/page/hotWord?hotWord=' + e.target.value
-                             }
-                         </script>
                      </div>
                   </div>
          </div>
