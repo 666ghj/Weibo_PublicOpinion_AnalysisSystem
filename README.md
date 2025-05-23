@@ -116,7 +116,7 @@ The Weibo Public Opinion Analysis and Prediction System employs a range of moder
 - **[Pandas](https://pandas.pydata.org/)** - A data analysis and manipulation library.
 - **[Matplotlib](https://matplotlib.org/)** - A data visualization library.
 - **[Scikit-learn](https://scikit-learn.org/)** - A machine learning library used for model training and evaluation.
-- **[TensorFlow](https://www.tensorflow.org/)** 或 **[PyTorch](https://pytorch.org/)** - Deep learning frameworks used for advanced model development.
+- **[TensorFlow](https://www.tensorflow.org/)** or **[PyTorch](https://pytorch.org/)** - Deep learning frameworks used for advanced model development.
 - **[OpenAI GPT](https://openai.com/)** - Advanced language models for text analysis.
 - **[Anthropic Claude](https://www.anthropic.com/)** - AI models for sophisticated text analysis.
 - **[DeepSeek](https://deepseek.com/)** - Advanced Chinese-English bilingual AI models.
