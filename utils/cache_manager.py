@@ -95,10 +95,11 @@ class CacheManager:
         logger.info(f"初始化缓存管理器: {name}，内存容量: {memory_capacity}项，缓存时间: {cache_duration}小时")
     
     def _get_cache_key(self, key):
-        """标准化缓存键"""
+        """标准化缓存键，使用SHA-256而不是MD5"""
         if isinstance(key, str):
             return key
-        return hashlib.md5(str(key).encode()).hexdigest()
+        # 使用SHA-256代替MD5，更安全
+        return hashlib.sha256(str(key).encode()).hexdigest()
     
     def _get_disk_path(self, key):
         """获取磁盘缓存路径"""

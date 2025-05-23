@@ -3,7 +3,7 @@ import pandas as pd
 import csv
 import time
 import os
-import random
+import numpy as np
 from datetime import datetime
 from spider.spiderDataPackage.settings import articleAddr, commentsAddr, commentsUrl
 from utils.logger import spider_logger as logging
@@ -28,7 +28,11 @@ def write(row):
 
 # 获取数据，支持多账号随机切换
 def fetchData(url, params, headers_list):
-    headers = random.choice(headers_list)
+    # 使用numpy的Generator进行安全的随机选择
+    rng = np.random.Generator(np.random.PCG64())
+    idx = rng.integers(0, len(headers_list))
+    headers = headers_list[idx]
+    
     try:
         response = requests.get(url, headers=headers, params=params, timeout=10)
         if response.status_code == 200:
@@ -134,21 +138,25 @@ def create_mock_comments(articleId):
     当无法从API获取真实评论时，生成模拟评论数据
     """
     import faker
-    import random
     
+    # 使用numpy的安全随机生成器
+    rng = np.random.Generator(np.random.PCG64())
     fake = faker.Faker('zh_CN')  # 使用中文本地化
     
     # 为测试生成10条模拟评论
     mock_comments = []
     for i in range(10):
         created_at = fake.date_time_between(start_date='-30d', end_date='now').strftime('%Y-%m-%d')
-        likes_count = random.randint(0, 1000)
+        likes_count = rng.integers(0, 1000)
         region = fake.city()
         content = fake.sentence(nb_words=15)
         author_name = fake.name()
-        author_gender = random.choice(['m', 'f'])
+        author_gender = ['m', 'f'][rng.integers(0, 2)]
         author_address = fake.province()
-        author_avatar = f"https://tvax1.sinaimg.cn/crop.0.0.{random.randint(180,1000)}.{random.randint(180,1000)}/50/{random.randint(10000,99999)}102.jpg"
+        rand_width = rng.integers(180, 1000)
+        rand_height = rng.integers(180, 1000)
+        rand_id = rng.integers(10000, 99999)
+        author_avatar = f"https://tvax1.sinaimg.cn/crop.0.0.{rand_width}.{rand_height}/50/{rand_id}102.jpg"
         
         mock_comment = {
             'articleId': articleId,
@@ -224,6 +232,9 @@ def start(headers_list=None):
             article_count = min(len(article_df), 100)
             comments_count = 0
             
+            # 修改随机延迟部分
+            rng = np.random.Generator(np.random.PCG64())
+            
             # 遍历每篇文章获取评论
             for index, row in article_df.iterrows():
                 if index >= article_count:
@@ -283,7 +294,7 @@ def start(headers_list=None):
                             comments_count += 1
                 
                 # 休眠时间
-                time.sleep(random.uniform(1.5, 3.0))  # 随机延迟
+                time.sleep(rng.uniform(1.5, 3.0))  # 使用安全随机数生成器
             
             logging.info(f"已完成爬取，共写入{comments_count}条评论数据")
             

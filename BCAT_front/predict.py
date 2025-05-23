@@ -10,7 +10,7 @@ class ModelManager:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logging.info(f"模型将使用设备: {self.device}")
         
-    def load_models(self, model_save_path, bert_model_path, ctm_tokenizer_path):
+    def load_models(self, model_save_path):
         """
         加载模型和分词器
         """
@@ -50,10 +50,13 @@ class ModelManager:
             predictions = []
             probabilities = []
             
-            for text in texts:
+            # 使用numpy的Generator进行安全的随机数生成
+            rng = np.random.Generator(np.random.PCG64())
+            
+            for _ in texts:
                 # 模拟预测结果
-                label = np.random.randint(0, 2)  # 0表示正面，1表示负面
-                prob = [np.random.uniform(0.1, 0.4), np.random.uniform(0.6, 0.9)]
+                label = rng.integers(0, 2)  # 0表示正面，1表示负面
+                prob = [rng.uniform(0.1, 0.4), rng.uniform(0.6, 0.9)]
                 if label == 0:
                     prob = [prob[1], prob[0]]  # 确保概率最高的是预测的标签
                 
