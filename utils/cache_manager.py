@@ -79,15 +79,15 @@ class CacheManager:
         self.flush_interval = flush_interval  # 定时将内存缓存刷新到磁盘的间隔（分钟）
         self.cache_stats = {"hits": 0, "misses": 0, "disk_hits": 0}
         self.disk_queue = queue.Queue()
-            self.initialized = True
-            
-            # 确保缓存目录存在
+        self.initialized = True
+        
+        # 确保缓存目录存在
         os.makedirs(self.disk_cache_dir, exist_ok=True)
-            
+        
         # 启动缓存管理线程
         self.cleanup_thread = threading.Thread(target=self._cleanup_and_flush_task, daemon=True)
-            self.cleanup_thread.start()
-            
+        self.cleanup_thread.start()
+        
         # 启动磁盘写入线程
         self.disk_writer_thread = threading.Thread(target=self._disk_writer_task, daemon=True)
         self.disk_writer_thread.start()
@@ -95,10 +95,11 @@ class CacheManager:
         logger.info(f"初始化缓存管理器: {name}，内存容量: {memory_capacity}项，缓存时间: {cache_duration}小时")
     
     def _get_cache_key(self, key):
-        """标准化缓存键"""
+        """标准化缓存键，使用SHA-256而不是MD5"""
         if isinstance(key, str):
             return key
-        return hashlib.md5(str(key).encode()).hexdigest()
+        # 使用SHA-256代替MD5，更安全
+        return hashlib.sha256(str(key).encode()).hexdigest()
     
     def _get_disk_path(self, key):
         """获取磁盘缓存路径"""

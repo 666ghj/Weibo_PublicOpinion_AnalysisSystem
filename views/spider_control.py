@@ -20,9 +20,11 @@ from pymongo import MongoClient
 from cryptography.fernet import Fernet
 import base64
 import re
+from flask_sock import Sock
 
 # 创建蓝图
 spider_bp = Blueprint('spider', __name__)
+sock = Sock()
 
 # 创建日志记录器
 logger = logging.getLogger('spider_control')
@@ -499,7 +501,7 @@ def save_spider_config():
             'message': str(e)
         })
 
-@spider_bp.websocket('/ws/spider-status')
+@sock.route('/ws/spider-status')
 async def spider_status_socket(websocket):
     """WebSocket连接处理"""
     try:
@@ -737,4 +739,37 @@ async def validate_account():
         return jsonify({
             'success': False,
             'message': str(e)
-        }) 
+        })
+
+def save_config(config):
+    """
+    保存爬虫配置到文件或数据库
+    
+    Args:
+        config: 爬虫配置字典
+        
+    Returns:
+        bool: 保存是否成功
+    """
+    try:
+        # 创建配置目录（如果不存在）
+        config_dir = os.path.join(os.path.dirname(__file__), '..', 'configs')
+        os.makedirs(config_dir, exist_ok=True)
+        
+        # 生成配置文件名
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        config_name = config.get('name', f'crawler_config_{timestamp}')
+        safe_name = re.sub(r'[^\w\-_]', '_', config_name)
+        filename = f"{safe_name}_{timestamp}.json"
+        
+        # 写入配置文件
+        config_path = os.path.join(config_dir, filename)
+        with open(config_path, 'w', encoding='utf-8') as f:
+            json.dump(config, f, ensure_ascii=False, indent=2)
+        
+        logger.info(f"配置已保存到: {config_path}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"保存配置失败: {e}")
+        return False 

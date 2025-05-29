@@ -109,36 +109,146 @@
 {% endblock %}
 
 {% block content %}
-          <div class="container-fluid">
-                <div class="row">
-              <div class="col-md-12 mb-4 mt-1">
-                 <div class="d-flex flex-wrap justify-content-between align-items-center">
-                     <h4 class="font-weight-bold" data-i18n="articleCharPage">文章分析页</h4>
-                 </div>
-              </div>
-           </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                         <div class="card card-block">
-                            <div class="card-header d-flex justify-content-between pb-0">
-                               <div class="header-title">
-                                  <h4 class="card-title mb-0" data-i18n="articleCloud">文章内容词云图</h4>
-                               </div>
-                            </div>
-                            <div class="card-body">
-                               <div id="mainThree" style="width: 100%;height: 750px;text-align: center">
-                                   <img style="width:60%" src="/static/contentCloud.jpg" alt="">
-                               </div>
-                            </div>
-                         </div>
-                      </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mb-4 mt-1">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <h4 class="font-weight-bold" data-i18n="articleCloud">文章内容词云图</h4>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-block">
+                <div class="card-header d-flex justify-content-between pb-0">
+                    <div class="header-title">
+                        <h4 class="card-title mb-0" data-i18n="wordCloudSettings">词云设置</h4>
+                    </div>
                 </div>
-          </div>
-
+                <div class="card-body">
+                    <form action="/page/articleCloud" method="get" class="row">
+                        <div class="col-md-3 form-group">
+                            <label for="min_freq">最小词频</label>
+                            <input type="number" class="form-control" id="min_freq" name="min_freq" 
+                                   value="{{ min_freq }}" min="1" max="100">
+                            <small class="form-text text-muted">只显示出现频率大于此值的词</small>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label for="max_words">最大词数</label>
+                            <input type="number" class="form-control" id="max_words" name="max_words" 
+                                   value="{{ max_words }}" min="50" max="500">
+                            <small class="form-text text-muted">词云中显示的最多词数</small>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label for="font_selection">选择字体</label>
+                            <select class="form-control" id="font_selection" name="font_selection">
+                                <option value="pingfang">苹方 (PingFang)</option>
+                                <option value="heiti_light">华文细黑 (STHeiti Light)</option>
+                                <option value="heiti_medium">华文中黑 (STHeiti Medium)</option>
+                                <option value="hiragino">冬青黑体 (Hiragino Sans GB)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 form-group" style="display: flex; align-items: flex-end;">
+                            <button type="submit" class="btn btn-primary btn-block">生成词云</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-block">
+                <div class="card-header d-flex justify-content-between pb-0">
+                    <div class="header-title">
+                        <h4 class="card-title mb-0" data-i18n="articleCloud">文章内容词云图</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if error_message %}
+                    <div class="alert alert-warning" role="alert">
+                        {{ error_message }}
+                    </div>
+                    {% endif %}
+                    
+                    <div id="mainThree" style="width: 100%; height: 750px; text-align: center">
+                        {% if cloud_image_url %}
+                        <img style="max-width:90%; max-height:700px; object-fit:contain;" src="{{ cloud_image_url }}" alt="词云图">
+                        {% else %}
+                        <div class="alert alert-info">
+                            <p>正在生成词云，请稍候...</p>
+                            <p>如果长时间未显示，请尝试调整参数后重新生成</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mt-3" id="loadingInfo">
+                        {% if not cloud_image_url and not error_message %}
+                        <p class="text-muted">正在加载词云图，请稍候...</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if word_freq %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-block">
+                <div class="card-header d-flex justify-content-between pb-0">
+                    <div class="header-title">
+                        <h4 class="card-title mb-0">高频词统计</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>词语</th>
+                                    <th>频率</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for word, freq in word_freq %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ word }}</td>
+                                    <td>{{ freq }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
 
 {% block echarts %}
-    <script>
-
-    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 检查词云图像是否加载
+        var wordCloudImg = document.querySelector('#mainThree img');
+        if (wordCloudImg) {
+            wordCloudImg.onload = function() {
+                console.log('词云图像加载成功');
+            };
+            wordCloudImg.onerror = function() {
+                console.error('词云图像加载失败');
+                // 显示错误信息
+                var loadingInfo = document.getElementById('loadingInfo');
+                if (loadingInfo) {
+                    loadingInfo.innerHTML = '<p class="text-danger">词云图像加载失败，请刷新页面重试</p>';
+                }
+            };
+        }
+    });
+</script>
 {% endblock %}

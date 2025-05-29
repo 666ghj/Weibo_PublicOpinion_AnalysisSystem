@@ -2,7 +2,7 @@ import os
 import getpass
 import pymysql
 import subprocess
-from flask import Flask, session, request, redirect
+from flask import Flask, session, request, redirect, jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
 try:
     from zoneinfo import ZoneInfo  # Python 3.9+
@@ -15,6 +15,8 @@ from utils.logger import app_logger as logging
 from utils.db_pool import DatabasePool
 from utils.error_handlers import register_error_handlers
 from middleware.security import set_secure_headers, log_request_info, require_https
+from utils.db_middleware import db_middleware
+from utils.setup_static_files import create_default_wordcloud
 
 # 加载环境变量
 load_dotenv()
@@ -64,17 +66,24 @@ app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)
+app.debug = True  # 添加这一行开启调试模式
+
+# 注册中间件
+db_middleware(app)
 
 # 导入蓝图
 from views.page import page
 from views.user import user
-from views.spider_control import spider_bp
+from views.spider_control import spider_bp, sock
 from views.workflow_api import workflow_bp, workflow_api_bp
 app.register_blueprint(page.pb)
 app.register_blueprint(user.ub)
 app.register_blueprint(spider_bp)
 app.register_blueprint(workflow_bp)
 app.register_blueprint(workflow_api_bp)
+
+# 初始化sock
+sock.init_app(app)
 
 # 注册错误处理器
 register_error_handlers(app)
@@ -89,42 +98,65 @@ def hello_world():
 # 请求前中间件
 @app.before_request
 def before_request():
-    # 记录请求信息
-    log_request_info()
-    
-    # 如果请求的是静态文件路径，允许访问
-    if request.path.startswith('/static'):
-        return
-
-    # 如果请求的是登录或注册页面，不需要会话验证
-    if request.path in ['/user/login', '/user/register']:
-        return
-
-    # 验证会话
-    if not session.get('username'):
-        return redirect('/user/login')
-    
-    # 验证会话完整性
-    if 'client_info' not in session:
-        session.clear()
-        return redirect('/user/login')
+    try:
+        # 记录请求信息
+        log_request_info()
         
-    # 验证客户端信息
-    current_client = {
-        'ip': request.remote_addr,
-        'user_agent': str(request.user_agent)
-    }
-    stored_client = session.get('client_info', {})
-    
-    if (current_client['ip'] != stored_client.get('ip') or 
-        current_client['user_agent'] != stored_client.get('user_agent')):
-        session.clear()
-        return redirect('/user/login')
+        # 如果请求的是静态文件路径，允许访问
+        if request.path.startswith('/static'):
+            return
+
+        # 如果请求的是登录或注册页面，不需要会话验证
+        if request.path in ['/user/login', '/user/register']:
+            return
+
+        # 验证会话
+        if not session.get('username'):
+            return redirect('/user/login')
+        
+        # 验证会话完整性
+        if 'client_info' not in session:
+            session.clear()
+            return redirect('/user/login')
+        
+        # 验证客户端信息
+        current_client = {
+            'ip': request.remote_addr,
+            'user_agent': str(request.user_agent)
+        }
+        stored_client = session.get('client_info', {})
+        
+        if (current_client['ip'] != stored_client.get('ip') or 
+            current_client['user_agent'] != stored_client.get('user_agent')):
+            session.clear()
+            return redirect('/user/login')
+    except Exception as e:
+        logging.error(f"请求处理中间件错误: {e}")
+        return None  # 允许请求继续
 
 # 响应后中间件
 @app.after_request
 def after_request(response):
     return set_secure_headers(response)
+
+@app.after_request
+def add_security_headers(response):
+    """添加安全相关的响应头"""
+    csp = (
+        "default-src 'self'; "
+        "img-src 'self' data: https: http:; "  # 允许所有图片来源
+        "font-src 'self' data: https:; "
+        "style-src 'self' 'unsafe-inline' https:; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
+        "connect-src 'self' https:; "
+        "frame-src 'self'"
+    )
+    
+    response.headers['Content-Security-Policy'] = csp
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    
+    return response
 
 # 数据库配置
 DB_CONFIG = {
@@ -137,13 +169,21 @@ DB_CONFIG = {
     'ssl': {'ca': os.getenv('DB_SSL_CA')} if os.getenv('DB_SSL_CA') else None
 }
 
+@app.route('/.well-known/appspecific/<path:filename>')
+def well_known_files(filename):
+    """处理.well-known特殊路径请求"""
+    # Chrome开发者工具特殊请求，返回空响应
+    if filename == 'com.chrome.devtools.json':
+        return jsonify({}), 200
+    return "Not Found", 404
+
 if __name__ == '__main__':
     # 检测是否需要初始化数据库
     try:
         if os.getenv('INITIALIZE_DB', 'false').lower() == 'true':
             connection = get_db_connection_interactive()
             sql_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'createTables.sql')
-            initialize_database(connection, sql_file)
+            # initialize_database(connection, sql_file)
             connection.close()
             logging.info("数据库初始化完成。")
     except Exception as e:
@@ -162,18 +202,22 @@ if __name__ == '__main__':
         scheduler = BackgroundScheduler(timezone=ZoneInfo("UTC"))
         scheduler.start()
 
-        if check_database_empty():
-            logging.info("数据库为空。立即开始初始爬取。")
-            dynamic_crawl()
-        else:
-            logging.info("数据库已有数据。安排首次爬取。")
-            base_interval = int(os.getenv('CRAWL_INTERVAL', '18000'))  # 默认5小时
-            scheduler.add_job(
-                dynamic_crawl, 
-                'date', 
-                run_date=datetime.now() + timedelta(seconds=base_interval), 
-                id='dynamic_crawl'
-            )
+        # if check_database_empty():
+        #     logging.info("数据库为空。立即开始初始爬取。")
+        #     dynamic_crawl()
+        # else:
+        #     logging.info("数据库已有数据。安排首次爬取。")
+        #     base_interval = int(os.getenv('CRAWL_INTERVAL', '18000'))  # 默认5小时
+        #     scheduler.add_job(
+        #         dynamic_crawl,
+        #         'date',
+        #         run_date=datetime.now() + timedelta(seconds=base_interval),
+        #         id='dynamic_crawl'
+        #     )
+
+        # 应用启动前检查默认词云图片是否存在
+        if not os.path.exists(os.path.join('static', 'contentCloud.jpg')):
+            create_default_wordcloud()
 
         # 启动应用
         app.run(
