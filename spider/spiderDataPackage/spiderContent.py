@@ -4,7 +4,7 @@ import csv
 import os
 import random
 from datetime import datetime
-from spider.spiderDataPackage.settings import navAddr, articleAddr
+from .settings import navAddr, articleAddr
 from requests.exceptions import RequestException
 
 # 初始化文章数据文件

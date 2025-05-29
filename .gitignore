@@ -1,82 +1,16 @@
-# 虚拟环境和包管理
-.conda/
-venv/
-env/
-.env
-.python-version
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# 模型文件
-model/
+.conda
+*__pycache__/
 model2/*
 !model2/readme.md
 !model2/话题识别模型
-model_pro/*
-!model_pro/*.py
-
-# 日志文件
-logs/
-*.log
-
-# 数据库相关
-*.sqlite
-*.db
-*.sql
-!createTable.sql
-
-# 敏感配置文件
-.env
-.env.*
-!.env.example
-config.ini
-
-# API密钥和证书
-*.pem
-*.key
-*.cert
-
-# 缓存文件
-.cache/
-cache/
-temp/
-.pytest_cache/
-__pycache__/
-.ipynb_checkpoints/
-
-# IDE相关
-.idea/
-.vscode/
-*.sublime-*
-.VSCodeCounter/
-
-# 操作系统文件
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-# 静态文件自动生成部分
-static/wordcloud_*.jpg
-static/uploads/
-
-# 其他文件
-.coverage
-htmlcov/
+.idea
+*.ipynb_checkpoints
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+.vscode
+.VSCodeCounter
+.idea

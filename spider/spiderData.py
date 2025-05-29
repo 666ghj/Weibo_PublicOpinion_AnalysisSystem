@@ -1,7 +1,7 @@
-from spider.spiderDataPackage.spiderNav import start as spiderNav
-from spider.spiderDataPackage.spiderContent import start as spiderContent
-from spider.spiderDataPackage.spiderComments import start as spiderComments
-from spider.spiderDataPackage.settings import navAddr
+from spiderDataPackage.spiderNav import start as spiderNav
+from spiderDataPackage.spiderContent import start as spiderContent
+from spiderDataPackage.spiderComments import start as spiderComments
+from spiderDataPackage.settings import navAddr
 import os
 import requests
 import time

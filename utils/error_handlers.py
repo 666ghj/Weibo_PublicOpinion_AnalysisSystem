@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template
 from utils.logger import app_logger as logging
 
 def register_error_handlers(app):

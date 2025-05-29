@@ -1,7 +1,7 @@
 import torch
 import os
 import logging
-from model_pro.LSTM_model import lstm_model_manager
+from LSTM_model import lstm_model_manager
 
 # 配置日志记录
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
