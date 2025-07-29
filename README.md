@@ -10,146 +10,43 @@
   [![GitHub Contributors](https://img.shields.io/github/contributors/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/graphs/contributors)
   [![GitHub License](https://img.shields.io/github/license/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE)
 
-  [English](./README.md) | [中文文档](./README-CN.md)
 </div>
 
-🚀The latest 2.1 version has fully upgraded AI modes———welcome to experience it!⬇️
+ ### **[Important Announcement] Refactoring Plan for Weibo_PublicOpinion_AnalysisSystem**
 
-<div style="display: flex; justify-content: center; align-items: center; gap: 10px; width: 90%; margin: auto;">
-    <img src="https://github.com/user-attachments/assets/52d07a31-111a-47e7-86f2-a1bafccfe0a5" style="width: 45%; height: auto;">
-    <img src="https://github.com/user-attachments/assets/33a8baf7-e365-4eaf-9620-4f6e9a23fa89" style="width: 45%; height: auto;">
-</div>
+Dear all contributors, users, and followers,
 
-**Weibo Public Opinion Analysis and Prediction System** is a **social network public opinion analysis system** designed to monitor, analyze, and predict public opinion trends on social media platforms such as Weibo. This system leverages deep learning, natural language processing (NLP), and machine learning technologies to extract valuable public opinion information from vast amounts of social media data, helping governments, enterprises, and other organizations promptly understand public attitudes, respond to emergencies, and optimize decision-making. 📈
+Hello everyone,
 
-Through powerful data collection and processing capabilities, the Weibo Public Opinion Analysis and Prediction System achieves real-time data collection, sentiment analysis, topic classification, and public opinion prediction, ensuring that users can obtain accurate and comprehensive insights into public opinion in the complex and changing social network environment. The system adopts a modular design, making it easy to maintain and expand, aiming to provide users with an efficient and reliable public opinion analysis tool, assisting various organizations in making informed decisions in the information age.
+I am the initiator and main developer of this project. First and foremost, I want to personally thank you for your continued attention, contributions, and enthusiasm for the `Weibo_PublicOpinion_AnalysisSystem` project.
 
-## ✨ Features
+Over the past period, as the project has expanded, I have noticed several challenges that require attention:
 
-- **Real-time Data Collection**: Utilize web scraping technologies to obtain user-generated content from social platforms like Weibo in real-time.
-- **Data Cleaning and Processing**: Preprocess collected data, including tokenization, removal of stop words, emojis, and URLs.
-- **Topic Classification**: Automatically classify posts and comments into topics using machine learning and natural language processing techniques.
-- **Sentiment Analysis**: Analyze the sentiment orientation (positive, neutral, negative) within texts to understand public emotions.
-- **Public Opinion Monitoring and Prediction**: Monitor changes in public opinion in real-time and predict future trends based on historical data.
-- **Data Visualization**: Display analysis results through charts and graphics for easy understanding and decision-making.
-- **User Management**: Provide user registration, login, and session management features to ensure system security and personalized services.
+1. **Architectural and Module Issues:** Through rapid iteration, many modules have been integrated. However, a lack of unified top-level design has led to some module conflicts and a need for structural optimization.
+2. **High Barrier to Entry:** A significant current challenge is that users need to configure their own crawlers and scrape data from scratch. This makes the deployment and startup process relatively complex, creating an inconvenience for many new users.
+3. **Development and Presentation Limitations:** The development progress of various functional modules has been uneven. Additionally, the existing dashboard paradigm has limitations in compatibility and scalability that hinder my future development goals.
+4. **Constraints of the Self-Trained Model:** Considering its size and maintenance costs, the previously trained model has become a constraint on the project's long-term development.
 
-## 🚀 Getting Started
+After a careful evaluation of these points, and in light of current technological trends (especially in LLMs, and Agents), I have decided to initiate a **comprehensive, bottom-up architectural refactoring** of the project, with the goal of providing a more user-friendly tool for everyone.
 
-Follow the steps below to run the project on your system.
+**My next update plan will focus on:**
 
-### Prerequisites
+1. **Optimizing the Core Architecture:** I will be moving away from the current dashboard-centric presentation to design a more lightweight and flexible system framework.
+2. **Focusing on Core Competencies:** The new architecture will refocus my efforts on the crawling, processing, and in-depth analysis of Weibo data, aiming to build a stable and efficient data core.
+3. **Integrating Advanced Large Language Models (LLMs):** I plan to discontinue maintenance of the self-trained model and will instead utilize APIs to call mainstream large language models for analysis tasks, enhancing the system's analytical capabilities and flexibility.
+4. **The Ultimate Goal: A New Model of "Deployable Core + Online Service":**
+   - **For Developers:** I aim to refine the project into a **"minimal, user-friendly, low-cost, modular"** public opinion analysis **core engine** to facilitate secondary development and private deployment.
+   - **For General Users:** Leveraging the new architecture, I **plan to introduce a new "Online Service" version, designed to address the challenges of deployment and data acquisition.**
+     - **Providing a Shared Database:** I will begin building and maintaining a **continuously updated, shared database**. This will allow users to access our data source directly, **removing the need to configure and run their own crawlers.**
+     - **Simplifying the User Experience:** This will eliminate the need for a complex local setup, enabling a **click-to-use** experience.
+     - **Retaining Personalized Analysis:** Users will still be able to configure their own LLM API keys in the online service to perform personalized, in-depth analysis with our data core.
 
-- [Python](https://www.python.org/) 3.7 or higher
-- [MySQL](https://www.mysql.com/) Database
-- [Conda](https://docs.conda.io/en/latest/) (optional, for environment management)
-- A valid Weibo account (for data collection)
-- At least one of the following API keys for AI analysis features:
-  - OpenAI API key
-  - Anthropic (Claude) API key
-  - DeepSeek API key
+This refactoring is a necessary step in our development. I understand this will require adjusting and, in some cases, rewriting code to which many of you have contributed. However, for the long-term health of the project and to make it accessible to a broader audience, I believe this step is essential.
 
-### Installation Steps
+In the coming weeks, I will begin to outline the new project blueprint and will keep the community updated on my progress. I value your wisdom and support now more than ever.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem.git
-   cd Weibo-Public-Opinion-Analysis-System
+Thank you once again for your understanding and support! Let's look forward to the next evolution of `Weibo_PublicOpinion_AnalysisSystem`.
 
-2. Create and activate a virtual environment (optional):
+Sincerely,
 
-   ```bash
-   conda create -n weibo_opinion_analysis python=3.8
-   conda activate weibo_opinion_analysis
-   ```
-
-3. Install dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Configure the MySQL database:
-
-   - Run `createTables.sql` to create the necessary database tables.
-   - Modify the database connection settings in `config.py` to match your MySQL configuration.
-
-5. Configure AI Analysis (Optional):
-   
-   Set up environment variables for AI analysis features:
-   ```bash
-   # For OpenAI API (Required for GPT models)
-   export OPENAI_API_KEY="your-openai-key"
-   
-   # For Anthropic API (Required for Claude models)
-   export ANTHROPIC_API_KEY="your-anthropic-key"
-   
-   # For DeepSeek API (Required for DeepSeek models)
-   export DEEPSEEK_API_KEY="your-deepseek-key"
-   ```
-   
-   Note: At least one API key must be configured to use AI analysis features.
-   
-   Supported AI Models:
-   - OpenAI: GPT-3.5-Turbo, GPT-4
-   - Anthropic: Claude-3 (Opus, Sonnet, Haiku)
-   - DeepSeek: DeepSeek-V3 (deepseek-chat), DeepSeek-R1 (deepseek-reasoner)
-
-6. Start the Flask application:
-
-   ```bash
-   python app.py
-   ```
-
-7. Access the application: Open your browser and navigate to http://localhost:5000 to use the system.
-
-## 🛠️ Technology Stack
-
-The Weibo Public Opinion Analysis and Prediction System employs a range of modern technologies to ensure efficiency and scalability:
-
-- **[Flask](https://flask.palletsprojects.com/en/stable/)** - A lightweight web application framework.
-- **[MySQL](https://www.mysql.com/)** - A relational database used to store collected and processed data.
-- **[Scrapy](https://scrapy.org/)** - A powerful web scraping framework used for data collection.
-- **[Jieba](https://github.com/fxsjy/jieba)** - A Chinese text segmentation tool used for text preprocessing.
-- **[SnowNLP](https://github.com/isnowfy/snownlp)** - A Chinese natural language processing library used for sentiment analysis.
-- **[BERT](https://github.com/google-research/bert)** - A pre-trained language model used for topic classification.
-- **[Pandas](https://pandas.pydata.org/)** - A data analysis and manipulation library.
-- **[Matplotlib](https://matplotlib.org/)** - A data visualization library.
-- **[Scikit-learn](https://scikit-learn.org/)** - A machine learning library used for model training and evaluation.
-- **[TensorFlow](https://www.tensorflow.org/)** or **[PyTorch](https://pytorch.org/)** - Deep learning frameworks used for advanced model development.
-- **[OpenAI GPT](https://openai.com/)** - Advanced language models for text analysis.
-- **[Anthropic Claude](https://www.anthropic.com/)** - AI models for sophisticated text analysis.
-- **[DeepSeek](https://deepseek.com/)** - Advanced Chinese-English bilingual AI models.
-
-## 🤝 Contribution
-
-We welcome your contributions! Follow the steps below to participate in the project:
-
-1. Fork this repository.
-2. Create your feature branch (`git checkout -b feature/your-feature`).
-3. Commit your changes (`git commit -m 'Add some feature'`).
-4. Push to the branch (`git push origin feature/your-feature`).
-5. Open a Pull Request.
-
-Please ensure that all tests pass before submitting and follow the project's coding standards.
-
-## 📜 License
-
-This project is licensed under the [GPL-2.0 License](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE) - see the [LICENSE](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE) file for details.
-
-## 🌟 Show Your Support
-
-If you like this project, please give it a star ⭐ on [GitHub](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem)!
-
-## 📫 Contact Us
-
-If you have any questions or suggestions, feel free to contact us through the following methods:
-
-- GitHub Issues: [Create a new issue](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/issues)
-- Email: 670939375@qq.com
-
-## ✨ Contributors
-
-Thanks to the following contributors:
-
-[![Contributors](https://contrib.rocks/image?repo=666ghj/Weibo_PublicOpinion_AnalysisSystem)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/graphs/contributors)
+Project Initiator
