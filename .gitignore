@@ -1,16 +1,348 @@
-.conda
-*__pycache__/
-model2/*
-!model2/readme.md
-!model2/话题识别模型
-.idea
-*.ipynb_checkpoints
-*.pyc
-*.pyo
-*.pyd
-*.pyw
-*.pyz
-*.pywz
-.vscode
-.VSCodeCounter
-.idea
+# ====================================
+# 微博舆情分析系统 .gitignore 文件
+# ====================================
+
+# ==== Python 相关 ====
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+pdm.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# ==== 环境和IDE ====
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+conda_env/
+pytorch_python11/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm / JetBrains
+.idea/
+*.iml
+*.xml
+
+# Visual Studio Code
+.vscode/
+
+# macOS
+.DS_Store
+*/.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ==== 大型模型文件 ====
+# 预训练模型目录
+# models/
+# */models/
+# */*/models/
+
+# PyTorch 模型文件
+*.pth
+*.pt
+*.bin
+*.ckpt
+*.safetensors
+
+# TensorFlow 模型文件
+*.pb
+*.h5
+*.hdf5
+saved_model/
+
+# Hugging Face 缓存
+.cache/
+*/cache/
+huggingface_hub/
+transformers_cache/
+
+# 具体模型文件路径
+WeiboSentiment_Finetuned/GPT2-Lora/models/
+WeiboSentiment_Finetuned/GPT2-AdapterTuning/models/
+WeiboSentiment_Finetuned/BertChinese-Lora/models/
+WeiboSentiment_MachineLearning/model/
+WeiboSentiment_LLM/models/
+
+# LoRA 和 Adapter 权重
+*/adapter_model.safetensors
+*/pytorch_adapter.bin
+*/adapter_config.json
+best_weibo_sentiment_lora/
+best_weibo_sentiment_model.pth
+
+# 微调后的模型
+*_finetuned/
+*_fine_tuned/
+checkpoints/
+*/checkpoints/
+
+# ==== 数据集文件 ====
+# 大型数据集压缩包
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# CSV 数据文件 (大型)
+# ChineseNlpCorpus/datasets/*/*.csv
+# */weibo_senti_100k.csv
+# */ChnSentiCorp_htl_all.csv
+# */waimai_10k.csv
+
+# 其他数据文件
+*.pkl
+*.pickle
+*.json.gz
+*.jsonl
+*.parquet
+
+# 数据集目录
+# data/
+# */data/
+# dataset/
+# */dataset/
+# datasets/raw/
+# datasets/processed/
+
+# ==== MediaCrawler 相关 ====
+# 临时图片和媒体文件
+temp_image/
+*/temp_image/
+browser_data/
+*/browser_data/
+
+# 爬虫数据输出
+/data/
+crawled_data/
+output/
+
+# Node.js
+node_modules/
+package-lock.json
+*.tgz
+
+# 数据库文件
+# *.db
+# *.sqlite
+# *.sqlite3
+# subtitle_db
+
+# ==== UI 和 Web 相关 ====
+# 前端构建文件
+dist/
+build/
+public/build/
+
+# 图片和媒体文件 (大型)
+# *.png
+# *.jpg
+# *.jpeg
+# *.gif
+# *.bmp
+# *.ico
+# *.svg
+# !docs/static/images/*.png
+# !docs/static/images/*.jpg
+# !docs/static/images/*.jpeg
+# !UIexample/*.png
+
+# VitePress 缓存
+docs/.vitepress/cache
+
+# ==== 日志和临时文件 ====
+# 日志文件
+*.log
+logs/
+*/logs/
+
+# 临时文件
+temp/
+tmp/
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ==== 配置和密钥 ====
+# 敏感配置文件
+config.ini
+secrets.json
+.secrets
+*.key
+*.pem
+*.crt
+
+# API 密钥
+api_keys.txt
+credentials.json
+
+# ==== 其他项目特定文件 ====
+# 词云生成的临时文件
+wordcloud_temp/
+*.ttf
+
+# 测试输出
+test_output/
+test_results/
+
+# 备份文件
+*.bak
+*.backup
+*.old
+
+# 压缩文件
+*.gz
+*.bz2
+*.xz
+
+# Office 文件临时
+~$*
+
+# ==== 版本控制 ====
+# Git
+.git/
+*.orig
+
+# SVN
+.svn/
+
+# Mercurial
+.hg/
+
+# ==== 特定项目文件 ====
+# MediaCrawler 特定
+.refer
+uv.lock
