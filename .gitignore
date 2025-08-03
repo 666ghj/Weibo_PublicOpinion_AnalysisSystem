@@ -191,7 +191,6 @@ transformers_cache/
 WeiboSentiment_Finetuned/GPT2-Lora/models/
 WeiboSentiment_Finetuned/GPT2-AdapterTuning/models/
 WeiboSentiment_Finetuned/BertChinese-Lora/models/
-WeiboSentiment_MachineLearning/model/
 WeiboSentiment_LLM/models/
 
 # LoRA 和 Adapter 权重
@@ -202,8 +201,6 @@ best_weibo_sentiment_lora/
 best_weibo_sentiment_model.pth
 
 # 微调后的模型
-*_finetuned/
-*_fine_tuned/
 checkpoints/
 */checkpoints/
 
