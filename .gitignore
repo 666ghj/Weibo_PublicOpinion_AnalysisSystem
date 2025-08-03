@@ -45,7 +45,6 @@ htmlcov/
 .nox/
 .coverage
 .coverage.*
-.cache
 nosetests.xml
 coverage.xml
 *.cover
@@ -85,9 +84,6 @@ target/
 # IPython
 profile_default/
 ipython_config.py
-
-# pyenv
-.python-version
 
 # pipenv
 Pipfile.lock
@@ -182,8 +178,6 @@ Desktop.ini
 saved_model/
 
 # Hugging Face 缓存
-.cache/
-*/cache/
 huggingface_hub/
 transformers_cache/
 
@@ -247,7 +241,6 @@ output/
 
 # Node.js
 node_modules/
-package-lock.json
 *.tgz
 
 # 数据库文件
@@ -338,8 +331,3 @@ test_results/
 
 # Mercurial
 .hg/
-
-# ==== 特定项目文件 ====
-# MediaCrawler 特定
-.refer
-uv.lock
