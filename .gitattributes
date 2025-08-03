@@ -1,11 +1,5 @@
 *.js linguist-language=python
 
+*.ipynb binary
+
 * text=auto
-
-*.bat text eol=crlf
-*.cmd text eol=crlf
-
-*.png binary
-*.jpg binary
-*.exe binary
-*.dll binary
