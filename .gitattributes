@@ -1,1 +1,11 @@
 *.js linguist-language=python
+
+* text=auto
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.png binary
+*.jpg binary
+*.exe binary
+*.dll binary
