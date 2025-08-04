@@ -160,7 +160,7 @@ Desktop.ini
 # */*/models/
 
 # PyTorch 模型文件
-*.pth
+# *.pth
 *.pt
 *.bin
 *.ckpt
@@ -183,6 +183,7 @@ WeiboSentiment_Finetuned/BertChinese-Lora/models/
 WeiboSentiment_LLM/models/
 WeiboSentiment_Finetuned/BertChinese-Lora/model/
 WeiboMultilingualSentiment/model/
+WeiboSentiment_MachineLearning/model/chinese_wwm_pytorch/
 
 # LoRA 和 Adapter 权重
 */adapter_model.safetensors
@@ -210,8 +211,8 @@ checkpoints/
 # */waimai_10k.csv
 
 # 其他数据文件
-*.pkl
-*.pickle
+# *.pkl
+# *.pickle
 *.json.gz
 *.jsonl
 *.parquet
