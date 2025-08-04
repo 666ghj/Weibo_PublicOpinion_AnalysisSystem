@@ -2,6 +2,18 @@ import torch
 from transformers import GPT2ForSequenceClassification, BertTokenizer
 from peft import PeftModel
 import os
+import re
+
+def preprocess_text(text):
+    """简单的文本预处理"""
+    text = re.sub(r"\{%.+?%\}", " ", text)           # 去除 {%xxx%}
+    text = re.sub(r"@.+?( |$)", " ", text)           # 去除 @xxx
+    text = re.sub(r"【.+?】", " ", text)              # 去除 【xx】
+    text = re.sub(r"\u200b", " ", text)              # 去除特殊字符
+    # 删除表情符号
+    text = re.sub(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F1E0-\U0001F1FF\U00002600-\U000027BF\U0001f900-\U0001f9ff\U0001f018-\U0001f270\U0000231a-\U0000231b\U0000238d-\U0000238d\U000024c2-\U0001f251]+', '', text)
+    text = re.sub(r"\s+", " ", text)                 # 多个空格合并
+    return text.strip()
 
 def main():
     # 设置设备
@@ -66,9 +78,12 @@ def main():
             continue
         
         try:
+            # 预处理文本
+            processed_text = preprocess_text(text)
+            
             # 对文本进行编码
             encoding = tokenizer(
-                text,
+                processed_text,
                 max_length=128,
                 padding='max_length',
                 truncation=True,
