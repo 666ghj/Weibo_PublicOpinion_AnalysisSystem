@@ -15,13 +15,36 @@ def main():
     
     # 使用pipeline方式 - 更简单
     model_name = "wsqstar/GISchat-weibo-100k-fine-tuned-bert"
+    local_model_path = "./model"
     
     try:
-        classifier = pipeline(
-            "text-classification", 
-            model=model_name,
-            return_all_scores=True
-        )
+        # 检查本地是否已有模型
+        import os
+        if os.path.exists(local_model_path):
+            print("从本地加载模型...")
+            classifier = pipeline(
+                "text-classification", 
+                model=local_model_path,
+                return_all_scores=True
+            )
+        else:
+            print("首次使用，正在下载模型到本地...")
+            # 先下载模型
+            from transformers import AutoTokenizer, AutoModelForSequenceClassification
+            tokenizer = AutoTokenizer.from_pretrained(model_name)
+            model = AutoModelForSequenceClassification.from_pretrained(model_name)
+            
+            # 保存到本地
+            tokenizer.save_pretrained(local_model_path)
+            model.save_pretrained(local_model_path)
+            print(f"模型已保存到: {local_model_path}")
+            
+            # 使用本地模型创建pipeline
+            classifier = pipeline(
+                "text-classification", 
+                model=local_model_path,
+                return_all_scores=True
+            )
         print("模型加载成功!")
         
     except Exception as e:

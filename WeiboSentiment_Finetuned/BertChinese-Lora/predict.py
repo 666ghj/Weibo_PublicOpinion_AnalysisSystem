@@ -16,11 +16,25 @@ def main():
     
     # 使用HuggingFace预训练模型
     model_name = "wsqstar/GISchat-weibo-100k-fine-tuned-bert"
+    local_model_path = "./model"
     
     try:
-        # 加载模型和分词器
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-        model = AutoModelForSequenceClassification.from_pretrained(model_name)
+        # 检查本地是否已有模型
+        import os
+        if os.path.exists(local_model_path):
+            print("从本地加载模型...")
+            tokenizer = AutoTokenizer.from_pretrained(local_model_path)
+            model = AutoModelForSequenceClassification.from_pretrained(local_model_path)
+        else:
+            print("首次使用，正在下载模型到本地...")
+            # 下载并保存到本地
+            tokenizer = AutoTokenizer.from_pretrained(model_name)
+            model = AutoModelForSequenceClassification.from_pretrained(model_name)
+            
+            # 保存到本地
+            tokenizer.save_pretrained(local_model_path)
+            model.save_pretrained(local_model_path)
+            print(f"模型已保存到: {local_model_path}")
         
         # 设置设备
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

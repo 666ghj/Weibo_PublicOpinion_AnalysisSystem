@@ -181,6 +181,7 @@ WeiboSentiment_Finetuned/GPT2-Lora/models/
 WeiboSentiment_Finetuned/GPT2-AdapterTuning/models/
 WeiboSentiment_Finetuned/BertChinese-Lora/models/
 WeiboSentiment_LLM/models/
+WeiboSentiment_Finetuned/BertChinese-Lora/model/
 
 # LoRA 和 Adapter 权重
 */adapter_model.safetensors
