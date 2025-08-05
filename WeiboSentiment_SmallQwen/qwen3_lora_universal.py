@@ -155,7 +155,7 @@ class Qwen3LoRAUniversal(BaseQwenModel):
         tokenized = self.tokenizer(
             examples["text"],
             truncation=True,
-            padding=False,
+            padding="max_length",
             max_length=512,
             return_tensors=None
         )
@@ -178,9 +178,15 @@ class Qwen3LoRAUniversal(BaseQwenModel):
         
         self.lora_model = get_peft_model(self.base_model, lora_config)
         
+        # 统计参数
+        total_params = sum(p.numel() for p in self.lora_model.parameters())
+        trainable_params = sum(p.numel() for p in self.lora_model.parameters() if p.requires_grad)
+        
         print(f"LoRA配置完成 (r={lora_r}, alpha={lora_alpha})")
-        print(f"可训练参数: {self.lora_model.num_parameters():,}")
-        print(f"参数比例: {self.lora_model.num_parameters() / self.lora_model.base_model.num_parameters() * 100:.2f}%")
+        print(f"总参数: {total_params:,}")
+        print(f"可训练参数: {trainable_params:,}")
+        print(f"可训练参数比例: {trainable_params / total_params * 100:.2f}%")
+        self.lora_model.print_trainable_parameters()  # PEFT库自带的参数统计
         
         return lora_config
     
@@ -360,7 +366,7 @@ def main():
     parser.add_argument('--batch_size', type=int, help='批大小（可选，使用推荐值）')
     parser.add_argument('--learning_rate', type=float, help='学习率（可选，使用推荐值）')
     parser.add_argument('--lora_r', type=int, help='LoRA秩（可选，使用推荐值）')
-    parser.add_argument('--max_samples', type=int, default=1000, help='最大训练样本数')
+    parser.add_argument('--max_samples', type=int, default=0, help='最大训练样本数（0表示使用全部数据）')
     parser.add_argument('--eval_only', action='store_true', help='仅评估模式')
     
     args = parser.parse_args()
@@ -370,9 +376,9 @@ def main():
         print("Qwen3-LoRA模型训练")
         print("="*40)
         print("可用模型大小:")
-        print("  1. 0.6B - 轻量级，训练快速，显存需求约4GB")
-        print("  2. 4B  - 中等规模，性能均衡，显存需求约16GB") 
-        print("  3. 8B  - 大规模，性能最佳，显存需求约32GB")
+        print("  1. 0.6B - 轻量级，训练快速，显存需求约8GB")
+        print("  2. 4B  - 中等规模，性能均衡，显存需求约32GB") 
+        print("  3. 8B  - 大规模，性能最佳，显存需求约64GB")
         print("\n注意: LoRA微调比Embedding方法需要更多显存")
         
         while True:
@@ -414,9 +420,13 @@ def main():
         # 训练模式
         train_data, test_data = BaseQwenModel.load_data(args.train_path, args.test_path)
         
-        # 由于LoRA训练资源消耗大，使用部分数据
-        train_subset = train_data[:args.max_samples]
-        print(f"使用 {len(train_subset)} 条数据进行LoRA训练")
+        # 训练数据处理
+        if args.max_samples > 0:
+            train_subset = train_data[:args.max_samples]
+            print(f"使用 {len(train_subset)} 条数据进行LoRA训练")
+        else:
+            train_subset = train_data
+            print(f"使用全部 {len(train_subset)} 条数据进行LoRA训练")
         
         # 准备训练参数
         train_kwargs = {'num_epochs': args.epochs}

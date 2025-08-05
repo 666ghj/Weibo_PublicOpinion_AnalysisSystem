@@ -347,9 +347,9 @@ def main():
         print("Qwen3-Embedding模型训练")
         print("="*40)
         print("可用模型大小:")
-        print("  1. 0.6B - 轻量级，训练快速，显存需求约2GB")
-        print("  2. 4B  - 中等规模，性能均衡，显存需求约8GB") 
-        print("  3. 8B  - 大规模，性能最佳，显存需求约16GB")
+        print("  1. 0.6B - 轻量级，训练快速，显存需求约4GB")
+        print("  2. 4B  - 中等规模，性能均衡，显存需求约16GB") 
+        print("  3. 8B  - 大规模，性能最佳，显存需求约32GB")
         
         while True:
             choice = input("\n请选择模型大小 (1/2/3): ").strip()
