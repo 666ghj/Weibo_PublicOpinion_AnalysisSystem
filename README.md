@@ -13,7 +13,7 @@
 </div>
 
 <div align="center">
-<img src="https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/static/image/banner.svg" alt="banner" width="800">
+<img src="https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/static/image/banner_compressed.png" alt="banner" width="800">
 </div>
 
  ### **[Important Announcement] Refactoring Plan for Weibo_PublicOpinion_AnalysisSystem**
