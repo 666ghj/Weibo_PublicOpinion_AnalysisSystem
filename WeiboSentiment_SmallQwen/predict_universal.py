@@ -37,11 +37,14 @@ class Qwen3UniversalPredictor:
             raise ValueError(f"不支持的模型大小: {model_size}")
             
         model_path = MODEL_PATHS[model_type][model_size]
+        model_key = self._get_model_key(model_type, model_size)
+        
+        # 检查训练好的模型文件是否存在
         if not os.path.exists(model_path):
-            print(f"模型文件不存在: {model_path}")
+            print(f"训练好的模型文件不存在: {model_path}")
+            print(f"请先训练 {model_type.upper()}-{model_size} 模型，或检查模型路径配置")
             return
         
-        model_key = self._get_model_key(model_type, model_size)
         print(f"加载 {model_type.upper()}-{model_size} 模型...")
         
         try:
@@ -60,6 +63,7 @@ class Qwen3UniversalPredictor:
             
         except Exception as e:
             print(f"加载 {model_type.upper()}-{model_size} 模型失败: {e}")
+            print(f"这可能是因为基础模型下载失败或训练好的模型文件损坏")
     
     def load_all_models(self, model_dir: str = './models') -> None:
         """加载所有可用的模型"""

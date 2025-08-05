@@ -103,46 +103,61 @@ class Qwen3EmbeddingUniversal(BaseQwenModel):
         """加载Qwen3 Embedding模型"""
         print(f"加载{self.model_size}模型: {self.model_name_hf}")
         
+        # 第一步：检查当前文件夹的models目录
+        local_model_dir = f"./models/qwen3-embedding-{self.model_size.lower()}"
+        if os.path.exists(local_model_dir) and os.path.exists(os.path.join(local_model_dir, "config.json")):
+            try:
+                print(f"发现本地模型，从本地加载: {local_model_dir}")
+                self.tokenizer = AutoTokenizer.from_pretrained(local_model_dir)
+                self.embedding_model = AutoModel.from_pretrained(local_model_dir).to(self.device)
+                print(f"从本地模型加载{self.model_size}模型成功")
+                return
+                
+            except Exception as e:
+                print(f"本地模型加载失败: {e}")
+        
+        # 第二步：检查HuggingFace缓存
         try:
+            from transformers.utils import default_cache_path
+            cache_path = default_cache_path
+            print(f"检查HuggingFace缓存: {cache_path}")
+            
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_name_hf)
             self.embedding_model = AutoModel.from_pretrained(self.model_name_hf).to(self.device)
-            print(f"{self.model_size}模型加载完成")
+            print(f"从HuggingFace缓存加载{self.model_size}模型成功")
             
-            # 立即保存到本地缓存
-            cache_dir = f"./models/qwen3-embedding-{self.model_size.lower()}"
-            if not os.path.exists(cache_dir):
-                print(f"保存模型到本地: {cache_dir}")
-                os.makedirs(cache_dir, exist_ok=True)
-                self.tokenizer.save_pretrained(cache_dir)
-                self.embedding_model.save_pretrained(cache_dir)
-                print(f"模型已保存到: {cache_dir}")
+            # 保存到本地models目录
+            print(f"保存模型到本地: {local_model_dir}")
+            os.makedirs(local_model_dir, exist_ok=True)
+            self.tokenizer.save_pretrained(local_model_dir)
+            self.embedding_model.save_pretrained(local_model_dir)
+            print(f"模型已保存到: {local_model_dir}")
             
         except Exception as e:
-            print(f"从Hugging Face加载失败: {e}")
+            print(f"从HuggingFace缓存加载失败: {e}")
             
-            # 尝试从本地缓存加载
-            cache_dir = f"./models/qwen3-embedding-{self.model_size.lower()}"
+            # 第三步：从HuggingFace下载
             try:
-                if os.path.exists(cache_dir):
-                    self.tokenizer = AutoTokenizer.from_pretrained(cache_dir)
-                    self.embedding_model = AutoModel.from_pretrained(cache_dir).to(self.device)
-                    print(f"从本地缓存加载{self.model_size}模型成功")
-                else:
-                    raise FileNotFoundError("本地缓存也不存在")
-                    
+                print(f"正在从HuggingFace下载{self.model_size}模型...")
+                
+                self.tokenizer = AutoTokenizer.from_pretrained(
+                    self.model_name_hf,
+                    force_download=True
+                )
+                self.embedding_model = AutoModel.from_pretrained(
+                    self.model_name_hf,
+                    force_download=True
+                ).to(self.device)
+                
+                # 保存到本地models目录
+                os.makedirs(local_model_dir, exist_ok=True)
+                self.tokenizer.save_pretrained(local_model_dir)
+                self.embedding_model.save_pretrained(local_model_dir)
+                print(f"{self.model_size}模型下载并保存到: {local_model_dir}")
+                
             except Exception as e2:
-                print(f"本地加载也失败: {e2}")
-                print(f"正在下载{self.model_size}模型...")
-                
-                # 创建缓存目录并下载
-                os.makedirs(cache_dir, exist_ok=True)
-                self.tokenizer = AutoTokenizer.from_pretrained(self.model_name_hf, cache_dir=cache_dir)
-                self.embedding_model = AutoModel.from_pretrained(self.model_name_hf, cache_dir=cache_dir).to(self.device)
-                
-                # 保存到本地
-                self.tokenizer.save_pretrained(cache_dir)
-                self.embedding_model.save_pretrained(cache_dir)
-                print(f"{self.model_size}模型下载并保存到: {cache_dir}")
+                print(f"从HuggingFace下载也失败: {e2}")
+                raise RuntimeError(f"无法加载{self.model_size}模型，所有方法都失败了")
     
     def train(self, train_data: List[Tuple[str, int]], **kwargs) -> None:
         """训练模型"""
