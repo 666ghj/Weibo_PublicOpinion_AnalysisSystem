@@ -111,9 +111,3 @@ for text in texts:
 - 支持GPU加速，会自动检测可用设备
 - 如需清理模型文件，删除 `model` 文件夹即可
 - 该模型基于合成数据训练，在实际应用中建议进行验证
-
-## 参考信息
-
-- 模型链接: https://huggingface.co/tabularisai/multilingual-sentiment-analysis
-- 许可证: CC-BY-NC-4.0 (非商业使用)
-- 商业使用需联系: info@tabularis.ai

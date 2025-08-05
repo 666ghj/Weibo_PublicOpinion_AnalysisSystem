@@ -1,4 +1,4 @@
-# 微博情感分析 - HuggingFace预训练模型
+# 微博情感分析 - 基于BertChinese的微调模型
 
 本模块使用HuggingFace上的预训练微博情感分析模型进行情感分析。
 
