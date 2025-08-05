@@ -14,7 +14,7 @@ from typing import List, Dict, Tuple, Any
 # 添加当前目录到路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from models_config import MODEL_CONFIGS, MODEL_PATHS
+from models_config import QWEN3_MODELS, MODEL_PATHS
 from qwen3_embedding_universal import Qwen3EmbeddingUniversal
 from qwen3_lora_universal import Qwen3LoRAUniversal
 
