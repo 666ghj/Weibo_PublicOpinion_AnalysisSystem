@@ -40,14 +40,3 @@
 | 联通知道 | 20.3 万条联通问答数据，包括用户提问、网友回答、最佳回答 | [点击查看](./datasets/liantongzhidao/intro.ipynb) |
 | 农行知道 | 4 万条农业银行问答数据，包括用户提问、网友回答、最佳回答 | [点击查看](./datasets/nonghangzhidao/intro.ipynb) |
 | 保险知道 | 58.8 万条保险行业问答数据，包括用户提问、网友回答、最佳回答 | [点击查看](./datasets/baoxianzhidao/intro.ipynb) |
-
-
-
-## 加入我们
-
-- 愿景：以人工智能产品和技术服务 30 亿人
-- 团队：极客精神、技术驱动，做有温度的技术，让世界更美好
-- 产品：面向细分行业领域的自动营销机器人，客户需求旺盛，产品前景无限
-- 职位：[自然语言人机交互应用研究](./docs/recruit/researcher.md)、[自然语言处理算法工程师](./docs/recruit/engineer.md)、[系统架构师（人工智能产品）](./docs/recruit/architect.md)
-
-![](./docs/images/recruit/recruit_banner.png)
