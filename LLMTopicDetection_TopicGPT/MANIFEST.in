@@ -1,0 +1,4 @@
+# MANIFEST.in
+
+include README.md
+recursive-include quicktests *
