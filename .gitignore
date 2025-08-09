@@ -185,6 +185,7 @@ WeiboSentiment_Finetuned/BertChinese-Lora/model/
 WeiboMultilingualSentiment/model/
 WeiboSentiment_MachineLearning/model/chinese_wwm_pytorch/
 WeiboSentiment_SmallQwen/models/
+BertTopicDetection_Finetuned/model/
 
 # LoRA 和 Adapter 权重
 */adapter_model.safetensors

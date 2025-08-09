@@ -63,6 +63,23 @@ python train.py \
 - 支持早停（默认耐心 5 次评估），并在评估/保存策略一致时自动回滚到最佳模型；
 - 分词器、权重与 `label_map.json` 保存到 `model/bert-chinese-classifier/`。
 
+### 可选中文基座模型（训练前交互选择）
+
+默认基座：`google-bert/bert-base-chinese`。启动训练时，若终端可交互，程序会提示从下列选项中选择（或输入任意 Hugging Face 模型 ID）：
+
+1) `google-bert/bert-base-chinese`
+2) `hfl/chinese-roberta-wwm-ext-large`
+3) `hfl/chinese-macbert-large`
+4) `IDEA-CCNL/Erlangshen-DeBERTa-v2-710M-Chinese`
+5) `IDEA-CCNL/Erlangshen-DeBERTa-v3-Base-Chinese`
+6) `Langboat/mengzi-bert-base`
+7) `BAAI/bge-base-zh`（更适合检索式/对比学习范式）
+8) `nghuyong/ernie-3.0-base-zh`
+
+说明：
+- 非交互环境（如调度系统）或设置 `NON_INTERACTIVE=1` 时，会直接使用命令行参数 `--pretrained_name` 指定的模型（默认为 `google-bert/bert-base-chinese`）。
+- 选择后，基础模型将下载/缓存至 `model/` 目录，统一管理。
+
 ### 预测
 
 单条：
@@ -94,5 +111,16 @@ python predict.py --interactive --model_root ./model --finetuned_subdir bert-chi
 - 评估/保存：按 `--eval_fraction` 折算步数（默认 0.25），`save_total_limit=5` 限制磁盘占用。
 - 早停：监控加权 F1（越大越好），默认耐心 5、改善阈值 0.0。
 - 单卡稳定运行：默认仅使用一张 GPU，可通过 `--gpu` 指定；脚本会清理分布式环境变量。
+
+
+### 作者说明（关于超大规模多分类）
+
+- 当话题类别达到上万级时，直接在编码器后接单一线性分类头（大 softmax）往往受限：长尾类别难学、语义稀疏、新增话题无法增量适配、上线后需频繁重训。
+- 改进思路（推荐优先级）：
+  - 检索式/双塔范式（文本 vs. 话题名称/描述 对比学习）+ 近邻检索 + 小头重排，天然支持增量扩类与快速更新；
+  - 分层分类（先粗分再细分），显著降低单头难度与计算；
+  - 文本-标签联合建模（使用标签描述），提升近义话题的可迁移性；
+  - 训练细节：class-balanced/focal/label smoothing、sampled softmax、对比预训练等。
+- 重要声明：本目录使用的“静态分类头微调”仅作为备选与学习参考。对于英文/多语微短文场景，话题变化极快，传统静态分类器难以及时覆盖，我们的工作重点在 `TopicGPT` 等生成式/自监督话题发现与动态体系构建方向；本实现旨在提供一个可运行的基线与工程示例。
 
 
