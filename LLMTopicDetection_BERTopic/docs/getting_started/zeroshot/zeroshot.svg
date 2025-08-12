@@ -1,0 +1,282 @@
+<svg width="492" height="417" viewBox="0 0 492 417" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="15.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="29.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="43.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="57.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="71.5" y="101.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="33.3438" y="94.1758">&#34;Religion&#34;&#10;</tspan></text>
+<rect x="47.5" y="154.5" width="249" height="68" rx="2.5" fill="#F5F5F5" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="370.248" y="111.97"> the labels</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="336" y="111.97">Embed</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="349.291" y="185.97">cosine similarity</tspan><tspan x="306" y="197.97">document</tspan><tspan x="378.803" y="197.97">zeroshot</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="306" y="173.97">For each document, assign topics &#10;</tspan><tspan x="306" y="185.97">based on </tspan><tspan x="431.176" y="185.97"> between </tspan><tspan x="356.195" y="197.97"> and </tspan><tspan x="422.396" y="197.97"> embeddings</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="381.955" y="277.97"> that could not be </tspan><tspan x="288" y="289.97">assigned to a zero-shot topic</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="288" y="277.97">Cluster documents</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="311.086" y="386.97"> the </tspan><tspan x="381.525" y="386.97"> </tspan><tspan x="414.719" y="386.97"> to </tspan><tspan x="273" y="398.97">the </tspan><tspan x="371.223" y="398.97"> to create a </tspan><tspan x="273" y="410.97">single list of topics</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="273" y="386.97">Append</tspan><tspan x="331.525" y="386.97">clustering</tspan><tspan x="384.65" y="386.97">topics</tspan><tspan x="290.314" y="398.97">zero-shot topics</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="385.484" y="28.9697">zeroshot topics</tspan><tspan x="391.764" y="40.9697">labels</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="354" y="28.9697">Define </tspan><tspan x="462.076" y="28.9697"> </tspan><tspan x="354" y="40.9697">through </tspan><tspan x="421.188" y="40.9697">.</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="26.5186" y="37.4697">&#34;Clustering&#34;</tspan></text>
+<text fill="#8F1313" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="14" y="9.96973">Zeroshot topic 1</tspan></text>
+<rect x="0.5" y="15.5" width="104" height="36" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="135.273" y="37.4697">&#34;Topic Modeling&#34;</tspan></text>
+<text fill="#8F1313" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="134" y="9.96973">Zeroshot topic 2</tspan></text>
+<rect x="120.5" y="15.5" width="104" height="36" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="255.137" y="31.4697">&#34;Large Language </tspan><tspan x="260.933" y="43.4697">Models (LLM)&#34;</tspan></text>
+<text fill="#8F1313" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="254" y="9.96973">Zeroshot topic 3</tspan></text>
+<rect x="240.5" y="15.5" width="104" height="36" stroke="black"/>
+<path d="M172.293 147.707C172.683 148.098 173.317 148.098 173.707 147.707L180.071 141.343C180.462 140.953 180.462 140.319 180.071 139.929C179.681 139.538 179.047 139.538 178.657 139.929L173 145.586L167.343 139.929C166.953 139.538 166.319 139.538 165.929 139.929C165.538 140.319 165.538 140.953 165.929 141.343L172.293 147.707ZM172 122L172 147L174 147L174 122L172 122Z" fill="black"/>
+<path d="M172.293 251.707C172.683 252.098 173.317 252.098 173.707 251.707L180.071 245.343C180.462 244.953 180.462 244.319 180.071 243.929C179.681 243.538 179.047 243.538 178.657 243.929L173 249.586L167.343 243.929C166.953 243.538 166.319 243.538 165.929 243.929C165.538 244.319 165.538 244.953 165.929 245.343L172.293 251.707ZM172 226L172 251L174 251L174 226L172 226Z" fill="black"/>
+<path d="M172.293 351.707C172.683 352.098 173.317 352.098 173.707 351.707L180.071 345.343C180.462 344.953 180.462 344.319 180.071 343.929C179.681 343.538 179.047 343.538 178.657 343.929L173 349.586L167.343 343.929C166.953 343.538 166.319 343.538 165.929 343.929C165.538 344.319 165.538 344.953 165.929 345.343L172.293 351.707ZM172 326L172 351L174 351L174 326L172 326Z" fill="black"/>
+<path d="M51.2929 79.7071C51.6834 80.0976 52.3166 80.0976 52.7071 79.7071L59.0711 73.3431C59.4616 72.9526 59.4616 72.3195 59.0711 71.9289C58.6805 71.5384 58.0474 71.5384 57.6569 71.9289L52 77.5858L46.3431 71.9289C45.9526 71.5384 45.3195 71.5384 44.9289 71.9289C44.5384 72.3195 44.5384 72.9526 44.9289 73.3431L51.2929 79.7071ZM51 55L51 79L53 79L53 55L51 55Z" fill="black"/>
+<rect x="136.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="150.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="164.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="178.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="192.5" y="101.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="143.219" y="94.1758">&#34;Topic Modeling&#34;&#10;</tspan></text>
+<path d="M172.293 79.7071C172.683 80.0976 173.317 80.0976 173.707 79.7071L180.071 73.3431C180.462 72.9526 180.462 72.3195 180.071 71.9289C179.681 71.5384 179.047 71.5384 178.657 71.9289L173 77.5858L167.343 71.9289C166.953 71.5384 166.319 71.5384 165.929 71.9289C165.538 72.3195 165.538 72.9526 165.929 73.3431L172.293 79.7071ZM172 55L172 79L174 79L174 55L172 55Z" fill="black"/>
+<rect x="256.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="270.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="284.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="298.5" y="101.5" width="14" height="14" stroke="black"/>
+<rect x="312.5" y="101.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="247.984" y="94.1758">&#34;Large Language Models&#34;&#10;</tspan></text>
+<path d="M292.293 79.7071C292.683 80.0976 293.317 80.0976 293.707 79.7071L300.071 73.3431C300.462 72.9526 300.462 72.3195 300.071 71.9289C299.681 71.5384 299.047 71.5384 298.657 71.9289L293 77.5858L287.343 71.9289C286.953 71.5384 286.319 71.5384 285.929 71.9289C285.538 72.3195 285.538 72.9526 285.929 73.3431L292.293 79.7071ZM292 55L292 79L294 79L294 55L292 55Z" fill="black"/>
+<path d="M84.9508 147.912C85.495 147.818 85.8598 147.301 85.7656 146.757L84.2307 137.888C84.1365 137.344 83.619 136.979 83.0748 137.074C82.5306 137.168 82.1658 137.685 82.26 138.229L83.6244 146.112L75.7416 147.477C75.1974 147.571 74.8326 148.088 74.9268 148.632C75.0209 149.177 75.5384 149.541 76.0826 149.447L84.9508 147.912ZM47.4238 121.817L84.2041 147.744L85.3564 146.11L48.5762 120.183L47.4238 121.817Z" fill="black"/>
+<path d="M256.049 147.912C255.505 147.818 255.14 147.301 255.234 146.757L256.769 137.888C256.863 137.344 257.381 136.979 257.925 137.074C258.469 137.168 258.834 137.685 258.74 138.229L257.376 146.112L265.258 147.477C265.803 147.571 266.167 148.088 266.073 148.632C265.979 149.177 265.462 149.541 264.917 149.447L256.049 147.912ZM293.576 121.817L256.796 147.744L255.644 146.11L292.424 120.183L293.576 121.817Z" fill="black"/>
+<path d="M90.8315 184H68.7801C68.3493 184 68 184.349 68 184.78V213.22C68 213.651 68.3493 214 68.7801 214H90.8315C91.2624 214 91.6117 213.651 91.6117 213.22V184.78C91.6117 184.349 91.2624 184 90.8315 184Z" fill="white" stroke="#8F1313"/>
+<path d="M71.0491 188.447H88.4176" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M75.4045 191.496H88.4174" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M71.0491 191.496H73.7535" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M71.0491 194.4H88.4176" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M74.5334 197.303H88.4174" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M71.0491 197.303H72.8824" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M73.2268 200.207H78.6898" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M71.0491 200.207H71.7208" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M80.1958 200.207H88.4174" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M71.0491 203.111H88.4176" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M71.0491 206.015H88.4176" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M71.0491 208.918H88.4176" stroke="#8F1313" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="68.2695" y="170.176">Topic &#10;</tspan><tspan x="63.1602" y="180.176">Modeling</tspan></text>
+<rect x="184.5" y="260.5" width="96" height="59" rx="2.5" fill="#F5F5F5" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" font-weight="bold" letter-spacing="0em"><tspan x="187.211" y="257.176">Cluster non-assigned docs</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="16" letter-spacing="0em"><tspan x="166.18" y="293.852">+</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="191.709" y="304.882">Topic X</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="221.724" y="304.882">Topic Y</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="249.773" y="304.882">Topic Z</tspan></text>
+<path d="M212.832 267H190.78C190.349 267 190 267.349 190 267.78V296.22C190 296.651 190.349 297 190.78 297H212.832C213.262 297 213.612 296.651 213.612 296.22V267.78C213.612 267.349 213.262 267 212.832 267Z" fill="white" stroke="#138F83"/>
+<path d="M193.049 271.447H210.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M197.405 274.496H210.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 274.496H195.753" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 277.4H210.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M196.533 280.303H210.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 280.303H194.882" stroke="#138F83" stroke-linecap="round"/>
+<path d="M195.227 283.207H200.69" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 283.207H193.721" stroke="#138F83" stroke-linecap="round"/>
+<path d="M202.196 283.207H210.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 286.111H210.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 289.015H210.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 291.918H210.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M240.832 267H218.78C218.349 267 218 267.349 218 267.78V296.22C218 296.651 218.349 297 218.78 297H240.832C241.262 297 241.612 296.651 241.612 296.22V267.78C241.612 267.349 241.262 267 240.832 267Z" fill="white" stroke="#138F83"/>
+<path d="M221.049 271.447H238.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M225.405 274.496H238.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M221.049 274.496H223.753" stroke="#138F83" stroke-linecap="round"/>
+<path d="M221.049 277.4H238.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M224.533 280.303H238.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M221.049 280.303H222.882" stroke="#138F83" stroke-linecap="round"/>
+<path d="M223.227 283.207H228.69" stroke="#138F83" stroke-linecap="round"/>
+<path d="M221.049 283.207H221.721" stroke="#138F83" stroke-linecap="round"/>
+<path d="M230.196 283.207H238.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M221.049 286.111H238.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M221.049 289.015H238.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M221.049 291.918H238.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M269.832 267H247.78C247.349 267 247 267.349 247 267.78V296.22C247 296.651 247.349 297 247.78 297H269.832C270.262 297 270.612 296.651 270.612 296.22V267.78C270.612 267.349 270.262 267 269.832 267Z" fill="white" stroke="#138F83"/>
+<path d="M250.049 271.447H267.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M254.405 274.496H267.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M250.049 274.496H252.753" stroke="#138F83" stroke-linecap="round"/>
+<path d="M250.049 277.4H267.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M253.533 280.303H267.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M250.049 280.303H251.882" stroke="#138F83" stroke-linecap="round"/>
+<path d="M252.227 283.207H257.69" stroke="#138F83" stroke-linecap="round"/>
+<path d="M250.049 283.207H250.721" stroke="#138F83" stroke-linecap="round"/>
+<path d="M259.196 283.207H267.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M250.049 286.111H267.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M250.049 289.015H267.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M250.049 291.918H267.418" stroke="#138F83" stroke-linecap="round"/>
+<rect x="64.5" y="261.5" width="96" height="59" rx="2.5" fill="#F5F5F5" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" font-weight="bold" letter-spacing="0em"><tspan x="69.4648" y="258.176">Zero-shot Topics</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="74.3896" y="305.882">Topic&#10;</tspan><tspan x="69.6201" y="312.882">Modeling</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="106.2" y="305.882">LLM</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="126.319" y="305.882">Clustering</tspan></text>
+<path d="M92.8315 268H70.7801C70.3493 268 70 268.349 70 268.78V297.22C70 297.651 70.3493 298 70.7801 298H92.8315C93.2624 298 93.6117 297.651 93.6117 297.22V268.78C93.6117 268.349 93.2624 268 92.8315 268Z" fill="white" stroke="#8F1313"/>
+<path d="M73.0491 272.447H90.4176" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M77.4045 275.496H90.4174" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M73.0491 275.496H75.7535" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M73.0491 278.4H90.4176" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M76.5334 281.303H90.4174" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M73.0491 281.303H74.8824" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M75.2268 284.207H80.6898" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M73.0491 284.207H73.7208" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M82.1958 284.207H90.4174" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M73.0491 287.111H90.4176" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M73.0491 290.015H90.4176" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M73.0491 292.918H90.4176" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M120.832 268H98.7801C98.3493 268 98 268.349 98 268.78V297.22C98 297.651 98.3493 298 98.7801 298H120.832C121.262 298 121.612 297.651 121.612 297.22V268.78C121.612 268.349 121.262 268 120.832 268Z" fill="white" stroke="#8F1313"/>
+<path d="M101.049 272.447H118.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M105.405 275.496H118.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M101.049 275.496H103.753" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M101.049 278.4H118.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M104.533 281.303H118.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M101.049 281.303H102.882" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M103.227 284.207H108.69" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M101.049 284.207H101.721" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M110.196 284.207H118.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M101.049 287.111H118.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M101.049 290.015H118.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M101.049 292.918H118.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M149.832 268H127.78C127.349 268 127 268.349 127 268.78V297.22C127 297.651 127.349 298 127.78 298H149.832C150.262 298 150.612 297.651 150.612 297.22V268.78C150.612 268.349 150.262 268 149.832 268Z" fill="white" stroke="#8F1313"/>
+<path d="M130.049 272.447H147.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M134.405 275.496H147.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 275.496H132.753" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 278.4H147.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M133.533 281.303H147.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 281.303H131.882" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M132.227 284.207H137.69" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 284.207H130.721" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M139.196 284.207H147.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 287.111H147.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 290.015H147.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 292.918H147.418" stroke="#8F1313" stroke-linecap="round"/>
+<rect x="77.5" y="357.5" width="189" height="59" rx="2.5" fill="#F5F5F5" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" font-weight="bold" letter-spacing="0em"><tspan x="80.8633" y="354.176">Merged BERTopic</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="87.3896" y="401.882">Topic&#10;</tspan><tspan x="82.6201" y="408.882">Modeling</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="119.2" y="401.882">LLM</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="139.319" y="401.882">Clustering</tspan></text>
+<path d="M105.832 364H83.7801C83.3493 364 83 364.349 83 364.78V393.22C83 393.651 83.3493 394 83.7801 394H105.832C106.262 394 106.612 393.651 106.612 393.22V364.78C106.612 364.349 106.262 364 105.832 364Z" fill="white" stroke="#8F1313"/>
+<path d="M86.0491 368.447H103.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M90.4045 371.496H103.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M86.0491 371.496H88.7535" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M86.0491 374.4H103.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M89.5334 377.303H103.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M86.0491 377.303H87.8824" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M88.2268 380.207H93.6898" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M86.0491 380.207H86.7208" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M95.1958 380.207H103.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M86.0491 383.111H103.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M86.0491 386.015H103.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M86.0491 388.918H103.418" stroke="#8F1313" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="175.709" y="401.882">Topic X</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="205.724" y="401.882">Topic Y</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="6" letter-spacing="0em"><tspan x="233.773" y="401.882">Topic Z</tspan></text>
+<path d="M196.832 364H174.78C174.349 364 174 364.349 174 364.78V393.22C174 393.651 174.349 394 174.78 394H196.832C197.262 394 197.612 393.651 197.612 393.22V364.78C197.612 364.349 197.262 364 196.832 364Z" fill="white" stroke="#138F83"/>
+<path d="M177.049 368.447H194.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M181.405 371.496H194.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M177.049 371.496H179.753" stroke="#138F83" stroke-linecap="round"/>
+<path d="M177.049 374.4H194.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M180.533 377.303H194.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M177.049 377.303H178.882" stroke="#138F83" stroke-linecap="round"/>
+<path d="M179.227 380.207H184.69" stroke="#138F83" stroke-linecap="round"/>
+<path d="M177.049 380.207H177.721" stroke="#138F83" stroke-linecap="round"/>
+<path d="M186.196 380.207H194.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M177.049 383.111H194.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M177.049 386.015H194.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M177.049 388.918H194.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M224.832 364H202.78C202.349 364 202 364.349 202 364.78V393.22C202 393.651 202.349 394 202.78 394H224.832C225.262 394 225.612 393.651 225.612 393.22V364.78C225.612 364.349 225.262 364 224.832 364Z" fill="white" stroke="#138F83"/>
+<path d="M205.049 368.447H222.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M209.405 371.496H222.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M205.049 371.496H207.753" stroke="#138F83" stroke-linecap="round"/>
+<path d="M205.049 374.4H222.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M208.533 377.303H222.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M205.049 377.303H206.882" stroke="#138F83" stroke-linecap="round"/>
+<path d="M207.227 380.207H212.69" stroke="#138F83" stroke-linecap="round"/>
+<path d="M205.049 380.207H205.721" stroke="#138F83" stroke-linecap="round"/>
+<path d="M214.196 380.207H222.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M205.049 383.111H222.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M205.049 386.015H222.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M205.049 388.918H222.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M253.832 364H231.78C231.349 364 231 364.349 231 364.78V393.22C231 393.651 231.349 394 231.78 394H253.832C254.262 394 254.612 393.651 254.612 393.22V364.78C254.612 364.349 254.262 364 253.832 364Z" fill="white" stroke="#138F83"/>
+<path d="M234.049 368.447H251.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M238.405 371.496H251.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M234.049 371.496H236.753" stroke="#138F83" stroke-linecap="round"/>
+<path d="M234.049 374.4H251.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M237.533 377.303H251.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M234.049 377.303H235.882" stroke="#138F83" stroke-linecap="round"/>
+<path d="M236.227 380.207H241.69" stroke="#138F83" stroke-linecap="round"/>
+<path d="M234.049 380.207H234.721" stroke="#138F83" stroke-linecap="round"/>
+<path d="M243.196 380.207H251.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M234.049 383.111H251.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M234.049 386.015H251.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M234.049 388.918H251.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M133.832 364H111.78C111.349 364 111 364.349 111 364.78V393.22C111 393.651 111.349 394 111.78 394H133.832C134.262 394 134.612 393.651 134.612 393.22V364.78C134.612 364.349 134.262 364 133.832 364Z" fill="white" stroke="#8F1313"/>
+<path d="M114.049 368.447H131.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M118.405 371.496H131.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M114.049 371.496H116.753" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M114.049 374.4H131.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M117.533 377.303H131.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M114.049 377.303H115.882" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M116.227 380.207H121.69" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M114.049 380.207H114.721" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M123.196 380.207H131.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M114.049 383.111H131.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M114.049 386.015H131.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M114.049 388.918H131.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M162.832 364H140.78C140.349 364 140 364.349 140 364.78V393.22C140 393.651 140.349 394 140.78 394H162.832C163.262 394 163.612 393.651 163.612 393.22V364.78C163.612 364.349 163.262 364 162.832 364Z" fill="white" stroke="#8F1313"/>
+<path d="M143.049 368.447H160.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M147.405 371.496H160.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M143.049 371.496H145.753" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M143.049 374.4H160.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M146.533 377.303H160.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M143.049 377.303H144.882" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M145.227 380.207H150.69" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M143.049 380.207H143.721" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M152.196 380.207H160.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M143.049 383.111H160.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M143.049 386.015H160.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M143.049 388.918H160.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M149.832 184H127.78C127.349 184 127 184.349 127 184.78V213.22C127 213.651 127.349 214 127.78 214H149.832C150.262 214 150.612 213.651 150.612 213.22V184.78C150.612 184.349 150.262 184 149.832 184Z" fill="white" stroke="#8F1313"/>
+<path d="M130.049 188.447H147.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M134.405 191.496H147.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 191.496H132.753" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 194.4H147.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M133.533 197.303H147.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 197.303H131.882" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M132.227 200.207H137.69" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 200.207H130.721" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M139.196 200.207H147.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 203.111H147.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 206.015H147.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M130.049 208.918H147.418" stroke="#8F1313" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="132.434" y="179.176">LLM</tspan></text>
+<path d="M212.832 184H190.78C190.349 184 190 184.349 190 184.78V213.22C190 213.651 190.349 214 190.78 214H212.832C213.262 214 213.612 213.651 213.612 213.22V184.78C213.612 184.349 213.262 184 212.832 184Z" fill="white" stroke="#138F83"/>
+<path d="M193.049 188.447H210.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M197.405 191.496H210.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 191.496H195.753" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 194.4H210.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M196.533 197.303H210.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 197.303H194.882" stroke="#138F83" stroke-linecap="round"/>
+<path d="M195.227 200.207H200.69" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 200.207H193.721" stroke="#138F83" stroke-linecap="round"/>
+<path d="M202.196 200.207H210.417" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 203.111H210.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 206.015H210.418" stroke="#138F83" stroke-linecap="round"/>
+<path d="M193.049 208.918H210.418" stroke="#138F83" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="173.16" y="180.176">No match found</tspan></text>
+<path d="M281.832 184H259.78C259.349 184 259 184.349 259 184.78V213.22C259 213.651 259.349 214 259.78 214H281.832C282.262 214 282.612 213.651 282.612 213.22V184.78C282.612 184.349 282.262 184 281.832 184Z" fill="white" stroke="#8F1313"/>
+<path d="M262.049 188.447H279.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M266.405 191.496H279.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M262.049 191.496H264.753" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M262.049 194.4H279.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M265.533 197.303H279.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M262.049 197.303H263.882" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M264.227 200.207H269.69" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M262.049 200.207H262.721" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M271.196 200.207H279.417" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M262.049 203.111H279.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M262.049 206.015H279.418" stroke="#8F1313" stroke-linecap="round"/>
+<path d="M262.049 208.918H279.418" stroke="#8F1313" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="252.426" y="180.176">Clustering</tspan></text>
+<circle cx="227" cy="198" r="1" fill="black"/>
+<circle cx="237" cy="198" r="1" fill="black"/>
+<circle cx="247" cy="198" r="1" fill="black"/>
+</svg>

@@ -1,0 +1,14 @@
+<svg width="374" height="57" viewBox="0 0 374 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="374" height="57" fill="white"/>
+<rect x="0.5" y="14.5" width="88" height="42" fill="white" stroke="black"/>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="30" y="10.9697">SBERT</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="156" y="10.9697">HDBSCAN</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="308" y="10.9697">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="9" y="38.7637">Embeddings</tspan></text>
+<rect x="135.5" y="14.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="157" y="38.7637">Clustering</tspan></text>
+<path d="M125.707 33.7071C126.098 33.3166 126.098 32.6834 125.707 32.2929L119.343 25.9289C118.953 25.5384 118.319 25.5384 117.929 25.9289C117.538 26.3195 117.538 26.9526 117.929 27.3431L123.586 33L117.929 38.6569C117.538 39.0474 117.538 39.6805 117.929 40.0711C118.319 40.4616 118.953 40.4616 119.343 40.0711L125.707 33.7071ZM98 34H125V32H98V34Z" fill="black"/>
+<rect x="282.5" y="14.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="312.404" y="30.7637">Topic &#10;</tspan><tspan x="290.215" y="44.7637">representation</tspan></text>
+<path d="M266.707 33.7071C267.098 33.3166 267.098 32.6834 266.707 32.2929L260.343 25.9289C259.953 25.5384 259.319 25.5384 258.929 25.9289C258.538 26.3195 258.538 26.9526 258.929 27.3431L264.586 33L258.929 38.6569C258.538 39.0474 258.538 39.6805 258.929 40.0711C259.319 40.4616 259.953 40.4616 260.343 40.0711L266.707 33.7071ZM239 34H266V32H239V34Z" fill="black"/>
+</svg>

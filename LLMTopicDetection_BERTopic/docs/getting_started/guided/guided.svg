@@ -1,0 +1,152 @@
+<svg width="718" height="527" viewBox="0 0 718 527" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="44.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="58.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="72.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="86.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="100.5" y="115.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="33.3086" y="108.176">&#34;drug cancer drugs doctor&#34;&#10;</tspan></text>
+<rect x="227.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="241.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="255.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="269.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="283.5" y="115.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="221.75" y="108.176">&#34;windows drive dos file&#34;&#10;</tspan><tspan x="264" y="118.176">&#10;</tspan></text>
+<rect x="413.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="427.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="441.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="455.5" y="115.5" width="14" height="14" stroke="black"/>
+<rect x="469.5" y="115.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="404.438" y="108.176">&#34;space launch orbit lunar&#34;&#10;</tspan><tspan x="450" y="118.176">&#10;</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="522" y="104.764">Concatenate and embed the </tspan><tspan x="522" y="118.764">keywords/keyphrases using the </tspan><tspan x="522" y="132.764">embedding model.</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="408" y="200.764">For each document, generate labels by finding </tspan><tspan x="408" y="214.764">which seeded topic fits best based on cosine </tspan><tspan x="408" y="228.764">similarity between embeddings.</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="366" y="313.764">Average the embedding of each document </tspan><tspan x="366" y="327.764">with the selected seeded topic. </tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="550" y="24.7637">Define seed topics through </tspan><tspan x="550" y="38.7637">keywords or keyphrases. </tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="11" y="29.9697">&#34;drug&#34;, &#34;cancer&#34;, &#34;drugs&#34;, &#34;doctor&#34;&#10;</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="53" y="9.96973">Seed topic 1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="233" y="9.96973">Seed topic 2</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="413" y="9.96973">Seed topic 3</tspan></text>
+<rect x="0.5" y="14.5" width="170" height="24" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="198" y="29.9697">&#34;windows&#34;, &#34;drive&#34;, &#34;dos&#34;, &#34;file&#34;&#10;</tspan></text>
+<rect x="185.5" y="14.5" width="170" height="24" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="378" y="29.9697">&#34;space&#34;, &#34;launch&#34;, &#34;orbit&#34;, &#34;lunar&#34;&#10;</tspan></text>
+<rect x="365.5" y="14.5" width="170" height="24" stroke="black"/>
+<path d="M445.293 86.7071C445.683 87.0976 446.317 87.0976 446.707 86.7071L453.071 80.3431C453.462 79.9526 453.462 79.3195 453.071 78.9289C452.681 78.5384 452.047 78.5384 451.657 78.9289L446 84.5858L440.343 78.9289C439.953 78.5384 439.319 78.5384 438.929 78.9289C438.538 79.3195 438.538 79.9526 438.929 80.3431L445.293 86.7071ZM445 51L445 86L447 86L447 51L445 51Z" fill="black"/>
+<path d="M263.293 86.7071C263.683 87.0976 264.317 87.0976 264.707 86.7071L271.071 80.3431C271.462 79.9526 271.462 79.3195 271.071 78.9289C270.681 78.5384 270.047 78.5384 269.657 78.9289L264 84.5858L258.343 78.9289C257.953 78.5384 257.319 78.5384 256.929 78.9289C256.538 79.3195 256.538 79.9526 256.929 80.3431L263.293 86.7071ZM263 51L263 86L265 86L265 51L263 51Z" fill="black"/>
+<path d="M263.293 166.707C263.683 167.098 264.317 167.098 264.707 166.707L271.071 160.343C271.462 159.953 271.462 159.319 271.071 158.929C270.681 158.538 270.047 158.538 269.657 158.929L264 164.586L258.343 158.929C257.953 158.538 257.319 158.538 256.929 158.929C256.538 159.319 256.538 159.953 256.929 160.343L263.293 166.707ZM263 141L263 166L265 166L265 141L263 141Z" fill="black"/>
+<path d="M263.293 272.707C263.683 273.098 264.317 273.098 264.707 272.707L271.071 266.343C271.462 265.953 271.462 265.319 271.071 264.929C270.681 264.538 270.047 264.538 269.657 264.929L264 270.586L258.343 264.929C257.953 264.538 257.319 264.538 256.929 264.929C256.538 265.319 256.538 265.953 256.929 266.343L263.293 272.707ZM263 247L263 272L265 272L265 247L263 247Z" fill="black"/>
+<path d="M80.2929 86.7071C80.6834 87.0976 81.3166 87.0976 81.7071 86.7071L88.0711 80.3431C88.4616 79.9526 88.4616 79.3195 88.0711 78.9289C87.6805 78.5384 87.0474 78.5384 86.6569 78.9289L81 84.5858L75.3431 78.9289C74.9526 78.5384 74.3195 78.5384 73.9289 78.9289C73.5384 79.3195 73.5384 79.9526 73.9289 80.3431L80.2929 86.7071ZM80 51L80 86L82 86L82 51L80 51Z" fill="black"/>
+<path d="M117.951 166.912C118.495 166.818 118.86 166.301 118.766 165.757L117.231 156.888C117.137 156.344 116.619 155.979 116.075 156.074C115.531 156.168 115.166 156.685 115.26 157.229L116.624 165.112L108.742 166.477C108.197 166.571 107.833 167.088 107.927 167.632C108.021 168.177 108.538 168.541 109.083 168.447L117.951 166.912ZM80.4238 140.817L117.204 166.744L118.356 165.11L81.5762 139.183L80.4238 140.817Z" fill="black"/>
+<path d="M410.049 166.912C409.505 166.818 409.14 166.301 409.234 165.757L410.769 156.888C410.863 156.344 411.381 155.979 411.925 156.074C412.469 156.168 412.834 156.685 412.74 157.229L411.376 165.112L419.258 166.477C419.803 166.571 420.167 167.088 420.073 167.632C419.979 168.177 419.462 168.541 418.917 168.447L410.049 166.912ZM447.576 140.817L410.796 166.744L409.644 165.11L446.424 139.183L447.576 140.817Z" fill="black"/>
+<path d="M183.832 200H161.78C161.349 200 161 200.349 161 200.78V229.22C161 229.651 161.349 230 161.78 230H183.832C184.262 230 184.612 229.651 184.612 229.22V200.78C184.612 200.349 184.262 200 183.832 200Z" fill="white" stroke="black"/>
+<path d="M164.049 204.447H181.418" stroke="black" stroke-linecap="round"/>
+<path d="M168.405 207.496H181.417" stroke="black" stroke-linecap="round"/>
+<path d="M164.049 207.496H166.753" stroke="black" stroke-linecap="round"/>
+<path d="M164.049 210.4H181.418" stroke="black" stroke-linecap="round"/>
+<path d="M167.534 213.303H181.417" stroke="black" stroke-linecap="round"/>
+<path d="M164.049 213.303H165.882" stroke="black" stroke-linecap="round"/>
+<path d="M166.227 216.207H171.69" stroke="black" stroke-linecap="round"/>
+<path d="M164.049 216.207H164.721" stroke="black" stroke-linecap="round"/>
+<path d="M173.196 216.207H181.417" stroke="black" stroke-linecap="round"/>
+<path d="M164.049 219.111H181.418" stroke="black" stroke-linecap="round"/>
+<path d="M164.049 222.015H181.418" stroke="black" stroke-linecap="round"/>
+<path d="M164.049 224.918H181.418" stroke="black" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="162.098" y="186.176">Seed &#10;</tspan><tspan x="160.082" y="196.176">topic 3&#10;</tspan><tspan x="172" y="206.176">&#10;</tspan></text>
+<path d="M242.832 200H220.78C220.349 200 220 200.349 220 200.78V229.22C220 229.651 220.349 230 220.78 230H242.832C243.262 230 243.612 229.651 243.612 229.22V200.78C243.612 200.349 243.262 200 242.832 200Z" fill="white" stroke="black"/>
+<path d="M223.049 204.447H240.418" stroke="black" stroke-linecap="round"/>
+<path d="M227.405 207.496H240.417" stroke="black" stroke-linecap="round"/>
+<path d="M223.049 207.496H225.753" stroke="black" stroke-linecap="round"/>
+<path d="M223.049 210.4H240.418" stroke="black" stroke-linecap="round"/>
+<path d="M226.534 213.303H240.417" stroke="black" stroke-linecap="round"/>
+<path d="M223.049 213.303H224.882" stroke="black" stroke-linecap="round"/>
+<path d="M225.227 216.207H230.69" stroke="black" stroke-linecap="round"/>
+<path d="M223.049 216.207H223.721" stroke="black" stroke-linecap="round"/>
+<path d="M232.196 216.207H240.417" stroke="black" stroke-linecap="round"/>
+<path d="M223.049 219.111H240.418" stroke="black" stroke-linecap="round"/>
+<path d="M223.049 222.015H240.418" stroke="black" stroke-linecap="round"/>
+<path d="M223.049 224.918H240.418" stroke="black" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="222.098" y="186.176">Seed &#10;</tspan><tspan x="220.082" y="196.176">topic 2&#10;</tspan><tspan x="232" y="206.176">&#10;</tspan></text>
+<path d="M305.832 200H283.78C283.349 200 283 200.349 283 200.78V229.22C283 229.651 283.349 230 283.78 230H305.832C306.262 230 306.612 229.651 306.612 229.22V200.78C306.612 200.349 306.262 200 305.832 200Z" fill="white" stroke="black"/>
+<path d="M286.049 204.447H303.418" stroke="black" stroke-linecap="round"/>
+<path d="M290.405 207.496H303.417" stroke="black" stroke-linecap="round"/>
+<path d="M286.049 207.496H288.753" stroke="black" stroke-linecap="round"/>
+<path d="M286.049 210.4H303.418" stroke="black" stroke-linecap="round"/>
+<path d="M289.534 213.303H303.417" stroke="black" stroke-linecap="round"/>
+<path d="M286.049 213.303H287.882" stroke="black" stroke-linecap="round"/>
+<path d="M288.227 216.207H293.69" stroke="black" stroke-linecap="round"/>
+<path d="M286.049 216.207H286.721" stroke="black" stroke-linecap="round"/>
+<path d="M295.196 216.207H303.417" stroke="black" stroke-linecap="round"/>
+<path d="M286.049 219.111H303.418" stroke="black" stroke-linecap="round"/>
+<path d="M286.049 222.015H303.418" stroke="black" stroke-linecap="round"/>
+<path d="M286.049 224.918H303.418" stroke="black" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="272.965" y="186.176">No seed topic </tspan><tspan x="274.754" y="196.176">match found</tspan></text>
+<path d="M374.832 200H352.78C352.349 200 352 200.349 352 200.78V229.22C352 229.651 352.349 230 352.78 230H374.832C375.262 230 375.612 229.651 375.612 229.22V200.78C375.612 200.349 375.262 200 374.832 200Z" fill="white" stroke="black"/>
+<path d="M355.049 204.447H372.418" stroke="black" stroke-linecap="round"/>
+<path d="M359.405 207.496H372.417" stroke="black" stroke-linecap="round"/>
+<path d="M355.049 207.496H357.753" stroke="black" stroke-linecap="round"/>
+<path d="M355.049 210.4H372.418" stroke="black" stroke-linecap="round"/>
+<path d="M358.534 213.303H372.417" stroke="black" stroke-linecap="round"/>
+<path d="M355.049 213.303H356.882" stroke="black" stroke-linecap="round"/>
+<path d="M357.227 216.207H362.69" stroke="black" stroke-linecap="round"/>
+<path d="M355.049 216.207H355.721" stroke="black" stroke-linecap="round"/>
+<path d="M364.196 216.207H372.417" stroke="black" stroke-linecap="round"/>
+<path d="M355.049 219.111H372.418" stroke="black" stroke-linecap="round"/>
+<path d="M355.049 222.015H372.418" stroke="black" stroke-linecap="round"/>
+<path d="M355.049 224.918H372.418" stroke="black" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="341.18" y="196.176">Seed topic 2&#10;</tspan><tspan x="363" y="206.176">&#10;</tspan></text>
+<circle cx="320" cy="214" r="1" fill="black"/>
+<circle cx="330" cy="214" r="1" fill="black"/>
+<circle cx="340" cy="214" r="1" fill="black"/>
+<rect x="268.5" y="307.5" width="14" height="14" stroke="black"/>
+<rect x="282.5" y="307.5" width="14" height="14" stroke="black"/>
+<rect x="296.5" y="307.5" width="14" height="14" stroke="black"/>
+<rect x="310.5" y="307.5" width="14" height="14" stroke="black"/>
+<rect x="324.5" y="307.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="284.809" y="293.176">seed topic &#10;</tspan><tspan x="284.441" y="303.176">embedding</tspan></text>
+<rect x="180.5" y="307.5" width="14" height="14" stroke="black"/>
+<rect x="194.5" y="307.5" width="14" height="14" stroke="black"/>
+<rect x="208.5" y="307.5" width="14" height="14" stroke="black"/>
+<rect x="222.5" y="307.5" width="14" height="14" stroke="black"/>
+<rect x="236.5" y="307.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="197.254" y="292.176">document &#10;</tspan><tspan x="196.441" y="302.176">embedding</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="256" y="317.176">+</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="256" y="344.176">2</tspan></text>
+<line x1="179" y1="328.5" x2="343" y2="328.5" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="379" y="462.764">Multiply the IDF values of the seeded </tspan><tspan x="379" y="476.764">keywords across all topics with 1.2.</tspan></text>
+<path d="M263.293 392.707C263.683 393.098 264.317 393.098 264.707 392.707L271.071 386.343C271.462 385.953 271.462 385.319 271.071 384.929C270.681 384.538 270.047 384.538 269.657 384.929L264 390.586L258.343 384.929C257.953 384.538 257.319 384.538 256.929 384.929C256.538 385.319 256.538 385.953 256.929 386.343L263.293 392.707ZM263 367L263 392L265 392L265 367L263 367Z" fill="black"/>
+<rect x="162.045" y="400" width="202.259" height="17.7695" fill="white"/>
+<line x1="162.045" y1="417.815" x2="364.305" y2="417.815" stroke="#BDBDBD" stroke-width="2"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="9" font-weight="bold" letter-spacing="0em"><tspan x="178.247" y="414.299">Word</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="9" font-weight="bold" letter-spacing="0em"><tspan x="274.412" y="414.299">IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="9" font-weight="bold" letter-spacing="0em"><tspan x="215.292" y="414.848">Multiplier</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="9" font-weight="bold" letter-spacing="0em"><tspan x="301.927" y="413.693">Adjusted IDF</tspan></text>
+<rect x="162.045" y="418.815" width="202.259" height="17.7695" fill="white"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="179.829" y="431.172">drug</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="217.264" y="431.694">1.2</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="275.276" y="431.694">.55</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="327.539" y="431.694">.66</tspan></text>
+<rect x="162.045" y="436.062" width="202.259" height="17.7695" fill="#F5F5F5"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="217.264" y="448.419">1.2</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="173.649" y="448.419">doctor</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="275.276" y="448.941">.78</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="327.539" y="448.941">.94</tspan></text>
+<rect x="162.045" y="453.831" width="202.259" height="17.7695" fill="white"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="185.438" y="466.188">cat</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="224.053" y="466.711">1&#10;</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="275.276" y="466.188">.22</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="327.539" y="466.188">.22</tspan></text>
+<rect x="162.045" y="471.601" width="202.259" height="17.7695" fill="#F5F5F5"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="224.053" y="483.958">1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="182.812" y="484.176">dog</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="275.276" y="483.958">.11</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="327.539" y="483.958">.11</tspan></text>
+<rect x="162.045" y="489.37" width="202.259" height="17.7695" fill="white"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="175.915" y="501.727">space</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="217.264" y="502.25">1.2</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="275.276" y="502.772">.35</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="327.539" y="502.772">.42</tspan></text>
+<rect x="162.045" y="507.14" width="202.259" height="17.7695" fill="#F5F5F5"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="217.264" y="519.497">1.2&#10;</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="172.907" y="519.497">launch</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="275.276" y="519.497">.89</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="323.172" y="519.497">1.07</tspan></text>
+</svg>

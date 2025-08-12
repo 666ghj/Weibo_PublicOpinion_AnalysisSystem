@@ -1,0 +1,49 @@
+<svg width="320" height="252" viewBox="0 0 320 252" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="202" y="210" width="118" height="38" fill="#64B5F6"/>
+<rect x="294" y="200" width="20" height="8" fill="#64B5F6"/>
+<rect x="266" y="200" width="20" height="8" fill="#64B5F6"/>
+<rect x="238" y="200" width="20" height="8" fill="#64B5F6"/>
+<rect x="210" y="200" width="20" height="8" fill="#64B5F6"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="228.256" y="237.939">SBERT</tspan></text>
+<rect x="202" y="170" width="118" height="38" fill="#E57373"/>
+<rect x="294" y="160" width="20" height="8" fill="#E57373"/>
+<rect x="266" y="160" width="20" height="8" fill="#E57373"/>
+<rect x="238" y="160" width="20" height="8" fill="#E57373"/>
+<rect x="210" y="160" width="20" height="8" fill="#E57373"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="231.254" y="197.939">UMAP</tspan></text>
+<rect x="202" y="130" width="118" height="38" fill="#4DB6AC"/>
+<rect x="294" y="120" width="20" height="8" fill="#4DB6AC"/>
+<rect x="266" y="120" width="20" height="8" fill="#4DB6AC"/>
+<rect x="238" y="120" width="20" height="8" fill="#4DB6AC"/>
+<rect x="210" y="120" width="20" height="8" fill="#4DB6AC"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="211.342" y="157.939">HDBSCAN</tspan></text>
+<rect x="202" y="90" width="118" height="38" fill="#FFD54F"/>
+<rect x="294" y="80" width="20" height="8" fill="#FFD54F"/>
+<rect x="266" y="80" width="20" height="8" fill="#FFD54F"/>
+<rect x="238" y="80" width="20" height="8" fill="#FFD54F"/>
+<rect x="210" y="80" width="20" height="8" fill="#FFD54F"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="208.346" y="113.161">CountVectorizer</tspan></text>
+<rect x="202" y="50" width="118" height="38" fill="#90A4AE"/>
+<rect x="294" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="266" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="238" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="210" y="40" width="20" height="8" fill="#90A4AE"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="216.938" y="77.9395">c-TF-IDF</tspan></text>
+<rect x="202" y="10" width="118" height="38" fill="#3F51B5"/>
+<rect x="294" width="20" height="8" fill="#3F51B5"/>
+<rect x="266" width="20" height="8" fill="#3F51B5"/>
+<rect x="238" width="20" height="8" fill="#3F51B5"/>
+<rect x="210" width="20" height="8" fill="#3F51B5"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="14" font-weight="bold" letter-spacing="0em"><tspan x="231.065" y="25.0576">Optional&#10;</tspan><tspan x="220.271" y="42.0576">Fine-tuning</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="85.4023" y="65.7637">Weighting scheme</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="138.938" y="111.764">Tokenizer</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="136.312" y="153.764">Clustering</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="43.1602" y="193.764">Dimensionality Reduction</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="124.301" y="233.764">Embeddings</tspan></text>
+<path d="M169.354 203.646C169.158 203.451 168.842 203.451 168.646 203.646L165.464 206.828C165.269 207.024 165.269 207.34 165.464 207.536C165.66 207.731 165.976 207.731 166.172 207.536L169 204.707L171.828 207.536C172.024 207.731 172.34 207.731 172.536 207.536C172.731 207.34 172.731 207.024 172.536 206.828L169.354 203.646ZM169.5 218L169.5 204L168.5 204L168.5 218L169.5 218Z" fill="black"/>
+<path d="M169.354 75.6464C169.158 75.4512 168.842 75.4512 168.646 75.6464L165.464 78.8284C165.269 79.0237 165.269 79.3403 165.464 79.5355C165.66 79.7308 165.976 79.7308 166.172 79.5355L169 76.7071L171.828 79.5355C172.024 79.7308 172.34 79.7308 172.536 79.5355C172.731 79.3403 172.731 79.0237 172.536 78.8284L169.354 75.6464ZM169.5 90L169.5 76L168.5 76L168.5 90L169.5 90Z" fill="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="36.6289" y="25.7637">Fine-tune Representations</tspan></text>
+<path d="M169.354 35.6464C169.158 35.4512 168.842 35.4512 168.646 35.6464L165.464 38.8284C165.269 39.0237 165.269 39.3403 165.464 39.5355C165.66 39.7308 165.976 39.7308 166.172 39.5355L169 36.7071L171.828 39.5355C172.024 39.7308 172.34 39.7308 172.536 39.5355C172.731 39.3403 172.731 39.0237 172.536 38.8284L169.354 35.6464ZM169.5 50L169.5 36L168.5 36L168.5 50L169.5 50Z" fill="black"/>
+<path d="M169.354 120.646C169.158 120.451 168.842 120.451 168.646 120.646L165.464 123.828C165.269 124.024 165.269 124.34 165.464 124.536C165.66 124.731 165.976 124.731 166.172 124.536L169 121.707L171.828 124.536C172.024 124.731 172.34 124.731 172.536 124.536C172.731 124.34 172.731 124.024 172.536 123.828L169.354 120.646ZM169.5 135L169.5 121L168.5 121L168.5 135L169.5 135Z" fill="black"/>
+<path d="M169.354 162.646C169.158 162.451 168.842 162.451 168.646 162.646L165.464 165.828C165.269 166.024 165.269 166.34 165.464 166.536C165.66 166.731 165.976 166.731 166.172 166.536L169 163.707L171.828 166.536C172.024 166.731 172.34 166.731 172.536 166.536C172.731 166.34 172.731 166.024 172.536 165.828L169.354 162.646ZM169.5 177L169.5 163L168.5 163L168.5 177L169.5 177Z" fill="black"/>
+</svg>

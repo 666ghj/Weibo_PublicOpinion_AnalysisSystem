@@ -1,0 +1,17 @@
+<svg width="736" height="66" viewBox="0 0 736 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" y="12.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="47.2617" y="35.7637"> n</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="15" y="35.7637">Topic</tspan></text>
+<rect x="250.5" y="3.5" width="137" height="58" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="265.062" y="19.8636">Extract documents </tspan><tspan x="261.992" y="34.8636">that contain at least </tspan><tspan x="282.183" y="49.8636">one keyword</tspan></text>
+<rect x="605.5" y="12.5" width="130" height="44" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="620.495" y="28.8636">Sort keywords by </tspan><tspan x="613.481" y="43.8636">their c-TF-IDF value</tspan></text>
+<rect x="419.5" y="0.5" width="153" height="65" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="425.06" y="15.8636">Use the POS matcher on </tspan><tspan x="438.109" y="30.8636">those documents to </tspan><tspan x="426.039" y="45.8636">generate new candidate </tspan><tspan x="467.628" y="60.8636">keywords</tspan></text>
+<path d="M93.7071 33.7071C94.0976 33.3166 94.0976 32.6834 93.7071 32.2929L87.3431 25.9289C86.9526 25.5384 86.3195 25.5384 85.9289 25.9289C85.5384 26.3195 85.5384 26.9526 85.9289 27.3431L91.5858 33L85.9289 38.6569C85.5384 39.0474 85.5384 39.6805 85.9289 40.0711C86.3195 40.4616 86.9526 40.4616 87.3431 40.0711L93.7071 33.7071ZM75 34L93 34V32L75 32V34Z" fill="black"/>
+<path d="M243.707 33.7071C244.098 33.3166 244.098 32.6834 243.707 32.2929L237.343 25.9289C236.953 25.5384 236.319 25.5384 235.929 25.9289C235.538 26.3195 235.538 26.9526 235.929 27.3431L241.586 33L235.929 38.6569C235.538 39.0474 235.538 39.6805 235.929 40.0711C236.319 40.4616 236.953 40.4616 237.343 40.0711L243.707 33.7071ZM225 34L243 34V32L225 32V34Z" fill="black"/>
+<path d="M411.707 33.7071C412.098 33.3166 412.098 32.6834 411.707 32.2929L405.343 25.9289C404.953 25.5384 404.319 25.5384 403.929 25.9289C403.538 26.3195 403.538 26.9526 403.929 27.3431L409.586 33L403.929 38.6569C403.538 39.0474 403.538 39.6805 403.929 40.0711C404.319 40.4616 404.953 40.4616 405.343 40.0711L411.707 33.7071ZM393 34L411 34V32L393 32V34Z" fill="black"/>
+<path d="M597.707 33.7071C598.098 33.3166 598.098 32.6834 597.707 32.2929L591.343 25.9289C590.953 25.5384 590.319 25.5384 589.929 25.9289C589.538 26.3195 589.538 26.9526 589.929 27.3431L595.586 33L589.929 38.6569C589.538 39.0474 589.538 39.6805 589.929 40.0711C590.319 40.4616 590.953 40.4616 591.343 40.0711L597.707 33.7071ZM579 34L597 34V32L579 32V34Z" fill="black"/>
+<rect x="100.5" y="11.5" width="119" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="109.606" y="27.8636">Extract candidate </tspan><tspan x="132.381" y="42.8636">keywords</tspan></text>
+</svg>

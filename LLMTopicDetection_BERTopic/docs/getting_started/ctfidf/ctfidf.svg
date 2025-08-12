@@ -1,0 +1,53 @@
+<svg width="445" height="248" viewBox="0 0 445 248" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="132" y="210" width="118" height="38" fill="#64B5F6"/>
+<rect x="224" y="200" width="20" height="8" fill="#64B5F6"/>
+<rect x="196" y="200" width="20" height="8" fill="#64B5F6"/>
+<rect x="168" y="200" width="20" height="8" fill="#64B5F6"/>
+<rect x="140" y="200" width="20" height="8" fill="#64B5F6"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="158.256" y="237.939">SBERT</tspan></text>
+<rect x="132" y="170" width="118" height="38" fill="#E57373"/>
+<rect x="224" y="160" width="20" height="8" fill="#E57373"/>
+<rect x="196" y="160" width="20" height="8" fill="#E57373"/>
+<rect x="168" y="160" width="20" height="8" fill="#E57373"/>
+<rect x="140" y="160" width="20" height="8" fill="#E57373"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="161.254" y="197.939">UMAP</tspan></text>
+<rect x="132" y="130" width="118" height="38" fill="#4DB6AC"/>
+<rect x="224" y="120" width="20" height="8" fill="#4DB6AC"/>
+<rect x="196" y="120" width="20" height="8" fill="#4DB6AC"/>
+<rect x="168" y="120" width="20" height="8" fill="#4DB6AC"/>
+<rect x="140" y="120" width="20" height="8" fill="#4DB6AC"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="141.342" y="157.939">HDBSCAN</tspan></text>
+<rect y="50" width="118" height="38" fill="#90A4AE"/>
+<rect x="92" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="64" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="36" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="8" y="40" width="20" height="8" fill="#90A4AE"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="23.1357" y="66.1606">c-TF-IDF +&#10;</tspan><tspan x="40.4521" y="82.1606">BM25</tspan></text>
+<rect x="132" y="90" width="118" height="38" fill="#FFD54F"/>
+<rect x="224" y="80" width="20" height="8" fill="#FFD54F"/>
+<rect x="196" y="80" width="20" height="8" fill="#FFD54F"/>
+<rect x="168" y="80" width="20" height="8" fill="#FFD54F"/>
+<rect x="140" y="80" width="20" height="8" fill="#FFD54F"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="138.346" y="113.161">CountVectorizer</tspan></text>
+<rect x="132" y="50" width="118" height="38" fill="#90A4AE"/>
+<rect x="224" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="196" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="168" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="140" y="40" width="20" height="8" fill="#90A4AE"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="146.938" y="77.9395">c-TF-IDF</tspan></text>
+<rect x="132" y="10" width="118" height="38" fill="#3F51B5"/>
+<rect x="224" width="20" height="8" fill="#3F51B5"/>
+<rect x="196" width="20" height="8" fill="#3F51B5"/>
+<rect x="168" width="20" height="8" fill="#3F51B5"/>
+<rect x="140" width="20" height="8" fill="#3F51B5"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="14" font-weight="bold" letter-spacing="0em"><tspan x="161.065" y="26.0576">Optional&#10;</tspan><tspan x="150.271" y="43.0576">Fine-tuning</tspan></text>
+<rect x="327" y="50" width="118" height="38" fill="#90A4AE"/>
+<rect x="419" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="391" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="363" y="40" width="20" height="8" fill="#90A4AE"/>
+<rect x="335" y="40" width="20" height="8" fill="#90A4AE"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="14" font-weight="bold" letter-spacing="0em"><tspan x="345.326" y="67.0576">c-TF-IDF + &#10;</tspan><tspan x="336.453" y="84.0576">Normalization</tspan></text>
+<circle cx="266.5" cy="68.5" r="5.5" fill="black"/>
+<circle cx="285.5" cy="68.5" r="5.5" fill="black"/>
+<circle cx="307.5" cy="68.5" r="5.5" fill="black"/>
+</svg>

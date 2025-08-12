@@ -1,0 +1,257 @@
+<svg width="992" height="452" viewBox="0 0 992 452" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="803.5" cy="229.5" r="5.5" fill="black"/>
+<circle cx="823.5" cy="229.5" r="5.5" fill="black"/>
+<circle cx="843.5" cy="229.5" r="5.5" fill="black"/>
+<rect x="121" y="411" width="118" height="38" fill="#64B5F6"/>
+<rect x="213" y="401" width="20" height="8" fill="#64B5F6"/>
+<rect x="185" y="401" width="20" height="8" fill="#64B5F6"/>
+<rect x="157" y="401" width="20" height="8" fill="#64B5F6"/>
+<rect x="129" y="401" width="20" height="8" fill="#64B5F6"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="147.256" y="438.939">SBERT</tspan></text>
+<rect x="253" y="411" width="118" height="38" fill="#64B5F6"/>
+<rect x="345" y="401" width="20" height="8" fill="#64B5F6"/>
+<rect x="317" y="401" width="20" height="8" fill="#64B5F6"/>
+<rect x="289" y="401" width="20" height="8" fill="#64B5F6"/>
+<rect x="261" y="401" width="20" height="8" fill="#64B5F6"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="280.936" y="438.939">SpaCy</tspan></text>
+<rect x="448" y="411" width="118" height="38" fill="#64B5F6"/>
+<rect x="540" y="401" width="20" height="8" fill="#64B5F6"/>
+<rect x="512" y="401" width="20" height="8" fill="#64B5F6"/>
+<rect x="484" y="401" width="20" height="8" fill="#64B5F6"/>
+<rect x="456" y="401" width="20" height="8" fill="#64B5F6"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="479.623" y="433.764">Transformers</tspan></text>
+<circle cx="387.5" cy="429.5" r="5.5" fill="black"/>
+<circle cx="406.5" cy="429.5" r="5.5" fill="black"/>
+<circle cx="428.5" cy="429.5" r="5.5" fill="black"/>
+<path d="M466.944 437.706C463.02 437.706 458.787 435.245 458.787 429.845C458.787 424.445 463.02 421.984 466.944 421.984C469.123 421.984 471.134 422.702 472.625 424.009C474.242 425.444 475.1 427.469 475.1 429.845C475.1 432.222 474.242 434.233 472.625 435.667C471.134 436.975 469.109 437.706 466.944 437.706Z" fill="url(#paint0_radial_31_1943)"/>
+<path d="M466.944 437.706C463.02 437.706 458.787 435.245 458.787 429.845C458.787 424.445 463.02 421.984 466.944 421.984C469.123 421.984 471.134 422.702 472.625 424.009C474.242 425.444 475.1 427.469 475.1 429.845C475.1 432.222 474.242 434.233 472.625 435.667C471.134 436.975 469.109 437.706 466.944 437.706Z" fill="url(#paint1_linear_31_1943)"/>
+<path d="M473.678 425.172C474.428 426.382 474.819 427.822 474.819 429.423C474.819 431.8 473.961 433.811 472.344 435.245C470.853 436.553 468.828 437.284 466.663 437.284C464.123 437.284 461.454 436.251 459.887 434.058C461.4 436.542 464.245 437.706 466.944 437.706C469.109 437.706 471.134 436.975 472.625 435.667C474.242 434.233 475.1 432.222 475.1 429.845C475.1 428.054 474.612 426.462 473.678 425.172V425.172Z" fill="#EB8F00"/>
+<path opacity="0.8" d="M462.177 432.306C463.443 432.306 464.469 431.28 464.469 430.014C464.469 428.748 463.443 427.722 462.177 427.722C460.911 427.722 459.884 428.748 459.884 430.014C459.884 431.28 460.911 432.306 462.177 432.306Z" fill="url(#paint2_radial_31_1943)"/>
+<path opacity="0.8" d="M471.627 430.534C472.893 430.534 473.919 429.508 473.919 428.242C473.919 426.976 472.893 425.95 471.627 425.95C470.361 425.95 469.334 426.976 469.334 428.242C469.334 429.508 470.361 430.534 471.627 430.534Z" fill="url(#paint3_radial_31_1943)"/>
+<path d="M471.627 427.947C470.544 428.945 469.109 429.733 467.45 430.113C465.791 430.492 464.159 430.422 462.753 429.986C462.5 429.902 462.317 430.239 462.542 430.408C463.962 431.463 465.861 431.913 467.759 431.463C469.658 431.027 471.177 429.803 471.992 428.228C472.133 427.989 471.823 427.764 471.627 427.947V427.947Z" fill="#422B0D"/>
+<path d="M464.82 427.638L464.792 427.609C464.778 427.595 464.75 427.581 464.722 427.553C464.694 427.539 464.666 427.511 464.637 427.497C464.609 427.469 464.567 427.441 464.525 427.413C464.483 427.384 464.441 427.356 464.398 427.342C464.356 427.314 464.314 427.3 464.272 427.3C464.23 427.286 464.202 427.286 464.187 427.286H464.159H464.145H464.173L464.103 427.3C464.089 427.3 464.103 427.3 464.103 427.3H464.117C464.131 427.3 464.117 427.3 464.117 427.3H464.103C464.089 427.314 464.061 427.328 464.033 427.342C464.005 427.37 463.962 427.398 463.934 427.427C463.906 427.455 463.878 427.497 463.85 427.539C463.794 427.623 463.752 427.694 463.723 427.75C463.695 427.806 463.667 427.834 463.667 427.834L463.639 427.891C463.498 428.13 463.189 428.228 462.936 428.102C462.767 428.017 462.669 427.863 462.655 427.694V427.539C462.669 427.441 462.683 427.3 462.739 427.131C462.795 426.963 462.894 426.752 463.077 426.555C463.175 426.456 463.287 426.344 463.428 426.273C463.456 426.245 463.498 426.231 463.541 426.217C463.583 426.203 463.611 426.175 463.667 426.161L463.737 426.133C463.766 426.119 463.794 426.119 463.808 426.119L463.878 426.105L463.92 426.091H463.977L464.047 426.077H464.173C464.258 426.077 464.342 426.077 464.427 426.091C464.595 426.119 464.736 426.175 464.862 426.231C465.116 426.358 465.27 426.513 465.397 426.639C465.453 426.709 465.509 426.766 465.537 426.822C465.58 426.878 465.608 426.934 465.636 426.977C465.664 427.019 465.664 427.047 465.678 427.061C465.678 427.075 465.692 427.089 465.692 427.089C465.791 427.342 465.65 427.623 465.369 427.722C465.172 427.792 464.961 427.75 464.82 427.638V427.638Z" fill="#422B0D"/>
+<path d="M469.644 426.695L469.616 426.667C469.602 426.653 469.573 426.639 469.545 426.611C469.517 426.597 469.489 426.569 469.461 426.555C469.433 426.527 469.391 426.498 469.348 426.47C469.306 426.442 469.264 426.414 469.222 426.4C469.18 426.372 469.137 426.358 469.095 426.358C469.067 426.344 469.039 426.344 469.025 426.344H468.983H469.011L468.941 426.358C468.927 426.358 468.941 426.358 468.941 426.358H468.955C468.969 426.358 468.955 426.358 468.955 426.358H468.941C468.927 426.372 468.898 426.386 468.856 426.4C468.828 426.428 468.8 426.456 468.758 426.484C468.73 426.513 468.702 426.555 468.673 426.597C468.617 426.681 468.575 426.752 468.547 426.808C468.519 426.864 468.491 426.892 468.491 426.892L468.462 426.934C468.322 427.173 468.012 427.272 467.759 427.145C467.591 427.061 467.492 426.906 467.478 426.738C467.478 426.738 467.478 426.681 467.492 426.583C467.506 426.484 467.52 426.344 467.577 426.175C467.633 426.006 467.731 425.795 467.914 425.598C468.012 425.5 468.125 425.388 468.266 425.317C468.294 425.303 468.336 425.275 468.378 425.261C468.42 425.247 468.448 425.219 468.505 425.205L468.589 425.177C468.617 425.163 468.645 425.163 468.659 425.163L468.73 425.148L468.772 425.134H468.828L468.898 425.12H469.025C469.109 425.12 469.194 425.12 469.278 425.134C469.447 425.163 469.587 425.219 469.714 425.275C469.967 425.402 470.122 425.556 470.248 425.683C470.305 425.753 470.361 425.809 470.389 425.866C470.431 425.922 470.459 425.978 470.487 426.02C470.516 426.063 470.516 426.091 470.53 426.105C470.544 426.119 470.544 426.133 470.544 426.133C470.642 426.386 470.502 426.667 470.22 426.766C469.995 426.864 469.784 426.822 469.644 426.695V426.695Z" fill="#422B0D"/>
+<path d="M464.029 432.62C463.993 432.27 464.009 432.07 463.74 432.007C463.439 431.936 463.171 432.152 463.089 432.46C462.874 433.284 463.24 433.859 463.24 433.859C462.719 433.756 462.285 433.25 462.285 433.25C462.013 432.931 461.631 432.137 461.367 431.811C461.206 431.613 460.943 431.451 460.682 431.588C460.055 431.917 460.749 433.036 460.983 433.334C461.248 433.673 460.292 432.589 460.152 432.353C459.89 431.914 459.569 431.797 459.301 432.026C459.032 432.254 459.247 432.824 459.37 433.04C460.119 434.355 460.773 434.677 460.773 434.677C460.773 434.677 460.077 434.342 459.484 433.624C458.924 432.946 458.392 433.662 458.765 434.264C458.844 434.392 458.994 434.722 459.478 435.14C459.849 435.46 459.607 435.268 459.478 435.14C458.983 434.652 458.456 435.172 458.615 435.598C458.799 436.089 459.399 436.543 459.806 436.844C460.596 437.429 461.582 437.897 462.58 437.865C463.691 437.83 464.511 437.367 464.757 435.993C464.871 435.355 464.515 434.376 464.41 434.126C464.065 433.316 464.048 432.818 464.029 432.62Z" fill="url(#paint4_radial_31_1943)"/>
+<path d="M462.913 436.038C462.764 435.829 462.344 434.856 463.129 433.86L463.356 434.004C462.468 435.1 463.089 436.037 463.197 436.249C463.197 436.249 463.055 436.24 462.913 436.038V436.038Z" fill="#EB8F00"/>
+<path d="M464.497 434.036C464.148 433.36 464.123 433.008 464.099 432.623C464.072 432.344 464.052 432 463.716 431.921C463.573 431.887 463.373 431.907 463.196 432.102C462.753 432.595 463.106 433.739 463.106 433.739C462.469 433.441 462.362 433.178 461.911 432.499C461.714 432.201 461.4 431.65 461.113 431.489C460.908 431.374 460.604 431.46 460.452 431.665C460.111 432.123 460.72 433.053 460.72 433.053C460.72 433.053 460.384 432.564 460.237 432.308C459.988 431.873 459.533 431.633 459.197 431.935C458.648 432.429 459.714 433.756 459.714 433.756C459.714 433.756 459.223 432.978 458.734 433.307C458.48 433.479 458.38 433.926 458.644 434.357C458.761 434.552 459.057 434.898 459.057 434.898C459.057 434.898 458.938 434.822 458.738 434.887C458.516 434.96 458.326 435.235 458.488 435.666C458.675 436.169 459.229 436.605 459.734 436.969C460.883 437.799 462.226 437.85 462.226 437.85C462.226 437.85 460.753 437.567 459.811 436.709C459.516 436.441 458.346 435.624 458.764 435.199C458.862 435.098 459.042 435.047 459.308 435.258C460.243 436.003 460.562 435.83 460.562 435.83C460.596 435.701 460.503 435.646 460.225 435.482C460.032 435.368 459.768 435.212 459.572 435.044C459.093 434.629 458.551 433.908 458.848 433.587C459.007 433.416 459.191 433.452 459.37 433.637C460.613 434.905 460.905 434.726 460.905 434.726C460.905 434.726 460.943 434.589 460.551 434.244C460.25 433.981 459.88 433.656 459.423 432.86C459.302 432.649 459.24 432.274 459.417 432.126C459.657 431.924 459.877 432.057 460.076 432.354C460.317 432.715 460.661 433.16 461.002 433.487C461.416 433.883 461.638 434.004 461.652 433.99C461.75 433.883 461.327 433.468 461.139 433.209C460.475 432.294 460.485 431.993 460.623 431.755C460.71 431.605 460.95 431.537 461.24 431.901C461.864 432.621 462.179 433.793 463.355 434.001C463.355 434.001 463.4 433.93 463.295 433.549C463.168 433.151 463.147 432.812 463.212 432.516C463.283 432.188 463.546 432.095 463.691 432.13C463.885 432.177 463.863 432.503 463.863 432.503C463.863 432.503 463.874 432.623 463.88 432.677C463.902 432.914 463.948 433.406 464.275 434.165C464.405 434.469 465.103 435.718 464.158 437.28C464.158 437.28 464.559 437.383 465.019 437.49C465.019 437.49 465.2 436.85 465.116 435.856C465.013 434.605 464.732 434.492 464.497 434.036V434.036Z" fill="#EB8F00"/>
+<path d="M458.077 435.438C458.082 435.399 458.087 435.365 458.094 435.335C458.084 435.368 458.079 435.401 458.077 435.438Z" fill="url(#paint5_radial_31_1943)"/>
+<path d="M469.843 432.62C469.879 432.27 469.865 432.077 470.132 432.007C470.419 431.932 470.696 432.153 470.783 432.46C470.984 433.18 470.599 433.859 470.599 433.859C471.119 433.756 471.56 433.257 471.56 433.257C471.832 432.938 472.242 432.137 472.505 431.811C472.666 431.613 472.856 431.485 473.131 431.586C473.701 431.797 473.106 432.95 472.872 433.25C472.607 433.589 472.775 433.534 473.133 433.142C473.491 432.746 473.681 432.523 473.822 432.288C474.083 431.849 474.397 431.883 474.571 432.026C474.844 432.251 474.625 432.824 474.502 433.04C473.753 434.355 474.388 433.624 474.388 433.624C474.948 432.946 475.48 433.662 475.107 434.264C475.028 434.392 474.878 434.722 474.394 435.14C474.023 435.46 474.265 435.268 474.394 435.14C474.889 434.652 475.416 435.172 475.257 435.598C475.073 436.089 474.473 436.543 474.066 436.844C473.276 437.429 472.29 437.897 471.292 437.865C470.181 437.83 469.361 437.367 469.115 435.993C469.001 435.355 469.357 434.376 469.462 434.126C469.807 433.316 469.824 432.818 469.843 432.62V432.62Z" fill="url(#paint6_radial_31_1943)"/>
+<path d="M470.959 436.038C471.108 435.829 471.528 434.856 470.743 433.86L470.516 434.004C471.404 435.1 470.783 436.037 470.675 436.249C470.675 436.249 470.817 436.24 470.959 436.038V436.038Z" fill="#EB8F00"/>
+<path d="M469.375 434.036C469.724 433.36 469.749 433.008 469.773 432.623C469.8 432.344 469.82 432 470.156 431.921C470.299 431.887 470.499 431.907 470.676 432.102C471.119 432.595 470.766 433.739 470.766 433.739C471.403 433.441 471.51 433.178 471.961 432.499C472.158 432.201 472.472 431.65 472.759 431.489C472.964 431.374 473.268 431.46 473.42 431.665C473.761 432.123 473.152 433.053 473.152 433.053C473.152 433.053 473.488 432.564 473.635 432.308C473.884 431.873 474.339 431.633 474.675 431.935C475.224 432.429 474.158 433.756 474.158 433.756C474.158 433.756 474.649 432.978 475.138 433.307C475.392 433.479 475.492 433.926 475.228 434.357C475.111 434.552 474.815 434.898 474.815 434.898C474.815 434.898 474.934 434.822 475.134 434.887C475.356 434.96 475.546 435.235 475.384 435.666C475.197 436.169 474.643 436.605 474.138 436.969C472.989 437.799 471.646 437.85 471.646 437.85C471.646 437.85 473.119 437.567 474.061 436.709C474.356 436.441 475.526 435.624 475.108 435.199C475.01 435.098 474.83 435.047 474.564 435.258C473.629 436.003 473.31 435.83 473.31 435.83C473.276 435.701 473.369 435.646 473.647 435.482C473.84 435.368 474.104 435.212 474.3 435.044C474.779 434.629 475.321 433.908 475.024 433.587C474.865 433.416 474.681 433.452 474.502 433.637C473.259 434.905 472.967 434.726 472.967 434.726C472.967 434.726 472.929 434.589 473.321 434.244C473.622 433.981 473.992 433.656 474.449 432.86C474.57 432.649 474.632 432.274 474.455 432.126C474.215 431.924 473.995 432.057 473.796 432.354C473.555 432.715 473.211 433.16 472.87 433.487C472.456 433.883 472.234 434.004 472.22 433.99C472.122 433.883 472.545 433.468 472.733 433.209C473.397 432.294 473.387 431.993 473.249 431.755C473.162 431.605 472.922 431.537 472.632 431.901C472.005 432.624 471.69 433.795 470.516 434.004C470.516 434.004 470.471 433.933 470.576 433.552C470.703 433.154 470.724 432.815 470.659 432.519C470.587 432.191 470.324 432.098 470.18 432.133C469.985 432.18 470.008 432.506 470.008 432.506C470.008 432.506 469.997 432.625 469.991 432.68C469.969 432.917 469.922 433.409 469.596 434.168C469.465 434.472 468.766 435.733 469.713 437.283C469.713 437.283 469.312 437.386 468.852 437.492C468.852 437.492 468.671 436.853 468.755 435.858C468.859 434.605 469.14 434.492 469.375 434.036V434.036Z" fill="#EB8F00"/>
+<path d="M475.795 435.438C475.79 435.399 475.785 435.365 475.778 435.335C475.788 435.368 475.793 435.401 475.795 435.438Z" fill="url(#paint7_radial_31_1943)"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="29.3008" y="432.764">Embeddings</tspan></text>
+<rect x="121" y="331" width="118" height="38" fill="#E57373"/>
+<rect x="213" y="321" width="20" height="8" fill="#E57373"/>
+<rect x="185" y="321" width="20" height="8" fill="#E57373"/>
+<rect x="157" y="321" width="20" height="8" fill="#E57373"/>
+<rect x="129" y="321" width="20" height="8" fill="#E57373"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="150.254" y="358.939">UMAP</tspan></text>
+<rect x="253" y="331" width="118" height="38" fill="#E57373"/>
+<rect x="345" y="321" width="20" height="8" fill="#E57373"/>
+<rect x="317" y="321" width="20" height="8" fill="#E57373"/>
+<rect x="289" y="321" width="20" height="8" fill="#E57373"/>
+<rect x="261" y="321" width="20" height="8" fill="#E57373"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="291.902" y="358.939">PCA</tspan></text>
+<rect x="448" y="331" width="118" height="38" fill="#E57373"/>
+<rect x="540" y="321" width="20" height="8" fill="#E57373"/>
+<rect x="512" y="321" width="20" height="8" fill="#E57373"/>
+<rect x="484" y="321" width="20" height="8" fill="#E57373"/>
+<rect x="456" y="321" width="20" height="8" fill="#E57373"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="14" font-weight="bold" letter-spacing="0em"><tspan x="456.886" y="356.058">TruncatedSVD</tspan></text>
+<circle cx="387.5" cy="349.5" r="5.5" fill="black"/>
+<circle cx="407.5" cy="349.5" r="5.5" fill="black"/>
+<circle cx="427.5" cy="349.5" r="5.5" fill="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="12.8008" y="346.764">Dimensionality&#10;</tspan><tspan x="41.875" y="360.764">Reduction</tspan></text>
+<rect x="121" y="251" width="118" height="38" fill="#4DB6AC"/>
+<rect x="213" y="241" width="20" height="8" fill="#4DB6AC"/>
+<rect x="185" y="241" width="20" height="8" fill="#4DB6AC"/>
+<rect x="157" y="241" width="20" height="8" fill="#4DB6AC"/>
+<rect x="129" y="241" width="20" height="8" fill="#4DB6AC"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="130.342" y="278.939">HDBSCAN</tspan></text>
+<rect x="253" y="251" width="118" height="38" fill="#4DB6AC"/>
+<rect x="345" y="241" width="20" height="8" fill="#4DB6AC"/>
+<rect x="317" y="241" width="20" height="8" fill="#4DB6AC"/>
+<rect x="289" y="241" width="20" height="8" fill="#4DB6AC"/>
+<rect x="261" y="241" width="20" height="8" fill="#4DB6AC"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="269.246" y="278.939">k-Means</tspan></text>
+<rect x="448" y="251" width="118" height="38" fill="#4DB6AC"/>
+<rect x="540" y="241" width="20" height="8" fill="#4DB6AC"/>
+<rect x="512" y="241" width="20" height="8" fill="#4DB6AC"/>
+<rect x="484" y="241" width="20" height="8" fill="#4DB6AC"/>
+<rect x="456" y="241" width="20" height="8" fill="#4DB6AC"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="472.709" y="278.939">BIRCH</tspan></text>
+<circle cx="387.5" cy="269.5" r="5.5" fill="black"/>
+<circle cx="407.5" cy="269.5" r="5.5" fill="black"/>
+<circle cx="427.5" cy="269.5" r="5.5" fill="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="41.3125" y="273.764">Clustering</tspan></text>
+<rect x="121" y="171" width="118" height="38" fill="#FFD54F"/>
+<rect x="213" y="161" width="20" height="8" fill="#FFD54F"/>
+<rect x="185" y="161" width="20" height="8" fill="#FFD54F"/>
+<rect x="157" y="161" width="20" height="8" fill="#FFD54F"/>
+<rect x="129" y="161" width="20" height="8" fill="#FFD54F"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="127.346" y="195.161">CountVectorizer</tspan></text>
+<rect x="253" y="171" width="118" height="38" fill="#FFD54F"/>
+<rect x="345" y="161" width="20" height="8" fill="#FFD54F"/>
+<rect x="317" y="161" width="20" height="8" fill="#FFD54F"/>
+<rect x="289" y="161" width="20" height="8" fill="#FFD54F"/>
+<rect x="261" y="161" width="20" height="8" fill="#FFD54F"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="285.73" y="198.939">Jieba</tspan></text>
+<rect x="448" y="171" width="118" height="38" fill="#FFD54F"/>
+<rect x="540" y="161" width="20" height="8" fill="#FFD54F"/>
+<rect x="512" y="161" width="20" height="8" fill="#FFD54F"/>
+<rect x="484" y="161" width="20" height="8" fill="#FFD54F"/>
+<rect x="456" y="161" width="20" height="8" fill="#FFD54F"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="486.385" y="198.939">POS</tspan></text>
+<circle cx="387.5" cy="189.5" r="5.5" fill="black"/>
+<circle cx="407.5" cy="189.5" r="5.5" fill="black"/>
+<circle cx="427.5" cy="189.5" r="5.5" fill="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="44.9375" y="193.764">Tokenizer</tspan></text>
+<rect x="662" y="289" width="118" height="38" fill="#64B5F6"/>
+<rect x="754" y="279" width="20" height="8" fill="#64B5F6"/>
+<rect x="726" y="279" width="20" height="8" fill="#64B5F6"/>
+<rect x="698" y="279" width="20" height="8" fill="#64B5F6"/>
+<rect x="670" y="279" width="20" height="8" fill="#64B5F6"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="689.936" y="316.939">SpaCy</tspan></text>
+<rect x="662" y="249" width="118" height="38" fill="#E57373"/>
+<rect x="754" y="239" width="20" height="8" fill="#E57373"/>
+<rect x="726" y="239" width="20" height="8" fill="#E57373"/>
+<rect x="698" y="239" width="20" height="8" fill="#E57373"/>
+<rect x="670" y="239" width="20" height="8" fill="#E57373"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="700.902" y="276.939">PCA</tspan></text>
+<rect x="662" y="209" width="118" height="38" fill="#4DB6AC"/>
+<rect x="754" y="199" width="20" height="8" fill="#4DB6AC"/>
+<rect x="726" y="199" width="20" height="8" fill="#4DB6AC"/>
+<rect x="698" y="199" width="20" height="8" fill="#4DB6AC"/>
+<rect x="670" y="199" width="20" height="8" fill="#4DB6AC"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="678.246" y="236.939">k-Means</tspan></text>
+<rect x="662" y="169" width="118" height="38" fill="#FFD54F"/>
+<rect x="754" y="159" width="20" height="8" fill="#FFD54F"/>
+<rect x="726" y="159" width="20" height="8" fill="#FFD54F"/>
+<rect x="698" y="159" width="20" height="8" fill="#FFD54F"/>
+<rect x="670" y="159" width="20" height="8" fill="#FFD54F"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="668.346" y="193.161">CountVectorizer</tspan></text>
+<rect x="662" y="129" width="118" height="38" fill="#90A4AE"/>
+<rect x="754" y="119" width="20" height="8" fill="#90A4AE"/>
+<rect x="726" y="119" width="20" height="8" fill="#90A4AE"/>
+<rect x="698" y="119" width="20" height="8" fill="#90A4AE"/>
+<rect x="670" y="119" width="20" height="8" fill="#90A4AE"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="676.938" y="156.939">c-TF-IDF</tspan></text>
+<circle cx="387.5" cy="110.5" r="5.5" fill="black"/>
+<circle cx="407.5" cy="110.5" r="5.5" fill="black"/>
+<circle cx="427.5" cy="110.5" r="5.5" fill="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="40.8086" y="106.764">Weighting&#10;</tspan><tspan x="57.1094" y="120.764">scheme</tspan></text>
+<rect x="121" y="91" width="118" height="38" fill="#90A4AE"/>
+<rect x="213" y="81" width="20" height="8" fill="#90A4AE"/>
+<rect x="185" y="81" width="20" height="8" fill="#90A4AE"/>
+<rect x="157" y="81" width="20" height="8" fill="#90A4AE"/>
+<rect x="129" y="81" width="20" height="8" fill="#90A4AE"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="135.938" y="117.939">c-TF-IDF</tspan></text>
+<rect x="253" y="91" width="118" height="38" fill="#90A4AE"/>
+<rect x="345" y="81" width="20" height="8" fill="#90A4AE"/>
+<rect x="317" y="81" width="20" height="8" fill="#90A4AE"/>
+<rect x="289" y="81" width="20" height="8" fill="#90A4AE"/>
+<rect x="261" y="81" width="20" height="8" fill="#90A4AE"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="14" font-weight="bold" letter-spacing="0em"><tspan x="271.326" y="107.058">c-TF-IDF + &#10;</tspan><tspan x="292.025" y="124.058">BM25</tspan></text>
+<rect x="448" y="91" width="118" height="38" fill="#90A4AE"/>
+<rect x="540" y="81" width="20" height="8" fill="#90A4AE"/>
+<rect x="512" y="81" width="20" height="8" fill="#90A4AE"/>
+<rect x="484" y="81" width="20" height="8" fill="#90A4AE"/>
+<rect x="456" y="81" width="20" height="8" fill="#90A4AE"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="14" font-weight="bold" letter-spacing="0em"><tspan x="466.326" y="107.058">c-TF-IDF + &#10;</tspan><tspan x="457.453" y="124.058">Normalization</tspan></text>
+<circle cx="387.5" cy="30.5" r="5.5" fill="black"/>
+<circle cx="407.5" cy="30.5" r="5.5" fill="black"/>
+<circle cx="427.5" cy="30.5" r="5.5" fill="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="10.3984" y="25.7637">Representation&#10;</tspan><tspan x="61.4102" y="39.7637">Tuning</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="51.6484" y="11.7637">(optional)&#10;</tspan></text>
+<rect x="121" y="11" width="118" height="38" fill="#3F51B5"/>
+<rect x="213" y="1" width="20" height="8" fill="#3F51B5"/>
+<rect x="185" y="1" width="20" height="8" fill="#3F51B5"/>
+<rect x="157" y="1" width="20" height="8" fill="#3F51B5"/>
+<rect x="129" y="1" width="20" height="8" fill="#3F51B5"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="135.732" y="37.9395">GPT / T5</tspan></text>
+<rect x="253" y="11" width="118" height="38" fill="#3F51B5"/>
+<rect x="345" y="1" width="20" height="8" fill="#3F51B5"/>
+<rect x="317" y="1" width="20" height="8" fill="#3F51B5"/>
+<rect x="289" y="1" width="20" height="8" fill="#3F51B5"/>
+<rect x="261" y="1" width="20" height="8" fill="#3F51B5"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="266.932" y="37.9395">KeyBERT</tspan></text>
+<rect x="448" y="11" width="118" height="38" fill="#3F51B5"/>
+<rect x="540" y="1" width="20" height="8" fill="#3F51B5"/>
+<rect x="512" y="1" width="20" height="8" fill="#3F51B5"/>
+<rect x="484" y="1" width="20" height="8" fill="#3F51B5"/>
+<rect x="456" y="1" width="20" height="8" fill="#3F51B5"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="481.863" y="37.9395">MMR</tspan></text>
+<rect x="865" y="308" width="118" height="38" fill="#64B5F6"/>
+<rect x="957" y="298" width="20" height="8" fill="#64B5F6"/>
+<rect x="929" y="298" width="20" height="8" fill="#64B5F6"/>
+<rect x="901" y="298" width="20" height="8" fill="#64B5F6"/>
+<rect x="873" y="298" width="20" height="8" fill="#64B5F6"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="889.527" y="335.939">TF-IDF</tspan></text>
+<rect x="865" y="268" width="118" height="38" fill="#E57373"/>
+<rect x="957" y="258" width="20" height="8" fill="#E57373"/>
+<rect x="929" y="258" width="20" height="8" fill="#E57373"/>
+<rect x="901" y="258" width="20" height="8" fill="#E57373"/>
+<rect x="873" y="258" width="20" height="8" fill="#E57373"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="15" font-weight="bold" letter-spacing="0em"><tspan x="871.306" y="293.955">TruncatedSVD</tspan></text>
+<rect x="865" y="228" width="118" height="38" fill="#4DB6AC"/>
+<rect x="957" y="218" width="20" height="8" fill="#4DB6AC"/>
+<rect x="929" y="218" width="20" height="8" fill="#4DB6AC"/>
+<rect x="901" y="218" width="20" height="8" fill="#4DB6AC"/>
+<rect x="873" y="218" width="20" height="8" fill="#4DB6AC"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="890.709" y="255.939">BIRCH</tspan></text>
+<rect x="865" y="188" width="118" height="38" fill="#FFD54F"/>
+<rect x="957" y="178" width="20" height="8" fill="#FFD54F"/>
+<rect x="929" y="178" width="20" height="8" fill="#FFD54F"/>
+<rect x="901" y="178" width="20" height="8" fill="#FFD54F"/>
+<rect x="873" y="178" width="20" height="8" fill="#FFD54F"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="871.346" y="212.161">CountVectorizer</tspan></text>
+<rect x="865" y="148" width="118" height="38" fill="#90A4AE"/>
+<rect x="957" y="138" width="20" height="8" fill="#90A4AE"/>
+<rect x="929" y="138" width="20" height="8" fill="#90A4AE"/>
+<rect x="901" y="138" width="20" height="8" fill="#90A4AE"/>
+<rect x="873" y="138" width="20" height="8" fill="#90A4AE"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="15" font-weight="bold" letter-spacing="0em"><tspan x="889.756" y="163.955">c-TF-IDF &#10;</tspan><tspan x="895.264" y="181.955">+ BM25</tspan></text>
+<rect x="865" y="108" width="118" height="38" fill="#3F51B5"/>
+<rect x="957" y="98" width="20" height="8" fill="#3F51B5"/>
+<rect x="929" y="98" width="20" height="8" fill="#3F51B5"/>
+<rect x="901" y="98" width="20" height="8" fill="#3F51B5"/>
+<rect x="873" y="98" width="20" height="8" fill="#3F51B5"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="904.854" y="133.939">GPT</tspan></text>
+<path d="M642.061 231.061C642.646 230.475 642.646 229.525 642.061 228.939L632.515 219.393C631.929 218.808 630.979 218.808 630.393 219.393C629.808 219.979 629.808 220.929 630.393 221.515L638.879 230L630.393 238.485C629.808 239.071 629.808 240.021 630.393 240.607C630.979 241.192 631.929 241.192 632.515 240.607L642.061 231.061ZM579 231.5L641 231.5L641 228.5L579 228.5L579 231.5Z" fill="black"/>
+<defs>
+<radialGradient id="paint0_radial_31_1943" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(466.944 429.845) scale(8.01)">
+<stop offset="0.5" stop-color="#FDE030"/>
+<stop offset="0.919" stop-color="#F7C02B"/>
+<stop offset="1" stop-color="#F4A223"/>
+</radialGradient>
+<linearGradient id="paint1_linear_31_1943" x1="466.944" y1="437.706" x2="466.944" y2="421.984" gradientUnits="userSpaceOnUse">
+<stop offset="0.158" stop-color="#F4A223"/>
+<stop offset="0.333" stop-color="#F7C02B"/>
+<stop offset="0.807" stop-color="#FDE030" stop-opacity="0"/>
+</linearGradient>
+<radialGradient id="paint2_radial_31_1943" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(462.172 430.015) rotate(-10.6121) scale(2.49432 2.36965)">
+<stop stop-color="#ED7770"/>
+<stop offset="0.9" stop-color="#ED7770" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="paint3_radial_31_1943" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(471.628 428.247) rotate(-10.6121) scale(2.49404 2.36938)">
+<stop stop-color="#ED7770"/>
+<stop offset="0.9" stop-color="#ED7770" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="paint4_radial_31_1943" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(462.552 434.229) scale(5.41589)">
+<stop offset="0.33" stop-color="#FFF176"/>
+<stop offset="1" stop-color="#FFC400"/>
+</radialGradient>
+<radialGradient id="paint5_radial_31_1943" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(462.104 434.2) scale(5.47088 5.47084)">
+<stop offset="0.33" stop-color="#FFF176"/>
+<stop offset="1" stop-color="#FFC400"/>
+</radialGradient>
+<radialGradient id="paint6_radial_31_1943" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(471.321 434.236) rotate(180) scale(5.40773)">
+<stop offset="0.33" stop-color="#FFF176"/>
+<stop offset="1" stop-color="#FFC400"/>
+</radialGradient>
+<radialGradient id="paint7_radial_31_1943" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(471.768 434.2) rotate(180) scale(5.471 5.47084)">
+<stop offset="0.33" stop-color="#FFF176"/>
+<stop offset="1" stop-color="#FFC400"/>
+</radialGradient>
+</defs>
+</svg>

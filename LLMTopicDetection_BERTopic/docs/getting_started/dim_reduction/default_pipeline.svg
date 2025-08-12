@@ -1,0 +1,18 @@
+<svg width="534" height="57" viewBox="0 0 534 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="534" height="57" fill="white"/>
+<rect x="0.5" y="14.5" width="88" height="42" fill="white" stroke="black"/>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="30" y="10.9697">SBERT</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="183" y="10.9697">UMAP</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="313" y="10.9697">HDBSCAN</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="468" y="10.9697">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="9" y="38.7637">Embeddings</tspan></text>
+<rect x="142.5" y="14.5" width="105" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="156.094" y="33.7637">Dimensionality &#10;</tspan><tspan x="171.762" y="47.7637">reduction</tspan></text>
+<path d="M126.707 33.7071C127.098 33.3166 127.098 32.6834 126.707 32.2929L120.343 25.9289C119.953 25.5384 119.319 25.5384 118.929 25.9289C118.538 26.3195 118.538 26.9526 118.929 27.3431L124.586 33L118.929 38.6569C118.538 39.0474 118.538 39.6805 118.929 40.0711C119.319 40.4616 119.953 40.4616 120.343 40.0711L126.707 33.7071ZM99 34H126V32H99V34Z" fill="black"/>
+<rect x="295.5" y="14.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="317" y="38.7637">Clustering</tspan></text>
+<path d="M285.707 33.7071C286.098 33.3166 286.098 32.6834 285.707 32.2929L279.343 25.9289C278.953 25.5384 278.319 25.5384 277.929 25.9289C277.538 26.3195 277.538 26.9526 277.929 27.3431L283.586 33L277.929 38.6569C277.538 39.0474 277.538 39.6805 277.929 40.0711C278.319 40.4616 278.953 40.4616 279.343 40.0711L285.707 33.7071ZM258 34H285V32H258V34Z" fill="black"/>
+<rect x="442.5" y="14.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="472.404" y="30.7637">Topic &#10;</tspan><tspan x="450.215" y="44.7637">representation</tspan></text>
+<path d="M426.707 33.7071C427.098 33.3166 427.098 32.6834 426.707 32.2929L420.343 25.9289C419.953 25.5384 419.319 25.5384 418.929 25.9289C418.538 26.3195 418.538 26.9526 418.929 27.3431L424.586 33L418.929 38.6569C418.538 39.0474 418.538 39.6805 418.929 40.0711C419.319 40.4616 419.953 40.4616 420.343 40.0711L426.707 33.7071ZM399 34H426V32H399V34Z" fill="black"/>
+</svg>

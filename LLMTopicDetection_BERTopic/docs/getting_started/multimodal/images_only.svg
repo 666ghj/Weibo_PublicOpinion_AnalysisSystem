@@ -1,0 +1,32 @@
+<svg width="803" height="169" viewBox="0 0 803 169" fill="none" xmlns="http://www.w3.org/2000/svg">
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="21" y="127.864">Images</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="9.67578" y="158.97">Embed images</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="542.892" y="55.9697">For each topic, find the best matching images </tspan><tspan x="544.127" y="67.9697">based on the most representative documents</tspan></text>
+<rect x="13.5" y="104.5" width="60" height="42" stroke="black"/>
+<line x1="757" y1="73" x2="41" y2="73" stroke="black" stroke-width="2"/>
+<line x1="40" y1="94" x2="40" y2="72" stroke="black" stroke-width="2"/>
+<rect x="120" y="90" width="534" height="57" fill="white"/>
+<rect x="120.5" y="104.5" width="88" height="42" fill="white" stroke="black"/>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="136.238" y="158.97">clip-ViT-B-32</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="303" y="158.97">UMAP</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="439.149" y="158.97">HDBSCAN</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="557" y="158.97">vit-gpt2-image-captioning</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="738" y="158.97">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="129" y="128.764">Embeddings</tspan></text>
+<rect x="262.5" y="104.5" width="105" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="276.094" y="123.764">Dimensionality &#10;</tspan><tspan x="291.762" y="137.764">reduction</tspan></text>
+<path d="M246.707 123.707C247.098 123.317 247.098 122.683 246.707 122.293L240.343 115.929C239.953 115.538 239.319 115.538 238.929 115.929C238.538 116.319 238.538 116.953 238.929 117.343L244.586 123L238.929 128.657C238.538 129.047 238.538 129.681 238.929 130.071C239.319 130.462 239.953 130.462 240.343 130.071L246.707 123.707ZM219 124H246V122H219V124Z" fill="black"/>
+<path d="M106.707 123.707C107.098 123.317 107.098 122.683 106.707 122.293L100.343 115.929C99.9526 115.538 99.3195 115.538 98.9289 115.929C98.5384 116.319 98.5384 116.953 98.9289 117.343L104.586 123L98.9289 128.657C98.5384 129.047 98.5384 129.681 98.9289 130.071C99.3195 130.462 99.9526 130.462 100.343 130.071L106.707 123.707ZM79 124H106V122H79V124Z" fill="black"/>
+<rect x="415.5" y="104.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="437" y="128.764">Clustering</tspan></text>
+<path d="M405.707 123.707C406.098 123.317 406.098 122.683 405.707 122.293L399.343 115.929C398.953 115.538 398.319 115.538 397.929 115.929C397.538 116.319 397.538 116.953 397.929 117.343L403.586 123L397.929 128.657C397.538 129.047 397.538 129.681 397.929 130.071C398.319 130.462 398.953 130.462 399.343 130.071L405.707 123.707ZM378 124H405V122H378V124Z" fill="black"/>
+<rect x="562.5" y="104.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="590.224" y="116.97">Caption &#10;</tspan><tspan x="574.11" y="128.97">Representative &#10;</tspan><tspan x="592.182" y="140.97">Images</tspan></text>
+<rect x="710.5" y="0.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="715.232" y="16.7637">Representative &#10;</tspan><tspan x="737.785" y="30.7637">images</tspan></text>
+<path d="M546.707 123.707C547.098 123.317 547.098 122.683 546.707 122.293L540.343 115.929C539.953 115.538 539.319 115.538 538.929 115.929C538.538 116.319 538.538 116.953 538.929 117.343L544.586 123L538.929 128.657C538.538 129.047 538.538 129.681 538.929 130.071C539.319 130.462 539.953 130.462 540.343 130.071L546.707 123.707ZM519 124H546V122H519V124Z" fill="black"/>
+<rect x="711.5" y="104.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="741.404" y="120.764">Topic &#10;</tspan><tspan x="719.215" y="134.764">representation</tspan></text>
+<path d="M695.707 123.707C696.098 123.317 696.098 122.683 695.707 122.293L689.343 115.929C688.953 115.538 688.319 115.538 687.929 115.929C687.538 116.319 687.538 116.953 687.929 117.343L693.586 123L687.929 128.657C687.538 129.047 687.538 129.681 687.929 130.071C688.319 130.462 688.953 130.462 689.343 130.071L695.707 123.707ZM668 124H695V122H668V124Z" fill="black"/>
+<path d="M757.707 51.2929C757.317 50.9024 756.683 50.9024 756.293 51.2929L749.929 57.6569C749.538 58.0474 749.538 58.6805 749.929 59.0711C750.319 59.4616 750.953 59.4616 751.343 59.0711L757 53.4142L762.657 59.0711C763.047 59.4616 763.681 59.4616 764.071 59.0711C764.462 58.6805 764.462 58.0474 764.071 57.6569L757.707 51.2929ZM758 98L758 52L756 52L756 98L758 98Z" fill="black"/>
+</svg>

@@ -1,0 +1,27 @@
+:root {
+    --md-primary-fg-color:        #234E70;
+
+  }
+
+:root>* {
+--md-typeset-a-color: #016198;
+--md-text-link-color: #000000;
+}
+
+body[data-md-color-primary="black"] .svg_image  svg  {
+  filter: invert(100%) hue-rotate(180deg);
+}
+
+body[data-md-color-primary="black"] .svg_image svg rect {
+  fill: transparent;
+}
+
+.svg_image {
+  text-align: center;
+  width: 100%;
+}
+
+.center {
+  display: block;
+  margin: 0 auto;
+}

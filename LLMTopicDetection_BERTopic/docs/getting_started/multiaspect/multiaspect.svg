@@ -1,0 +1,68 @@
+<svg width="398" height="426" viewBox="0 0 398 426" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="125" y="388" width="118" height="38" fill="#64B5F6"/>
+<rect x="217" y="378" width="20" height="8" fill="#64B5F6"/>
+<rect x="189" y="378" width="20" height="8" fill="#64B5F6"/>
+<rect x="161" y="378" width="20" height="8" fill="#64B5F6"/>
+<rect x="133" y="378" width="20" height="8" fill="#64B5F6"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="151.256" y="415.939">SBERT</tspan></text>
+<rect x="125" y="348" width="118" height="38" fill="#E57373"/>
+<rect x="217" y="338" width="20" height="8" fill="#E57373"/>
+<rect x="189" y="338" width="20" height="8" fill="#E57373"/>
+<rect x="161" y="338" width="20" height="8" fill="#E57373"/>
+<rect x="133" y="338" width="20" height="8" fill="#E57373"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="154.254" y="375.939">UMAP</tspan></text>
+<rect x="125" y="308" width="118" height="38" fill="#4DB6AC"/>
+<rect x="217" y="298" width="20" height="8" fill="#4DB6AC"/>
+<rect x="189" y="298" width="20" height="8" fill="#4DB6AC"/>
+<rect x="161" y="298" width="20" height="8" fill="#4DB6AC"/>
+<rect x="133" y="298" width="20" height="8" fill="#4DB6AC"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="134.342" y="335.939">HDBSCAN</tspan></text>
+<rect x="125" y="268" width="118" height="38" fill="#FFD54F"/>
+<rect x="217" y="258" width="20" height="8" fill="#FFD54F"/>
+<rect x="189" y="258" width="20" height="8" fill="#FFD54F"/>
+<rect x="161" y="258" width="20" height="8" fill="#FFD54F"/>
+<rect x="133" y="258" width="20" height="8" fill="#FFD54F"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="131.346" y="291.161">CountVectorizer</tspan></text>
+<rect x="125" y="228" width="118" height="38" fill="#90A4AE"/>
+<rect x="217" y="218" width="20" height="8" fill="#90A4AE"/>
+<rect x="189" y="218" width="20" height="8" fill="#90A4AE"/>
+<rect x="161" y="218" width="20" height="8" fill="#90A4AE"/>
+<rect x="133" y="218" width="20" height="8" fill="#90A4AE"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="139.938" y="255.939">c-TF-IDF</tspan></text>
+<rect x="125" y="98" width="118" height="38" fill="#3F51B5"/>
+<rect x="217" y="88" width="20" height="8" fill="#3F51B5"/>
+<rect x="189" y="88" width="20" height="8" fill="#3F51B5"/>
+<rect x="161" y="88" width="20" height="8" fill="#3F51B5"/>
+<rect x="133" y="88" width="20" height="8" fill="#3F51B5"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="155.804" y="120.161">ChatGPT</tspan></text>
+<rect y="98" width="118" height="38" fill="#3F51B5"/>
+<rect x="92" y="88" width="20" height="8" fill="#3F51B5"/>
+<rect x="64" y="88" width="20" height="8" fill="#3F51B5"/>
+<rect x="36" y="88" width="20" height="8" fill="#3F51B5"/>
+<rect x="8" y="88" width="20" height="8" fill="#3F51B5"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="2.22656" y="120.161">KeyBERTInspired</tspan></text>
+<rect y="58" width="118" height="38" fill="#3F51B5"/>
+<rect x="92" y="48" width="20" height="8" fill="#3F51B5"/>
+<rect x="64" y="48" width="20" height="8" fill="#3F51B5"/>
+<rect x="36" y="48" width="20" height="8" fill="#3F51B5"/>
+<rect x="8" y="48" width="20" height="8" fill="#3F51B5"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="2.76611" y="72.1606">MaximalMarginal</tspan><tspan x="25.4907" y="88.1606">Relevance</tspan></text>
+<rect x="280" y="98" width="118" height="38" fill="#3F51B5"/>
+<rect x="372" y="88" width="20" height="8" fill="#3F51B5"/>
+<rect x="344" y="88" width="20" height="8" fill="#3F51B5"/>
+<rect x="316" y="88" width="20" height="8" fill="#3F51B5"/>
+<rect x="288" y="88" width="20" height="8" fill="#3F51B5"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="14" font-weight="bold" letter-spacing="0em"><tspan x="309.065" y="114.058">Optional&#10;</tspan><tspan x="298.271" y="131.058">Fine-tuning</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" letter-spacing="0em"><tspan x="34.4282" y="153.161">Aspect 1</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="152.077" y="27.9697">Create multiple topic representations, or aspects, </tspan><tspan x="168.107" y="39.9697">simultaneously. Topics are more than just </tspan><tspan x="152.229" y="51.9697">keywords and could be represented by a number </tspan><tspan x="221.813" y="63.9697">of ways together.</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" letter-spacing="0em"><tspan x="158.428" y="153.161">Aspect 2</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="13" letter-spacing="0em"><tspan x="312.352" y="153.161">Aspect n</tspan></text>
+<path d="M52.7071 174.293C52.3166 173.902 51.6834 173.902 51.2929 174.293L44.9289 180.657C44.5384 181.047 44.5384 181.681 44.9289 182.071C45.3195 182.462 45.9526 182.462 46.3431 182.071L52 176.414L57.6569 182.071C58.0474 182.462 58.6805 182.462 59.0711 182.071C59.4616 181.681 59.4616 181.047 59.0711 180.657L52.7071 174.293ZM53 191L53 175L51 175L51 191L53 191Z" fill="black"/>
+<path d="M185.707 174.293C185.317 173.902 184.683 173.902 184.293 174.293L177.929 180.657C177.538 181.047 177.538 181.681 177.929 182.071C178.319 182.462 178.953 182.462 179.343 182.071L185 176.414L190.657 182.071C191.047 182.462 191.681 182.462 192.071 182.071C192.462 181.681 192.462 181.047 192.071 180.657L185.707 174.293ZM186 191L186 175L184 175L184 191L186 191Z" fill="black"/>
+<path d="M352.707 174.293C352.317 173.902 351.683 173.902 351.293 174.293L344.929 180.657C344.538 181.047 344.538 181.681 344.929 182.071C345.319 182.462 345.953 182.462 346.343 182.071L352 176.414L357.657 182.071C358.047 182.462 358.681 182.462 359.071 182.071C359.462 181.681 359.462 181.047 359.071 180.657L352.707 174.293ZM353 191L353 175L351 175L351 191L353 191Z" fill="black"/>
+<line x1="52" y1="190" x2="352" y2="190" stroke="black" stroke-width="2"/>
+<line x1="185" y1="191" x2="185" y2="207" stroke="black" stroke-width="2"/>
+<circle cx="251.5" cy="117.5" r="2.5" fill="black"/>
+<circle cx="261.5" cy="117.5" r="2.5" fill="black"/>
+<circle cx="271.5" cy="117.5" r="2.5" fill="black"/>
+</svg>

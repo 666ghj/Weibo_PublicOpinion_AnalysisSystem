@@ -1,0 +1,12 @@
+<svg width="293" height="164" viewBox="0 0 293 164" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" y="0.5" width="118" height="42" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="22" y="24.7637">Documents</tspan></text>
+<rect x="53.5" y="121.5" width="65" height="42" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="65" y="145.764">Labels</tspan></text>
+<rect x="201.5" y="60.5" width="91" height="42" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="223" y="84.7637">c-TF-IDF</tspan></text>
+<path d="M246.293 52.7071C246.683 53.0976 247.317 53.0976 247.707 52.7071L254.071 46.3431C254.462 45.9526 254.462 45.3195 254.071 44.9289C253.681 44.5384 253.047 44.5384 252.657 44.9289L247 50.5858L241.343 44.9289C240.953 44.5384 240.319 44.5384 239.929 44.9289C239.538 45.3195 239.538 45.9526 239.929 46.3431L246.293 52.7071ZM246 21L246 52L248 52L248 21L246 21Z" fill="black"/>
+<path d="M247.707 113.293C247.317 112.902 246.683 112.902 246.293 113.293L239.929 119.657C239.538 120.047 239.538 120.681 239.929 121.071C240.319 121.462 240.953 121.462 241.343 121.071L247 115.414L252.657 121.071C253.047 121.462 253.681 121.462 254.071 121.071C254.462 120.681 254.462 120.047 254.071 119.657L247.707 113.293ZM248 145L248 114L246 114L246 145L248 145Z" fill="black"/>
+<line x1="248" y1="20" x2="130" y2="20" stroke="black" stroke-width="2"/>
+<line x1="248" y1="145" x2="130" y2="145" stroke="black" stroke-width="2"/>
+</svg>

@@ -1,0 +1,166 @@
+<svg width="480" height="410" viewBox="0 0 480 410" fill="none" xmlns="http://www.w3.org/2000/svg">
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="248" y="49.7637">Create a distance matrix by calculating the </tspan><tspan x="248" y="63.7637">cosine similarity between c-TF-IDF </tspan><tspan x="248" y="77.7637">representations of each topic. </tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="250" y="200.764">Apply a linkage function of choice on the </tspan><tspan x="250" y="214.764">distance matrix to model the hierarchical </tspan><tspan x="250" y="228.764">structure of topics. </tspan></text>
+<path d="M86.8315 310H64.7801C64.3493 310 64 310.349 64 310.78V339.22C64 339.651 64.3493 340 64.7801 340H86.8315C87.2624 340 87.6117 339.651 87.6117 339.22V310.78C87.6117 310.349 87.2624 310 86.8315 310Z" fill="white" stroke="black"/>
+<path d="M84.8315 308H62.7801C62.3493 308 62 308.349 62 308.78V337.22C62 337.651 62.3493 338 62.7801 338H84.8315C85.2624 338 85.6117 337.651 85.6117 337.22V308.78C85.6117 308.349 85.2624 308 84.8315 308Z" fill="white" stroke="black"/>
+<path d="M82.8315 306H60.7801C60.3493 306 60 306.349 60 306.78V335.22C60 335.651 60.3493 336 60.7801 336H82.8315C83.2624 336 83.6117 335.651 83.6117 335.22V306.78C83.6117 306.349 83.2624 306 82.8315 306Z" fill="white" stroke="black"/>
+<path d="M63.049 310.447H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M67.4046 313.496H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 313.496H65.7534" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 316.399H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M66.5335 319.303H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 319.303H64.8823" stroke="black" stroke-linecap="round"/>
+<path d="M65.2268 322.207H70.6898" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 322.207H63.7208" stroke="black" stroke-linecap="round"/>
+<path d="M72.1959 322.207H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 325.111H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 328.015H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 330.918H80.4175" stroke="black" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="57.9023" y="301.176">Topic 26</tspan></text>
+<path d="M36.8315 310H14.7801C14.3493 310 14 310.349 14 310.78V339.22C14 339.651 14.3493 340 14.7801 340H36.8315C37.2624 340 37.6117 339.651 37.6117 339.22V310.78C37.6117 310.349 37.2624 310 36.8315 310Z" fill="white" stroke="black"/>
+<path d="M34.8315 308H12.7801C12.3493 308 12 308.349 12 308.78V337.22C12 337.651 12.3493 338 12.7801 338H34.8315C35.2624 338 35.6117 337.651 35.6117 337.22V308.78C35.6117 308.349 35.2624 308 34.8315 308Z" fill="white" stroke="black"/>
+<path d="M32.8315 306H10.7801C10.3493 306 10 306.349 10 306.78V335.22C10 335.651 10.3493 336 10.7801 336H32.8315C33.2624 336 33.6117 335.651 33.6117 335.22V306.78C33.6117 306.349 33.2624 306 32.8315 306Z" fill="white" stroke="black"/>
+<path d="M13.049 310.447H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M17.4046 313.496H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 313.496H15.7534" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 316.399H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M16.5335 319.303H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 319.303H14.8823" stroke="black" stroke-linecap="round"/>
+<path d="M15.2268 322.207H20.6898" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 322.207H13.7208" stroke="black" stroke-linecap="round"/>
+<path d="M22.1959 322.207H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 325.111H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 328.015H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 330.918H30.4175" stroke="black" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="10.0859" y="301.176">Topic 1</tspan></text>
+<path d="M36.8315 368H14.7801C14.3493 368 14 368.349 14 368.78V397.22C14 397.651 14.3493 398 14.7801 398H36.8315C37.2624 398 37.6117 397.651 37.6117 397.22V368.78C37.6117 368.349 37.2624 368 36.8315 368Z" fill="white" stroke="black"/>
+<path d="M34.8315 366H12.7801C12.3493 366 12 366.349 12 366.78V395.22C12 395.651 12.3493 396 12.7801 396H34.8315C35.2624 396 35.6117 395.651 35.6117 395.22V366.78C35.6117 366.349 35.2624 366 34.8315 366Z" fill="white" stroke="black"/>
+<path d="M32.8315 364H10.7801C10.3493 364 10 364.349 10 364.78V393.22C10 393.651 10.3493 394 10.7801 394H32.8315C33.2624 394 33.6117 393.651 33.6117 393.22V364.78C33.6117 364.349 33.2624 364 32.8315 364Z" fill="white" stroke="black"/>
+<path d="M13.049 368.447H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M17.4046 371.496H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 371.496H15.7534" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 374.399H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M16.5335 377.303H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 377.303H14.8823" stroke="black" stroke-linecap="round"/>
+<path d="M15.2268 380.207H20.6898" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 380.207H13.7208" stroke="black" stroke-linecap="round"/>
+<path d="M22.1959 380.207H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 383.111H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 386.015H30.4175" stroke="black" stroke-linecap="round"/>
+<path d="M13.049 388.918H30.4175" stroke="black" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="7.90234" y="359.176">Topic 38</tspan></text>
+<path d="M86.8315 368H64.7801C64.3493 368 64 368.349 64 368.78V397.22C64 397.651 64.3493 398 64.7801 398H86.8315C87.2624 398 87.6117 397.651 87.6117 397.22V368.78C87.6117 368.349 87.2624 368 86.8315 368Z" fill="white" stroke="black"/>
+<path d="M84.8315 366H62.7801C62.3493 366 62 366.349 62 366.78V395.22C62 395.651 62.3493 396 62.7801 396H84.8315C85.2624 396 85.6117 395.651 85.6117 395.22V366.78C85.6117 366.349 85.2624 366 84.8315 366Z" fill="white" stroke="black"/>
+<path d="M82.8315 364H60.7801C60.3493 364 60 364.349 60 364.78V393.22C60 393.651 60.3493 394 60.7801 394H82.8315C83.2624 394 83.6117 393.651 83.6117 393.22V364.78C83.6117 364.349 83.2624 364 82.8315 364Z" fill="white" stroke="black"/>
+<path d="M63.049 368.447H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M67.4046 371.496H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 371.496H65.7534" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 374.399H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M66.5335 377.303H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 377.303H64.8823" stroke="black" stroke-linecap="round"/>
+<path d="M65.2268 380.207H70.6898" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 380.207H63.7208" stroke="black" stroke-linecap="round"/>
+<path d="M72.1959 380.207H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 383.111H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 386.015H80.4175" stroke="black" stroke-linecap="round"/>
+<path d="M63.049 388.918H80.4175" stroke="black" stroke-linecap="round"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="57.9023" y="359.176">Topic 42</tspan></text>
+<rect x="134.5" y="342.5" width="14" height="14" stroke="black"/>
+<rect x="148.5" y="342.5" width="14" height="14" stroke="black"/>
+<rect x="162.5" y="342.5" width="14" height="14" stroke="black"/>
+<rect x="176.5" y="342.5" width="14" height="14" stroke="black"/>
+<rect x="190.5" y="342.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="133.379" y="336.176">re-calculate c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="234" y="336.764">Update the c-TF-IDF representation </tspan><tspan x="234" y="350.764">based on the collection of documents </tspan><tspan x="234" y="364.764">across the merged topics. &#10;</tspan></text>
+<line x1="87" y1="289.5" x2="107" y2="289.5" stroke="black"/>
+<line x1="87" y1="409.5" x2="107" y2="409.5" stroke="black"/>
+<line x1="108" y1="349.5" x2="128" y2="349.5" stroke="black"/>
+<line x1="107.5" y1="289" x2="107.5" y2="410" stroke="black"/>
+<rect x="127.5" y="38.5" width="19" height="19" stroke="black"/>
+<rect x="146.5" y="38.5" width="19" height="19" stroke="black"/>
+<rect x="165.5" y="38.5" width="19" height="19" stroke="black"/>
+<rect x="184.5" y="38.5" width="19" height="19" stroke="black"/>
+<rect x="203.5" y="38.5" width="19" height="19" stroke="black"/>
+<rect x="127.5" y="57.5" width="19" height="19" stroke="black"/>
+<rect x="146.5" y="57.5" width="19" height="19" stroke="black"/>
+<rect x="165.5" y="57.5" width="19" height="19" stroke="black"/>
+<rect x="184.5" y="57.5" width="19" height="19" stroke="black"/>
+<rect x="203.5" y="57.5" width="19" height="19" stroke="black"/>
+<rect x="127.5" y="76.5" width="19" height="19" stroke="black"/>
+<rect x="146.5" y="76.5" width="19" height="19" stroke="black"/>
+<rect x="165.5" y="76.5" width="19" height="19" stroke="black"/>
+<rect x="184.5" y="76.5" width="19" height="19" stroke="black"/>
+<rect x="203.5" y="76.5" width="19" height="19" stroke="black"/>
+<rect x="127.5" y="95.5" width="19" height="19" stroke="black"/>
+<rect x="146.5" y="95.5" width="19" height="19" stroke="black"/>
+<rect x="165.5" y="95.5" width="19" height="19" stroke="black"/>
+<rect x="184.5" y="95.5" width="19" height="19" stroke="black"/>
+<rect x="203.5" y="95.5" width="19" height="19" stroke="black"/>
+<rect x="127.5" y="19.5" width="19" height="19" stroke="black"/>
+<rect x="146.5" y="19.5" width="19" height="19" stroke="black"/>
+<rect x="165.5" y="19.5" width="19" height="19" stroke="black"/>
+<rect x="184.5" y="19.5" width="19" height="19" stroke="black"/>
+<rect x="203.5" y="19.5" width="19" height="19" stroke="black"/>
+<rect x="127.5" y="0.5" width="19" height="19" fill="black" stroke="black"/>
+<rect x="146.5" y="0.5" width="19" height="19" fill="black" stroke="black"/>
+<rect x="165.5" y="0.5" width="19" height="19" fill="black" stroke="black"/>
+<rect x="184.5" y="0.5" width="19" height="19" fill="black" stroke="black"/>
+<rect x="203.5" y="0.5" width="19" height="19" fill="black" stroke="black"/>
+<rect x="127.5" y="19.5" width="19" height="19" transform="rotate(90 127.5 19.5)" fill="black" stroke="black"/>
+<rect x="127.5" y="38.5" width="19" height="19" transform="rotate(90 127.5 38.5)" fill="black" stroke="black"/>
+<rect x="127.5" y="57.5" width="19" height="19" transform="rotate(90 127.5 57.5)" fill="black" stroke="black"/>
+<rect x="127.5" y="76.5" width="19" height="19" transform="rotate(90 127.5 76.5)" fill="black" stroke="black"/>
+<rect x="127.5" y="95.5" width="19" height="19" transform="rotate(90 127.5 95.5)" fill="black" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="103.52" y="13.1758">Topic</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="134.816" y="33.1758">1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="149.922" y="33.1758">.12</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="131.922" y="51.1758">.12</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="168.922" y="33.1758">.53</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="131.922" y="71.1758">.53</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="168.922" y="51.1758">.74</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="149.922" y="71.1758">.74</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="206.922" y="51.1758">.89</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="149.922" y="109.176">.89</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="206.922" y="32.1758">.24</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="130.922" y="109.176">.24</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="206.922" y="69.1758">.01</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="169.922" y="109.176">.01</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="153.816" y="51.1758">1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="172.816" y="70.1758">1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="191.816" y="89.1758">1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="210.816" y="108.176">1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="209.367" y="89.1758">...</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="171.367" y="89.1758">...</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="151.367" y="89.1758">...</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="132.367" y="89.1758">...</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="190.367" y="69.1758">...</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="190.367" y="49.1758">...</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="190.367" y="30.1758">...</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="190.367" y="107.176">...</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="115.816" y="33.1758">1</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="115.816" y="52.1758">2</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="115.816" y="70.1758">3</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="134.816" y="13.1758">1</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="152.816" y="13.1758">2</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="172.816" y="13.1758">3</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="209.77" y="13.1758">n</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="190.367" y="13.1758">...</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="116.789" y="83.1758">.</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="116.789" y="87.1758">.</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="116.789" y="91.1758">.</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="115.77" y="108.176">n</tspan></text>
+<path d="M173.293 165.707C173.683 166.098 174.317 166.098 174.707 165.707L181.071 159.343C181.462 158.953 181.462 158.319 181.071 157.929C180.681 157.538 180.047 157.538 179.657 157.929L174 163.586L168.343 157.929C167.953 157.538 167.319 157.538 166.929 157.929C166.538 158.319 166.538 158.953 166.929 159.343L173.293 165.707ZM173 127L173 165L175 165L175 127L173 127Z" fill="black"/>
+<path d="M173.293 305.707C173.683 306.098 174.317 306.098 174.707 305.707L181.071 299.343C181.462 298.953 181.462 298.319 181.071 297.929C180.681 297.538 180.047 297.538 179.657 297.929L174 303.586L168.343 297.929C167.953 297.538 167.319 297.538 166.929 297.929C166.538 298.319 166.538 298.953 166.929 299.343L173.293 305.707ZM173 267L173 305L175 305L175 267L173 267Z" fill="black"/>
+<circle cx="132" cy="185" r="3.5" stroke="black"/>
+<circle cx="192" cy="205" r="3.5" stroke="black"/>
+<circle cx="202" cy="185" r="3.5" stroke="black"/>
+<circle cx="202" cy="235" r="3.5" stroke="black"/>
+<circle cx="181" cy="233" r="3.5" stroke="black"/>
+<circle cx="137" cy="213" r="3.5" stroke="black"/>
+<circle cx="158" cy="227" r="3.5" stroke="black"/>
+<circle cx="122" cy="233" r="3.5" stroke="black"/>
+<circle cx="162" cy="194" r="3.5" stroke="black"/>
+<line x1="135.14" y1="185.52" x2="159.14" y2="192.52" stroke="black"/>
+<line x1="184.066" y1="233.504" x2="199.066" y2="235.504" stroke="black"/>
+<line x1="192.553" y1="201.776" x2="199.553" y2="187.776" stroke="black"/>
+</svg>

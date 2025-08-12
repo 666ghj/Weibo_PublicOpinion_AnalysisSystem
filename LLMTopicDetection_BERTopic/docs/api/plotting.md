@@ -1,0 +1,3 @@
+# `Plotting`
+
+::: bertopic.plotting

@@ -1,0 +1,127 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bertopic"
+version = "0.17.3"
+description = "BERTopic performs topic Modeling with state-of-the-art transformer models."
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.9"
+authors = [
+    { name = "Maarten P. Grootendorst", email = "maartengrootendorst@gmail.com" },
+]
+keywords = [
+    "nlp",
+    "bert",
+    "topic",
+    "modeling",
+    "embeddings",
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "hdbscan>=0.8.29",
+    "umap-learn>=0.5.0",
+    "numpy>=1.20.0",
+    "pandas>=1.1.5",
+    "plotly>=4.7.0",
+    "scikit-learn>=1.0",
+    "sentence-transformers>=0.4.1",
+    "tqdm>=4.41.1",
+    "llvmlite>0.36.0"  # To prevent conflicts with `uv` dependency manager
+]
+
+[project.optional-dependencies]
+datamap = [
+    "datamapplot>=0.1",
+    "matplotlib>=3.8",
+]
+dev = [
+    "bertopic[docs,test]",
+]
+docs = [
+    "mkdocs==1.5.3",
+    "mkdocs-material==9.5.18",
+    "mkdocstrings-python==1.10.0",
+    "mkdocstrings==0.24.3",
+]
+fastembed = [
+    "fastembed>=0.6.0",
+]
+flair = [
+    "flair>=0.7",
+    "torch>=1.4.0",
+    "transformers>=3.5.1",
+]
+gensim = [
+    "gensim>=4.0.0",
+]
+spacy = [
+    "spacy>=3.0.1",
+]
+test = [
+    "pytest>=5.4.3",
+    "pytest-cov>=2.6.1",
+    "ruff~=0.4.7",
+]
+use = [
+    "tensorflow",
+    "tensorflow_hub",
+    "tensorflow_text",
+]
+vision = [
+    "accelerate>=0.19.0", # To prevent "cannot import name 'PartialState' from 'accelerate'"
+    "Pillow>=9.2.0",
+]
+
+[project.urls]
+Documentation = "https://maartengr.github.io/BERTopic/"
+Homepage = "https://github.com/MaartenGr/BERTopic"
+Issues = "https://github.com/MaartenGr/BERTopic/issues"
+Repository = "https://github.com/MaartenGr/BERTopic.git"
+
+[tool.setuptools.packages.find]
+include = ["bertopic*"]
+exclude = ["tests"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+  "E4",  # Ruff Defaults
+  "E7",
+  "E9",
+  "F",   # End Ruff Defaults,
+  "D"
+]
+
+ignore = [
+  "D100", # Missing docstring in public module
+  "D104", # Missing docstring in public package
+  "D205", # 1 blank line required between summary line and description
+  "E731", # Do not assign a lambda expression, use a def
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*" = ["D"] # Ignore all docstring errors in tests
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

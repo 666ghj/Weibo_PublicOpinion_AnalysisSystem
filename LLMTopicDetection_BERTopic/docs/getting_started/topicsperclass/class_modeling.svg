@@ -1,0 +1,76 @@
+<svg width="550" height="248" viewBox="0 0 550 248" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="50.5" y="0.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="97.2617" y="23.7637"> 1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="65" y="23.7637">Topic</tspan></text>
+<rect x="0.5" y="100.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="44.2505" y="123.858"> 1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="13.0786" y="123.858">Class</tspan></text>
+<rect x="100.5" y="100.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="144.251" y="123.858"> m</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="113.079" y="123.858">Class</tspan></text>
+<rect x="200.5" y="100.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="244.251" y="123.858"> 1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="213.079" y="123.858">Class</tspan></text>
+<rect x="300.5" y="100.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="344.251" y="123.858"> m</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="313.079" y="123.858">Class</tspan></text>
+<rect x="250.5" y="0.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="297.41" y="23.7637"> n</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="265.148" y="23.7637">Topic</tspan></text>
+<path d="M36.0067 85.8845C35.9429 86.4331 36.3359 86.9295 36.8845 86.9933L45.8243 88.0328C46.3729 88.0966 46.8693 87.7036 46.9331 87.155C46.9969 86.6064 46.6039 86.11 46.0553 86.0462L38.1088 85.1222L39.0328 77.1757C39.0966 76.6271 38.7036 76.1307 38.155 76.0669C37.6064 76.0031 37.11 76.3961 37.0462 76.9447L36.0067 85.8845ZM84.3793 47.216L36.3793 85.216L37.6207 86.784L85.6207 48.784L84.3793 47.216Z" fill="black"/>
+<path d="M132.993 85.8845C133.057 86.4331 132.664 86.9295 132.116 86.9933L123.176 88.0328C122.627 88.0966 122.131 87.7036 122.067 87.155C122.003 86.6064 122.396 86.11 122.945 86.0462L130.891 85.1222L129.967 77.1757C129.903 76.6271 130.296 76.1307 130.845 76.0669C131.394 76.0031 131.89 76.3961 131.954 76.9447L132.993 85.8845ZM84.6207 47.216L132.621 85.216L131.379 86.784L83.3793 48.784L84.6207 47.216Z" fill="black"/>
+<path d="M333.993 85.8845C334.057 86.4331 333.664 86.9295 333.116 86.9933L324.176 88.0328C323.627 88.0966 323.131 87.7036 323.067 87.155C323.003 86.6064 323.396 86.11 323.945 86.0462L331.891 85.1222L330.967 77.1757C330.903 76.6271 331.296 76.1307 331.845 76.0669C332.394 76.0031 332.89 76.3961 332.954 76.9447L333.993 85.8845ZM285.621 47.216L333.621 85.216L332.379 86.784L284.379 48.784L285.621 47.216Z" fill="black"/>
+<path d="M237.007 85.8845C236.943 86.4331 237.336 86.9295 237.884 86.9933L246.824 88.0328C247.373 88.0966 247.869 87.7036 247.933 87.155C247.997 86.6064 247.604 86.11 247.055 86.0462L239.109 85.1222L240.033 77.1757C240.097 76.6271 239.704 76.1307 239.155 76.0669C238.606 76.0031 238.11 76.3961 238.046 76.9447L237.007 85.8845ZM285.379 47.216L237.379 85.216L238.621 86.784L286.621 48.784L285.379 47.216Z" fill="black"/>
+<path d="M133.293 203.707C133.683 204.098 134.317 204.098 134.707 203.707L141.071 197.343C141.462 196.953 141.462 196.319 141.071 195.929C140.681 195.538 140.047 195.538 139.657 195.929L134 201.586L128.343 195.929C127.953 195.538 127.319 195.538 126.929 195.929C126.538 196.319 126.538 196.953 126.929 197.343L133.293 203.707ZM133 153L133 203L135 203L135 153L133 153Z" fill="black"/>
+<rect x="99.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="113.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="127.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="141.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="155.5" y="222.5" width="14" height="14" stroke="black"/>
+<path d="M233.293 203.707C233.683 204.098 234.317 204.098 234.707 203.707L241.071 197.343C241.462 196.953 241.462 196.319 241.071 195.929C240.681 195.538 240.047 195.538 239.657 195.929L234 201.586L228.343 195.929C227.953 195.538 227.319 195.538 226.929 195.929C226.538 196.319 226.538 196.953 226.929 197.343L233.293 203.707ZM233 153L233 203L235 203L235 153L233 153Z" fill="black"/>
+<rect x="199.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="213.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="227.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="241.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="255.5" y="222.5" width="14" height="14" stroke="black"/>
+<path d="M335.293 203.707C335.683 204.098 336.317 204.098 336.707 203.707L343.071 197.343C343.462 196.953 343.462 196.319 343.071 195.929C342.681 195.538 342.047 195.538 341.657 195.929L336 201.586L330.343 195.929C329.953 195.538 329.319 195.538 328.929 195.929C328.538 196.319 328.538 196.953 328.929 197.343L335.293 203.707ZM335 153L335 203L337 203L337 153L335 153Z" fill="black"/>
+<rect x="301.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="315.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="329.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="343.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="357.5" y="222.5" width="14" height="14" stroke="black"/>
+<path d="M34.2929 203.707C34.6834 204.098 35.3166 204.098 35.7071 203.707L42.0711 197.343C42.4616 196.953 42.4616 196.319 42.0711 195.929C41.6805 195.538 41.0474 195.538 40.6569 195.929L35 201.586L29.3431 195.929C28.9526 195.538 28.3195 195.538 27.9289 195.929C27.5384 196.319 27.5384 196.953 27.9289 197.343L34.2929 203.707ZM34 153L34 203L36 203L36 153L34 153Z" fill="black"/>
+<rect x="0.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="14.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="28.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="42.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="56.5" y="222.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="19.0786" y="220.271">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="118.079" y="220.271">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="218.079" y="220.271">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="320.079" y="220.271">c-TF-IDF</tspan></text>
+<circle cx="76" cy="118" r="1" fill="black"/>
+<circle cx="84" cy="118" r="1" fill="black"/>
+<circle cx="92" cy="118" r="1" fill="black"/>
+<circle cx="76" cy="228" r="1" fill="black"/>
+<circle cx="84" cy="228" r="1" fill="black"/>
+<circle cx="92" cy="228" r="1" fill="black"/>
+<circle cx="276" cy="118" r="1" fill="black"/>
+<circle cx="284" cy="118" r="1" fill="black"/>
+<circle cx="292" cy="118" r="1" fill="black"/>
+<circle cx="152.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="160.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="168.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="176.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="184.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="192.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="200.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="208.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="216.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="276" cy="228" r="1" fill="black"/>
+<circle cx="284" cy="228" r="1" fill="black"/>
+<circle cx="292" cy="228" r="1" fill="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="325" y="21.7637">Split documents by topic</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="377" y="112.764">Split documents by topic </tspan><tspan x="377" y="126.764">and class</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="382" y="222.764">Apply pre-fitted c-TF-IDF on </tspan><tspan x="382" y="236.764">each subset of documents. </tspan></text>
+</svg>

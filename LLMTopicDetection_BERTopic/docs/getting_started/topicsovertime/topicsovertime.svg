@@ -1,0 +1,115 @@
+<svg width="562" height="405" viewBox="0 0 562 405" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="61.5" y="0.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="106.262" y="23.7637"> 1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="74" y="23.7637">Topic</tspan></text>
+<rect x="11.5" y="100.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="18" y="121.97">Timestep </tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="67.0918" y="121.97">1</tspan></text>
+<rect x="111.5" y="100.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="164.162" y="121.97"> m</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="118" y="121.97">Timestep</tspan></text>
+<rect x="211.5" y="100.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="219" y="121.97">Timestep </tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="268.092" y="121.97">1</tspan></text>
+<rect x="311.5" y="100.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="316" y="121.97">Timestep </tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="365.092" y="121.97">m</tspan></text>
+<rect x="261.5" y="0.5" width="69" height="39" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="307.41" y="23.7637"> n</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="275.148" y="23.7637">Topic</tspan></text>
+<path d="M47.0067 85.8845C46.9429 86.4331 47.3359 86.9295 47.8845 86.9933L56.8243 88.0328C57.3729 88.0966 57.8693 87.7036 57.9331 87.155C57.9969 86.6064 57.6039 86.11 57.0553 86.0462L49.1088 85.1222L50.0328 77.1757C50.0966 76.6271 49.7036 76.1307 49.155 76.0669C48.6064 76.0031 48.11 76.3961 48.0462 76.9447L47.0067 85.8845ZM95.3793 47.216L47.3793 85.216L48.6207 86.784L96.6207 48.784L95.3793 47.216Z" fill="black"/>
+<path d="M143.993 85.8845C144.057 86.4331 143.664 86.9295 143.116 86.9933L134.176 88.0328C133.627 88.0966 133.131 87.7036 133.067 87.155C133.003 86.6064 133.396 86.11 133.945 86.0462L141.891 85.1222L140.967 77.1757C140.903 76.6271 141.296 76.1307 141.845 76.0669C142.394 76.0031 142.89 76.3961 142.954 76.9447L143.993 85.8845ZM95.6207 47.216L143.621 85.216L142.379 86.784L94.3793 48.784L95.6207 47.216Z" fill="black"/>
+<path d="M344.993 85.8845C345.057 86.4331 344.664 86.9295 344.116 86.9933L335.176 88.0328C334.627 88.0966 334.131 87.7036 334.067 87.155C334.003 86.6064 334.396 86.11 334.945 86.0462L342.891 85.1222L341.967 77.1757C341.903 76.6271 342.296 76.1307 342.845 76.0669C343.394 76.0031 343.89 76.3961 343.954 76.9447L344.993 85.8845ZM296.621 47.216L344.621 85.216L343.379 86.784L295.379 48.784L296.621 47.216Z" fill="black"/>
+<path d="M248.007 85.8845C247.943 86.4331 248.336 86.9295 248.884 86.9933L257.824 88.0328C258.373 88.0966 258.869 87.7036 258.933 87.155C258.997 86.6064 258.604 86.11 258.055 86.0462L250.109 85.1222L251.033 77.1757C251.097 76.6271 250.704 76.1307 250.155 76.0669C249.606 76.0031 249.11 76.3961 249.046 76.9447L248.007 85.8845ZM296.379 47.216L248.379 85.216L249.621 86.784L297.621 48.784L296.379 47.216Z" fill="black"/>
+<path d="M144.293 203.707C144.683 204.098 145.317 204.098 145.707 203.707L152.071 197.343C152.462 196.953 152.462 196.319 152.071 195.929C151.681 195.538 151.047 195.538 150.657 195.929L145 201.586L139.343 195.929C138.953 195.538 138.319 195.538 137.929 195.929C137.538 196.319 137.538 196.953 137.929 197.343L144.293 203.707ZM144 153L144 203L146 203L146 153L144 153Z" fill="black"/>
+<rect x="110.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="124.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="138.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="152.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="166.5" y="222.5" width="14" height="14" stroke="black"/>
+<path d="M244.293 203.707C244.683 204.098 245.317 204.098 245.707 203.707L252.071 197.343C252.462 196.953 252.462 196.319 252.071 195.929C251.681 195.538 251.047 195.538 250.657 195.929L245 201.586L239.343 195.929C238.953 195.538 238.319 195.538 237.929 195.929C237.538 196.319 237.538 196.953 237.929 197.343L244.293 203.707ZM244 153L244 203L246 203L246 153L244 153Z" fill="black"/>
+<rect x="210.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="224.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="238.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="252.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="266.5" y="222.5" width="14" height="14" stroke="black"/>
+<path d="M346.293 203.707C346.683 204.098 347.317 204.098 347.707 203.707L354.071 197.343C354.462 196.953 354.462 196.319 354.071 195.929C353.681 195.538 353.047 195.538 352.657 195.929L347 201.586L341.343 195.929C340.953 195.538 340.319 195.538 339.929 195.929C339.538 196.319 339.538 196.953 339.929 197.343L346.293 203.707ZM346 153L346 203L348 203L348 153L346 153Z" fill="black"/>
+<rect x="312.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="326.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="340.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="354.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="368.5" y="222.5" width="14" height="14" stroke="black"/>
+<path d="M45.2929 203.707C45.6834 204.098 46.3166 204.098 46.7071 203.707L53.0711 197.343C53.4616 196.953 53.4616 196.319 53.0711 195.929C52.6805 195.538 52.0474 195.538 51.6569 195.929L46 201.586L40.3431 195.929C39.9526 195.538 39.3195 195.538 38.9289 195.929C38.5384 196.319 38.5384 196.953 38.9289 197.343L45.2929 203.707ZM45 153L45 203L47 203L47 153L45 153Z" fill="black"/>
+<rect x="11.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="25.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="39.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="53.5" y="222.5" width="14" height="14" stroke="black"/>
+<rect x="67.5" y="222.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="30.0786" y="220.271">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="129.079" y="220.271">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="229.079" y="220.271">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="331.079" y="220.271">c-TF-IDF</tspan></text>
+<circle cx="87" cy="118" r="1" fill="black"/>
+<circle cx="95" cy="118" r="1" fill="black"/>
+<circle cx="103" cy="118" r="1" fill="black"/>
+<circle cx="87" cy="228" r="1" fill="black"/>
+<circle cx="95" cy="228" r="1" fill="black"/>
+<circle cx="103" cy="228" r="1" fill="black"/>
+<circle cx="287" cy="118" r="1" fill="black"/>
+<circle cx="295" cy="118" r="1" fill="black"/>
+<circle cx="303" cy="118" r="1" fill="black"/>
+<circle cx="163.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="171.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="179.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="187.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="195.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="203.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="211.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="219.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="227.5" cy="18.5" r="1.5" fill="black"/>
+<circle cx="287" cy="228" r="1" fill="black"/>
+<circle cx="295" cy="228" r="1" fill="black"/>
+<circle cx="303" cy="228" r="1" fill="black"/>
+<rect x="103.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="117.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="131.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="145.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="159.5" y="365.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="111" y="362.176">topic c-TF-IDF</tspan></text>
+<rect x="15.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="29.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="43.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="57.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="71.5" y="365.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="28" y="362.176">c-TF-IDF at t</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="91" y="375.176">+</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="91" y="402.176">2</tspan></text>
+<line x1="14" y1="386.5" x2="178" y2="386.5" stroke="black"/>
+<rect x="308.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="322.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="336.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="350.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="364.5" y="365.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="319" y="362.176">c-TF-IDF at t</tspan></text>
+<rect x="220.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="234.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="248.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="262.5" y="365.5" width="14" height="14" stroke="black"/>
+<rect x="276.5" y="365.5" width="14" height="14" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="227" y="362.176">c-TF-IDF at t-1</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="296" y="375.176">+</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="296" y="402.176">2</tspan></text>
+<line x1="219" y1="386.5" x2="383" y2="386.5" stroke="black"/>
+<line x1="388" y1="266.5" y2="266.5" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="52" y="342.764">Global Tuning</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="336" y="21.7637">Split documents by topic</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="388" y="112.764">Split documents by topic </tspan><tspan x="388" y="126.764">and timestep</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="393" y="222.764">Apply pre-fitted c-TF-IDF on </tspan><tspan x="393" y="236.764">each subset of documents. </tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="394" y="345.764">Tune the c-TF-IDF at each </tspan><tspan x="394" y="359.764">timestep t by either averaging </tspan><tspan x="394" y="373.764">the representations with the </tspan><tspan x="394" y="387.764">global representation or with </tspan><tspan x="394" y="401.764">the representation at t-1. </tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="234" y="342.764">Evolutionary Tuning</tspan></text>
+<line x1="0.5" y1="241" x2="0.499999" y2="266" stroke="black"/>
+<line x1="388.5" y1="241" x2="388.5" y2="266" stroke="black"/>
+<line x1="95.5" y1="266" x2="95.5" y2="322" stroke="black"/>
+<line x1="295.5" y1="266" x2="295.5" y2="322" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="8" letter-spacing="0em"><tspan x="133" y="264.176">Optional tuning of representations</tspan></text>
+</svg>

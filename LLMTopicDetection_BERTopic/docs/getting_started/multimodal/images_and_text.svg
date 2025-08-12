@@ -1,0 +1,32 @@
+<svg width="652" height="186" viewBox="0 0 652 186" fill="none" xmlns="http://www.w3.org/2000/svg">
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="22" y="76.8636">Images</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="15.3008" y="41.9697">Embed text, </tspan><tspan x="8.82129" y="53.9697">images or both </tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="390.892" y="55.9697">For each topic, find the best matching images </tspan><tspan x="392.127" y="67.9697">based on the most representative documents</tspan></text>
+<rect x="14.5" y="59.5" width="56" height="27" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12" letter-spacing="0em"><tspan x="29" y="175.864">Text</tspan></text>
+<rect x="14.5" y="158.5" width="56" height="27" stroke="black"/>
+<line x1="79" y1="123" x2="42" y2="123" stroke="black" stroke-width="2"/>
+<line x1="607" y1="73" x2="79" y2="73" stroke="black" stroke-width="2"/>
+<line x1="43" y1="97" x2="43" y2="122" stroke="black" stroke-width="2"/>
+<line x1="43" y1="123" x2="43" y2="152" stroke="black" stroke-width="2"/>
+<rect x="118" y="90" width="534" height="57" fill="white"/>
+<rect x="118.5" y="104.5" width="88" height="42" fill="white" stroke="black"/>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="134.238" y="158.97">clip-ViT-B-32</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="301" y="158.97">UMAP</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="437.149" y="158.97">HDBSCAN</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="586" y="158.97">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="127" y="128.764">Embeddings</tspan></text>
+<rect x="260.5" y="104.5" width="105" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="274.094" y="123.764">Dimensionality &#10;</tspan><tspan x="289.762" y="137.764">reduction</tspan></text>
+<path d="M244.707 123.707C245.098 123.317 245.098 122.683 244.707 122.293L238.343 115.929C237.953 115.538 237.319 115.538 236.929 115.929C236.538 116.319 236.538 116.953 236.929 117.343L242.586 123L236.929 128.657C236.538 129.047 236.538 129.681 236.929 130.071C237.319 130.462 237.953 130.462 238.343 130.071L244.707 123.707ZM217 124H244V122H217V124Z" fill="black"/>
+<path d="M104.707 123.707C105.098 123.317 105.098 122.683 104.707 122.293L98.3431 115.929C97.9526 115.538 97.3195 115.538 96.9289 115.929C96.5384 116.319 96.5384 116.953 96.9289 117.343L102.586 123L96.9289 128.657C96.5384 129.047 96.5384 129.681 96.9289 130.071C97.3195 130.462 97.9526 130.462 98.3431 130.071L104.707 123.707ZM77 124H104V122H77V124Z" fill="black"/>
+<rect x="413.5" y="104.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="435" y="128.764">Clustering</tspan></text>
+<path d="M403.707 123.707C404.098 123.317 404.098 122.683 403.707 122.293L397.343 115.929C396.953 115.538 396.319 115.538 395.929 115.929C395.538 116.319 395.538 116.953 395.929 117.343L401.586 123L395.929 128.657C395.538 129.047 395.538 129.681 395.929 130.071C396.319 130.462 396.953 130.462 397.343 130.071L403.707 123.707ZM376 124H403V122H376V124Z" fill="black"/>
+<rect x="560.5" y="104.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="590.404" y="120.764">Topic &#10;</tspan><tspan x="568.215" y="134.764">representation</tspan></text>
+<rect x="560.5" y="0.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="565.232" y="16.7637">Representative &#10;</tspan><tspan x="587.785" y="30.7637">images</tspan></text>
+<path d="M544.707 123.707C545.098 123.317 545.098 122.683 544.707 122.293L538.343 115.929C537.953 115.538 537.319 115.538 536.929 115.929C536.538 116.319 536.538 116.953 536.929 117.343L542.586 123L536.929 128.657C536.538 129.047 536.538 129.681 536.929 130.071C537.319 130.462 537.953 130.462 538.343 130.071L544.707 123.707ZM517 124H544V122H517V124Z" fill="black"/>
+<path d="M607.707 51.2929C607.317 50.9024 606.683 50.9024 606.293 51.2929L599.929 57.6569C599.538 58.0474 599.538 58.6805 599.929 59.0711C600.319 59.4616 600.953 59.4616 601.343 59.0711L607 53.4142L612.657 59.0711C613.047 59.4616 613.681 59.4616 614.071 59.0711C614.462 58.6805 614.462 58.0474 614.071 57.6569L607.707 51.2929ZM608 98L608 52L606 52L606 98L608 98Z" fill="black"/>
+</svg>

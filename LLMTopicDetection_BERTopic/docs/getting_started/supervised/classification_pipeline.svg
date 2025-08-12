@@ -1,0 +1,14 @@
+<svg width="387" height="56" viewBox="0 0 387 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="387" height="56" fill="white"/>
+<rect x="0.5" y="13.5" width="88" height="42" fill="white" stroke="black"/>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="30" y="9.96973">SBERT</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="150" y="9.96973">Logistic Regression</tspan></text>
+<text fill="#757474" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="10" letter-spacing="0em"><tspan x="320" y="9.96973">c-TF-IDF</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="9" y="37.7637">Embeddings</tspan></text>
+<rect x="142.5" y="13.5" width="105" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="173.045" y="37.7637">Classifier</tspan></text>
+<path d="M126.707 32.7071C127.098 32.3166 127.098 31.6834 126.707 31.2929L120.343 24.9289C119.953 24.5384 119.319 24.5384 118.929 24.9289C118.538 25.3195 118.538 25.9526 118.929 26.3431L124.586 32L118.929 37.6569C118.538 38.0474 118.538 38.6805 118.929 39.0711C119.319 39.4616 119.953 39.4616 120.343 39.0711L126.707 32.7071ZM99 33H126V31H99V33Z" fill="black"/>
+<rect x="295.5" y="13.5" width="91" height="42" fill="white" stroke="black"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Tahoma" font-size="12" letter-spacing="0em"><tspan x="327.279" y="31.7637">Topic&#10;</tspan><tspan x="303.215" y="45.7637">representation</tspan></text>
+<path d="M285.707 32.7071C286.098 32.3166 286.098 31.6834 285.707 31.2929L279.343 24.9289C278.953 24.5384 278.319 24.5384 277.929 24.9289C277.538 25.3195 277.538 25.9526 277.929 26.3431L283.586 32L277.929 37.6569C277.538 38.0474 277.538 38.6805 277.929 39.0711C278.319 39.4616 278.953 39.4616 279.343 39.0711L285.707 32.7071ZM258 33H285V31H258V33Z" fill="black"/>
+</svg>
