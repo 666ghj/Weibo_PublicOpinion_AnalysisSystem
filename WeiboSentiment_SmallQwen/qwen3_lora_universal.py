@@ -139,6 +139,7 @@ class Qwen3LoRAUniversal(BaseQwenModel):
             instruction = f"请分析以下微博文本的情感倾向，回答'正面'或'负面'。\n\n文本：{text}\n\n情感："
             response = sentiment
             
+            
             # 组合成完整的训练文本
             full_text = f"{instruction}{response}{self.tokenizer.eos_token}"
             

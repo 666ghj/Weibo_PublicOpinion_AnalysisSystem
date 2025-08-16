@@ -333,3 +333,6 @@ test_results/
 .hg/
 
 .cursor/
+
+# Ai操作指引文件
+OperationGuidance/
