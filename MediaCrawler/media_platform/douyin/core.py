@@ -100,6 +100,7 @@ class DouYinCrawler(AbstractCrawler):
                 # Get the information and comments of the specified creator
                 await self.get_creators_and_videos()
 
+
             utils.logger.info("[DouYinCrawler.start] Douyin Crawler finished ...")
 
     async def search(self) -> None:
@@ -362,6 +363,7 @@ class DouYinCrawler(AbstractCrawler):
             if not url:
                 continue
             content = await self.dy_client.get_aweme_media(url)
+            await asyncio.sleep(random.random())
             if content is None:
                 continue
             extension_file_name = f"{picNum:>03d}.jpeg"
@@ -385,7 +387,59 @@ class DouYinCrawler(AbstractCrawler):
         if not video_download_url:
             return
         content = await self.dy_client.get_aweme_media(video_download_url)
+        await asyncio.sleep(random.random())
         if content is None:
             return
         extension_file_name = f"video.mp4"
         await douyin_store.update_dy_aweme_video(aweme_id, content, extension_file_name)
+
+
+
+    async def search_keyword_videos(self, keyword: str, max_videos: int = 50) -> None:
+        """Search videos for a specific keyword with limited count."""
+        dy_limit_count = 10  # douyin limit page fixed value
+        if max_videos < dy_limit_count:
+            max_videos = dy_limit_count
+
+        page = 0
+        dy_search_id = ""
+        crawled_count = 0
+
+        while crawled_count < max_videos:
+            try:
+                utils.logger.info(f"[DouYinCrawler.search_keyword_videos] search douyin keyword: {keyword}, page: {page}")
+                posts_res = await self.dy_client.search_info_by_keyword(
+                    keyword=keyword,
+                    offset=page * dy_limit_count,
+                    publish_time=PublishTimeType(config.PUBLISH_TIME_TYPE),
+                    search_id=dy_search_id,
+                )
+
+                if posts_res.get("data") is None or posts_res.get("data") == []:
+                    utils.logger.info(f"[DouYinCrawler.search_keyword_videos] No more content for keyword: {keyword}")
+                    break
+
+                dy_search_id = posts_res.get("extra", {}).get("logid", "")
+                aweme_list = []
+
+                for post_item in posts_res.get("data"):
+                    try:
+                        aweme_info: Dict = (post_item.get("aweme_info") or post_item.get("aweme_mix_info", {}).get("mix_items")[0])
+                    except TypeError:
+                        continue
+                    aweme_list.append(aweme_info.get("aweme_id", ""))
+                    await douyin_store.update_douyin_aweme(aweme_item=aweme_info)
+                    await self.get_aweme_media(aweme_item=aweme_info)
+
+                crawled_count += len(aweme_list)
+                utils.logger.info(f"[DouYinCrawler.search_keyword_videos] keyword: {keyword}, crawled: {crawled_count}/{max_videos}")
+
+                await self.batch_get_note_comments(aweme_list)
+                page += 1
+
+                if crawled_count >= max_videos:
+                    break
+
+            except Exception as e:
+                utils.logger.error(f"[DouYinCrawler.search_keyword_videos] Error searching keyword {keyword}: {e}")
+                break

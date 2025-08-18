@@ -120,14 +120,20 @@ class ZhihuDbStoreImplement(AbstractStore):
         """
         from .zhihu_store_sql import (add_new_content,
                                       query_content_by_content_id,
-                                      update_content_by_content_id)
-        note_id = content_item.get("note_id")
-        note_detail: Dict = await query_content_by_content_id(content_id=note_id)
-        if not note_detail:
+                                      update_content_by_content_id,
+                                      add_or_ignore_zhihu_content_keyword_map)
+        content_id = content_item.get("content_id")
+        content_detail: Dict = await query_content_by_content_id(content_id=content_id)
+        if not content_detail:
             content_item["add_ts"] = utils.get_current_timestamp()
             await add_new_content(content_item)
         else:
-            await update_content_by_content_id(note_id, content_item=content_item)
+            await update_content_by_content_id(content_id, content_item=content_item)
+
+        # write keyword mapping - DISABLED to avoid duplicate data issues
+        # from var import source_keyword_var
+        # keyword = content_item.get("source_keyword") or source_keyword_var.get()
+        # await add_or_ignore_zhihu_content_keyword_map(content_id, keyword)
 
     async def store_comment(self, comment_item: Dict):
         """
@@ -268,7 +274,8 @@ class ZhihuSqliteStoreImplement(AbstractStore):
         """
         from .zhihu_store_sql import (add_new_content,
                                       query_content_by_content_id,
-                                      update_content_by_content_id)
+                                      update_content_by_content_id,
+                                      add_or_ignore_zhihu_content_keyword_map)
         note_id = content_item.get("note_id")
         note_detail: Dict = await query_content_by_content_id(content_id=note_id)
         if not note_detail:
@@ -276,6 +283,11 @@ class ZhihuSqliteStoreImplement(AbstractStore):
             await add_new_content(content_item)
         else:
             await update_content_by_content_id(note_id, content_item=content_item)
+
+        # write keyword mapping - DISABLED to avoid duplicate data issues
+        # from var import source_keyword_var
+        # keyword = content_item.get("source_keyword") or source_keyword_var.get()
+        # await add_or_ignore_zhihu_content_keyword_map(note_id, keyword)
 
     async def store_comment(self, comment_item: Dict):
         """

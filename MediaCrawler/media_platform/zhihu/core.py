@@ -127,6 +127,9 @@ class ZhihuCrawler(AbstractCrawler):
             elif config.CRAWLER_TYPE == "creator":
                 # Get creator's information and their notes and comments
                 await self.get_creators_and_notes()
+            elif config.CRAWLER_TYPE == "trending":
+                # Get trending keywords and crawl related content
+                await self.search_trending()
             else:
                 pass
 
@@ -453,3 +456,83 @@ class ZhihuCrawler(AbstractCrawler):
         else:
             await self.browser_context.close()
         utils.logger.info("[ZhihuCrawler.close] Browser context closed ...")
+
+    async def search_trending(self) -> None:
+        """Search trending keywords and retrieve related content."""
+        utils.logger.info("[ZhihuCrawler.search_trending] Begin search zhihu trending keywords")
+
+        try:
+            # Get trending keywords
+            trending_res = await self.zhihu_client.get_trending_keywords()
+            utils.logger.info(f"[ZhihuCrawler.search_trending] Trending response: {trending_res}")
+
+            if not trending_res or not trending_res.get("data"):
+                utils.logger.error("[ZhihuCrawler.search_trending] Failed to get trending keywords")
+                return
+
+            trending_keywords = []
+            trending_data = trending_res.get("data", [])
+
+            # Extract trending keywords
+            # 如果TRENDING_KEYWORDS_COUNT为0或None，获取所有热搜；否则限制数量
+            if config.TRENDING_KEYWORDS_COUNT and config.TRENDING_KEYWORDS_COUNT > 0:
+                trending_data = trending_data[:config.TRENDING_KEYWORDS_COUNT]
+
+            for item in trending_data:
+                if isinstance(item, dict) and "query" in item:
+                    trending_keywords.append(item["query"])
+                elif isinstance(item, str):
+                    trending_keywords.append(item)
+
+            if not trending_keywords:
+                utils.logger.warning("[ZhihuCrawler.search_trending] No trending keywords found")
+                return
+
+            utils.logger.info(f"[ZhihuCrawler.search_trending] Found {len(trending_keywords)} trending keywords: {trending_keywords}")
+
+            # Search content for each trending keyword
+            if config.ENABLE_TRENDING_KEYWORDS_CRAWL:
+                for keyword in trending_keywords:
+                    source_keyword_var.set(keyword)
+                    utils.logger.info(f"[ZhihuCrawler.search_trending] Searching trending keyword: {keyword}")
+                    await self.search_keyword_content(keyword, max_content=config.TRENDING_KEYWORD_MAX_NOTES_COUNT)
+
+        except Exception as e:
+            utils.logger.error(f"[ZhihuCrawler.search_trending] Error getting trending keywords: {e}")
+
+    async def search_keyword_content(self, keyword: str, max_content: int = 50) -> None:
+        """Search content for a specific keyword with limited count."""
+        zhihu_limit_count = 20  # zhihu limit page fixed value
+        if max_content < zhihu_limit_count:
+            max_content = zhihu_limit_count
+
+        page = 1
+        crawled_count = 0
+
+        while crawled_count < max_content:
+            try:
+                utils.logger.info(f"[ZhihuCrawler.search_keyword_content] search zhihu keyword: {keyword}, page: {page}")
+                content_list: List[ZhihuContent] = await self.zhihu_client.get_note_by_keyword(
+                    keyword=keyword,
+                    page=page,
+                )
+
+                if not content_list:
+                    utils.logger.info(f"[ZhihuCrawler.search_keyword_content] No more content for keyword: {keyword}")
+                    break
+
+                for content in content_list:
+                    await zhihu_store.update_zhihu_content(content)
+
+                crawled_count += len(content_list)
+                utils.logger.info(f"[ZhihuCrawler.search_keyword_content] keyword: {keyword}, crawled: {crawled_count}/{max_content}")
+
+                await self.batch_get_content_comments(content_list)
+                page += 1
+
+                if crawled_count >= max_content:
+                    break
+
+            except Exception as e:
+                utils.logger.error(f"[ZhihuCrawler.search_keyword_content] Error searching keyword {keyword}: {e}")
+                break

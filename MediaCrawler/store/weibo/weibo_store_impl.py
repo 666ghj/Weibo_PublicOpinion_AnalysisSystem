@@ -1,12 +1,12 @@
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：  
-# 1. 不得用于任何商业用途。  
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。  
-# 3. 不得进行大规模爬取或对平台造成运营干扰。  
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。   
+# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：
+# 1. 不得用于任何商业用途。
+# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。
+# 3. 不得进行大规模爬取或对平台造成运营干扰。
+# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。
 # 5. 不得用于任何非法或不当的用途。
-#   
-# 详细许可条款请参阅项目根目录下的LICENSE文件。  
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。  
+#
+# 详细许可条款请参阅项目根目录下的LICENSE文件。
+# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
 
 
 # -*- coding: utf-8 -*-
@@ -26,6 +26,13 @@ import config
 from base.base_crawler import AbstractStore
 from tools import utils, words
 from var import crawler_type_var
+
+# 导入分析钩子
+try:
+    from analysis.analysis_hooks import analysis_hooks
+    ANALYSIS_HOOKS_AVAILABLE = True
+except ImportError:
+    ANALYSIS_HOOKS_AVAILABLE = False
 
 
 def calculate_number_of_files(file_store_path: str) -> int:
@@ -88,6 +95,13 @@ class WeiboCsvStoreImplement(AbstractStore):
         """
         await self.save_data_to_csv(save_item=content_item, store_type="contents")
 
+        # 触发分析钩子
+        if ANALYSIS_HOOKS_AVAILABLE:
+            try:
+                await analysis_hooks.on_post_stored(content_item)
+            except Exception as e:
+                utils.logger.warning(f"Analysis hook failed: {e}")
+
     async def store_comment(self, comment_item: Dict):
         """
         Weibo comment CSV storage implementation
@@ -99,6 +113,13 @@ class WeiboCsvStoreImplement(AbstractStore):
         """
         await self.save_data_to_csv(save_item=comment_item, store_type="comments")
 
+        # 触发分析钩子
+        if ANALYSIS_HOOKS_AVAILABLE:
+            try:
+                await analysis_hooks.on_comment_stored(comment_item)
+            except Exception as e:
+                utils.logger.warning(f"Analysis hook failed: {e}")
+
     async def store_creator(self, creator: Dict):
         """
         Weibo creator CSV storage implementation
@@ -109,6 +130,8 @@ class WeiboCsvStoreImplement(AbstractStore):
 
         """
         await self.save_data_to_csv(save_item=creator, store_type="creators")
+
+
 
 
 class WeiboDbStoreImplement(AbstractStore):
@@ -125,7 +148,8 @@ class WeiboDbStoreImplement(AbstractStore):
 
         from .weibo_store_sql import (add_new_content,
                                       query_content_by_content_id,
-                                      update_content_by_content_id)
+                                      update_content_by_content_id,
+                                      add_or_ignore_weibo_note_keyword_map)
         note_id = content_item.get("note_id")
         note_detail: Dict = await query_content_by_content_id(content_id=note_id)
         if not note_detail:
@@ -133,6 +157,18 @@ class WeiboDbStoreImplement(AbstractStore):
             await add_new_content(content_item)
         else:
             await update_content_by_content_id(note_id, content_item=content_item)
+
+        # 触发分析钩子
+        if ANALYSIS_HOOKS_AVAILABLE:
+            try:
+                await analysis_hooks.on_post_stored(content_item)
+            except Exception as e:
+                utils.logger.warning(f"Analysis hook failed: {e}")
+
+
+
+
+        # TODO: add keyword mapping for creators if needed in the future
 
     async def store_comment(self, comment_item: Dict):
         """
@@ -154,6 +190,13 @@ class WeiboDbStoreImplement(AbstractStore):
         else:
             await update_comment_by_comment_id(comment_id, comment_item=comment_item)
 
+        # 触发分析钩子
+        if ANALYSIS_HOOKS_AVAILABLE:
+            try:
+                await analysis_hooks.on_comment_stored(comment_item)
+            except Exception as e:
+                utils.logger.warning(f"Analysis hook failed: {e}")
+
     async def store_creator(self, creator: Dict):
         """
         Weibo creator DB storage implementation
@@ -174,6 +217,8 @@ class WeiboDbStoreImplement(AbstractStore):
             await add_new_creator(creator)
         else:
             await update_creator_by_user_id(user_id, creator)
+
+
 
 
 class WeiboJsonStoreImplement(AbstractStore):
@@ -239,6 +284,13 @@ class WeiboJsonStoreImplement(AbstractStore):
         """
         await self.save_data_to_json(content_item, "contents")
 
+        # 触发分析钩子
+        if ANALYSIS_HOOKS_AVAILABLE:
+            try:
+                await analysis_hooks.on_post_stored(content_item)
+            except Exception as e:
+                utils.logger.warning(f"Analysis hook failed: {e}")
+
     async def store_comment(self, comment_item: Dict):
         """
         comment JSON storage implementation
@@ -250,6 +302,13 @@ class WeiboJsonStoreImplement(AbstractStore):
         """
         await self.save_data_to_json(comment_item, "comments")
 
+        # 触发分析钩子
+        if ANALYSIS_HOOKS_AVAILABLE:
+            try:
+                await analysis_hooks.on_comment_stored(comment_item)
+            except Exception as e:
+                utils.logger.warning(f"Analysis hook failed: {e}")
+
     async def store_creator(self, creator: Dict):
         """
         creator JSON storage implementation
@@ -260,6 +319,8 @@ class WeiboJsonStoreImplement(AbstractStore):
 
         """
         await self.save_data_to_json(creator, "creators")
+
+
 
 
 class WeiboSqliteStoreImplement(AbstractStore):
@@ -275,7 +336,8 @@ class WeiboSqliteStoreImplement(AbstractStore):
 
         from .weibo_store_sql import (add_new_content,
                                       query_content_by_content_id,
-                                      update_content_by_content_id)
+                                      update_content_by_content_id,
+                                      add_or_ignore_weibo_note_keyword_map)
         note_id = content_item.get("note_id")
         note_detail: Dict = await query_content_by_content_id(content_id=note_id)
         if not note_detail:
@@ -283,6 +345,15 @@ class WeiboSqliteStoreImplement(AbstractStore):
             await add_new_content(content_item)
         else:
             await update_content_by_content_id(note_id, content_item=content_item)
+
+        # 触发分析钩子
+        if ANALYSIS_HOOKS_AVAILABLE:
+            try:
+                await analysis_hooks.on_post_stored(content_item)
+            except Exception as e:
+                utils.logger.warning(f"Analysis hook failed: {e}")
+
+
 
     async def store_comment(self, comment_item: Dict):
         """
@@ -304,6 +375,13 @@ class WeiboSqliteStoreImplement(AbstractStore):
         else:
             await update_comment_by_comment_id(comment_id, comment_item=comment_item)
 
+        # 触发分析钩子
+        if ANALYSIS_HOOKS_AVAILABLE:
+            try:
+                await analysis_hooks.on_comment_stored(comment_item)
+            except Exception as e:
+                utils.logger.warning(f"Analysis hook failed: {e}")
+
     async def store_creator(self, creator: Dict):
         """
         Weibo creator SQLite storage implementation
@@ -324,3 +402,5 @@ class WeiboSqliteStoreImplement(AbstractStore):
             await add_new_creator(creator)
         else:
             await update_creator_by_user_id(user_id, creator)
+
+

@@ -239,3 +239,5 @@ async def update_xhs_note_video(note_id, video_content, extension_file_name):
     """
 
     await XiaoHongShuVideo().store_video({"notice_id": note_id, "video_content": video_content, "extension_file_name": extension_file_name})
+
+

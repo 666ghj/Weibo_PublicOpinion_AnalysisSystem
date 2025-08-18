@@ -107,6 +107,9 @@ class BilibiliCrawler(AbstractCrawler):
                         await self.get_creator_videos(int(creator_id))
                 else:
                     await self.get_all_creator_details(config.BILI_CREATOR_ID_LIST)
+            elif config.CRAWLER_TYPE == "trending":
+                # Get trending keywords and crawl related videos
+                await self.search_trending()
             else:
                 pass
             utils.logger.info("[BilibiliCrawler.start] Bilibili Crawler finished ...")
@@ -544,6 +547,7 @@ class BilibiliCrawler(AbstractCrawler):
             return
 
         content = await self.bili_client.get_video_media(video_url)
+        await asyncio.sleep(random.random())
         if content is None:
             return
         extension_file_name = f"video.mp4"
@@ -654,3 +658,94 @@ class BilibiliCrawler(AbstractCrawler):
                 utils.logger.error(f"[BilibiliCrawler.get_dynamics] get creator_id: {creator_id} dynamics error: {ex}")
             except Exception as e:
                 utils.logger.error(f"[BilibiliCrawler.get_dynamics] may be been blocked, err:{e}")
+
+    async def search_trending(self) -> None:
+        """Search trending keywords and retrieve related videos."""
+        utils.logger.info("[BilibiliCrawler.search_trending] Begin search bilibili trending keywords")
+
+        try:
+            # Get trending keywords
+            trending_res = await self.bili_client.get_trending_keywords()
+            utils.logger.info(f"[BilibiliCrawler.search_trending] Trending response: {trending_res}")
+
+            if not trending_res or not trending_res.get("data"):
+                utils.logger.error("[BilibiliCrawler.search_trending] Failed to get trending keywords")
+                return
+
+            trending_keywords = []
+            trending_data = trending_res.get("data", {})
+
+            # Extract trending keywords
+            if "trending" in trending_data:
+                # 如果TRENDING_KEYWORDS_COUNT为0或None，获取所有热搜；否则限制数量
+                trending_list = trending_data["trending"]["list"]
+                if config.TRENDING_KEYWORDS_COUNT and config.TRENDING_KEYWORDS_COUNT > 0:
+                    trending_list = trending_list[:config.TRENDING_KEYWORDS_COUNT]
+
+                for item in trending_list:
+                    if isinstance(item, dict) and "keyword" in item:
+                        trending_keywords.append(item["keyword"])
+                    elif isinstance(item, str):
+                        trending_keywords.append(item)
+
+            if not trending_keywords:
+                utils.logger.warning("[BilibiliCrawler.search_trending] No trending keywords found")
+                return
+
+            utils.logger.info(f"[BilibiliCrawler.search_trending] Found {len(trending_keywords)} trending keywords: {trending_keywords}")
+
+            # Search videos for each trending keyword
+            if config.ENABLE_TRENDING_KEYWORDS_CRAWL:
+                for keyword in trending_keywords:
+                    source_keyword_var.set(keyword)
+                    utils.logger.info(f"[BilibiliCrawler.search_trending] Searching trending keyword: {keyword}")
+                    await self.search_keyword_videos(keyword, max_videos=config.TRENDING_KEYWORD_MAX_NOTES_COUNT)
+
+        except Exception as e:
+            utils.logger.error(f"[BilibiliCrawler.search_trending] Error getting trending keywords: {e}")
+
+    async def search_keyword_videos(self, keyword: str, max_videos: int = 50) -> None:
+        """Search videos for a specific keyword with limited count."""
+        bili_limit_count = 20  # bilibili limit page fixed value
+        if max_videos < bili_limit_count:
+            max_videos = bili_limit_count
+
+        page = 1
+        crawled_count = 0
+
+        while crawled_count < max_videos:
+            try:
+                utils.logger.info(f"[BilibiliCrawler.search_keyword_videos] search bilibili keyword: {keyword}, page: {page}")
+                videos_res = await self.bili_client.search_video_by_keyword(
+                    keyword=keyword,
+                    page=page,
+                    page_size=bili_limit_count,
+                )
+
+                if not videos_res or not videos_res.get("data"):
+                    utils.logger.info(f"[BilibiliCrawler.search_keyword_videos] No more content for keyword: {keyword}")
+                    break
+
+                video_list = videos_res.get("data", {}).get("result", [])
+                if not video_list:
+                    utils.logger.info(f"[BilibiliCrawler.search_keyword_videos] No more content for keyword: {keyword}")
+                    break
+
+                video_ids = []
+                for video_item in video_list:
+                    if video_item:
+                        video_ids.append(video_item.get("aid"))
+                        await bilibili_store.update_bilibili_video(video_item)
+
+                crawled_count += len(video_ids)
+                utils.logger.info(f"[BilibiliCrawler.search_keyword_videos] keyword: {keyword}, crawled: {crawled_count}/{max_videos}")
+
+                await self.batch_get_video_comments(video_ids)
+                page += 1
+
+                if crawled_count >= max_videos:
+                    break
+
+            except Exception as e:
+                utils.logger.error(f"[BilibiliCrawler.search_keyword_videos] Error searching keyword {keyword}: {e}")
+                break

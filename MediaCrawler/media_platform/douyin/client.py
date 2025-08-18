@@ -30,7 +30,7 @@ class DouYinClient(AbstractApiClient):
 
     def __init__(
         self,
-        timeout=30,  # 若开启爬取媒体选项，抖音的短视频需要更久的超时时间
+        timeout=60,  # 若开启爬取媒体选项，抖音的短视频需要更久的超时时间
         proxy=None,
         *,
         headers: Dict,
@@ -173,6 +173,8 @@ class DouYinClient(AbstractApiClient):
         headers["Referer"] = urllib.parse.quote(referer_url, safe=':/')
         return await self.get("/aweme/v1/web/general/search/single/", query_params, headers=headers)
 
+
+
     async def get_video_by_id(self, aweme_id: str) -> Any:
         """
         DouYin Video Detail API
@@ -305,7 +307,7 @@ class DouYinClient(AbstractApiClient):
             posts_has_more = aweme_post_res.get("has_more", 0)
             max_cursor = aweme_post_res.get("max_cursor")
             aweme_list = aweme_post_res.get("aweme_list") if aweme_post_res.get("aweme_list") else []
-            utils.logger.info(f"[DouYinCrawler.get_all_user_aweme_posts] get sec_user_id:{sec_user_id} video len : {len(aweme_list)}")
+            utils.logger.info(f"[DouYinClient.get_all_user_aweme_posts] get sec_user_id:{sec_user_id} video len : {len(aweme_list)}")
             if callback:
                 await callback(aweme_list)
             result.extend(aweme_list)
@@ -313,9 +315,14 @@ class DouYinClient(AbstractApiClient):
 
     async def get_aweme_media(self, url: str) -> Union[bytes, None]:
         async with httpx.AsyncClient(proxy=self.proxy) as client:
-            response = await client.request("GET", url, timeout=self.timeout, follow_redirects=True)
-            if not response.reason_phrase == "OK":
-                utils.logger.error(f"[DouYinCrawler.get_aweme_media] request {url} err, res:{response.text}")
+            try:
+                response = await client.request("GET", url, timeout=self.timeout, follow_redirects=True)
+                response.raise_for_status()
+                if not response.reason_phrase == "OK":
+                    utils.logger.error(f"[DouYinClient.get_aweme_media] request {url} err, res:{response.text}")
+                    return None
+                else:
+                    return response.content
+            except httpx.HTTPError as exc:  # some wrong when call httpx.request method, such as connection error, client error, server error or response status code is not 2xx
+                utils.logger.error(f"[DouYinClient.get_aweme_media] {exc.__class__.__name__} for {exc.request.url} - {exc}")  # 保留原始异常类型名称，以便开发者调试
                 return None
-            else:
-                return response.content

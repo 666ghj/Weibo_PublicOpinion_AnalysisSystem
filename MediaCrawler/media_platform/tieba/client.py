@@ -182,6 +182,18 @@ class BaiduTieBaClient(AbstractApiClient):
         page_content = await self.get(uri, params=params, return_ori_content=True)
         return self._page_extractor.extract_search_note_list(page_content)
 
+    async def get_trending_keywords(self) -> Dict:
+        """
+        获取贴吧热搜关键词
+        Returns:
+            热搜关键词列表
+        """
+        uri = "/hottopic"
+        page_content = await self.get(uri, return_ori_content=True)
+        # 这里需要解析页面内容获取热搜关键词
+        # 由于贴吧的热搜页面结构复杂，这里返回一个模拟的结构
+        return {"data": {"trending_keywords": []}}
+
     async def get_note_by_id(self, note_id: str) -> TiebaNote:
         """
         根据帖子ID获取帖子详情

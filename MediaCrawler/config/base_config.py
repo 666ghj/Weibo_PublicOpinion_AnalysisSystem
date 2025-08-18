@@ -9,12 +9,13 @@
 # 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
 
 # 基础配置
-PLATFORM = "xhs"  # 平台，xhs | dy | ks | bili | wb | tieba | zhihu
-KEYWORDS = "编程副业,编程兼职"  # 关键词搜索配置，以英文逗号分隔
+PLATFORM = "wb"  # 平台，xhs | dy | ks | bili | wb | tieba | zhihu
+KEYWORDS = ""
+#"巴黎奥运会,樊振东,郑钦文,北京密云暴雨,河北强降雨,京津冀暴雨,涿州洪水,海河流域洪水预警,天水幼儿园血铅超标,少林寺释永信被查,武大图书馆性骚扰宣判,中美关税谈判,特朗普对印度加税50%,日本25%关税,广东顺德基孔肯雅热,中国智谱模型,DeepSeek-V3,比亚迪秦L续航,理想L6锁单,问界M9五座版,翻车,暴雷"  # 关键词搜索配置，以英文逗号分隔
 LOGIN_TYPE = "qrcode"  # qrcode or phone or cookie
 COOKIES = ""
 CRAWLER_TYPE = (
-    "search"  # 爬取类型，search(关键词搜索) | detail(帖子详情)| creator(创作者主页数据)
+    "search"  # 爬取类型，search(关键词搜索) | detail(帖子详情)| creator(创作者主页数据) | trending(热搜爬取)（仅微博）
 )
 # 是否开启 IP 代理
 ENABLE_IP_PROXY = False
@@ -62,7 +63,7 @@ BROWSER_LAUNCH_TIMEOUT = 30
 AUTO_CLOSE_BROWSER = True
 
 # 数据保存类型选项配置,支持四种类型：csv、db、json、sqlite, 最好保存到DB，有排重的功能。
-SAVE_DATA_OPTION = "json"  # csv or db or json or sqlite
+SAVE_DATA_OPTION = "db"  # csv or db or json or sqlite (db表示MySQL)
 
 # 用户浏览器缓存的浏览器文件配置
 USER_DATA_DIR = "%s_user_data_dir"  # %s will be replaced by platform name
@@ -107,6 +108,25 @@ FONT_PATH = "./docs/STZHONGS.TTF"
 
 # 爬取间隔时间
 CRAWLER_MAX_SLEEP_SEC = 2
+
+# 日志配置
+# 是否启用详细日志模式（包含HTTP请求日志等）
+ENABLE_VERBOSE_LOGGING = False
+
+# ==================== 热搜爬取配置 ====================
+# 是否启用热搜关键词爬取
+ENABLE_TRENDING_KEYWORDS_CRAWL = True
+
+# 热搜关键词数量限制（0表示无限制，爬取所有热搜）
+TRENDING_KEYWORDS_COUNT = 0
+
+# 是否爬取热搜相关帖子
+ENABLE_TRENDING_POSTS_CRAWL = True
+
+# 每个热搜关键词爬取的帖子数量限制（0表示使用CRAWLER_MAX_NOTES_COUNT的值）
+TRENDING_KEYWORD_MAX_NOTES_COUNT = 0
+
+
 
 from .bilibili_config import *
 from .xhs_config import *

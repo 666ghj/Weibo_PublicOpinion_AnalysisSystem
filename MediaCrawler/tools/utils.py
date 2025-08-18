@@ -26,6 +26,38 @@ def init_loging_config():
     )
     _logger = logging.getLogger("MediaCrawler")
     _logger.setLevel(level)
+
+    # 根据配置决定是否启用详细日志
+    try:
+        import config
+        if not getattr(config, 'ENABLE_VERBOSE_LOGGING', False):
+            # 简化第三方库日志输出，完全禁用或只显示CRITICAL级别
+            httpx_logger = logging.getLogger("httpx")
+            httpx_logger.setLevel(logging.CRITICAL)
+
+            asyncio_logger = logging.getLogger("asyncio")
+            asyncio_logger.setLevel(logging.CRITICAL)
+
+            playwright_logger = logging.getLogger("playwright")
+            playwright_logger.setLevel(logging.CRITICAL)
+
+            # 禁用一些特定的日志记录器
+            logging.getLogger("urllib3").setLevel(logging.CRITICAL)
+            logging.getLogger("httpcore").setLevel(logging.CRITICAL)
+    except ImportError:
+        # 如果config模块还未加载，使用默认的简化设置
+        httpx_logger = logging.getLogger("httpx")
+        httpx_logger.setLevel(logging.CRITICAL)
+
+        asyncio_logger = logging.getLogger("asyncio")
+        asyncio_logger.setLevel(logging.CRITICAL)
+
+        playwright_logger = logging.getLogger("playwright")
+        playwright_logger.setLevel(logging.CRITICAL)
+
+        logging.getLogger("urllib3").setLevel(logging.CRITICAL)
+        logging.getLogger("httpcore").setLevel(logging.CRITICAL)
+
     return _logger
 
 

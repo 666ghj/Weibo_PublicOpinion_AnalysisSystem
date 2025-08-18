@@ -11,11 +11,42 @@
 
 import asyncio
 import sys
+import warnings
 from typing import Optional
 
 import cmd_arg
 import config
 import db
+
+# 抑制特定的警告和异常信息
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+# 自定义异常钩子，过滤程序结束时的清理异常
+def custom_excepthook(exc_type, exc_value, exc_traceback):
+    # 过滤掉程序结束时的常见清理异常
+    if exc_type == KeyboardInterrupt:
+        return
+
+    error_msg = str(exc_value)
+    ignore_errors = [
+        "Event loop is closed",
+        "Target page, context or browser has been closed",
+        "I/O operation on closed pipe",
+        "Task was destroyed but it is pending",
+        "Connection.run()",
+        "_ProactorBasePipeTransport.__del__",
+        "BaseSubprocessTransport.__del__"
+    ]
+
+    if any(ignore_err in error_msg for ignore_err in ignore_errors):
+        return
+
+    # 只显示真正的错误
+    sys.__excepthook__(exc_type, exc_value, exc_traceback)
+
+# 设置自定义异常钩子
+sys.excepthook = custom_excepthook
 from base.base_crawler import AbstractCrawler
 from media_platform.bilibili import BilibiliCrawler
 from media_platform.douyin import DouYinCrawler
@@ -76,5 +107,16 @@ def cleanup():
 if __name__ == "__main__":
     try:
         asyncio.get_event_loop().run_until_complete(main())
+    except KeyboardInterrupt:
+        # 用户手动中断，静默处理
+        pass
+    except Exception as e:
+        # 只显示真正的错误，不显示程序结束时的清理异常
+        if not any(err_type in str(e) for err_type in ["Event loop is closed", "Target page", "I/O operation on closed pipe"]):
+            print(f"程序运行出错: {e}")
     finally:
-        cleanup()
+        try:
+            cleanup()
+        except Exception:
+            # 静默处理清理过程中的异常
+            pass

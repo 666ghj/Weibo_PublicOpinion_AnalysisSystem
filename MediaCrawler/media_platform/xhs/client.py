@@ -32,7 +32,7 @@ class XiaoHongShuClient(AbstractApiClient):
 
     def __init__(
         self,
-        timeout=30,  # 若开启爬取媒体选项，xhs 的长视频需要更久的超时时间
+        timeout=60,  # 若开启爬取媒体选项，xhs 的长视频需要更久的超时时间
         proxy=None,
         *,
         headers: Dict[str, str],
@@ -152,12 +152,17 @@ class XiaoHongShuClient(AbstractApiClient):
 
     async def get_note_media(self, url: str) -> Union[bytes, None]:
         async with httpx.AsyncClient(proxy=self.proxy) as client:
-            response = await client.request("GET", url, timeout=self.timeout)
-            if not response.reason_phrase == "OK":
-                utils.logger.error(f"[XiaoHongShuClient.get_note_media] request {url} err, res:{response.text}")
+            try:
+                response = await client.request("GET", url, timeout=self.timeout)
+                response.raise_for_status()
+                if not response.reason_phrase == "OK":
+                    utils.logger.error(f"[XiaoHongShuClient.get_note_media] request {url} err, res:{response.text}")
+                    return None
+                else:
+                    return response.content
+            except httpx.HTTPError as exc:  # some wrong when call httpx.request method, such as connection error, client error, server error or response status code is not 2xx
+                utils.logger.error(f"[DouYinClient.get_aweme_media] {exc.__class__.__name__} for {exc.request.url} - {exc}")  # 保留原始异常类型名称，以便开发者调试
                 return None
-            else:
-                return response.content
 
     async def pong(self) -> bool:
         """
@@ -221,6 +226,214 @@ class XiaoHongShuClient(AbstractApiClient):
             "note_type": note_type.value,
         }
         return await self.post(uri, data)
+
+
+
+    async def get_search_suggestions(self, keyword: str = "") -> Dict:
+        """
+        获取搜索建议，可能包含热门搜索词
+        Args:
+            keyword: 搜索关键词，为空时可能返回热门搜索
+        Returns:
+            搜索建议列表
+        """
+        uri = "/api/sns/web/v1/search/suggest"
+        params = {
+            "keyword": keyword
+        }
+        return await self.get(uri, params)
+
+    async def get_trending_keywords(self) -> Dict:
+        """
+        获取小红书热搜关键词
+        Returns:
+            热搜关键词列表
+        """
+        try:
+            # 方法1：通过搜索推荐API获取热门关键词
+            uri = "/api/sns/web/v1/search/recommend"
+            params = {"keyword": ""}  # 空关键词可能返回热门推荐
+            trending_res = await self.get(uri, params)
+            utils.logger.info(f"[XiaoHongShuClient.get_trending_keywords] Got trending response from search recommend API")
+            if trending_res and trending_res.get("data", {}).get("sug_items"):
+                return {"items": trending_res["data"]["sug_items"], "source": "search_recommend"}
+        except Exception as e:
+            utils.logger.warning(f"[XiaoHongShuClient.get_trending_keywords] Search recommend API failed: {e}")
+
+        try:
+            # 方法2：通过首页推荐获取热门内容
+            homefeed_res = await self.get_trending_from_homefeed()
+            utils.logger.info(f"[XiaoHongShuClient.get_trending_keywords] Got trending response from homefeed API")
+            if homefeed_res and homefeed_res.get("items"):
+                return homefeed_res
+        except Exception as e:
+            utils.logger.warning(f"[XiaoHongShuClient.get_trending_keywords] Homefeed API failed: {e}")
+
+        try:
+            # 方法3：尝试通过搜索建议获取热门关键词
+            suggest_res = await self.get_search_suggestions("")
+            utils.logger.info(f"[XiaoHongShuClient.get_trending_keywords] Got trending response from suggest API")
+            if suggest_res and suggest_res.get("items"):
+                return suggest_res
+        except Exception as backup_e:
+            utils.logger.warning(f"[XiaoHongShuClient.get_trending_keywords] Suggest API also failed: {backup_e}")
+
+        try:
+            # 方法4：尝试通过发现页面获取热门内容
+            discover_res = await self.get_trending_from_discover()
+            if discover_res and discover_res.get("items"):
+                return discover_res
+        except Exception as discover_e:
+            utils.logger.warning(f"[XiaoHongShuClient.get_trending_keywords] Discover API failed: {discover_e}")
+
+        try:
+            # 方法5：尝试通过页面直接获取热搜数据
+            return await self.get_trending_from_page()
+        except Exception as page_e:
+            utils.logger.error(f"[XiaoHongShuClient.get_trending_keywords] All methods failed, last error: {page_e}")
+            return {"items": []}
+
+    async def get_trending_from_homefeed(self) -> Dict:
+        """
+        通过首页推荐获取热门内容
+        Returns:
+            热门内容列表
+        """
+        try:
+            # 使用真实的homefeed API参数
+            uri = "/api/sns/web/v1/homefeed"
+            post_data = {
+                "cursor_score": "",
+                "num": 20,
+                "refresh_type": 1,
+                "note_index": 0,
+                "unread_begin_note_id": "",
+                "unread_end_note_id": "",
+                "unread_note_count": 0,
+                "category": "homefeed_recommend",
+                "search_key": "",
+                "need_num": 10,
+                "image_formats": ["jpg", "webp", "avif"],
+                "need_filter_image": False
+            }
+
+            # 使用POST方法调用
+            homefeed_res = await self.post(uri, post_data)
+            utils.logger.info(f"[XiaoHongShuClient.get_trending_from_homefeed] Got homefeed response")
+
+            # 从homefeed结果中提取热门标题作为关键词
+            if homefeed_res and homefeed_res.get("data", {}).get("items"):
+                items = homefeed_res["data"]["items"]
+                trending_keywords = []
+
+                utils.logger.info(f"[XiaoHongShuClient.get_trending_from_homefeed] Processing {len(items)} homefeed items")
+
+                for i, item in enumerate(items[:10]):  # 只取前10个
+                    utils.logger.debug(f"[XiaoHongShuClient.get_trending_from_homefeed] Item {i+1} keys: {list(item.keys())}")
+
+                    if item.get("note_card", {}).get("display_title"):
+                        title = item["note_card"]["display_title"].strip()
+                        utils.logger.info(f"[XiaoHongShuClient.get_trending_from_homefeed] Found title: {title}")
+
+                        if title and len(title) > 0:
+                            trending_keywords.append({
+                                "text": title,
+                                "type": "hot_note",
+                                "search_type": "notes"
+                            })
+                    else:
+                        utils.logger.debug(f"[XiaoHongShuClient.get_trending_from_homefeed] Item {i+1} has no display_title")
+
+                utils.logger.info(f"[XiaoHongShuClient.get_trending_from_homefeed] Extracted {len(trending_keywords)} keywords")
+                return {"items": trending_keywords, "source": "homefeed"}
+            else:
+                utils.logger.warning(f"[XiaoHongShuClient.get_trending_from_homefeed] No data.items found in response")
+                if homefeed_res:
+                    utils.logger.debug(f"[XiaoHongShuClient.get_trending_from_homefeed] Response keys: {list(homefeed_res.keys())}")
+                    if homefeed_res.get("data"):
+                        utils.logger.debug(f"[XiaoHongShuClient.get_trending_from_homefeed] Data keys: {list(homefeed_res['data'].keys())}")
+                return {"items": []}
+        except Exception as e:
+            utils.logger.error(f"[XiaoHongShuClient.get_trending_from_homefeed] Failed to get homefeed content: {e}")
+            return {"items": []}
+
+    async def get_trending_from_discover(self) -> Dict:
+        """
+        通过发现页面获取热门内容
+        Returns:
+            热门内容列表
+        """
+        try:
+            # 尝试获取发现页面的热门内容
+            uri = "/api/sns/web/v1/homefeed"
+            params = {
+                "refresh_type": 1,
+                "note_index": 0,
+                "unread_begin_note_id": "",
+                "unread_end_note_id": "",
+                "unread_note_count": 0,
+                "category": "homefeed.hot_recommend",
+                "search_key": "",
+                "need_num": 20
+            }
+            discover_res = await self.get(uri, params)
+            utils.logger.info(f"[XiaoHongShuClient.get_trending_from_discover] Got discover response")
+            return discover_res
+        except Exception as e:
+            utils.logger.error(f"[XiaoHongShuClient.get_trending_from_discover] Failed to get discover content: {e}")
+            return {"items": []}
+
+    async def get_trending_from_page(self) -> Dict:
+        """
+        通过浏览器页面直接获取热搜数据
+        Returns:
+            热搜数据
+        """
+        try:
+            # 访问小红书搜索页面，尝试获取热搜数据
+            await self.playwright_page.goto("https://www.xiaohongshu.com/search_result", wait_until="networkidle")
+            await asyncio.sleep(2)
+
+            # 尝试从页面中提取热搜数据
+            # 这里可能需要根据小红书页面的实际结构来调整
+            hot_searches = await self.playwright_page.evaluate("""
+                () => {
+                    const hotSearches = [];
+                    // 尝试查找热搜相关的元素
+                    const hotElements = document.querySelectorAll('[data-testid*="hot"], .hot-search, .trending');
+                    hotElements.forEach((element, index) => {
+                        const text = element.textContent?.trim();
+                        if (text && text.length > 0) {
+                            hotSearches.push({
+                                keyword: text,
+                                rank: index + 1
+                            });
+                        }
+                    });
+                    return hotSearches;
+                }
+            """)
+
+            if hot_searches:
+                utils.logger.info(f"[XiaoHongShuClient.get_trending_from_page] Found {len(hot_searches)} hot searches from page")
+                return {"items": hot_searches}
+            else:
+                utils.logger.warning("[XiaoHongShuClient.get_trending_from_page] No hot searches found on page")
+                return {"items": []}
+
+        except Exception as e:
+            utils.logger.error(f"[XiaoHongShuClient.get_trending_from_page] Failed to get trending from page: {e}")
+            return {"items": []}
+
+
+
+
+
+
+
+
+
+
 
     async def get_note_by_id(
         self,

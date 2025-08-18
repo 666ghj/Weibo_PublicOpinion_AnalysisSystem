@@ -161,6 +161,15 @@ class BilibiliClient(AbstractApiClient):
         }
         return await self.get(uri, post_data)
 
+    async def get_trending_keywords(self) -> Dict:
+        """
+        获取B站热搜关键词
+        Returns:
+            热搜关键词列表
+        """
+        uri = "/x/web-interface/wbi/search/square"
+        return await self.get(uri, {})
+
     async def get_video_info(self, aid: Union[int, None] = None, bvid: Union[str, None] = None) -> Dict:
         """
         Bilibli web video detail api, aid 和 bvid任选一个参数
@@ -202,12 +211,17 @@ class BilibiliClient(AbstractApiClient):
 
     async def get_video_media(self, url: str) -> Union[bytes, None]:
         async with httpx.AsyncClient(proxy=self.proxy) as client:
-            response = await client.request("GET", url, timeout=self.timeout, headers=self.headers)
-            if not response.reason_phrase == "OK":
-                utils.logger.error(f"[BilibiliClient.get_video_media] request {url} err, res:{response.text}")
+            try:
+                response = await client.request("GET", url, timeout=self.timeout, headers=self.headers)
+                response.raise_for_status()
+                if not response.reason_phrase == "OK":
+                    utils.logger.error(f"[BilibiliClient.get_video_media] request {url} err, res:{response.text}")
+                    return None
+                else:
+                    return response.content
+            except httpx.HTTPError as exc:  # some wrong when call httpx.request method, such as connection error, client error, server error or response status code is not 2xx
+                utils.logger.error(f"[BilibiliClient.get_video_media] {exc.__class__.__name__} for {exc.request.url} - {exc}")  # 保留原始异常类型名称，以便开发者调试
                 return None
-            else:
-                return response.content
 
     async def get_video_comments(
         self,

@@ -108,6 +108,9 @@ class XiaoHongShuCrawler(AbstractCrawler):
             elif config.CRAWLER_TYPE == "creator":
                 # Get creator's information and their notes and comments
                 await self.get_creators_and_notes()
+            elif config.CRAWLER_TYPE == "trending":
+                # Get trending keywords and their related notes
+                await self.search_trending()
             else:
                 pass
 
@@ -453,6 +456,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
             if not url:
                 continue
             content = await self.xhs_client.get_note_media(url)
+            await asyncio.sleep(random.random())
             if content is None:
                 continue
             extension_file_name = f"{picNum}.jpg"
@@ -476,8 +480,230 @@ class XiaoHongShuCrawler(AbstractCrawler):
         videoNum = 0
         for url in videos:
             content = await self.xhs_client.get_note_media(url)
+            await asyncio.sleep(random.random())
             if content is None:
                 continue
             extension_file_name = f"{videoNum}.mp4"
             videoNum += 1
             await xhs_store.update_xhs_note_video(note_id, content, extension_file_name)
+
+
+
+    async def search_keyword_notes(self, keyword: str, max_notes: int = 50) -> None:
+        """Search notes for a specific keyword with limited count."""
+        xhs_limit_count = 20  # xhs limit page fixed value
+        if max_notes < xhs_limit_count:
+            max_notes = xhs_limit_count
+
+        page = 1
+        search_id = get_search_id()
+        crawled_count = 0
+
+        while crawled_count < max_notes:
+            try:
+                utils.logger.info(f"[XiaoHongShuCrawler.search_keyword_notes] search xhs keyword: {keyword}, page: {page}")
+                notes_res = await self.xhs_client.get_note_by_keyword(
+                    keyword=keyword,
+                    search_id=search_id,
+                    page=page,
+                    sort=(SearchSortType(config.SORT_TYPE) if config.SORT_TYPE != "" else SearchSortType.GENERAL),
+                )
+
+                if not notes_res or not notes_res.get("has_more", False):
+                    utils.logger.info(f"[XiaoHongShuCrawler.search_keyword_notes] No more content for keyword: {keyword}")
+                    break
+
+                semaphore = asyncio.Semaphore(config.MAX_CONCURRENCY_NUM)
+                task_list = [
+                    self.get_note_detail_async_task(
+                        note_id=post_item.get("id"),
+                        xsec_source=post_item.get("xsec_source"),
+                        xsec_token=post_item.get("xsec_token"),
+                        semaphore=semaphore,
+                    ) for post_item in notes_res.get("items", {}) if post_item.get("model_type") not in ("rec_query", "hot_query")
+                ]
+
+                note_details = await asyncio.gather(*task_list)
+                note_ids = []
+                xsec_tokens = []
+
+                for post_item, note_detail in zip(notes_res.get("items", {}), note_details):
+                    if note_detail and note_detail.get("note_id"):
+                        note_ids.append(note_detail.get("note_id"))
+                        xsec_tokens.append(post_item.get("xsec_token", ""))
+                        # 保存笔记数据到数据库
+                        await xhs_store.update_xhs_note(note_detail)
+                        # 获取媒体文件（如果启用）
+                        await self.get_notice_media(note_detail)
+
+                crawled_count += len(note_ids)
+                utils.logger.info(f"[XiaoHongShuCrawler.search_keyword_notes] keyword: {keyword}, crawled: {crawled_count}/{max_notes}")
+
+                if note_ids and xsec_tokens:
+                    await self.batch_get_note_comments(note_ids, xsec_tokens)
+                page += 1
+
+                if crawled_count >= max_notes:
+                    break
+
+            except Exception as e:
+                utils.logger.error(f"[XiaoHongShuCrawler.search_keyword_notes] Error searching keyword {keyword}: {e}")
+                break
+
+    async def search_trending(self) -> None:
+        """
+        搜索小红书热搜关键词并爬取相关笔记
+        """
+        utils.logger.info("[XiaoHongShuCrawler.search_trending] Begin search xiaohongshu trending keywords")
+
+        try:
+            # 获取热搜关键词
+            trending_res = await self.xhs_client.get_trending_keywords()
+            utils.logger.info(f"[XiaoHongShuCrawler.search_trending] API response keys: {list(trending_res.keys())}")
+
+            trending_keywords = []
+
+            # 解析热搜数据 - 根据不同的API响应结构进行解析
+            if "items" in trending_res:
+                # 处理搜索建议或发现页面的数据
+                items = trending_res.get("items", [])
+                source = trending_res.get("source", "unknown")
+                utils.logger.info(f"[XiaoHongShuCrawler.search_trending] Found {len(items)} items from {source}")
+
+                for index, item in enumerate(items):
+                    if isinstance(item, dict):
+                        # 尝试从不同字段提取关键词
+                        keyword = None
+
+                        # 处理搜索推荐API的数据结构
+                        if "text" in item:
+                            keyword = item.get("text", "").strip()
+                        # 处理其他可能的数据结构
+                        elif "title" in item:
+                            keyword = item.get("title", "").strip()
+                        elif "desc" in item:
+                            keyword = item.get("desc", "").strip()
+                        elif "display_title" in item:
+                            keyword = item.get("display_title", "").strip()
+                        elif "note_card" in item and item["note_card"].get("display_title"):
+                            keyword = item["note_card"]["display_title"].strip()
+
+                        # 清理关键词
+                        if keyword and len(keyword) > 0:
+                            # 移除一些无用的关键词
+                            if any(skip_word in keyword.lower() for skip_word in ["undefined", "undefeated", "copywriting"]):
+                                continue
+
+                            # 限制关键词长度
+                            if len(keyword) > 50:
+                                continue
+
+                            trending_keywords.append({
+                                "keyword": keyword,
+                                "desc": keyword,
+                                "rank": len(trending_keywords) + 1,
+                                "source": source
+                            })
+
+                        # 限制热搜数量
+                        if hasattr(config, 'TRENDING_KEYWORDS_COUNT') and config.TRENDING_KEYWORDS_COUNT > 0:
+                            if len(trending_keywords) >= config.TRENDING_KEYWORDS_COUNT:
+                                break
+
+            elif "data" in trending_res:
+                # 处理其他可能的数据结构
+                data = trending_res.get("data", [])
+                if isinstance(data, list):
+                    for index, item in enumerate(data):
+                        if isinstance(item, dict):
+                            keyword = item.get("keyword", item.get("word", item.get("title", ""))).strip()
+                            if keyword:
+                                trending_keywords.append({
+                                    "keyword": keyword,
+                                    "desc": keyword,
+                                    "rank": len(trending_keywords) + 1,
+                                    "source": "data_list"
+                                })
+
+                            # 限制热搜数量
+                            if hasattr(config, 'TRENDING_KEYWORDS_COUNT') and config.TRENDING_KEYWORDS_COUNT > 0:
+                                if len(trending_keywords) >= config.TRENDING_KEYWORDS_COUNT:
+                                    break
+
+            # 如果没有获取到热搜，直接返回，不使用默认关键词
+            if not trending_keywords:
+                utils.logger.warning("[XiaoHongShuCrawler.search_trending] No trending keywords found from API, skipping trending crawl")
+                return
+
+            if not trending_keywords:
+                utils.logger.warning("[XiaoHongShuCrawler.search_trending] No trending keywords extracted")
+                return
+
+            utils.logger.info(f"[XiaoHongShuCrawler.search_trending] Found {len(trending_keywords)} trending keywords")
+
+            # 保存热搜数据
+            await self.save_trending_keywords(trending_keywords)
+
+            # 根据配置决定是否爬取热搜相关笔记
+            if hasattr(config, 'ENABLE_TRENDING_POSTS_CRAWL') and config.ENABLE_TRENDING_POSTS_CRAWL:
+                # 限制爬取的热搜数量（0表示无限制）
+                max_trending_count = getattr(config, 'TRENDING_KEYWORDS_COUNT', 0)
+                if max_trending_count == 0:
+                    keywords_to_crawl = trending_keywords  # 爬取所有热搜
+                    utils.logger.info(f"[XiaoHongShuCrawler.search_trending] Crawling notes for all {len(trending_keywords)} trending keywords")
+                else:
+                    keywords_to_crawl = trending_keywords[:max_trending_count]
+                    utils.logger.info(f"[XiaoHongShuCrawler.search_trending] Crawling notes for top {max_trending_count} trending keywords")
+
+                for trending_item in keywords_to_crawl:
+                    keyword = trending_item["keyword"]
+                    utils.logger.info(f"[XiaoHongShuCrawler.search_trending] Crawling notes for trending keyword: {keyword}")
+
+                    # 设置当前关键词
+                    source_keyword_var.set(keyword)
+
+                    # 爬取该关键词的笔记（使用与正常关键词搜索相同的数量配置）
+                    max_notes = getattr(config, 'TRENDING_KEYWORD_MAX_NOTES_COUNT', 0)
+                    if max_notes == 0:
+                        max_notes = getattr(config, 'CRAWLER_MAX_NOTES_COUNT', 200)  # 使用正常关键词搜索的数量
+
+                    await self.search_keyword_notes(keyword, max_notes)
+
+                    # 添加延时避免请求过快
+                    await asyncio.sleep(random.randint(2, 5))
+
+        except Exception as e:
+            utils.logger.error(f"[XiaoHongShuCrawler.search_trending] Error getting trending keywords: {e}")
+
+    async def save_trending_keywords(self, trending_keywords: List[Dict]) -> None:
+        """
+        保存热搜关键词数据到小红书笔记表中
+        Args:
+            trending_keywords: 热搜关键词列表
+        """
+        for trending_item in trending_keywords:
+            # 将热搜关键词作为特殊的笔记记录保存
+            trending_note_data = {
+                "note_id": f"trending_{utils.get_current_timestamp()}_{trending_item['rank']}",  # 生成唯一的note_id
+                "user_id": "xhs_trending",  # 特殊的用户ID标识这是热搜数据
+                "nickname": "小红书热搜",
+                "avatar": "",
+                "gender": "",
+                "profile_url": "",
+                "ip_location": "",
+                "title": f"#{trending_item['rank']}# {trending_item['desc']}",  # 热搜标题，包含排名
+                "desc": f"热搜关键词: {trending_item['keyword']}",  # 热搜描述
+                "create_time": utils.get_current_timestamp(),
+                "create_date_time": utils.get_current_time(),
+                "liked_count": "0",
+                "collected_count": "0",
+                "comment_count": "0",
+                "share_count": "0",
+                "note_url": "",
+                "source_keyword": "trending",  # 标识这是热搜数据
+                "add_ts": utils.get_current_timestamp(),
+                "last_modify_ts": utils.get_current_timestamp(),
+            }
+            utils.logger.info(f"[XiaoHongShuCrawler.save_trending_keywords] Saving trending keyword as note: {trending_item['keyword']} (rank: {trending_item['rank']})")
+            await xhs_store.update_xhs_note(trending_note_data)
+

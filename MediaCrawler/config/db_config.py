@@ -11,10 +11,10 @@
 
 import os
 
-# mysql config
-MYSQL_DB_PWD = os.getenv("MYSQL_DB_PWD", "123456")
+# mysql config - 请修改为您的MySQL数据库配置
+MYSQL_DB_PWD = os.getenv("MYSQL_DB_PWD", "mneDccc7sHHANtFk")
 MYSQL_DB_USER = os.getenv("MYSQL_DB_USER", "root")
-MYSQL_DB_HOST = os.getenv("MYSQL_DB_HOST", "localhost")
+MYSQL_DB_HOST = os.getenv("MYSQL_DB_HOST", "rm-2zeib6b13f6tt9kncoo.mysql.rds.aliyuncs.com")
 MYSQL_DB_PORT = os.getenv("MYSQL_DB_PORT", 3306)
 MYSQL_DB_NAME = os.getenv("MYSQL_DB_NAME", "media_crawler")
 
@@ -30,4 +30,8 @@ CACHE_TYPE_REDIS = "redis"
 CACHE_TYPE_MEMORY = "memory"
 
 # sqlite config
+# 默认路径
 SQLITE_DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "schema", "sqlite_tables.db")
+
+# 如果您有自己的数据库文件，可以修改为您的文件路径
+# 例如: SQLITE_DB_PATH = r"C:\path\to\your\database.db"

@@ -116,6 +116,8 @@ class KuaiShouClient(AbstractApiClient):
         }
         return await self.post("", post_data)
 
+
+
     async def get_video_info(self, photo_id: str) -> Dict:
         """
         Kuaishou web video detail api

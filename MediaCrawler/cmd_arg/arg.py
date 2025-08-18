@@ -24,9 +24,9 @@ async def parse_cmd():
     parser.add_argument('--lt', type=str, 
                         help='Login type / 登录方式 (qrcode=二维码 | phone=手机号 | cookie=Cookie)',
                         choices=["qrcode", "phone", "cookie"], default=config.LOGIN_TYPE)
-    parser.add_argument('--type', type=str, 
-                        help='Crawler type / 爬取类型 (search=搜索 | detail=详情 | creator=创作者)',
-                        choices=["search", "detail", "creator"], default=config.CRAWLER_TYPE)
+    parser.add_argument('--type', type=str,
+                        help='Crawler type / 爬取类型 (search=搜索 | detail=详情 | creator=创作者 | trending=热搜)',
+                        choices=["search", "detail", "creator", "trending"], default=config.CRAWLER_TYPE)
     parser.add_argument('--start', type=int,
                         help='Number of start page / 起始页码', default=config.START_PAGE)
     parser.add_argument('--keywords', type=str,

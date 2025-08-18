@@ -188,3 +188,19 @@ async def save_creator(user_id: str, user_info: Dict):
     }
     utils.logger.info(f"[store.weibo.save_creator] creator:{local_db_item}")
     await WeibostoreFactory.create_store().store_creator(local_db_item)
+
+
+async def save_content(content_item: Dict):
+    """
+    Save content item to local storage
+    Args:
+        content_item: content item dict
+
+    Returns:
+
+    """
+    utils.logger.info(f"[store.weibo.save_content] content: {content_item.get('content', '')[:50]}...")
+    await WeibostoreFactory.create_store().store_content(content_item=content_item)
+
+
+

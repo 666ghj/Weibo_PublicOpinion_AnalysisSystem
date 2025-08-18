@@ -269,7 +269,8 @@ class XhsSqliteStoreImplement(AbstractStore):
         """
         from .xhs_store_sql import (add_new_content,
                                     query_content_by_content_id,
-                                    update_content_by_content_id)
+                                    update_content_by_content_id,
+                                    add_or_ignore_note_keyword_map)
         note_id = content_item.get("note_id")
         note_detail: Dict = await query_content_by_content_id(content_id=note_id)
         if not note_detail:
@@ -277,6 +278,8 @@ class XhsSqliteStoreImplement(AbstractStore):
             await add_new_content(content_item)
         else:
             await update_content_by_content_id(note_id, content_item=content_item)
+
+
 
     async def store_comment(self, comment_item: Dict):
         """

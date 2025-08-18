@@ -204,6 +204,15 @@ class ZhiHuClient(AbstractApiClient):
         utils.logger.info(f"[ZhiHuClient.get_note_by_keyword] Search result: {search_res}")
         return self._extractor.extract_contents_from_search(search_res)
 
+    async def get_trending_keywords(self) -> Dict:
+        """
+        获取知乎热搜关键词
+        Returns:
+            热搜关键词列表
+        """
+        uri = "/api/v4/search/top_search"
+        return await self.get(uri, {})
+
     async def get_root_comments(
         self,
         content_id: str,

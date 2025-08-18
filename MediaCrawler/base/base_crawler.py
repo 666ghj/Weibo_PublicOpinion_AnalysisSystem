@@ -91,6 +91,8 @@ class AbstractStore(ABC):
         pass
 
 
+
+
 class AbstractStoreImage(ABC):
     # TODO: support all platform
     # only weibo is supported

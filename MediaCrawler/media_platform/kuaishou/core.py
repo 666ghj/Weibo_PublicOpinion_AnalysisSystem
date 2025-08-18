@@ -106,6 +106,7 @@ class KuaishouCrawler(AbstractCrawler):
             elif config.CRAWLER_TYPE == "creator":
                 # Get creator's information and their videos and comments
                 await self.get_creators_and_videos()
+
             else:
                 pass
 
@@ -394,3 +395,99 @@ class KuaishouCrawler(AbstractCrawler):
         else:
             await self.browser_context.close()
         utils.logger.info("[KuaishouCrawler.close] Browser context closed ...")
+
+    async def search_trending(self) -> None:
+        """Search trending keywords and retrieve related videos."""
+        utils.logger.info("[KuaishouCrawler.search_trending] Begin search kuaishou trending keywords")
+
+        try:
+            # Get trending keywords
+            trending_res = await self.ks_client.get_trending_keywords()
+            utils.logger.info(f"[KuaishouCrawler.search_trending] Trending response: {trending_res}")
+
+            if not trending_res or not trending_res.get("data"):
+                utils.logger.error("[KuaishouCrawler.search_trending] Failed to get trending keywords")
+                return
+
+            trending_keywords = []
+            trending_data = trending_res.get("data", {})
+
+            # Extract trending keywords
+            if "visionHotRank" in trending_data and "hotWords" in trending_data["visionHotRank"]:
+                # 如果TRENDING_KEYWORDS_COUNT为0或None，获取所有热搜；否则限制数量
+                hot_words = trending_data["visionHotRank"]["hotWords"]
+                if config.TRENDING_KEYWORDS_COUNT and config.TRENDING_KEYWORDS_COUNT > 0:
+                    hot_words = hot_words[:config.TRENDING_KEYWORDS_COUNT]
+
+                for item in hot_words:
+                    if isinstance(item, dict) and "word" in item:
+                        trending_keywords.append(item["word"])
+                    elif isinstance(item, str):
+                        trending_keywords.append(item)
+
+            if not trending_keywords:
+                utils.logger.warning("[KuaishouCrawler.search_trending] No trending keywords found")
+                return
+
+            utils.logger.info(f"[KuaishouCrawler.search_trending] Found {len(trending_keywords)} trending keywords: {trending_keywords}")
+
+            # Search videos for each trending keyword
+            if config.ENABLE_TRENDING_KEYWORDS_CRAWL:
+                for keyword in trending_keywords:
+                    source_keyword_var.set(keyword)
+                    utils.logger.info(f"[KuaishouCrawler.search_trending] Searching trending keyword: {keyword}")
+                    await self.search_keyword_videos(keyword, max_videos=config.TRENDING_KEYWORD_MAX_NOTES_COUNT)
+
+        except Exception as e:
+            utils.logger.error(f"[KuaishouCrawler.search_trending] Error getting trending keywords: {e}")
+
+    async def search_keyword_videos(self, keyword: str, max_videos: int = 50) -> None:
+        """Search videos for a specific keyword with limited count."""
+        ks_limit_count = 20  # kuaishou limit page fixed value
+        if max_videos < ks_limit_count:
+            max_videos = ks_limit_count
+
+        page = 1
+        search_session_id = ""
+        crawled_count = 0
+
+        while crawled_count < max_videos:
+            try:
+                utils.logger.info(f"[KuaishouCrawler.search_keyword_videos] search kuaishou keyword: {keyword}, page: {page}")
+                videos_res = await self.ks_client.search_info_by_keyword(
+                    keyword=keyword,
+                    pcursor=str(page),
+                    search_session_id=search_session_id,
+                )
+
+                if not videos_res:
+                    utils.logger.info(f"[KuaishouCrawler.search_keyword_videos] No more content for keyword: {keyword}")
+                    break
+
+                video_id_list: List[str] = []
+                vision_search_photo = videos_res.get("data", {}).get("visionSearchPhoto", {})
+
+                for edge_item in vision_search_photo.get("edges", []):
+                    photo_item = edge_item.get("node", {})
+                    if photo_item:
+                        video_id = photo_item.get("id")
+                        if video_id:
+                            video_id_list.append(video_id)
+                            await kuaishou_store.update_kuaishou_video(video_item=photo_item)
+
+                if not video_id_list:
+                    utils.logger.info(f"[KuaishouCrawler.search_keyword_videos] No more content for keyword: {keyword}")
+                    break
+
+                crawled_count += len(video_id_list)
+                utils.logger.info(f"[KuaishouCrawler.search_keyword_videos] keyword: {keyword}, crawled: {crawled_count}/{max_videos}")
+
+                await self.batch_get_video_comments(video_id_list)
+                page += 1
+
+                if crawled_count >= max_videos:
+                    break
+
+            except Exception as e:
+                utils.logger.error(f"[KuaishouCrawler.search_keyword_videos] Error searching keyword {keyword}: {e}")
+                break

@@ -123,7 +123,8 @@ class DouyinDbStoreImplement(AbstractStore):
 
         from .douyin_store_sql import (add_new_content,
                                        query_content_by_content_id,
-                                       update_content_by_content_id)
+                                       update_content_by_content_id,
+                                       add_or_ignore_aweme_keyword_map)
         aweme_id = content_item.get("aweme_id")
         aweme_detail: Dict = await query_content_by_content_id(content_id=aweme_id)
         if not aweme_detail:
@@ -132,6 +133,8 @@ class DouyinDbStoreImplement(AbstractStore):
                 await add_new_content(content_item)
         else:
             await update_content_by_content_id(aweme_id, content_item=content_item)
+
+
 
     async def store_comment(self, comment_item: Dict):
         """
@@ -273,7 +276,8 @@ class DouyinSqliteStoreImplement(AbstractStore):
 
         from .douyin_store_sql import (add_new_content,
                                        query_content_by_content_id,
-                                       update_content_by_content_id)
+                                       update_content_by_content_id,
+                                       add_or_ignore_aweme_keyword_map)
         aweme_id = content_item.get("aweme_id")
         aweme_detail: Dict = await query_content_by_content_id(content_id=aweme_id)
         if not aweme_detail:
@@ -282,6 +286,8 @@ class DouyinSqliteStoreImplement(AbstractStore):
                 await add_new_content(content_item)
         else:
             await update_content_by_content_id(aweme_id, content_item=content_item)
+
+
 
     async def store_comment(self, comment_item: Dict):
         """

@@ -35,7 +35,7 @@ class WeiboClient:
 
     def __init__(
         self,
-        timeout=30,  # 若开启爬取媒体选项，weibo 的图片需要更久的超时时间
+        timeout=60,  # 若开启爬取媒体选项，weibo 的图片需要更久的超时时间
         proxy=None,
         *,
         headers: Dict[str, str],
@@ -48,6 +48,7 @@ class WeiboClient:
         self._host = "https://m.weibo.cn"
         self.playwright_page = playwright_page
         self.cookie_dict = cookie_dict
+        self.context = playwright_page.context
         self._image_agent_host = "https://i1.wp.com/"
 
     async def request(self, method, url, **kwargs) -> Union[Response, Dict]:
@@ -125,6 +126,8 @@ class WeiboClient:
             "page": page,
         }
         return await self.get(uri, params)
+
+
 
     async def get_note_comments(self, mid_id: str, max_id: int, max_id_type: int = 0) -> Dict:
         """get notes comments
@@ -248,12 +251,17 @@ class WeiboClient:
         final_uri = (f"{self._image_agent_host}"
                      f"{image_url}")
         async with httpx.AsyncClient(proxy=self.proxy) as client:
-            response = await client.request("GET", final_uri, timeout=self.timeout)
-            if not response.reason_phrase == "OK":
-                utils.logger.error(f"[WeiboClient.get_note_image] request {final_uri} err, res:{response.text}")
+            try:
+                response = await client.request("GET", final_uri, timeout=self.timeout)
+                response.raise_for_status()
+                if not response.reason_phrase == "OK":
+                    utils.logger.error(f"[WeiboClient.get_note_image] request {final_uri} err, res:{response.text}")
+                    return None
+                else:
+                    return response.content
+            except httpx.HTTPError as exc:  # some wrong when call httpx.request method, such as connection error, client error, server error or response status code is not 2xx
+                utils.logger.error(f"[DouYinClient.get_aweme_media] {exc.__class__.__name__} for {exc.request.url} - {exc}")    # 保留原始异常类型名称，以便开发者调试
                 return None
-            else:
-                return response.content
 
     async def get_creator_container_info(self, creator_id: str) -> Dict:
         """
@@ -374,3 +382,122 @@ class WeiboClient:
             crawler_total_count += 10
             notes_has_more = notes_res.get("cardlistInfo", {}).get("total", 0) > crawler_total_count
         return result
+
+    async def get_trending_keywords(self) -> Dict:
+        """
+        获取微博热搜关键词
+        Returns:
+            热搜关键词列表
+        """
+        uri = "/api/container/getIndex"
+        # 微博热搜的containerid
+        params = {
+            "containerid": "106003type=25&t=3&disable_hot=1&filter_type=realtimehot",
+        }
+        try:
+            trending_res = await self.get(uri, params)
+            utils.logger.info(f"[WeiboClient.get_trending_keywords] Got trending response")
+            return trending_res
+        except Exception as e:
+            utils.logger.error(f"[WeiboClient.get_trending_keywords] Error getting trending keywords: {e}")
+
+            # 检查是否是验证码问题
+            if "geetest" in str(e) or "-100" in str(e):
+                utils.logger.warning("[WeiboClient.get_trending_keywords] 检测到验证码，尝试手动处理...")
+                return await self.handle_captcha_and_retry_trending()
+
+            # 如果主接口失败，尝试备用接口
+            try:
+                backup_params = {
+                    "containerid": "106003type=25&t=3&disable_hot=1",
+                }
+                trending_res = await self.get(uri, backup_params)
+                utils.logger.info(f"[WeiboClient.get_trending_keywords] Got trending response from backup API")
+                return trending_res
+            except Exception as backup_e:
+                utils.logger.error(f"[WeiboClient.get_trending_keywords] Backup API also failed: {backup_e}")
+
+                # 备用接口也失败，检查验证码
+                if "geetest" in str(backup_e) or "-100" in str(backup_e):
+                    utils.logger.warning("[WeiboClient.get_trending_keywords] 备用接口也遇到验证码，尝试手动处理...")
+                    return await self.handle_captcha_and_retry_trending()
+
+                return {"cards": []}
+
+    async def handle_captcha_and_retry_trending(self) -> Dict:
+        """
+        处理验证码并重试获取热搜
+        """
+        try:
+            utils.logger.info("[WeiboClient.handle_captcha_and_retry_trending] 正在打开微博页面进行手动验证...")
+
+            # 打开微博主页，让用户手动处理验证码
+            await self.playwright_page.goto("https://m.weibo.cn", wait_until="networkidle")
+
+            # 等待用户手动处理验证码
+            utils.logger.info("[WeiboClient.handle_captcha_and_retry_trending] 请在浏览器中手动完成验证码验证...")
+            utils.logger.info("[WeiboClient.handle_captcha_and_retry_trending] 验证完成后，程序将在30秒后自动继续...")
+
+            # 等待30秒让用户处理验证码
+            await asyncio.sleep(30)
+
+            # 重新尝试获取热搜
+            uri = "/api/container/getIndex"
+            params = {
+                "containerid": "106003type=25&t=3&disable_hot=1&filter_type=realtimehot",
+            }
+
+            trending_res = await self.get(uri, params)
+            utils.logger.info("[WeiboClient.handle_captcha_and_retry_trending] 验证码处理后重试成功")
+            return trending_res
+
+        except Exception as e:
+            utils.logger.error(f"[WeiboClient.handle_captcha_and_retry_trending] 手动处理验证码失败: {e}")
+            return {"cards": []}
+
+    async def get_trending_keywords_from_page(self) -> Dict:
+        """
+        通过浏览器页面获取热搜关键词
+        Returns:
+            热搜关键词列表
+        """
+        import asyncio
+
+        # 访问热搜页面
+        trending_url = "https://m.weibo.cn/p/index?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot"
+
+        try:
+            page = await self.context.new_page()
+            await page.goto(trending_url, wait_until="networkidle")
+
+            # 等待页面加载
+            await asyncio.sleep(2)
+
+            # 查找热搜数据
+            # 尝试从页面的script标签中提取数据
+            scripts = await page.query_selector_all("script")
+            for script in scripts:
+                script_content = await script.inner_text()
+                if "cardlistInfo" in script_content and "card_group" in script_content:
+                    # 尝试解析JSON数据
+                    import re
+                    import json
+
+                    # 查找包含热搜数据的JSON
+                    json_match = re.search(r'\$render_data\s*=\s*(\[.*?\])\s*\[0\]', script_content)
+                    if json_match:
+                        try:
+                            data = json.loads(json_match.group(1))[0]
+                            if data.get("cards"):
+                                utils.logger.info(f"[WeiboClient.get_trending_keywords_from_page] Found trending data in page")
+                                await page.close()
+                                return data
+                        except:
+                            continue
+
+            await page.close()
+            return {"cards": []}
+
+        except Exception as e:
+            utils.logger.error(f"[WeiboClient.get_trending_keywords_from_page] Error: {e}")
+            return {"cards": []}

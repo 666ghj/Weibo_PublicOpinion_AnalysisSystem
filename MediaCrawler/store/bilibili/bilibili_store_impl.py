@@ -145,7 +145,8 @@ class BiliDbStoreImplement(AbstractStore):
 
         from .bilibili_store_sql import (add_new_content,
                                          query_content_by_content_id,
-                                         update_content_by_content_id)
+                                         update_content_by_content_id,
+                                         add_or_ignore_bilibili_video_keyword_map)
         video_id = content_item.get("video_id")
         video_detail: Dict = await query_content_by_content_id(content_id=video_id)
         if not video_detail:
@@ -153,6 +154,8 @@ class BiliDbStoreImplement(AbstractStore):
             await add_new_content(content_item)
         else:
             await update_content_by_content_id(video_id, content_item=content_item)
+
+
 
     async def store_comment(self, comment_item: Dict):
         """
@@ -367,7 +370,8 @@ class BiliSqliteStoreImplement(AbstractStore):
 
         from .bilibili_store_sql import (add_new_content,
                                          query_content_by_content_id,
-                                         update_content_by_content_id)
+                                         update_content_by_content_id,
+                                         add_or_ignore_bilibili_video_keyword_map)
         video_id = content_item.get("video_id")
         video_detail: Dict = await query_content_by_content_id(content_id=video_id)
         if not video_detail:
@@ -375,6 +379,8 @@ class BiliSqliteStoreImplement(AbstractStore):
             await add_new_content(content_item)
         else:
             await update_content_by_content_id(video_id, content_item=content_item)
+
+
 
     async def store_comment(self, comment_item: Dict):
         """

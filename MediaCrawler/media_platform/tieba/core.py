@@ -86,6 +86,9 @@ class TieBaCrawler(AbstractCrawler):
         elif config.CRAWLER_TYPE == "creator":
             # Get creator's information and their notes and comments
             await self.get_creators_and_notes()
+        elif config.CRAWLER_TYPE == "trending":
+            # Get trending keywords and crawl related posts
+            await self.search_trending()
         else:
             pass
 
@@ -416,3 +419,81 @@ class TieBaCrawler(AbstractCrawler):
         else:
             await self.browser_context.close()
         utils.logger.info("[BaiduTieBaCrawler.close] Browser context closed ...")
+
+    async def search_trending(self) -> None:
+        """Search trending keywords and retrieve related posts."""
+        utils.logger.info("[BaiduTieBaCrawler.search_trending] Begin search tieba trending keywords")
+
+        try:
+            # Get trending keywords
+            trending_res = await self.tieba_client.get_trending_keywords()
+            utils.logger.info(f"[BaiduTieBaCrawler.search_trending] Trending response: {trending_res}")
+
+            # 由于贴吧热搜API较复杂，这里使用一些常见的热门关键词作为示例
+            all_trending_keywords = ["热点", "新闻", "娱乐", "科技", "游戏", "体育", "生活", "美食", "旅游", "时尚", "教育", "健康", "汽车", "房产", "财经", "军事", "历史", "文化", "艺术", "音乐"]
+            # 如果TRENDING_KEYWORDS_COUNT为0或None，获取所有热搜；否则限制数量
+            if config.TRENDING_KEYWORDS_COUNT and config.TRENDING_KEYWORDS_COUNT > 0:
+                trending_keywords = all_trending_keywords[:config.TRENDING_KEYWORDS_COUNT]
+            else:
+                trending_keywords = all_trending_keywords
+
+            if not trending_keywords:
+                utils.logger.warning("[BaiduTieBaCrawler.search_trending] No trending keywords found")
+                return
+
+            utils.logger.info(f"[BaiduTieBaCrawler.search_trending] Found {len(trending_keywords)} trending keywords: {trending_keywords}")
+
+            # Search posts for each trending keyword
+            if config.ENABLE_TRENDING_KEYWORDS_CRAWL:
+                for keyword in trending_keywords:
+                    source_keyword_var.set(keyword)
+                    utils.logger.info(f"[BaiduTieBaCrawler.search_trending] Searching trending keyword: {keyword}")
+                    await self.search_keyword_posts(keyword, max_posts=config.TRENDING_KEYWORD_MAX_NOTES_COUNT)
+
+        except Exception as e:
+            utils.logger.error(f"[BaiduTieBaCrawler.search_trending] Error getting trending keywords: {e}")
+
+    async def search_keyword_posts(self, keyword: str, max_posts: int = 50) -> None:
+        """Search posts for a specific keyword with limited count."""
+        tieba_limit_count = 10  # tieba limit page fixed value
+        if max_posts < tieba_limit_count:
+            max_posts = tieba_limit_count
+
+        page = 1
+        crawled_count = 0
+
+        while crawled_count < max_posts:
+            try:
+                utils.logger.info(f"[BaiduTieBaCrawler.search_keyword_posts] search tieba keyword: {keyword}, page: {page}")
+                notes_res = await self.tieba_client.get_notes_by_keyword(
+                    keyword=keyword,
+                    page=page,
+                    page_size=tieba_limit_count,
+                )
+
+                if not notes_res:
+                    utils.logger.info(f"[BaiduTieBaCrawler.search_keyword_posts] No more content for keyword: {keyword}")
+                    break
+
+                note_ids = []
+                for note_item in notes_res:
+                    if note_item:
+                        note_ids.append(note_item.note_id)
+                        await tieba_store.update_tieba_note(note_item)
+
+                if not note_ids:
+                    utils.logger.info(f"[BaiduTieBaCrawler.search_keyword_posts] No more content for keyword: {keyword}")
+                    break
+
+                crawled_count += len(note_ids)
+                utils.logger.info(f"[BaiduTieBaCrawler.search_keyword_posts] keyword: {keyword}, crawled: {crawled_count}/{max_posts}")
+
+                await self.batch_get_note_comments(note_ids)
+                page += 1
+
+                if crawled_count >= max_posts:
+                    break
+
+            except Exception as e:
+                utils.logger.error(f"[BaiduTieBaCrawler.search_keyword_posts] Error searching keyword {keyword}: {e}")
+                break

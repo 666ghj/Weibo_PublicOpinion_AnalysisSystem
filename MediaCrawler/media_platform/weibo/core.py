@@ -110,6 +110,9 @@ class WeiboCrawler(AbstractCrawler):
             elif config.CRAWLER_TYPE == "creator":
                 # Get creator's information and their notes and comments
                 await self.get_creators_and_notes()
+            elif config.CRAWLER_TYPE == "trending":
+                # Get trending keywords and crawl related posts
+                await self.search_trending()
             else:
                 pass
             utils.logger.info("[WeiboCrawler.start] Weibo Crawler finished ...")
@@ -250,6 +253,7 @@ class WeiboCrawler(AbstractCrawler):
             if not url:
                 continue
             content = await self.wb_client.get_note_image(url)
+            await asyncio.sleep(random.random())
             if content != None:
                 extension_file_name = url.split(".")[-1]
                 await weibo_store.update_weibo_note_image(pic["pid"], content, extension_file_name)
@@ -370,3 +374,154 @@ class WeiboCrawler(AbstractCrawler):
         else:
             await self.browser_context.close()
         utils.logger.info("[WeiboCrawler.close] Browser context closed ...")
+
+    async def search_trending(self) -> None:
+        """
+        获取热搜关键词并爬取相关帖子
+        """
+        utils.logger.info("[WeiboCrawler.search_trending] Begin search trending keywords")
+
+        try:
+            # 获取热搜关键词
+            trending_res = await self.wb_client.get_trending_keywords()
+            utils.logger.info(f"[WeiboCrawler.search_trending] API response keys: {list(trending_res.keys())}")
+
+            # 微博热搜数据直接在根级别的cards字段中
+            cards = trending_res.get("cards", [])
+            utils.logger.info(f"[WeiboCrawler.search_trending] Found {len(cards)} cards")
+
+            if not cards:
+                utils.logger.warning("[WeiboCrawler.search_trending] No trending cards found")
+                return
+
+            trending_keywords = []
+
+            # 解析热搜数据
+            for card in cards:
+                if card.get("card_type") == 11:  # 热搜卡片组类型
+                    card_group = card.get("card_group", [])
+                    for item in card_group:
+                        if item.get("card_type") == 4:  # 热搜条目类型
+                            desc = item.get("desc", "")
+                            if desc and desc not in ["热搜", "查看更多实时热点", "查看更多实时上升热点", "查看更多文娱热搜"]:
+                                # 清理热搜关键词，移除特殊标记
+                                keyword = desc.replace("#", "").strip()
+                                if keyword:
+                                    trending_keywords.append({
+                                        "keyword": keyword,
+                                        "desc": desc,
+                                        "rank": len(trending_keywords) + 1
+                                    })
+
+            if not trending_keywords:
+                utils.logger.warning("[WeiboCrawler.search_trending] No trending keywords extracted")
+                return
+
+            utils.logger.info(f"[WeiboCrawler.search_trending] Found {len(trending_keywords)} trending keywords")
+
+            # 保存热搜数据
+            await self.save_trending_keywords(trending_keywords)
+
+            # 根据配置决定是否爬取热搜相关帖子
+            if hasattr(config, 'ENABLE_TRENDING_POSTS_CRAWL') and config.ENABLE_TRENDING_POSTS_CRAWL:
+                # 限制爬取的热搜数量（0表示无限制）
+                max_trending_count = getattr(config, 'TRENDING_KEYWORDS_COUNT', 0)
+                if max_trending_count == 0:
+                    keywords_to_crawl = trending_keywords  # 爬取所有热搜
+                    utils.logger.info(f"[WeiboCrawler.search_trending] Crawling posts for all {len(trending_keywords)} trending keywords")
+                else:
+                    keywords_to_crawl = trending_keywords[:max_trending_count]
+                    utils.logger.info(f"[WeiboCrawler.search_trending] Crawling posts for top {max_trending_count} trending keywords")
+
+                for trending_item in keywords_to_crawl:
+                    keyword = trending_item["keyword"]
+                    utils.logger.info(f"[WeiboCrawler.search_trending] Crawling posts for trending keyword: {keyword}")
+
+                    # 设置当前关键词
+                    source_keyword_var.set(keyword)
+
+                    # 爬取该关键词的帖子（使用与正常关键词搜索相同的数量配置）
+                    max_posts = getattr(config, 'TRENDING_KEYWORD_MAX_NOTES_COUNT', 0)
+                    if max_posts == 0:
+                        max_posts = getattr(config, 'CRAWLER_MAX_NOTES_COUNT', 200)  # 使用正常关键词搜索的数量
+
+                    await self.search_keyword_posts(keyword, max_posts)
+
+                    # 添加延时避免请求过快
+                    await asyncio.sleep(random.randint(2, 5))
+
+        except Exception as e:
+            utils.logger.error(f"[WeiboCrawler.search_trending] Error getting trending keywords: {e}")
+
+    async def save_trending_keywords(self, trending_keywords: List[Dict]) -> None:
+        """
+        保存热搜关键词数据到微博帖子表中
+        Args:
+            trending_keywords: 热搜关键词列表
+        """
+        for trending_item in trending_keywords:
+            # 将热搜关键词作为特殊的帖子记录保存
+            trending_note_data = {
+                "note_id": f"trending_{utils.get_current_timestamp()}_{trending_item['rank']}",  # 生成唯一的note_id
+                "user_id": "weibo_trending",  # 特殊的用户ID标识这是热搜数据
+                "nickname": "微博热搜",
+                "avatar": "",
+                "gender": "",
+                "profile_url": "",
+                "ip_location": "",
+                "content": f"#{trending_item['rank']}# {trending_item['desc']}",  # 热搜内容，包含排名
+                "create_time": utils.get_current_timestamp(),
+                "create_date_time": utils.get_current_time(),
+                "liked_count": "0",
+                "comments_count": "0",
+                "shared_count": "0",
+                "note_url": "",
+                "source_keyword": "trending",  # 标识这是热搜数据
+                "add_ts": utils.get_current_timestamp(),
+                "last_modify_ts": utils.get_current_timestamp(),
+            }
+            utils.logger.info(f"[WeiboCrawler.save_trending_keywords] Saving trending keyword as note: {trending_item['keyword']} (rank: {trending_item['rank']})")
+            await weibo_store.save_content(trending_note_data)
+
+
+
+    async def search_keyword_posts(self, keyword: str, max_posts: int = 50) -> None:
+        """Search posts for a specific keyword with limited count."""
+        weibo_limit_count = 10  # weibo limit page fixed value
+        if max_posts < weibo_limit_count:
+            max_posts = weibo_limit_count
+
+        page = 1
+        crawled_count = 0
+        search_type = SearchType(config.SEARCH_TYPE) if hasattr(config, 'SEARCH_TYPE') else SearchType.DEFAULT
+
+        while crawled_count < max_posts:
+            try:
+                utils.logger.info(f"[WeiboCrawler.search_keyword_posts] search weibo keyword: {keyword}, page: {page}")
+                search_res = await self.wb_client.get_note_by_keyword(keyword=keyword, page=page, search_type=search_type)
+                note_id_list: List[str] = []
+                note_list = filter_search_result_card(search_res.get("cards"))
+
+                for note_item in note_list:
+                    if note_item:
+                        mblog: Dict = note_item.get("mblog")
+                        if mblog:
+                            note_id_list.append(mblog.get("id"))
+                            await weibo_store.update_weibo_note(note_item)
+
+                if not note_id_list:
+                    utils.logger.info(f"[WeiboCrawler.search_keyword_posts] No more content for keyword: {keyword}")
+                    break
+
+                crawled_count += len(note_id_list)
+                utils.logger.info(f"[WeiboCrawler.search_keyword_posts] keyword: {keyword}, crawled: {crawled_count}/{max_posts}")
+
+                await self.batch_get_notes_comments(note_id_list)
+                page += 1
+
+                if crawled_count >= max_posts:
+                    break
+
+            except Exception as e:
+                utils.logger.error(f"[WeiboCrawler.search_keyword_posts] Error searching keyword {keyword}: {e}")
+                break
