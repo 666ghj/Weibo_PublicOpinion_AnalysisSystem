@@ -1,0 +1,27 @@
+query visionProfile($userId: String) {
+  visionProfile(userId: $userId) {
+    result
+    hostName
+    userProfile {
+      ownerCount {
+        fan
+        photo
+        follow
+        photo_public
+        __typename
+      }
+      profile {
+        gender
+        user_name
+        user_id
+        headurl
+        user_text
+        user_profile_bg_url
+        __typename
+      }
+      isFollowing
+      __typename
+    }
+    __typename
+  }
+}
