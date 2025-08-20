@@ -288,6 +288,7 @@ tmp/
 
 # ==== 配置和密钥 ====
 # 敏感配置文件
+config.py
 config.ini
 secrets.json
 .secrets
