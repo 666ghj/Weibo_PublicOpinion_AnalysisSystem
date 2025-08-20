@@ -1,3 +1,0 @@
-# `Backends`
-
-::: bertopic.backend

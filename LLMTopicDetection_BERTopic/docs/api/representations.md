@@ -1,3 +1,0 @@
-# `Representations`
-
-::: bertopic.representation
