@@ -13,7 +13,7 @@ import json
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '.'))
 
 from src import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, TAVILY_API_KEY
+from config import DEEPSEEK_API_KEY, DEEPSEEK_API_KEY_2, TAVILY_API_KEY
 
 
 def main():
@@ -30,18 +30,6 @@ def main():
     # 侧边栏配置
     with st.sidebar:
         st.header("配置")
-        
-        # 显示当前API密钥状态
-        st.subheader("API密钥状态")
-        if DEEPSEEK_API_KEY:
-            st.success("DeepSeek API Key: 已配置")
-        else:
-            st.error("DeepSeek API Key: 未配置")
-            
-        if TAVILY_API_KEY:
-            st.success("Tavily API Key: 已配置")
-        else:
-            st.error("Tavily API Key: 未配置")
         
         # 高级配置
         st.subheader("高级配置")
@@ -105,23 +93,19 @@ def main():
             st.error("请输入研究查询")
             return
         
-        if not DEEPSEEK_API_KEY and llm_provider == "deepseek":
-            st.error("请在config.py中配置DeepSeek API Key")
-            return
-        
-        if not TAVILY_API_KEY:
-            st.error("请在config.py中配置Tavily API Key")
-            return
-        
         if llm_provider == "openai" and not openai_key:
             st.error("请提供OpenAI API Key")
             return
         
+        # 自动使用配置文件中的API密钥
+        deepseek_key = DEEPSEEK_API_KEY
+        tavily_key = TAVILY_API_KEY
+        
         # 创建配置
         config = Config(
-            deepseek_api_key=DEEPSEEK_API_KEY if llm_provider == "deepseek" else None,
+            deepseek_api_key=deepseek_key if llm_provider == "deepseek" else None,
             openai_api_key=openai_key if llm_provider == "openai" else None,
-            tavily_api_key=TAVILY_API_KEY,
+            tavily_api_key=tavily_key,
             default_llm_provider=llm_provider,
             deepseek_model=model_name if llm_provider == "deepseek" else "deepseek-chat",
             openai_model=model_name if llm_provider == "openai" else "gpt-4o-mini",

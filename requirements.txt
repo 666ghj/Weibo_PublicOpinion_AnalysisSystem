@@ -1,0 +1,32 @@
+# 多Agent舆情分析协作系统依赖包
+
+# 核心依赖
+streamlit>=1.28.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+
+# LLM接口
+openai>=1.3.0
+deepseek-ai>=0.1.0
+
+# 搜索API
+tavily-python>=0.3.0
+
+# 数据处理
+pandas>=2.0.0
+numpy>=1.24.0
+
+# 可视化
+plotly>=5.17.0
+
+# 工具库
+python-dateutil>=2.8.2
+uuid>=1.30
+
+# 博查API相关
+# 注意：博查API使用标准的HTTP请求，不需要额外的包
+
+# 开发工具
+pytest>=7.4.0
+black>=23.0.0
+flake8>=6.0.0
