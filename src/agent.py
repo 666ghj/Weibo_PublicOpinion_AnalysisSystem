@@ -5,6 +5,7 @@ Deep Search Agent主类
 
 import json
 import os
+import re
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 
@@ -18,7 +19,7 @@ from .nodes import (
     ReportFormattingNode
 )
 from .state import State
-from .tools import tavily_search
+from .tools import TavilyNewsAgency, TavilyResponse
 from .utils import Config, load_config, format_search_results_for_prompt
 
 
@@ -38,6 +39,9 @@ class DeepSearchAgent:
         # 初始化LLM客户端
         self.llm_client = self._initialize_llm()
         
+        # 初始化搜索工具集
+        self.search_agency = TavilyNewsAgency(api_key=self.config.tavily_api_key)
+        
         # 初始化节点
         self._initialize_nodes()
         
@@ -49,6 +53,7 @@ class DeepSearchAgent:
         
         print(f"Deep Search Agent 已初始化")
         print(f"使用LLM: {self.llm_client.get_model_info()}")
+        print(f"搜索工具集: TavilyNewsAgency (支持6种搜索工具)")
     
     def _initialize_llm(self) -> BaseLLM:
         """初始化LLM客户端"""
@@ -72,6 +77,72 @@ class DeepSearchAgent:
         self.first_summary_node = FirstSummaryNode(self.llm_client)
         self.reflection_summary_node = ReflectionSummaryNode(self.llm_client)
         self.report_formatting_node = ReportFormattingNode(self.llm_client)
+    
+    def _validate_date_format(self, date_str: str) -> bool:
+        """
+        验证日期格式是否为YYYY-MM-DD
+        
+        Args:
+            date_str: 日期字符串
+            
+        Returns:
+            是否为有效格式
+        """
+        if not date_str:
+            return False
+        
+        # 检查格式
+        pattern = r'^\d{4}-\d{2}-\d{2}$'
+        if not re.match(pattern, date_str):
+            return False
+        
+        # 检查日期是否有效
+        try:
+            datetime.strptime(date_str, '%Y-%m-%d')
+            return True
+        except ValueError:
+            return False
+    
+    def execute_search_tool(self, tool_name: str, query: str, **kwargs) -> TavilyResponse:
+        """
+        执行指定的搜索工具
+        
+        Args:
+            tool_name: 工具名称，可选值：
+                - "basic_search_news": 基础新闻搜索（快速、通用）
+                - "deep_search_news": 深度新闻分析
+                - "search_news_last_24_hours": 24小时内最新新闻
+                - "search_news_last_week": 本周新闻
+                - "search_images_for_news": 新闻图片搜索
+                - "search_news_by_date": 按日期范围搜索新闻
+            query: 搜索查询
+            **kwargs: 额外参数（如start_date, end_date, max_results）
+            
+        Returns:
+            TavilyResponse对象
+        """
+        print(f"  → 执行搜索工具: {tool_name}")
+        
+        if tool_name == "basic_search_news":
+            max_results = kwargs.get("max_results", 7)
+            return self.search_agency.basic_search_news(query, max_results)
+        elif tool_name == "deep_search_news":
+            return self.search_agency.deep_search_news(query)
+        elif tool_name == "search_news_last_24_hours":
+            return self.search_agency.search_news_last_24_hours(query)
+        elif tool_name == "search_news_last_week":
+            return self.search_agency.search_news_last_week(query)
+        elif tool_name == "search_images_for_news":
+            return self.search_agency.search_images_for_news(query)
+        elif tool_name == "search_news_by_date":
+            start_date = kwargs.get("start_date")
+            end_date = kwargs.get("end_date")
+            if not start_date or not end_date:
+                raise ValueError("search_news_by_date工具需要start_date和end_date参数")
+            return self.search_agency.search_news_by_date(query, start_date, end_date)
+        else:
+            print(f"  ⚠️  未知的搜索工具: {tool_name}，使用默认基础搜索")
+            return self.search_agency.basic_search_news(query)
     
     def research(self, query: str, save_report: bool = True) -> str:
         """
@@ -156,28 +227,62 @@ class DeepSearchAgent:
             "content": paragraph.content
         }
         
-        # 生成搜索查询
+        # 生成搜索查询和工具选择
         print("  - 生成搜索查询...")
         search_output = self.first_search_node.run(search_input)
         search_query = search_output["search_query"]
+        search_tool = search_output.get("search_tool", "basic_search_news")  # 默认工具
         reasoning = search_output["reasoning"]
         
         print(f"  - 搜索查询: {search_query}")
+        print(f"  - 选择的工具: {search_tool}")
         print(f"  - 推理: {reasoning}")
         
         # 执行搜索
         print("  - 执行网络搜索...")
-        search_results = tavily_search(
-            search_query,
-            max_results=self.config.max_search_results,
-            timeout=self.config.search_timeout,
-            api_key=self.config.tavily_api_key
-        )
+        
+        # 处理search_news_by_date的特殊参数
+        search_kwargs = {}
+        if search_tool == "search_news_by_date":
+            start_date = search_output.get("start_date")
+            end_date = search_output.get("end_date")
+            
+            if start_date and end_date:
+                # 验证日期格式
+                if self._validate_date_format(start_date) and self._validate_date_format(end_date):
+                    search_kwargs["start_date"] = start_date
+                    search_kwargs["end_date"] = end_date
+                    print(f"  - 时间范围: {start_date} 到 {end_date}")
+                else:
+                    print(f"  ⚠️  日期格式错误（应为YYYY-MM-DD），改用基础搜索")
+                    print(f"      提供的日期: start_date={start_date}, end_date={end_date}")
+                    search_tool = "basic_search_news"
+            else:
+                print(f"  ⚠️  search_news_by_date工具缺少时间参数，改用基础搜索")
+                search_tool = "basic_search_news"
+        
+        search_response = self.execute_search_tool(search_tool, search_query, **search_kwargs)
+        
+        # 转换为兼容格式
+        search_results = []
+        if search_response and search_response.results:
+            # 每种搜索工具都有其特定的结果数量，这里取前10个作为上限
+            max_results = min(len(search_response.results), 10)
+            for result in search_response.results[:max_results]:
+                search_results.append({
+                    'title': result.title,
+                    'url': result.url,
+                    'content': result.content,
+                    'score': result.score,
+                    'raw_content': result.raw_content,
+                    'published_date': result.published_date  # 新增字段
+                })
         
         if search_results:
             print(f"  - 找到 {len(search_results)} 个搜索结果")
             for j, result in enumerate(search_results, 1):
-                print(f"    {j}. {result['title'][:50]}...")
+                date_info = f" (发布于: {result.get('published_date', 'N/A')})" if result.get('published_date') else ""
+                print(f"    {j}. {result['title'][:50]}...{date_info}")
         else:
             print("  - 未找到搜索结果")
         
@@ -219,21 +324,58 @@ class DeepSearchAgent:
             # 生成反思搜索查询
             reflection_output = self.reflection_node.run(reflection_input)
             search_query = reflection_output["search_query"]
+            search_tool = reflection_output.get("search_tool", "basic_search_news")  # 默认工具
             reasoning = reflection_output["reasoning"]
             
             print(f"    反思查询: {search_query}")
+            print(f"    选择的工具: {search_tool}")
             print(f"    反思推理: {reasoning}")
             
             # 执行反思搜索
-            search_results = tavily_search(
-                search_query,
-                max_results=self.config.max_search_results,
-                timeout=self.config.search_timeout,
-                api_key=self.config.tavily_api_key
-            )
+            # 处理search_news_by_date的特殊参数
+            search_kwargs = {}
+            if search_tool == "search_news_by_date":
+                start_date = reflection_output.get("start_date")
+                end_date = reflection_output.get("end_date")
+                
+                if start_date and end_date:
+                    # 验证日期格式
+                    if self._validate_date_format(start_date) and self._validate_date_format(end_date):
+                        search_kwargs["start_date"] = start_date
+                        search_kwargs["end_date"] = end_date
+                        print(f"    时间范围: {start_date} 到 {end_date}")
+                    else:
+                        print(f"    ⚠️  日期格式错误（应为YYYY-MM-DD），改用基础搜索")
+                        print(f"        提供的日期: start_date={start_date}, end_date={end_date}")
+                        search_tool = "basic_search_news"
+                else:
+                    print(f"    ⚠️  search_news_by_date工具缺少时间参数，改用基础搜索")
+                    search_tool = "basic_search_news"
+            
+            search_response = self.execute_search_tool(search_tool, search_query, **search_kwargs)
+            
+            # 转换为兼容格式
+            search_results = []
+            if search_response and search_response.results:
+                # 每种搜索工具都有其特定的结果数量，这里取前10个作为上限
+                max_results = min(len(search_response.results), 10)
+                for result in search_response.results[:max_results]:
+                    search_results.append({
+                        'title': result.title,
+                        'url': result.url,
+                        'content': result.content,
+                        'score': result.score,
+                        'raw_content': result.raw_content,
+                        'published_date': result.published_date
+                    })
             
             if search_results:
                 print(f"    找到 {len(search_results)} 个反思搜索结果")
+                for j, result in enumerate(search_results, 1):
+                    date_info = f" (发布于: {result.get('published_date', 'N/A')})" if result.get('published_date') else ""
+                    print(f"      {j}. {result['title'][:50]}...{date_info}")
+            else:
+                print("    未找到反思搜索结果")
             
             # 更新搜索历史
             paragraph.research.add_search_results(search_query, search_results)

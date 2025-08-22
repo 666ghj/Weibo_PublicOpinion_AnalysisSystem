@@ -3,6 +3,18 @@
 提供外部工具接口，如网络搜索等
 """
 
-from .search import tavily_search, SearchResult
+from .search import (
+    TavilyNewsAgency, 
+    SearchResult, 
+    TavilyResponse, 
+    ImageResult,
+    print_response_summary
+)
 
-__all__ = ["tavily_search", "SearchResult"]
+__all__ = [
+    "TavilyNewsAgency", 
+    "SearchResult", 
+    "TavilyResponse", 
+    "ImageResult",
+    "print_response_summary"
+]

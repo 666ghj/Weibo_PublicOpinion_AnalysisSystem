@@ -33,8 +33,12 @@ output_schema_first_search = {
     "type": "object",
     "properties": {
         "search_query": {"type": "string"},
-        "reasoning": {"type": "string"}
-    }
+        "search_tool": {"type": "string"},
+        "reasoning": {"type": "string"},
+        "start_date": {"type": "string", "description": "开始日期，格式YYYY-MM-DD，仅search_news_by_date工具需要"},
+        "end_date": {"type": "string", "description": "结束日期，格式YYYY-MM-DD，仅search_news_by_date工具需要"}
+    },
+    "required": ["search_query", "search_tool", "reasoning"]
 }
 
 # 首次总结输入Schema
@@ -74,8 +78,12 @@ output_schema_reflection = {
     "type": "object",
     "properties": {
         "search_query": {"type": "string"},
-        "reasoning": {"type": "string"}
-    }
+        "search_tool": {"type": "string"},
+        "reasoning": {"type": "string"},
+        "start_date": {"type": "string", "description": "开始日期，格式YYYY-MM-DD，仅search_news_by_date工具需要"},
+        "end_date": {"type": "string", "description": "结束日期，格式YYYY-MM-DD，仅search_news_by_date工具需要"}
+    },
+    "required": ["search_query", "search_tool", "reasoning"]
 }
 
 # 反思总结输入Schema
@@ -139,8 +147,41 @@ SYSTEM_PROMPT_FIRST_SEARCH = f"""
 {json.dumps(input_schema_first_search, indent=2, ensure_ascii=False)}
 </INPUT JSON SCHEMA>
 
-你可以使用一个网络搜索工具，该工具接受'search_query'作为参数。
-你的任务是思考这个主题，并提供最佳的网络搜索查询来丰富你当前的知识。
+你可以使用以下6种专业的新闻搜索工具：
+
+1. **basic_search_news** - 基础新闻搜索工具
+   - 适用于：一般性的新闻搜索，不确定需要何种特定搜索时
+   - 特点：快速、标准的通用搜索，是最常用的基础工具
+
+2. **deep_search_news** - 深度新闻分析工具
+   - 适用于：需要全面深入了解某个主题时
+   - 特点：提供最详细的分析结果，包含高级AI摘要
+
+3. **search_news_last_24_hours** - 24小时最新新闻工具
+   - 适用于：需要了解最新动态、突发事件时
+   - 特点：只搜索过去24小时的新闻
+
+4. **search_news_last_week** - 本周新闻工具
+   - 适用于：需要了解近期发展趋势时
+   - 特点：搜索过去一周的新闻报道
+
+5. **search_images_for_news** - 图片搜索工具
+   - 适用于：需要可视化信息、图片资料时
+   - 特点：提供相关图片和图片描述
+
+6. **search_news_by_date** - 按日期范围搜索工具
+   - 适用于：需要研究特定历史时期时
+   - 特点：可以指定开始和结束日期进行搜索
+   - 特殊要求：需要提供start_date和end_date参数，格式为'YYYY-MM-DD'
+   - 注意：只有这个工具需要额外的时间参数
+
+你的任务是：
+1. 根据段落主题选择最合适的搜索工具
+2. 制定最佳的搜索查询
+3. 如果选择search_news_by_date工具，必须同时提供start_date和end_date参数（格式：YYYY-MM-DD）
+4. 解释你的选择理由
+
+注意：除了search_news_by_date工具外，其他工具都不需要额外参数。
 请按照以下JSON模式定义格式化输出（文字请使用中文）：
 
 <OUTPUT JSON SCHEMA>
@@ -178,8 +219,23 @@ SYSTEM_PROMPT_REFLECTION = f"""
 {json.dumps(input_schema_reflection, indent=2, ensure_ascii=False)}
 </INPUT JSON SCHEMA>
 
-你可以使用一个网络搜索工具，该工具接受'search_query'作为参数。
-你的任务是反思段落文本的当前状态，思考是否遗漏了主题的某些关键方面，并提供最佳的网络搜索查询来丰富最新状态。
+你可以使用以下6种专业的新闻搜索工具：
+
+1. **basic_search_news** - 基础新闻搜索工具
+2. **deep_search_news** - 深度新闻分析工具
+3. **search_news_last_24_hours** - 24小时最新新闻工具  
+4. **search_news_last_week** - 本周新闻工具
+5. **search_images_for_news** - 图片搜索工具
+6. **search_news_by_date** - 按日期范围搜索工具（需要时间参数）
+
+你的任务是：
+1. 反思段落文本的当前状态，思考是否遗漏了主题的某些关键方面
+2. 选择最合适的搜索工具来补充缺失信息
+3. 制定精确的搜索查询
+4. 如果选择search_news_by_date工具，必须同时提供start_date和end_date参数（格式：YYYY-MM-DD）
+5. 解释你的选择和推理
+
+注意：除了search_news_by_date工具外，其他工具都不需要额外参数。
 请按照以下JSON模式定义格式化输出：
 
 <OUTPUT JSON SCHEMA>

@@ -34,7 +34,6 @@ def main():
         # 高级配置
         st.subheader("高级配置")
         max_reflections = st.slider("反思次数", 1, 5, 2)
-        max_search_results = st.slider("搜索结果数", 1, 10, 3)
         max_content_length = st.number_input("最大内容长度", 1000, 50000, 20000)
         
         # 模型选择
@@ -110,7 +109,6 @@ def main():
             deepseek_model=model_name if llm_provider == "deepseek" else "deepseek-chat",
             openai_model=model_name if llm_provider == "openai" else "gpt-4o-mini",
             max_reflections=max_reflections,
-            max_search_results=max_search_results,
             max_content_length=max_content_length,
             output_dir="streamlit_reports"
         )
