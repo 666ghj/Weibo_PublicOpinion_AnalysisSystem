@@ -34,9 +34,7 @@ output_schema_first_search = {
     "properties": {
         "search_query": {"type": "string"},
         "search_tool": {"type": "string"},
-        "reasoning": {"type": "string"},
-        "start_date": {"type": "string", "description": "开始日期，格式YYYY-MM-DD，仅search_news_by_date工具需要"},
-        "end_date": {"type": "string", "description": "结束日期，格式YYYY-MM-DD，仅search_news_by_date工具需要"}
+        "reasoning": {"type": "string"}
     },
     "required": ["search_query", "search_tool", "reasoning"]
 }
@@ -79,9 +77,7 @@ output_schema_reflection = {
     "properties": {
         "search_query": {"type": "string"},
         "search_tool": {"type": "string"},
-        "reasoning": {"type": "string"},
-        "start_date": {"type": "string", "description": "开始日期，格式YYYY-MM-DD，仅search_news_by_date工具需要"},
-        "end_date": {"type": "string", "description": "结束日期，格式YYYY-MM-DD，仅search_news_by_date工具需要"}
+        "reasoning": {"type": "string"}
     },
     "required": ["search_query", "search_tool", "reasoning"]
 }
@@ -147,41 +143,34 @@ SYSTEM_PROMPT_FIRST_SEARCH = f"""
 {json.dumps(input_schema_first_search, indent=2, ensure_ascii=False)}
 </INPUT JSON SCHEMA>
 
-你可以使用以下6种专业的新闻搜索工具：
+你可以使用以下5种专业的多模态搜索工具：
 
-1. **basic_search_news** - 基础新闻搜索工具
-   - 适用于：一般性的新闻搜索，不确定需要何种特定搜索时
-   - 特点：快速、标准的通用搜索，是最常用的基础工具
+1. **comprehensive_search** - 全面综合搜索工具
+   - 适用于：一般性的研究需求，需要完整信息时
+   - 特点：返回网页、图片、AI总结、追问建议和可能的结构化数据，是最常用的基础工具
 
-2. **deep_search_news** - 深度新闻分析工具
-   - 适用于：需要全面深入了解某个主题时
-   - 特点：提供最详细的分析结果，包含高级AI摘要
+2. **web_search_only** - 纯网页搜索工具
+   - 适用于：只需要网页链接和摘要，不需要AI分析时
+   - 特点：速度更快，成本更低，只返回网页结果
 
-3. **search_news_last_24_hours** - 24小时最新新闻工具
+3. **search_for_structured_data** - 结构化数据查询工具
+   - 适用于：查询天气、股票、汇率、百科定义等结构化信息时
+   - 特点：专门用于触发"模态卡"的查询，返回结构化数据
+
+4. **search_last_24_hours** - 24小时内信息搜索工具
    - 适用于：需要了解最新动态、突发事件时
-   - 特点：只搜索过去24小时的新闻
+   - 特点：只搜索过去24小时内发布的内容
 
-4. **search_news_last_week** - 本周新闻工具
+5. **search_last_week** - 本周信息搜索工具
    - 适用于：需要了解近期发展趋势时
-   - 特点：搜索过去一周的新闻报道
-
-5. **search_images_for_news** - 图片搜索工具
-   - 适用于：需要可视化信息、图片资料时
-   - 特点：提供相关图片和图片描述
-
-6. **search_news_by_date** - 按日期范围搜索工具
-   - 适用于：需要研究特定历史时期时
-   - 特点：可以指定开始和结束日期进行搜索
-   - 特殊要求：需要提供start_date和end_date参数，格式为'YYYY-MM-DD'
-   - 注意：只有这个工具需要额外的时间参数
+   - 特点：搜索过去一周内的主要报道
 
 你的任务是：
 1. 根据段落主题选择最合适的搜索工具
 2. 制定最佳的搜索查询
-3. 如果选择search_news_by_date工具，必须同时提供start_date和end_date参数（格式：YYYY-MM-DD）
-4. 解释你的选择理由
+3. 解释你的选择理由
 
-注意：除了search_news_by_date工具外，其他工具都不需要额外参数。
+注意：所有工具都不需要额外参数，选择工具主要基于搜索意图和需要的信息类型。
 请按照以下JSON模式定义格式化输出（文字请使用中文）：
 
 <OUTPUT JSON SCHEMA>
@@ -219,23 +208,21 @@ SYSTEM_PROMPT_REFLECTION = f"""
 {json.dumps(input_schema_reflection, indent=2, ensure_ascii=False)}
 </INPUT JSON SCHEMA>
 
-你可以使用以下6种专业的新闻搜索工具：
+你可以使用以下5种专业的多模态搜索工具：
 
-1. **basic_search_news** - 基础新闻搜索工具
-2. **deep_search_news** - 深度新闻分析工具
-3. **search_news_last_24_hours** - 24小时最新新闻工具  
-4. **search_news_last_week** - 本周新闻工具
-5. **search_images_for_news** - 图片搜索工具
-6. **search_news_by_date** - 按日期范围搜索工具（需要时间参数）
+1. **comprehensive_search** - 全面综合搜索工具
+2. **web_search_only** - 纯网页搜索工具
+3. **search_for_structured_data** - 结构化数据查询工具
+4. **search_last_24_hours** - 24小时内信息搜索工具
+5. **search_last_week** - 本周信息搜索工具
 
 你的任务是：
 1. 反思段落文本的当前状态，思考是否遗漏了主题的某些关键方面
 2. 选择最合适的搜索工具来补充缺失信息
 3. 制定精确的搜索查询
-4. 如果选择search_news_by_date工具，必须同时提供start_date和end_date参数（格式：YYYY-MM-DD）
-5. 解释你的选择和推理
+4. 解释你的选择和推理
 
-注意：除了search_news_by_date工具外，其他工具都不需要额外参数。
+注意：所有工具都不需要额外参数，选择工具主要基于搜索意图和需要的信息类型。
 请按照以下JSON模式定义格式化输出：
 
 <OUTPUT JSON SCHEMA>

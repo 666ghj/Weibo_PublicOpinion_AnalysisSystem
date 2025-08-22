@@ -14,7 +14,7 @@ class Config:
     # API密钥
     deepseek_api_key: Optional[str] = None
     openai_api_key: Optional[str] = None
-    tavily_api_key: Optional[str] = None
+    bocha_api_key: Optional[str] = None
     
     # 模型配置
     default_llm_provider: str = "deepseek"  # deepseek 或 openai
@@ -44,8 +44,8 @@ class Config:
             print("错误: OpenAI API Key未设置")
             return False
         
-        if not self.tavily_api_key:
-            print("错误: Tavily API Key未设置")
+        if not self.bocha_api_key:
+            print("错误: Bocha API Key未设置")
             return False
         
         return True
@@ -65,7 +65,7 @@ class Config:
             return cls(
                 deepseek_api_key=getattr(config_module, "DEEPSEEK_API_KEY", None),
                 openai_api_key=getattr(config_module, "OPENAI_API_KEY", None),
-                tavily_api_key=getattr(config_module, "TAVILY_API_KEY", None),
+                bocha_api_key=getattr(config_module, "BOCHA_API_KEY", None),
                 default_llm_provider=getattr(config_module, "DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=getattr(config_module, "DEEPSEEK_MODEL", "deepseek-chat"),
                 openai_model=getattr(config_module, "OPENAI_MODEL", "gpt-4o-mini"),
@@ -92,7 +92,7 @@ class Config:
             return cls(
                 deepseek_api_key=config_dict.get("DEEPSEEK_API_KEY"),
                 openai_api_key=config_dict.get("OPENAI_API_KEY"),
-                tavily_api_key=config_dict.get("TAVILY_API_KEY"),
+                bocha_api_key=config_dict.get("BOCHA_API_KEY"),
                 default_llm_provider=config_dict.get("DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=config_dict.get("DEEPSEEK_MODEL", "deepseek-chat"),
                 openai_model=config_dict.get("OPENAI_MODEL", "gpt-4o-mini"),
@@ -147,7 +147,7 @@ def print_config(config: Config):
     print(f"LLM提供商: {config.default_llm_provider}")
     print(f"DeepSeek模型: {config.deepseek_model}")
     print(f"OpenAI模型: {config.openai_model}")
-    print(f"最大搜索结果数: {config.max_search_results}")
+
     print(f"搜索超时: {config.search_timeout}秒")
     print(f"最大内容长度: {config.max_content_length}")
     print(f"最大反思次数: {config.max_reflections}")
@@ -158,5 +158,5 @@ def print_config(config: Config):
     # 显示API密钥状态（不显示实际密钥）
     print(f"DeepSeek API Key: {'已设置' if config.deepseek_api_key else '未设置'}")
     print(f"OpenAI API Key: {'已设置' if config.openai_api_key else '未设置'}")
-    print(f"Tavily API Key: {'已设置' if config.tavily_api_key else '未设置'}")
+    print(f"Bocha API Key: {'已设置' if config.bocha_api_key else '未设置'}")
     print("==================\n")

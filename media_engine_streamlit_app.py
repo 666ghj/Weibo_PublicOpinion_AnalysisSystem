@@ -12,8 +12,8 @@ import json
 # 添加src目录到Python路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '.'))
 
-from QueryEngine import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, TAVILY_API_KEY
+from MediaEngine import DeepSearchAgent, Config
+from config import DEEPSEEK_API_KEY, BOCHA_Web_Search_API_KEY
 
 
 def main():
@@ -98,19 +98,19 @@ def main():
         
         # 自动使用配置文件中的API密钥
         deepseek_key = DEEPSEEK_API_KEY
-        tavily_key = TAVILY_API_KEY
+        bocha_key = BOCHA_Web_Search_API_KEY
         
         # 创建配置
         config = Config(
             deepseek_api_key=deepseek_key if llm_provider == "deepseek" else None,
             openai_api_key=openai_key if llm_provider == "openai" else None,
-            tavily_api_key=tavily_key,
+            bocha_api_key=bocha_key,
             default_llm_provider=llm_provider,
             deepseek_model=model_name if llm_provider == "deepseek" else "deepseek-chat",
             openai_model=model_name if llm_provider == "openai" else "gpt-4o-mini",
             max_reflections=max_reflections,
             max_content_length=max_content_length,
-            output_dir="query_engine_streamlit_reports"
+            output_dir="media_engine_streamlit_reports"
         )
         
         # 执行研究
