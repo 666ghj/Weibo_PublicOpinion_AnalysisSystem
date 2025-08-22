@@ -14,6 +14,7 @@ from ..utils.text_processing import (
     remove_reasoning_from_output,
     clean_json_tags,
     extract_clean_response,
+    fix_incomplete_json,
     format_search_results_for_prompt
 )
 
@@ -82,25 +83,42 @@ class FirstSummaryNode(StateMutationNode):
     
     def process_output(self, output: str) -> str:
         """
-        处理LLM输出，提取段落总结
+        处理LLM输出，提取段落内容
         
         Args:
             output: LLM原始输出
             
         Returns:
-            段落总结内容
+            段落内容
         """
         try:
             # 清理响应文本
             cleaned_output = remove_reasoning_from_output(output)
             cleaned_output = clean_json_tags(cleaned_output)
             
+            # 记录清理后的输出用于调试
+            self.log_info(f"清理后的输出: {cleaned_output[:200]}...")
+            
             # 解析JSON
             try:
                 result = json.loads(cleaned_output)
-            except JSONDecodeError:
-                # 如果不是JSON格式，直接返回清理后的文本
-                return cleaned_output
+                self.log_info("JSON解析成功")
+            except JSONDecodeError as e:
+                self.log_info(f"JSON解析失败: {str(e)}")
+                # 尝试修复JSON
+                fixed_json = fix_incomplete_json(cleaned_output)
+                if fixed_json:
+                    try:
+                        result = json.loads(fixed_json)
+                        self.log_info("JSON修复成功")
+                    except JSONDecodeError:
+                        self.log_info("JSON修复失败，直接使用清理后的文本")
+                        # 如果不是JSON格式，直接返回清理后的文本
+                        return cleaned_output
+                else:
+                    self.log_info("无法修复JSON，直接使用清理后的文本")
+                    # 如果不是JSON格式，直接返回清理后的文本
+                    return cleaned_output
             
             # 提取段落内容
             if isinstance(result, dict):
@@ -224,12 +242,29 @@ class ReflectionSummaryNode(StateMutationNode):
             cleaned_output = remove_reasoning_from_output(output)
             cleaned_output = clean_json_tags(cleaned_output)
             
+            # 记录清理后的输出用于调试
+            self.log_info(f"清理后的输出: {cleaned_output[:200]}...")
+            
             # 解析JSON
             try:
                 result = json.loads(cleaned_output)
-            except JSONDecodeError:
-                # 如果不是JSON格式，直接返回清理后的文本
-                return cleaned_output
+                self.log_info("JSON解析成功")
+            except JSONDecodeError as e:
+                self.log_info(f"JSON解析失败: {str(e)}")
+                # 尝试修复JSON
+                fixed_json = fix_incomplete_json(cleaned_output)
+                if fixed_json:
+                    try:
+                        result = json.loads(fixed_json)
+                        self.log_info("JSON修复成功")
+                    except JSONDecodeError:
+                        self.log_info("JSON修复失败，直接使用清理后的文本")
+                        # 如果不是JSON格式，直接返回清理后的文本
+                        return cleaned_output
+                else:
+                    self.log_info("无法修复JSON，直接使用清理后的文本")
+                    # 如果不是JSON格式，直接返回清理后的文本
+                    return cleaned_output
             
             # 提取更新后的段落内容
             if isinstance(result, dict):

@@ -12,7 +12,8 @@ from ..prompts import SYSTEM_PROMPT_FIRST_SEARCH, SYSTEM_PROMPT_REFLECTION
 from ..utils.text_processing import (
     remove_reasoning_from_output,
     clean_json_tags,
-    extract_clean_response
+    extract_clean_response,
+    fix_incomplete_json
 )
 
 
@@ -91,21 +92,40 @@ class FirstSearchNode(BaseNode):
             cleaned_output = remove_reasoning_from_output(output)
             cleaned_output = clean_json_tags(cleaned_output)
             
+            # 记录清理后的输出用于调试
+            self.log_info(f"清理后的输出: {cleaned_output[:200]}...")
+            
             # 解析JSON
             try:
                 result = json.loads(cleaned_output)
-            except JSONDecodeError:
+                self.log_info("JSON解析成功")
+            except JSONDecodeError as e:
+                self.log_info(f"JSON解析失败: {str(e)}")
                 # 使用更强大的提取方法
                 result = extract_clean_response(cleaned_output)
                 if "error" in result:
-                    raise ValueError("JSON解析失败")
+                    self.log_error("JSON解析失败，尝试修复...")
+                    # 尝试修复JSON
+                    fixed_json = fix_incomplete_json(cleaned_output)
+                    if fixed_json:
+                        try:
+                            result = json.loads(fixed_json)
+                            self.log_info("JSON修复成功")
+                        except JSONDecodeError:
+                            self.log_error("JSON修复失败")
+                            # 返回默认查询
+                            return self._get_default_search_query()
+                    else:
+                        self.log_error("无法修复JSON，使用默认查询")
+                        return self._get_default_search_query()
             
             # 验证和清理结果
             search_query = result.get("search_query", "")
             reasoning = result.get("reasoning", "")
             
             if not search_query:
-                raise ValueError("未找到搜索查询")
+                self.log_warning("未找到搜索查询，使用默认查询")
+                return self._get_default_search_query()
             
             return {
                 "search_query": search_query,
@@ -115,10 +135,19 @@ class FirstSearchNode(BaseNode):
         except Exception as e:
             self.log_error(f"处理输出失败: {str(e)}")
             # 返回默认查询
-            return {
-                "search_query": "相关主题研究",
-                "reasoning": "由于解析失败，使用默认搜索查询"
-            }
+            return self._get_default_search_query()
+    
+    def _get_default_search_query(self) -> Dict[str, str]:
+        """
+        获取默认搜索查询
+        
+        Returns:
+            默认的搜索查询字典
+        """
+        return {
+            "search_query": "相关主题研究",
+            "reasoning": "由于解析失败，使用默认搜索查询"
+        }
 
 
 class ReflectionNode(BaseNode):
@@ -198,21 +227,40 @@ class ReflectionNode(BaseNode):
             cleaned_output = remove_reasoning_from_output(output)
             cleaned_output = clean_json_tags(cleaned_output)
             
+            # 记录清理后的输出用于调试
+            self.log_info(f"清理后的输出: {cleaned_output[:200]}...")
+            
             # 解析JSON
             try:
                 result = json.loads(cleaned_output)
-            except JSONDecodeError:
+                self.log_info("JSON解析成功")
+            except JSONDecodeError as e:
+                self.log_info(f"JSON解析失败: {str(e)}")
                 # 使用更强大的提取方法
                 result = extract_clean_response(cleaned_output)
                 if "error" in result:
-                    raise ValueError("JSON解析失败")
+                    self.log_error("JSON解析失败，尝试修复...")
+                    # 尝试修复JSON
+                    fixed_json = fix_incomplete_json(cleaned_output)
+                    if fixed_json:
+                        try:
+                            result = json.loads(fixed_json)
+                            self.log_info("JSON修复成功")
+                        except JSONDecodeError:
+                            self.log_error("JSON修复失败")
+                            # 返回默认查询
+                            return self._get_default_reflection_query()
+                    else:
+                        self.log_error("无法修复JSON，使用默认查询")
+                        return self._get_default_reflection_query()
             
             # 验证和清理结果
             search_query = result.get("search_query", "")
             reasoning = result.get("reasoning", "")
             
             if not search_query:
-                raise ValueError("未找到搜索查询")
+                self.log_warning("未找到搜索查询，使用默认查询")
+                return self._get_default_reflection_query()
             
             return {
                 "search_query": search_query,
@@ -222,7 +270,16 @@ class ReflectionNode(BaseNode):
         except Exception as e:
             self.log_error(f"处理输出失败: {str(e)}")
             # 返回默认查询
-            return {
-                "search_query": "深度研究补充信息",
-                "reasoning": "由于解析失败，使用默认反思搜索查询"
-            }
+            return self._get_default_reflection_query()
+    
+    def _get_default_reflection_query(self) -> Dict[str, str]:
+        """
+        获取默认反思搜索查询
+        
+        Returns:
+            默认的反思搜索查询字典
+        """
+        return {
+            "search_query": "深度研究补充信息",
+            "reasoning": "由于解析失败，使用默认反思搜索查询"
+        }

@@ -13,7 +13,7 @@ import json
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '.'))
 
 from src import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, DEEPSEEK_API_KEY_2, TAVILY_API_KEY
+from config import DEEPSEEK_API_KEY, TAVILY_API_KEY
 
 
 def main():

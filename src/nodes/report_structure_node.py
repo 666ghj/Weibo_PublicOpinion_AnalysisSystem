@@ -13,7 +13,8 @@ from ..prompts import SYSTEM_PROMPT_REPORT_STRUCTURE
 from ..utils.text_processing import (
     remove_reasoning_from_output,
     clean_json_tags,
-    extract_clean_response
+    extract_clean_response,
+    fix_incomplete_json
 )
 
 
@@ -77,48 +78,91 @@ class ReportStructureNode(StateMutationNode):
             cleaned_output = remove_reasoning_from_output(output)
             cleaned_output = clean_json_tags(cleaned_output)
             
+            # 记录清理后的输出用于调试
+            self.log_info(f"清理后的输出: {cleaned_output[:200]}...")
+            
             # 解析JSON
             try:
                 report_structure = json.loads(cleaned_output)
-            except JSONDecodeError:
+                self.log_info("JSON解析成功")
+            except JSONDecodeError as e:
+                self.log_info(f"JSON解析失败: {str(e)}")
                 # 使用更强大的提取方法
                 report_structure = extract_clean_response(cleaned_output)
                 if "error" in report_structure:
-                    raise ValueError("JSON解析失败")
+                    self.log_error("JSON解析失败，尝试修复...")
+                    # 尝试修复JSON
+                    fixed_json = fix_incomplete_json(cleaned_output)
+                    if fixed_json:
+                        try:
+                            report_structure = json.loads(fixed_json)
+                            self.log_info("JSON修复成功")
+                        except JSONDecodeError:
+                            self.log_error("JSON修复失败")
+                            # 返回默认结构
+                            return self._generate_default_structure()
+                    else:
+                        self.log_error("无法修复JSON，使用默认结构")
+                        return self._generate_default_structure()
             
             # 验证结构
             if not isinstance(report_structure, list):
-                raise ValueError("报告结构应该是一个列表")
+                self.log_info("报告结构不是列表，尝试转换...")
+                if isinstance(report_structure, dict):
+                    # 如果是单个对象，包装成列表
+                    report_structure = [report_structure]
+                else:
+                    self.log_error("报告结构格式无效，使用默认结构")
+                    return self._generate_default_structure()
             
             # 验证每个段落
             validated_structure = []
             for i, paragraph in enumerate(report_structure):
                 if not isinstance(paragraph, dict):
+                    self.log_warning(f"段落 {i+1} 不是字典格式，跳过")
                     continue
                 
                 title = paragraph.get("title", f"段落 {i+1}")
                 content = paragraph.get("content", "")
+                
+                if not title or not content:
+                    self.log_warning(f"段落 {i+1} 缺少标题或内容，跳过")
+                    continue
                 
                 validated_structure.append({
                     "title": title,
                     "content": content
                 })
             
+            if not validated_structure:
+                self.log_warning("没有有效的段落结构，使用默认结构")
+                return self._generate_default_structure()
+            
+            self.log_info(f"成功验证 {len(validated_structure)} 个段落结构")
             return validated_structure
             
         except Exception as e:
             self.log_error(f"处理输出失败: {str(e)}")
-            # 返回默认结构
-            return [
-                {
-                    "title": "概述",
-                    "content": f"对'{self.query}'的总体概述和背景介绍"
-                },
-                {
-                    "title": "详细分析", 
-                    "content": f"深入分析'{self.query}'的相关内容"
-                }
-            ]
+            return self._generate_default_structure()
+    
+    def _generate_default_structure(self) -> List[Dict[str, str]]:
+        """
+        生成默认的报告结构
+        
+        Returns:
+            默认的报告结构列表
+        """
+        self.log_info("生成默认报告结构")
+        return [
+            {
+                "title": "研究概述",
+                "content": "对查询主题进行总体概述和分析"
+            },
+            {
+                "title": "深度分析",
+                "content": "深入分析查询主题的各个方面"
+            }
+        ]
     
     def mutate_state(self, input_data: Any = None, state: State = None, **kwargs) -> State:
         """
