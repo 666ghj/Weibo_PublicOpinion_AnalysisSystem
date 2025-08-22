@@ -12,7 +12,7 @@ import json
 # 添加src目录到Python路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '.'))
 
-from src import DeepSearchAgent, Config
+from QueryEngine import DeepSearchAgent, Config
 from config import DEEPSEEK_API_KEY, TAVILY_API_KEY
 
 
@@ -110,7 +110,7 @@ def main():
             openai_model=model_name if llm_provider == "openai" else "gpt-4o-mini",
             max_reflections=max_reflections,
             max_content_length=max_content_length,
-            output_dir="streamlit_reports"
+            output_dir="query_engine_streamlit_reports"
         )
         
         # 执行研究
