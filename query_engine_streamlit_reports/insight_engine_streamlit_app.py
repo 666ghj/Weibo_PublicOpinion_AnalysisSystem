@@ -1,6 +1,6 @@
 """
 Streamlit Web界面
-为Media Agent提供友好的Web界面
+为DInsight Agent提供友好的Web界面
 """
 
 import os
@@ -12,28 +12,28 @@ import json
 # 添加src目录到Python路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from MediaEngine import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, BOCHA_Web_Search_API_KEY, GEMINI_API_KEY
+from InsightEngine import DeepSearchAgent, Config
+from config import DEEPSEEK_API_KEY, KIMI_API_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, DB_CHARSET
 
 
 def main():
     """主函数"""
     st.set_page_config(
-        page_title="Media Agent",
+        page_title="Insight Agent",
         page_icon="",
         layout="wide"
     )
 
-    st.title("Media Agent")
-    st.markdown("具备强大多模态能力的AI代理")
+    st.title("Insight Engine")
+    st.markdown("本地舆情数据库深度分析AI代理")
 
     # ----- 配置被硬编码 -----
-    # 强制使用 Gemini
-    llm_provider = "gemini"
-    model_name = "gemini-2.5-pro"
+    # 强制使用 Kimi
+    llm_provider = "kimi"
+    model_name = "kimi-k2-0711-preview"
     # 默认高级配置
     max_reflections = 2
-    max_content_length = 20000
+    max_content_length = 500000  # Kimi支持长文本
 
     # 主界面
     col1, col2 = st.columns([2, 1])
@@ -67,31 +67,37 @@ def main():
             st.error("请输入研究查询")
             return
 
-        # 由于强制使用Gemini，检查相关的API密钥
-        if not GEMINI_API_KEY:
-            st.error("请在您的配置文件(config.py)中设置GEMINI_API_KEY")
-            return
-        if not BOCHA_Web_Search_API_KEY:
-            st.error("请在您的配置文件(config.py)中设置BOCHA_Web_Search_API_KEY")
+        # 由于强制使用Kimi，只检查KIMI_API_KEY
+        if not KIMI_API_KEY:
+            st.error("请在您的配置文件(config.py)中设置KIMI_API_KEY")
             return
 
-        # 自动使用配置文件中的API密钥
-        gemini_key = GEMINI_API_KEY
-        bocha_key = BOCHA_Web_Search_API_KEY
+        # 自动使用配置文件中的API密钥和数据库配置
+        db_host = DB_HOST
+        db_user = DB_USER
+        db_password = DB_PASSWORD
+        db_name = DB_NAME
+        db_port = DB_PORT
+        db_charset = DB_CHARSET
 
         # 创建配置
         config = Config(
             deepseek_api_key=None,
             openai_api_key=None,
-            gemini_api_key=gemini_key,
-            bocha_api_key=bocha_key,
+            kimi_api_key=KIMI_API_KEY,  # 强制使用配置文件中的Kimi Key
+            db_host=db_host,
+            db_user=db_user,
+            db_password=db_password,
+            db_name=db_name,
+            db_port=db_port,
+            db_charset=db_charset,
             default_llm_provider=llm_provider,
-            deepseek_model="deepseek-chat",  # 保留默认值以兼容
-            openai_model="gpt-4o-mini",  # 保留默认值以兼容
-            gemini_model=model_name,
+            deepseek_model="deepseek-chat", # 保留默认值以兼容
+            openai_model="gpt-4o-mini", # 保留默认值以兼容
+            kimi_model=model_name,
             max_reflections=max_reflections,
             max_content_length=max_content_length,
-            output_dir="media_engine_streamlit_reports"
+            output_dir="insight_engine_streamlit_reports"
         )
 
         # 执行研究
