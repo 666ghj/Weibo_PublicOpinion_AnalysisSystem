@@ -7,9 +7,9 @@ import json
 import os
 import re
 from datetime import datetime
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Union
 
-from .llms import DeepSeekLLM, OpenAILLM, BaseLLM
+from .llms import DeepSeekLLM, OpenAILLM, KimiLLM, BaseLLM
 from .nodes import (
     ReportStructureNode,
     FirstSearchNode, 
@@ -19,7 +19,7 @@ from .nodes import (
     ReportFormattingNode
 )
 from .state import State
-from .tools import MediaCrawlerDB, DBResponse, keyword_optimizer
+from .tools import MediaCrawlerDB, DBResponse, keyword_optimizer, multilingual_sentiment_analyzer
 from .utils import Config, load_config, format_search_results_for_prompt
 
 
@@ -50,6 +50,9 @@ class DeepSearchAgent:
         # 初始化搜索工具集
         self.search_agency = MediaCrawlerDB()
         
+        # 初始化情感分析器
+        self.sentiment_analyzer = multilingual_sentiment_analyzer
+        
         # 初始化节点
         self._initialize_nodes()
         
@@ -62,6 +65,7 @@ class DeepSearchAgent:
         print(f"Deep Search Agent 已初始化")
         print(f"使用LLM: {self.llm_client.get_model_info()}")
         print(f"搜索工具集: MediaCrawlerDB (支持5种本地数据库查询工具)")
+        print(f"情感分析: WeiboMultilingualSentiment (支持22种语言的情感分析)")
     
     def _initialize_llm(self) -> BaseLLM:
         """初始化LLM客户端"""
@@ -74,6 +78,11 @@ class DeepSearchAgent:
             return OpenAILLM(
                 api_key=self.config.openai_api_key,
                 model_name=self.config.openai_model
+            )
+        elif self.config.default_llm_provider == "kimi":
+            return KimiLLM(
+                api_key=self.config.kimi_api_key,
+                model_name=self.config.kimi_model
             )
         else:
             raise ValueError(f"不支持的LLM提供商: {self.config.default_llm_provider}")
@@ -113,7 +122,7 @@ class DeepSearchAgent:
     
     def execute_search_tool(self, tool_name: str, query: str, **kwargs) -> DBResponse:
         """
-        执行指定的数据库查询工具（集成关键词优化中间件）
+        执行指定的数据库查询工具（集成关键词优化中间件和情感分析）
         
         Args:
             tool_name: 工具名称，可选值：
@@ -122,11 +131,13 @@ class DeepSearchAgent:
                 - "search_topic_by_date": 按日期搜索话题
                 - "get_comments_for_topic": 获取话题评论
                 - "search_topic_on_platform": 平台定向搜索
+                - "analyze_sentiment": 对查询结果进行情感分析
             query: 搜索关键词/话题
-            **kwargs: 额外参数（如start_date, end_date, platform, limit等）
+            **kwargs: 额外参数（如start_date, end_date, platform, limit, enable_sentiment等）
+                     enable_sentiment: 是否自动对搜索结果进行情感分析（默认True）
             
         Returns:
-            DBResponse对象
+            DBResponse对象（可能包含情感分析结果）
         """
         print(f"  → 执行数据库查询工具: {tool_name}")
         
@@ -134,7 +145,36 @@ class DeepSearchAgent:
         if tool_name == "search_hot_content":
             time_period = kwargs.get("time_period", "week")
             limit = kwargs.get("limit", 100)
-            return self.search_agency.search_hot_content(time_period=time_period, limit=limit)
+            response = self.search_agency.search_hot_content(time_period=time_period, limit=limit)
+            
+            # 检查是否需要进行情感分析
+            enable_sentiment = kwargs.get("enable_sentiment", True)
+            if enable_sentiment and response.results and len(response.results) > 0:
+                print(f"  🎭 开始对热点内容进行情感分析...")
+                sentiment_analysis = self._perform_sentiment_analysis(response.results)
+                if sentiment_analysis:
+                    # 将情感分析结果添加到响应的parameters中
+                    response.parameters["sentiment_analysis"] = sentiment_analysis
+                    print(f"  ✅ 情感分析完成")
+            
+            return response
+        
+        # 独立情感分析工具
+        if tool_name == "analyze_sentiment":
+            texts = kwargs.get("texts", query)  # 可以通过texts参数传递，或使用query
+            sentiment_result = self.analyze_sentiment_only(texts)
+            
+            # 构建DBResponse格式的响应
+            return DBResponse(
+                tool_name="analyze_sentiment",
+                parameters={
+                    "texts": texts if isinstance(texts, list) else [texts],
+                    **kwargs
+                },
+                results=[],  # 情感分析不返回搜索结果
+                results_count=0,
+                metadata=sentiment_result
+            )
         
         # 对于需要搜索词的工具，使用关键词优化中间件
         optimized_response = keyword_optimizer.optimize_keywords(
@@ -154,31 +194,35 @@ class DeepSearchAgent:
             
             try:
                 if tool_name == "search_topic_globally":
-                    limit_per_table = kwargs.get("limit_per_table", 100)
+                    # 使用配置文件中的默认值，忽略agent提供的limit_per_table参数
+                    limit_per_table = self.config.default_search_topic_globally_limit_per_table
                     response = self.search_agency.search_topic_globally(topic=keyword, limit_per_table=limit_per_table)
                 elif tool_name == "search_topic_by_date":
                     start_date = kwargs.get("start_date")
                     end_date = kwargs.get("end_date")
-                    limit_per_table = kwargs.get("limit_per_table", 100)
+                    # 使用配置文件中的默认值，忽略agent提供的limit_per_table参数
+                    limit_per_table = self.config.default_search_topic_by_date_limit_per_table
                     if not start_date or not end_date:
                         raise ValueError("search_topic_by_date工具需要start_date和end_date参数")
                     response = self.search_agency.search_topic_by_date(topic=keyword, start_date=start_date, end_date=end_date, limit_per_table=limit_per_table)
                 elif tool_name == "get_comments_for_topic":
-                    limit = kwargs.get("limit", 500) // len(optimized_response.optimized_keywords)
+                    # 使用配置文件中的默认值，按关键词数量分配，但保证最小值
+                    limit = self.config.default_get_comments_for_topic_limit // len(optimized_response.optimized_keywords)
                     limit = max(limit, 50)
                     response = self.search_agency.get_comments_for_topic(topic=keyword, limit=limit)
                 elif tool_name == "search_topic_on_platform":
                     platform = kwargs.get("platform")
                     start_date = kwargs.get("start_date")
                     end_date = kwargs.get("end_date")
-                    limit = kwargs.get("limit", 200) // len(optimized_response.optimized_keywords)
+                    # 使用配置文件中的默认值，按关键词数量分配，但保证最小值
+                    limit = self.config.default_search_topic_on_platform_limit // len(optimized_response.optimized_keywords)
                     limit = max(limit, 30)
                     if not platform:
                         raise ValueError("search_topic_on_platform工具需要platform参数")
                     response = self.search_agency.search_topic_on_platform(platform=platform, topic=keyword, start_date=start_date, end_date=end_date, limit=limit)
                 else:
                     print(f"    未知的搜索工具: {tool_name}，使用默认全局搜索")
-                    response = self.search_agency.search_topic_globally(topic=keyword, limit_per_table=100)
+                    response = self.search_agency.search_topic_globally(topic=keyword, limit_per_table=self.config.default_search_topic_globally_limit_per_table)
                 
                 # 收集结果
                 if response.results:
@@ -209,6 +253,16 @@ class DeepSearchAgent:
             results_count=len(unique_results)
         )
         
+        # 检查是否需要进行情感分析
+        enable_sentiment = kwargs.get("enable_sentiment", True)
+        if enable_sentiment and unique_results and len(unique_results) > 0:
+            print(f"  🎭 开始对搜索结果进行情感分析...")
+            sentiment_analysis = self._perform_sentiment_analysis(unique_results)
+            if sentiment_analysis:
+                # 将情感分析结果添加到响应的parameters中
+                integrated_response.parameters["sentiment_analysis"] = sentiment_analysis
+                print(f"  ✅ 情感分析完成")
+        
         return integrated_response
     
     def _deduplicate_results(self, results: List) -> List:
@@ -226,6 +280,99 @@ class DeepSearchAgent:
                 unique_results.append(result)
         
         return unique_results
+    
+    def _perform_sentiment_analysis(self, results: List) -> Optional[Dict[str, Any]]:
+        """
+        对搜索结果执行情感分析
+        
+        Args:
+            results: 搜索结果列表
+            
+        Returns:
+            情感分析结果字典，如果失败则返回None
+        """
+        try:
+            # 初始化情感分析器（如果尚未初始化）
+            if not self.sentiment_analyzer.is_initialized:
+                print("    初始化情感分析模型...")
+                if not self.sentiment_analyzer.initialize():
+                    print("    ❌ 情感分析模型初始化失败")
+                    return None
+            
+            # 将查询结果转换为字典格式
+            results_dict = []
+            for result in results:
+                result_dict = {
+                    "content": result.title_or_content,
+                    "platform": result.platform,
+                    "author": result.author_nickname,
+                    "url": result.url,
+                    "publish_time": str(result.publish_time) if result.publish_time else None
+                }
+                results_dict.append(result_dict)
+            
+            # 执行情感分析
+            sentiment_analysis = self.sentiment_analyzer.analyze_query_results(
+                query_results=results_dict,
+                text_field="content",
+                min_confidence=0.5
+            )
+            
+            return sentiment_analysis.get("sentiment_analysis")
+            
+        except Exception as e:
+            print(f"    ❌ 情感分析过程中发生错误: {str(e)}")
+            return None
+    
+    def analyze_sentiment_only(self, texts: Union[str, List[str]]) -> Dict[str, Any]:
+        """
+        独立的情感分析工具
+        
+        Args:
+            texts: 单个文本或文本列表
+            
+        Returns:
+            情感分析结果
+        """
+        print(f"  → 执行独立情感分析")
+        
+        try:
+            # 初始化情感分析器（如果尚未初始化）
+            if not self.sentiment_analyzer.is_initialized:
+                print("    初始化情感分析模型...")
+                if not self.sentiment_analyzer.initialize():
+                    return {
+                        "success": False,
+                        "error": "情感分析模型初始化失败",
+                        "results": []
+                    }
+            
+            # 执行分析
+            if isinstance(texts, str):
+                result = self.sentiment_analyzer.analyze_single_text(texts)
+                return {
+                    "success": True,
+                    "total_analyzed": 1,
+                    "results": [result.__dict__]
+                }
+            else:
+                batch_result = self.sentiment_analyzer.analyze_batch(texts, show_progress=True)
+                return {
+                    "success": True,
+                    "total_analyzed": batch_result.total_processed,
+                    "success_count": batch_result.success_count,
+                    "failed_count": batch_result.failed_count,
+                    "average_confidence": batch_result.average_confidence,
+                    "results": [result.__dict__ for result in batch_result.results]
+                }
+                
+        except Exception as e:
+            print(f"    ❌ 情感分析过程中发生错误: {str(e)}")
+            return {
+                "success": False,
+                "error": str(e),
+                "results": []
+            }
     
     def research(self, query: str, save_report: bool = True) -> str:
         """
@@ -356,17 +503,23 @@ class DeepSearchAgent:
                 print(f"  ⚠️  search_topic_on_platform工具缺少平台参数，改用全局搜索")
                 search_tool = "search_topic_globally"
         
-        # 处理限制参数
+        # 处理限制参数，使用配置文件中的默认值而不是agent提供的参数
         if search_tool == "search_hot_content":
             time_period = search_output.get("time_period", "week")
-            limit = search_output.get("limit", 100)
+            limit = self.config.default_search_hot_content_limit
             search_kwargs["time_period"] = time_period
             search_kwargs["limit"] = limit
         elif search_tool in ["search_topic_globally", "search_topic_by_date"]:
-            limit_per_table = search_output.get("limit_per_table", 100)
+            if search_tool == "search_topic_globally":
+                limit_per_table = self.config.default_search_topic_globally_limit_per_table
+            else:  # search_topic_by_date
+                limit_per_table = self.config.default_search_topic_by_date_limit_per_table
             search_kwargs["limit_per_table"] = limit_per_table
         elif search_tool in ["get_comments_for_topic", "search_topic_on_platform"]:
-            limit = search_output.get("limit", 200)
+            if search_tool == "get_comments_for_topic":
+                limit = self.config.default_get_comments_for_topic_limit
+            else:  # search_topic_on_platform
+                limit = self.config.default_search_topic_on_platform_limit
             search_kwargs["limit"] = limit
         
         search_response = self.execute_search_tool(search_tool, search_query, **search_kwargs)
@@ -374,8 +527,11 @@ class DeepSearchAgent:
         # 转换为兼容格式
         search_results = []
         if search_response and search_response.results:
-            # 每种搜索工具都有其特定的结果数量，这里取前100个作为上限
-            max_results = min(len(search_response.results), 100)
+            # 使用配置文件控制传递给LLM的结果数量，0表示不限制
+            if self.config.max_search_results_for_llm > 0:
+                max_results = min(len(search_response.results), self.config.max_search_results_for_llm)
+            else:
+                max_results = len(search_response.results)  # 不限制，传递所有结果
             for result in search_response.results[:max_results]:
                 search_results.append({
                     'title': result.title_or_content,
@@ -479,14 +635,23 @@ class DeepSearchAgent:
             # 处理限制参数
             if search_tool == "search_hot_content":
                 time_period = reflection_output.get("time_period", "week")
-                limit = reflection_output.get("limit", 10)
+                # 使用配置文件中的默认值，不允许agent控制limit参数
+                limit = self.config.default_search_hot_content_limit
                 search_kwargs["time_period"] = time_period
                 search_kwargs["limit"] = limit
             elif search_tool in ["search_topic_globally", "search_topic_by_date"]:
-                limit_per_table = reflection_output.get("limit_per_table", 5)
+                # 使用配置文件中的默认值，不允许agent控制limit_per_table参数
+                if search_tool == "search_topic_globally":
+                    limit_per_table = self.config.default_search_topic_globally_limit_per_table
+                else:  # search_topic_by_date
+                    limit_per_table = self.config.default_search_topic_by_date_limit_per_table
                 search_kwargs["limit_per_table"] = limit_per_table
             elif search_tool in ["get_comments_for_topic", "search_topic_on_platform"]:
-                limit = reflection_output.get("limit", 20)
+                # 使用配置文件中的默认值，不允许agent控制limit参数
+                if search_tool == "get_comments_for_topic":
+                    limit = self.config.default_get_comments_for_topic_limit
+                else:  # search_topic_on_platform
+                    limit = self.config.default_search_topic_on_platform_limit
                 search_kwargs["limit"] = limit
             
             search_response = self.execute_search_tool(search_tool, search_query, **search_kwargs)
@@ -494,8 +659,11 @@ class DeepSearchAgent:
             # 转换为兼容格式
             search_results = []
             if search_response and search_response.results:
-                # 每种搜索工具都有其特定的结果数量，这里取前100个作为上限
-                max_results = min(len(search_response.results), 100)
+                # 使用配置文件控制传递给LLM的结果数量，0表示不限制
+                if self.config.max_search_results_for_llm > 0:
+                    max_results = min(len(search_response.results), self.config.max_search_results_for_llm)
+                else:
+                    max_results = len(search_response.results)  # 不限制，传递所有结果
                 for result in search_response.results[:max_results]:
                     search_results.append({
                         'title': result.title_or_content,

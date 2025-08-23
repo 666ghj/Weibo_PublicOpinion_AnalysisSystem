@@ -228,7 +228,7 @@ class KeywordOptimizer:
         
         # 清理和验证关键词
         cleaned_keywords = []
-        for keyword in keywords[:20]:  # 最多5个
+        for keyword in keywords[:20]:  # 最多20个
             keyword = keyword.strip().strip('"\'""''')
             if keyword and len(keyword) <= 20:  # 合理长度
                 cleaned_keywords.append(keyword)

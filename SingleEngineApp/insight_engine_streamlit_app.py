@@ -10,10 +10,10 @@ from datetime import datetime
 import json
 
 # 添加src目录到Python路径
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '.'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from InsightEngine import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, DB_CHARSET
+from config import DEEPSEEK_API_KEY, KIMI_API_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, DB_CHARSET
 
 
 def main():
@@ -31,20 +31,38 @@ def main():
     with st.sidebar:
         st.header("配置")
         
+        # 模型选择
+        llm_provider = st.selectbox("LLM提供商", ["deepseek", "openai", "kimi"])
+        
         # 高级配置
         st.subheader("高级配置")
         max_reflections = st.slider("反思次数", 1, 5, 2)
-        max_content_length = st.number_input("最大内容长度", 10000, 500000, 200000)  # 提高10倍：1000-50000-20000 → 10000-500000-200000
         
-        # 模型选择
-        llm_provider = st.selectbox("LLM提供商", ["deepseek", "openai"])
+        # 根据选择的模型动态调整默认值
+        if llm_provider == "kimi":
+            default_content_length = 500000  # Kimi支持长文本，使用更大的默认值
+            max_limit = 1000000  # 提高上限
+            st.info("💡 Kimi模型支持超长文本处理，建议使用更大的内容长度以充分利用其能力")
+        else:
+            default_content_length = 200000
+            max_limit = 500000
+        
+        max_content_length = st.number_input("最大内容长度", 10000, max_limit, default_content_length)
+        
+        # 初始化所有可能的变量
+        openai_key = ""
+        kimi_key = ""
         
         if llm_provider == "deepseek":
             model_name = st.selectbox("DeepSeek模型", ["deepseek-chat"])
-        else:
+        elif llm_provider == "openai":
             model_name = st.selectbox("OpenAI模型", ["gpt-4o-mini", "gpt-4o"])
             openai_key = st.text_input("OpenAI API Key", type="password",
                                      value="")
+        else:  # kimi
+            model_name = st.selectbox("Kimi模型", ["kimi-k2-0711-preview"])
+            kimi_key = st.text_input("Kimi API Key", type="password",
+                                   value="")
     
     # 主界面
     col1, col2 = st.columns([2, 1])
@@ -96,8 +114,13 @@ def main():
             st.error("请提供OpenAI API Key")
             return
         
+        if llm_provider == "kimi" and not kimi_key and not KIMI_API_KEY:
+            st.error("请提供Kimi API Key或在配置文件中设置KIMI_API_KEY")
+            return
+        
         # 自动使用配置文件中的API密钥和数据库配置
         deepseek_key = DEEPSEEK_API_KEY
+        kimi_key_final = kimi_key if kimi_key else KIMI_API_KEY
         db_host = DB_HOST
         db_user = DB_USER
         db_password = DB_PASSWORD
@@ -109,6 +132,7 @@ def main():
         config = Config(
             deepseek_api_key=deepseek_key if llm_provider == "deepseek" else None,
             openai_api_key=openai_key if llm_provider == "openai" else None,
+            kimi_api_key=kimi_key_final if llm_provider == "kimi" else None,
             db_host=db_host,
             db_user=db_user,
             db_password=db_password,
@@ -118,6 +142,7 @@ def main():
             default_llm_provider=llm_provider,
             deepseek_model=model_name if llm_provider == "deepseek" else "deepseek-chat",
             openai_model=model_name if llm_provider == "openai" else "gpt-4o-mini",
+            kimi_model=model_name if llm_provider == "kimi" else "kimi-k2-0711-preview",
             max_reflections=max_reflections,
             max_content_length=max_content_length,
             output_dir="insight_engine_streamlit_reports"

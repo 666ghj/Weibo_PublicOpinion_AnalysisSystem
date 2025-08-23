@@ -14,12 +14,14 @@ class Config:
     # API密钥
     deepseek_api_key: Optional[str] = None
     openai_api_key: Optional[str] = None
+    gemini_api_key: Optional[str] = None
     bocha_api_key: Optional[str] = None
     
     # 模型配置
-    default_llm_provider: str = "deepseek"  # deepseek 或 openai
+    default_llm_provider: str = "deepseek"  # deepseek、openai 或 gemini
     deepseek_model: str = "deepseek-chat"
     openai_model: str = "gpt-4o-mini"
+    gemini_model: str = "gemini-2.5-pro"
     
     # 搜索配置
     search_timeout: int = 240
@@ -44,6 +46,10 @@ class Config:
             print("错误: OpenAI API Key未设置")
             return False
         
+        if self.default_llm_provider == "gemini" and not self.gemini_api_key:
+            print("错误: Gemini API Key未设置")
+            return False
+        
         if not self.bocha_api_key:
             print("错误: Bocha API Key未设置")
             return False
@@ -65,11 +71,12 @@ class Config:
             return cls(
                 deepseek_api_key=getattr(config_module, "DEEPSEEK_API_KEY", None),
                 openai_api_key=getattr(config_module, "OPENAI_API_KEY", None),
+                gemini_api_key=getattr(config_module, "GEMINI_API_KEY", None),
                 bocha_api_key=getattr(config_module, "BOCHA_API_KEY", None),
                 default_llm_provider=getattr(config_module, "DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=getattr(config_module, "DEEPSEEK_MODEL", "deepseek-chat"),
                 openai_model=getattr(config_module, "OPENAI_MODEL", "gpt-4o-mini"),
-
+                gemini_model=getattr(config_module, "GEMINI_MODEL", "gemini-2.5-pro"),
                 search_timeout=getattr(config_module, "SEARCH_TIMEOUT", 240),
                 max_content_length=getattr(config_module, "SEARCH_CONTENT_MAX_LENGTH", 20000),
                 max_reflections=getattr(config_module, "MAX_REFLECTIONS", 2),
@@ -92,11 +99,12 @@ class Config:
             return cls(
                 deepseek_api_key=config_dict.get("DEEPSEEK_API_KEY"),
                 openai_api_key=config_dict.get("OPENAI_API_KEY"),
+                gemini_api_key=config_dict.get("GEMINI_API_KEY"),
                 bocha_api_key=config_dict.get("BOCHA_API_KEY"),
                 default_llm_provider=config_dict.get("DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=config_dict.get("DEEPSEEK_MODEL", "deepseek-chat"),
                 openai_model=config_dict.get("OPENAI_MODEL", "gpt-4o-mini"),
-
+                gemini_model=config_dict.get("GEMINI_MODEL", "gemini-2.5-pro"),
                 search_timeout=int(config_dict.get("SEARCH_TIMEOUT", "240")),
                 max_content_length=int(config_dict.get("SEARCH_CONTENT_MAX_LENGTH", "20000")),
                 max_reflections=int(config_dict.get("MAX_REFLECTIONS", "2")),

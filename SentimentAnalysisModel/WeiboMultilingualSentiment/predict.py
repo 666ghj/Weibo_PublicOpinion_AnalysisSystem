@@ -160,6 +160,31 @@ def show_multilingual_demo(tokenizer, model, device, sentiment_map):
             print(f"处理 {text} 时出错: {e}")
     
     print("\n=== 示例结束 ===")
+    
+    '''
+    正在加载多语言情感分析模型...
+从本地加载模型...
+模型加载成功! 使用设备: cuda
+
+============= 多语言情感分析 =============
+支持语言: 中文、英文、西班牙文、阿拉伯文、日文、韩文等22种语言
+情感等级: 非常负面、负面、中性、正面、非常正面
+输入文本进行分析 (输入 'q' 退出):
+输入 'demo' 查看多语言示例
+
+请输入文本: 我喜欢你
+C:\Users\67093\.conda\envs\pytorch_python11\Lib\site-packages\transformers\models\distilbert\modeling_distilbert.py:401: UserWarning: 1Torch was not compiled with flash attention. (Triggered internally at C:\cb\pytorch_1000000000000\work\aten\src\ATen\native\transformers\cuda\sdp_utils.cpp:263.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+预测结果: 正面 (置信度: 0.5204)
+详细概率分布:
+  非常负面: 0.0329
+  负面: 0.0263
+  中性: 0.1987
+  正面: 0.5204
+  非常正面: 0.2216
+
+请输入文本:
+    '''
 
 if __name__ == "__main__":
     main()

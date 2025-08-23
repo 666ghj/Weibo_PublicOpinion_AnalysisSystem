@@ -1,25 +1,37 @@
 # -*- coding: utf-8 -*-
 """
-智能舆情分析平台配置文件
-存储数据库连接信息和API密钥
+Intelligence Public Opinion Analysis Platform Configuration File
+Stores database connection information and API keys
 """
 
-# MySQL数据库配置
-DB_HOST = "rm-2zeib6b13f6tt9kncoo.mysql.rds.aliyuncs.com"
+# MySQL Database Configuration
+DB_HOST = "your_database_host"  # e.g., "localhost" or "127.0.0.1"
 DB_PORT = 3306
-DB_USER = "root"
-DB_PASSWORD = "mneDccc7sHHANtFk"
-DB_NAME = "media_crawler"
+DB_USER = "your_database_user"
+DB_PASSWORD = "your_database_password"
+DB_NAME = "your_database_name"
 DB_CHARSET = "utf8mb4"
 
-# agent1 DeepSeek API密钥
-DEEPSEEK_API_KEY = "sk-4bbc57fadd234666a3840f1a7edc1f2e"
+# DeepSeek API Key
+# 申请地址https://www.deepseek.com/
+DEEPSEEK_API_KEY = "your_deepseek_api_key"
 
-# agent2 DeepSeek API密钥
-DEEPSEEK_API_KEY_2 = "sk-b26405d2e02f475c960d21c2acce61e7"
+# Tavily Search API Key
+# 申请地址https://www.tavily.com/
+TAVILY_API_KEY = "your_tavily_api_key"
 
-# Tavily搜索API密钥
-TAVILY_API_KEY = "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"
+# Kimi API Key
+# 申请地址https://www.kimi.com/
+KIMI_API_KEY = "your_kimi_api_key"
 
-# 博查Web Search API密钥
-BOCHA_Web_Search_API_KEY = "sk-496b37a2a1ee4915b438dd822b03de8d"
+# Gemini API Key (via OpenAI format proxy)
+# 申请地址hapi.chataiapi.com/
+GEMINI_API_KEY = "your_gemini_api_key"
+
+# Bocha Search API Key
+# 申请地址https://open.bochaai.com/
+BOCHA_Web_Search_API_KEY = "your_bocha_web_search_api_key"
+
+# Guiji Flow API Key
+# 申请地址https://siliconflow.cn/
+GUIJI_QWEN3_API_KEY = "your_guiji_qwen3_api_key"

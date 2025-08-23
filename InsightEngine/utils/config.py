@@ -14,6 +14,7 @@ class Config:
     # API密钥
     deepseek_api_key: Optional[str] = None
     openai_api_key: Optional[str] = None
+    kimi_api_key: Optional[str] = None
     
     # 数据库配置
     db_host: Optional[str] = None
@@ -24,13 +25,14 @@ class Config:
     db_charset: str = "utf8mb4"
     
     # 模型配置
-    default_llm_provider: str = "deepseek"  # deepseek 或 openai
+    default_llm_provider: str = "deepseek"  # deepseek、openai 或 kimi
     deepseek_model: str = "deepseek-chat"
     openai_model: str = "gpt-4o-mini"
+    kimi_model: str = "kimi-k2-0711-preview"
     
     # 搜索配置
     search_timeout: int = 240
-    max_content_length: int = 100000
+    max_content_length: int = 500000  # 提高5倍以充分利用Kimi的长文本能力
     
     # 数据库查询限制
     default_search_hot_content_limit: int = 100
@@ -42,6 +44,10 @@ class Config:
     # Agent配置
     max_reflections: int = 3
     max_paragraphs: int = 6
+    
+    # 结果处理限制
+    max_search_results_for_llm: int = 0  # 0表示不限制，传递所有搜索结果给LLM
+    max_high_confidence_sentiment_results: int = 0  # 0表示不限制，返回所有高置信度情感分析结果
     
     # 输出配置
     output_dir: str = "reports"
@@ -102,6 +108,10 @@ class Config:
                 
                 max_reflections=getattr(config_module, "MAX_REFLECTIONS", 2),
                 max_paragraphs=getattr(config_module, "MAX_PARAGRAPHS", 5),
+                
+                max_search_results_for_llm=getattr(config_module, "MAX_SEARCH_RESULTS_FOR_LLM", 0),
+                max_high_confidence_sentiment_results=getattr(config_module, "MAX_HIGH_CONFIDENCE_SENTIMENT_RESULTS", 0),
+                
                 output_dir=getattr(config_module, "OUTPUT_DIR", "reports"),
                 save_intermediate_states=getattr(config_module, "SAVE_INTERMEDIATE_STATES", True)
             )
@@ -120,6 +130,7 @@ class Config:
             return cls(
                 deepseek_api_key=config_dict.get("DEEPSEEK_API_KEY"),
                 openai_api_key=config_dict.get("OPENAI_API_KEY"),
+                kimi_api_key=config_dict.get("KIMI_API_KEY"),
                 
                 db_host=config_dict.get("DB_HOST"),
                 db_user=config_dict.get("DB_USER"),
@@ -131,9 +142,10 @@ class Config:
                 default_llm_provider=config_dict.get("DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=config_dict.get("DEEPSEEK_MODEL", "deepseek-chat"),
                 openai_model=config_dict.get("OPENAI_MODEL", "gpt-4o-mini"),
+                kimi_model=config_dict.get("KIMI_MODEL", "kimi-k2-0711-preview"),
 
                 search_timeout=int(config_dict.get("SEARCH_TIMEOUT", "240")),
-                max_content_length=int(config_dict.get("SEARCH_CONTENT_MAX_LENGTH", "200000")),
+                max_content_length=int(config_dict.get("SEARCH_CONTENT_MAX_LENGTH", "500000")),
                 
                 default_search_hot_content_limit=int(config_dict.get("DEFAULT_SEARCH_HOT_CONTENT_LIMIT", "100")),
                 default_search_topic_globally_limit_per_table=int(config_dict.get("DEFAULT_SEARCH_TOPIC_GLOBALLY_LIMIT_PER_TABLE", "50")),
@@ -143,6 +155,10 @@ class Config:
                 
                 max_reflections=int(config_dict.get("MAX_REFLECTIONS", "2")),
                 max_paragraphs=int(config_dict.get("MAX_PARAGRAPHS", "5")),
+                
+                max_search_results_for_llm=int(config_dict.get("MAX_SEARCH_RESULTS_FOR_LLM", "0")),
+                max_high_confidence_sentiment_results=int(config_dict.get("MAX_HIGH_CONFIDENCE_SENTIMENT_RESULTS", "0")),
+                
                 output_dir=config_dict.get("OUTPUT_DIR", "reports"),
                 save_intermediate_states=config_dict.get("SAVE_INTERMEDIATE_STATES", "true").lower() == "true"
             )

@@ -13,7 +13,7 @@ import json
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from MediaEngine import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, BOCHA_Web_Search_API_KEY
+from config import DEEPSEEK_API_KEY, BOCHA_Web_Search_API_KEY, GEMINI_API_KEY
 
 
 def main():
@@ -37,14 +37,16 @@ def main():
         max_content_length = st.number_input("最大内容长度", 1000, 50000, 20000)
         
         # 模型选择
-        llm_provider = st.selectbox("LLM提供商", ["deepseek", "openai"])
+        llm_provider = st.selectbox("LLM提供商", ["deepseek", "openai", "gemini"])
         
+        openai_key = ""  # 初始化变量
         if llm_provider == "deepseek":
             model_name = st.selectbox("DeepSeek模型", ["deepseek-chat"])
-        else:
+        elif llm_provider == "openai":
             model_name = st.selectbox("OpenAI模型", ["gpt-4o-mini", "gpt-4o"])
-            openai_key = st.text_input("OpenAI API Key", type="password",
-                                     value="")
+            openai_key = st.text_input("OpenAI API Key", type="password", value="")
+        else:  # gemini
+            model_name = st.selectbox("Gemini模型", ["gemini-2.5-pro"])
     
     # 主界面
     col1, col2 = st.columns([2, 1])
@@ -98,16 +100,19 @@ def main():
         
         # 自动使用配置文件中的API密钥
         deepseek_key = DEEPSEEK_API_KEY
+        gemini_key = GEMINI_API_KEY  # 使用config.py中的Gemini API密钥
         bocha_key = BOCHA_Web_Search_API_KEY
         
         # 创建配置
         config = Config(
             deepseek_api_key=deepseek_key if llm_provider == "deepseek" else None,
             openai_api_key=openai_key if llm_provider == "openai" else None,
+            gemini_api_key=gemini_key if llm_provider == "gemini" else None,
             bocha_api_key=bocha_key,
             default_llm_provider=llm_provider,
             deepseek_model=model_name if llm_provider == "deepseek" else "deepseek-chat",
             openai_model=model_name if llm_provider == "openai" else "gpt-4o-mini",
+            gemini_model=model_name if llm_provider == "gemini" else "gemini-2.5-pro",
             max_reflections=max_reflections,
             max_content_length=max_content_length,
             output_dir="media_engine_streamlit_reports"

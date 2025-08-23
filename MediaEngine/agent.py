@@ -9,7 +9,7 @@ import re
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 
-from .llms import DeepSeekLLM, OpenAILLM, BaseLLM
+from .llms import DeepSeekLLM, OpenAILLM, GeminiLLM, BaseLLM
 from .nodes import (
     ReportStructureNode,
     FirstSearchNode, 
@@ -66,6 +66,11 @@ class DeepSearchAgent:
             return OpenAILLM(
                 api_key=self.config.openai_api_key,
                 model_name=self.config.openai_model
+            )
+        elif self.config.default_llm_provider == "gemini":
+            return GeminiLLM(
+                api_key=self.config.gemini_api_key,
+                model_name=self.config.gemini_model
             )
         else:
             raise ValueError(f"不支持的LLM提供商: {self.config.default_llm_provider}")
