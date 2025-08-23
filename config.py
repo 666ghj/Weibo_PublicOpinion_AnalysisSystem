@@ -25,7 +25,7 @@ TAVILY_API_KEY = "your_tavily_api_key"
 KIMI_API_KEY = "your_kimi_api_key"
 
 # Gemini API Key (via OpenAI format proxy)
-# 申请地址hapi.chataiapi.com/
+# 申请地址https://api.chataiapi.com/
 GEMINI_API_KEY = "your_gemini_api_key"
 
 # Bocha Search API Key
