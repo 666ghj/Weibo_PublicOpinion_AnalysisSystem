@@ -12,8 +12,8 @@ import json
 # 添加src目录到Python路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '.'))
 
-from QueryEngine import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, TAVILY_API_KEY
+from InsightEngine import DeepSearchAgent, Config
+from config import DEEPSEEK_API_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, DB_CHARSET
 
 
 def main():
@@ -24,8 +24,8 @@ def main():
         layout="wide"
     )
     
-    st.title("Deep Search Agent")
-    st.markdown("基于DeepSeek的无框架深度搜索AI代理")
+    st.title("Insight Engine Agent")
+    st.markdown("基于DeepSeek的本地舆情数据库深度分析AI代理")
     
     # 侧边栏配置
     with st.sidebar:
@@ -96,21 +96,31 @@ def main():
             st.error("请提供OpenAI API Key")
             return
         
-        # 自动使用配置文件中的API密钥
+        # 自动使用配置文件中的API密钥和数据库配置
         deepseek_key = DEEPSEEK_API_KEY
-        tavily_key = TAVILY_API_KEY
+        db_host = DB_HOST
+        db_user = DB_USER
+        db_password = DB_PASSWORD
+        db_name = DB_NAME
+        db_port = DB_PORT
+        db_charset = DB_CHARSET
         
         # 创建配置
         config = Config(
             deepseek_api_key=deepseek_key if llm_provider == "deepseek" else None,
             openai_api_key=openai_key if llm_provider == "openai" else None,
-            tavily_api_key=tavily_key,
+            db_host=db_host,
+            db_user=db_user,
+            db_password=db_password,
+            db_name=db_name,
+            db_port=db_port,
+            db_charset=db_charset,
             default_llm_provider=llm_provider,
             deepseek_model=model_name if llm_provider == "deepseek" else "deepseek-chat",
             openai_model=model_name if llm_provider == "openai" else "gpt-4o-mini",
             max_reflections=max_reflections,
             max_content_length=max_content_length,
-            output_dir="query_engine_streamlit_reports"
+            output_dir="insight_engine_streamlit_reports"
         )
         
         # 执行研究

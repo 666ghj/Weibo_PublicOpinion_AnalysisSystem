@@ -14,7 +14,14 @@ class Config:
     # API密钥
     deepseek_api_key: Optional[str] = None
     openai_api_key: Optional[str] = None
-    tavily_api_key: Optional[str] = None
+    
+    # 数据库配置
+    db_host: Optional[str] = None
+    db_user: Optional[str] = None
+    db_password: Optional[str] = None
+    db_name: Optional[str] = None
+    db_port: int = 3306
+    db_charset: str = "utf8mb4"
     
     # 模型配置
     default_llm_provider: str = "deepseek"  # deepseek 或 openai
@@ -44,8 +51,8 @@ class Config:
             print("错误: OpenAI API Key未设置")
             return False
         
-        if not self.tavily_api_key:
-            print("错误: Tavily API Key未设置")
+        if not all([self.db_host, self.db_user, self.db_password, self.db_name]):
+            print("错误: 数据库连接信息不完整")
             return False
         
         return True
@@ -65,7 +72,14 @@ class Config:
             return cls(
                 deepseek_api_key=getattr(config_module, "DEEPSEEK_API_KEY", None),
                 openai_api_key=getattr(config_module, "OPENAI_API_KEY", None),
-                tavily_api_key=getattr(config_module, "TAVILY_API_KEY", None),
+                
+                db_host=getattr(config_module, "DB_HOST", None),
+                db_user=getattr(config_module, "DB_USER", None),
+                db_password=getattr(config_module, "DB_PASSWORD", None),
+                db_name=getattr(config_module, "DB_NAME", None),
+                db_port=getattr(config_module, "DB_PORT", 3306),
+                db_charset=getattr(config_module, "DB_CHARSET", "utf8mb4"),
+                
                 default_llm_provider=getattr(config_module, "DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=getattr(config_module, "DEEPSEEK_MODEL", "deepseek-chat"),
                 openai_model=getattr(config_module, "OPENAI_MODEL", "gpt-4o-mini"),
@@ -92,7 +106,14 @@ class Config:
             return cls(
                 deepseek_api_key=config_dict.get("DEEPSEEK_API_KEY"),
                 openai_api_key=config_dict.get("OPENAI_API_KEY"),
-                tavily_api_key=config_dict.get("TAVILY_API_KEY"),
+                
+                db_host=config_dict.get("DB_HOST"),
+                db_user=config_dict.get("DB_USER"),
+                db_password=config_dict.get("DB_PASSWORD"),
+                db_name=config_dict.get("DB_NAME"),
+                db_port=int(config_dict.get("DB_PORT", "3306")),
+                db_charset=config_dict.get("DB_CHARSET", "utf8mb4"),
+                
                 default_llm_provider=config_dict.get("DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=config_dict.get("DEEPSEEK_MODEL", "deepseek-chat"),
                 openai_model=config_dict.get("OPENAI_MODEL", "gpt-4o-mini"),
@@ -147,7 +168,7 @@ def print_config(config: Config):
     print(f"LLM提供商: {config.default_llm_provider}")
     print(f"DeepSeek模型: {config.deepseek_model}")
     print(f"OpenAI模型: {config.openai_model}")
-    print(f"最大搜索结果数: {config.max_search_results}")
+
     print(f"搜索超时: {config.search_timeout}秒")
     print(f"最大内容长度: {config.max_content_length}")
     print(f"最大反思次数: {config.max_reflections}")
@@ -155,8 +176,11 @@ def print_config(config: Config):
     print(f"输出目录: {config.output_dir}")
     print(f"保存中间状态: {config.save_intermediate_states}")
     
-    # 显示API密钥状态（不显示实际密钥）
+    # 显示API密钥和数据库状态（不显示实际密钥）
     print(f"DeepSeek API Key: {'已设置' if config.deepseek_api_key else '未设置'}")
     print(f"OpenAI API Key: {'已设置' if config.openai_api_key else '未设置'}")
-    print(f"Tavily API Key: {'已设置' if config.tavily_api_key else '未设置'}")
+    print(f"数据库连接: {'已配置' if all([config.db_host, config.db_user, config.db_password, config.db_name]) else '未配置'}")
+    print(f"数据库主机: {config.db_host}")
+    print(f"数据库端口: {config.db_port}")
+    print(f"数据库名称: {config.db_name}")
     print("==================\n")
