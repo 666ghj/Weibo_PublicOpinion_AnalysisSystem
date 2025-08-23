@@ -9,10 +9,18 @@ from .search import (
     DBResponse,
     print_response_summary
 )
+from .keyword_optimizer import (
+    KeywordOptimizer,
+    KeywordOptimizationResponse,
+    keyword_optimizer
+)
 
 __all__ = [
     "MediaCrawlerDB",
     "QueryResult",
     "DBResponse",
-    "print_response_summary"
+    "print_response_summary",
+    "KeywordOptimizer",
+    "KeywordOptimizationResponse",
+    "keyword_optimizer"
 ]

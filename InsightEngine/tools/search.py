@@ -2,7 +2,7 @@
 专为 AI Agent 设计的本地舆情数据库查询工具集 (MediaCrawlerDB)
 
 版本: 3.0
-最后更新: 2025-08-22
+最后更新: 2025-08-23
 
 此脚本将复杂的本地MySQL数据库查询功能封装成一系列目标明确、参数清晰的独立工具，
 专为AI Agent调用而设计。Agent只需根据任务意图（如搜索热点、全局搜索话题、
@@ -44,7 +44,7 @@ class QueryResult:
     publish_time: Optional[datetime] = None
     engagement: Dict[str, int] = field(default_factory=dict)
     source_keyword: Optional[str] = None
-    hotness_score: float = 0.0  # 新增：综合热度分
+    hotness_score: float = 0.0
     source_table: str = ""
 
 @dataclass
@@ -136,14 +136,14 @@ class MediaCrawlerDB:
     def search_hot_content(
         self,
         time_period: Literal['24h', 'week', 'year'] = 'week',
-        limit: int = 10
+        limit: int = 50
     ) -> DBResponse:
         """
-        【工具】查找热点内容: (已简化) 获取最近一段时间内综合热度最高的内容。
+        【工具】查找热点内容: 获取最近一段时间内综合热度最高的内容。
 
         Args:
             time_period (Literal['24h', 'week', 'year']): 时间范围，默认为 'week'。
-            limit (int): 返回结果的最大数量，默认为 10。
+            limit (int): 返回结果的最大数量，默认为 50。
 
         Returns:
             DBResponse: 包含按综合热度排序后的内容列表。
@@ -190,13 +190,13 @@ class MediaCrawlerDB:
         formatted_results = [QueryResult(platform=r['p'], content_type=r['t'], title_or_content=r['title'], author_nickname=r.get('author'), url=r['url'], publish_time=self._to_datetime(r['ts']), engagement=self._extract_engagement(r), hotness_score=r.get('hotness_score', 0.0), source_keyword=r.get('source_keyword'), source_table=r['tbl']) for r in raw_results]
         return DBResponse("search_hot_content", params_for_log, results=formatted_results, results_count=len(formatted_results))    
 
-    def search_topic_globally(self, topic: str, limit_per_table: int = 5) -> DBResponse:
+    def search_topic_globally(self, topic: str, limit_per_table: int = 100) -> DBResponse:
         """
         【工具】全局话题搜索: 在数据库中（内容、评论、标签、来源关键字）全面搜索指定话题。
 
         Args:
             topic (str): 要搜索的话题关键词。
-            limit_per_table (int): 从每个相关表中返回的最大记录数，默认为 5。
+            limit_per_table (int): 从每个相关表中返回的最大记录数，默认为 100。
 
         Returns:
             DBResponse: 包含所有匹配结果的聚合列表。
@@ -227,7 +227,7 @@ class MediaCrawlerDB:
                 ))
         return DBResponse("search_topic_globally", params_for_log, results=all_results, results_count=len(all_results))
 
-    def search_topic_by_date(self, topic: str, start_date: str, end_date: str, limit_per_table: int = 10) -> DBResponse:
+    def search_topic_by_date(self, topic: str, start_date: str, end_date: str, limit_per_table: int = 100) -> DBResponse:
         """
         【工具】按日期搜索话题: 在明确的历史时间段内，搜索与特定话题相关的内容。
 
@@ -235,7 +235,7 @@ class MediaCrawlerDB:
             topic (str): 要搜索的话题关键词。
             start_date (str): 开始日期，格式 'YYYY-MM-DD'。
             end_date (str): 结束日期，格式 'YYYY-MM-DD'。
-            limit_per_table (int): 从每个相关表中返回的最大记录数，默认为 10。
+            limit_per_table (int): 从每个相关表中返回的最大记录数，默认为 100。
 
         Returns:
             DBResponse: 包含在指定日期范围内找到的结果的聚合列表。
@@ -282,13 +282,13 @@ class MediaCrawlerDB:
                 ))
         return DBResponse("search_topic_by_date", params_for_log, results=all_results, results_count=len(all_results))
         
-    def get_comments_for_topic(self, topic: str, limit: int = 50) -> DBResponse:
+    def get_comments_for_topic(self, topic: str, limit: int = 500) -> DBResponse:
         """
         【工具】获取话题评论: 专门搜索并返回所有平台中与特定话题相关的公众评论数据。
 
         Args:
             topic (str): 要搜索的话题关键词。
-            limit (int): 返回评论的总数量上限，默认为 50。
+            limit (int): 返回评论的总数量上限，默认为 500。
 
         Returns:
             DBResponse: 包含匹配的评论列表。

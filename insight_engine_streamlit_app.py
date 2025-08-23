@@ -34,7 +34,7 @@ def main():
         # 高级配置
         st.subheader("高级配置")
         max_reflections = st.slider("反思次数", 1, 5, 2)
-        max_content_length = st.number_input("最大内容长度", 1000, 50000, 20000)
+        max_content_length = st.number_input("最大内容长度", 10000, 500000, 200000)  # 提高10倍：1000-50000-20000 → 10000-500000-200000
         
         # 模型选择
         llm_provider = st.selectbox("LLM提供商", ["deepseek", "openai"])

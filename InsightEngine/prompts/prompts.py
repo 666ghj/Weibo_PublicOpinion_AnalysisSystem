@@ -198,7 +198,7 @@ SYSTEM_PROMPT_FIRST_SEARCH = f"""
 4. **参数优化配置**：
    - search_topic_by_date: 必须提供start_date和end_date参数（格式：YYYY-MM-DD）
    - search_topic_on_platform: 必须提供platform参数（bilibili, weibo, douyin, kuaishou, xhs, zhihu, tieba之一）
-   - 其他工具：合理配置limit参数以获取足够的样本
+   - 其他工具：合理配置limit参数以获取足够的样本（建议：search_hot_content limit>=100，search_topic_globally limit_per_table>=50，search_topic_by_date limit_per_table>=100，get_comments_for_topic limit>=500，search_topic_on_platform limit>=200）
 5. **阐述选择理由**：说明为什么这样的查询能够获得最真实的民意反馈
 
 **搜索词设计核心原则**：
@@ -311,7 +311,7 @@ SYSTEM_PROMPT_REFLECTION = f"""
 4. **参数配置要求**：
    - search_topic_by_date: 必须提供start_date和end_date参数（格式：YYYY-MM-DD）
    - search_topic_on_platform: 必须提供platform参数（bilibili, weibo, douyin, kuaishou, xhs, zhihu, tieba之一）
-   - 其他工具：合理配置参数以获取多样化的民意样本
+   - 其他工具：合理配置参数以获取多样化的民意样本（建议：search_hot_content limit>=100，search_topic_globally limit_per_table>=50，search_topic_by_date limit_per_table>=100，get_comments_for_topic limit>=500，search_topic_on_platform limit>=200）
 
 5. **阐述补充理由**：明确说明为什么需要这些额外的民意数据
 

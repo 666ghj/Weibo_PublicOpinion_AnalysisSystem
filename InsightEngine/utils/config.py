@@ -30,11 +30,18 @@ class Config:
     
     # 搜索配置
     search_timeout: int = 240
-    max_content_length: int = 20000
+    max_content_length: int = 100000
+    
+    # 数据库查询限制
+    default_search_hot_content_limit: int = 100
+    default_search_topic_globally_limit_per_table: int = 50
+    default_search_topic_by_date_limit_per_table: int = 100
+    default_get_comments_for_topic_limit: int = 500
+    default_search_topic_on_platform_limit: int = 200
     
     # Agent配置
-    max_reflections: int = 2
-    max_paragraphs: int = 5
+    max_reflections: int = 3
+    max_paragraphs: int = 6
     
     # 输出配置
     output_dir: str = "reports"
@@ -85,7 +92,14 @@ class Config:
                 openai_model=getattr(config_module, "OPENAI_MODEL", "gpt-4o-mini"),
 
                 search_timeout=getattr(config_module, "SEARCH_TIMEOUT", 240),
-                max_content_length=getattr(config_module, "SEARCH_CONTENT_MAX_LENGTH", 20000),
+                max_content_length=getattr(config_module, "SEARCH_CONTENT_MAX_LENGTH", 200000),
+                
+                default_search_hot_content_limit=getattr(config_module, "DEFAULT_SEARCH_HOT_CONTENT_LIMIT", 100),
+                default_search_topic_globally_limit_per_table=getattr(config_module, "DEFAULT_SEARCH_TOPIC_GLOBALLY_LIMIT_PER_TABLE", 50),
+                default_search_topic_by_date_limit_per_table=getattr(config_module, "DEFAULT_SEARCH_TOPIC_BY_DATE_LIMIT_PER_TABLE", 100),
+                default_get_comments_for_topic_limit=getattr(config_module, "DEFAULT_GET_COMMENTS_FOR_TOPIC_LIMIT", 500),
+                default_search_topic_on_platform_limit=getattr(config_module, "DEFAULT_SEARCH_TOPIC_ON_PLATFORM_LIMIT", 200),
+                
                 max_reflections=getattr(config_module, "MAX_REFLECTIONS", 2),
                 max_paragraphs=getattr(config_module, "MAX_PARAGRAPHS", 5),
                 output_dir=getattr(config_module, "OUTPUT_DIR", "reports"),
@@ -119,7 +133,14 @@ class Config:
                 openai_model=config_dict.get("OPENAI_MODEL", "gpt-4o-mini"),
 
                 search_timeout=int(config_dict.get("SEARCH_TIMEOUT", "240")),
-                max_content_length=int(config_dict.get("SEARCH_CONTENT_MAX_LENGTH", "20000")),
+                max_content_length=int(config_dict.get("SEARCH_CONTENT_MAX_LENGTH", "200000")),
+                
+                default_search_hot_content_limit=int(config_dict.get("DEFAULT_SEARCH_HOT_CONTENT_LIMIT", "100")),
+                default_search_topic_globally_limit_per_table=int(config_dict.get("DEFAULT_SEARCH_TOPIC_GLOBALLY_LIMIT_PER_TABLE", "50")),
+                default_search_topic_by_date_limit_per_table=int(config_dict.get("DEFAULT_SEARCH_TOPIC_BY_DATE_LIMIT_PER_TABLE", "100")),
+                default_get_comments_for_topic_limit=int(config_dict.get("DEFAULT_GET_COMMENTS_FOR_TOPIC_LIMIT", "500")),
+                default_search_topic_on_platform_limit=int(config_dict.get("DEFAULT_SEARCH_TOPIC_ON_PLATFORM_LIMIT", "200")),
+                
                 max_reflections=int(config_dict.get("MAX_REFLECTIONS", "2")),
                 max_paragraphs=int(config_dict.get("MAX_PARAGRAPHS", "5")),
                 output_dir=config_dict.get("OUTPUT_DIR", "reports"),
