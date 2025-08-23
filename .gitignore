@@ -177,15 +177,15 @@ huggingface_hub/
 transformers_cache/
 
 # 具体模型文件路径
-WeiboSentiment_Finetuned/GPT2-Lora/models/
-WeiboSentiment_Finetuned/GPT2-AdapterTuning/models/
-WeiboSentiment_Finetuned/BertChinese-Lora/models/
-WeiboSentiment_LLM/models/
-WeiboSentiment_Finetuned/BertChinese-Lora/model/
-WeiboMultilingualSentiment/model/
-WeiboSentiment_MachineLearning/model/chinese_wwm_pytorch/
-WeiboSentiment_SmallQwen/models/
-BertTopicDetection_Finetuned/model/
+SentimentAnalysisModel/WeiboSentiment_Finetuned/GPT2-Lora/models/
+SentimentAnalysisModel/WeiboSentiment_Finetuned/GPT2-AdapterTuning/models/
+SentimentAnalysisModel/WeiboSentiment_Finetuned/BertChinese-Lora/models/
+SentimentAnalysisModel/WeiboSentiment_LLM/models/
+SentimentAnalysisModel/WeiboSentiment_Finetuned/BertChinese-Lora/model/
+SentimentAnalysisModel/WeiboMultilingualSentiment/model/
+SentimentAnalysisModel/WeiboSentiment_MachineLearning/model/chinese_wwm_pytorch/
+SentimentAnalysisModel/WeiboSentiment_SmallQwen/models/
+SentimentAnalysisModel/BertTopicDetection_Finetuned/model/
 
 # LoRA 和 Adapter 权重
 */adapter_model.safetensors
