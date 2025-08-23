@@ -30,3 +30,11 @@ uuid>=1.30
 pytest>=7.4.0
 black>=23.0.0
 flake8>=6.0.0
+
+# Flask Web应用
+flask==2.3.3
+flask-socketio==5.3.6
+streamlit==1.28.1
+requests==2.31.0
+python-socketio==5.8.0
+eventlet==0.33.3

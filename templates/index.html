@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微博舆情预测系统</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #000000;
+        }
+
+        /* 搜索框区域 */
+        .search-section {
+            border-bottom: 2px solid #000000;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .search-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .search-box {
+            display: flex;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid #000000;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            background-color: #ffffff;
+        }
+
+        .search-button {
+            padding: 15px 30px;
+            border: none;
+            border-left: 2px solid #000000;
+            background-color: #000000;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #333333;
+        }
+
+        .search-button:disabled {
+            background-color: #666666;
+            cursor: not-allowed;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            height: calc(100vh - 140px);
+        }
+
+        /* 嵌入页面区域 */
+        .embedded-section {
+            flex: 2;
+            border-right: 2px solid #000000;
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        .embedded-header {
+            padding: 15px;
+            border-bottom: 2px solid #000000;
+            background-color: #ffffff;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .embedded-content {
+            height: calc(100% - 60px);
+            position: relative;
+        }
+
+        /* 控制台输出区域 */
+        .console-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+        }
+
+        /* 应用切换按钮 */
+        .app-switcher {
+            display: flex;
+            border-bottom: 2px solid #000000;
+        }
+
+        .app-button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-right: 2px solid #000000;
+            background-color: #ffffff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .app-button:last-child {
+            border-right: none;
+        }
+
+        .app-button.active {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .app-button:not(.active):hover {
+            background-color: #f0f0f0;
+        }
+
+        .status-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ff0000;
+        }
+
+        .status-indicator.running {
+            background-color: #00ff00;
+        }
+
+        .status-indicator.starting {
+            background-color: #ffff00;
+        }
+
+        /* 控制台输出 */
+        .console-output {
+            flex: 1;
+            padding: 15px;
+            background-color: #000000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .console-line {
+            margin-bottom: 2px;
+        }
+
+        /* 状态信息 */
+        .status-bar {
+            padding: 10px 20px;
+            border-top: 2px solid #000000;
+            background-color: #ffffff;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #000000;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .embedded-section {
+                border-right: none;
+                border-bottom: 2px solid #000000;
+                height: 400px;
+            }
+
+            .console-section {
+                height: 300px;
+            }
+        }
+
+        /* 消息提示 */
+        .message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border: 2px solid #000000;
+            background-color: #ffffff;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .message.error {
+            background-color: #ffeeee;
+            border-color: #ff0000;
+        }
+
+        .message.success {
+            background-color: #eeffee;
+            border-color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 搜索框区域 -->
+        <div class="search-section">
+            <div class="search-title">搜索框</div>
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="请输入搜索内容...">
+                <button class="search-button" id="searchButton">搜索</button>
+            </div>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div class="main-content">
+            <!-- 嵌入页面区域 -->
+            <div class="embedded-section">
+                <div class="embedded-header" id="embeddedHeader">嵌入的页面</div>
+                <div class="embedded-content" id="embeddedContent">
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #666;">
+                        <span>只显示一个页面 - 点击按钮切换页面</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 控制台输出区域 -->
+            <div class="console-section">
+                <!-- 应用切换按钮 -->
+                <div class="app-switcher">
+                    <button class="app-button active" data-app="insight">
+                        <span class="status-indicator" id="status-insight"></span>
+                        Insight Engine
+                    </button>
+                    <button class="app-button" data-app="media">
+                        <span class="status-indicator" id="status-media"></span>
+                        Media Engine
+                    </button>
+                    <button class="app-button" data-app="query">
+                        <span class="status-indicator" id="status-query"></span>
+                        Query Engine
+                    </button>
+                </div>
+
+                <!-- 控制台输出 -->
+                <div class="console-output" id="consoleOutput">
+                    <div class="console-line">[系统] 等待连接...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span id="connectionStatus">连接中...</span>
+            <span id="systemTime"></span>
+        </div>
+    </div>
+
+    <!-- 消息提示 -->
+    <div class="message" id="message"></div>
+
+    <script>
+        // 全局变量
+        let socket;
+        let currentApp = 'insight';
+        let appStatus = {
+            insight: 'stopped',
+            media: 'stopped',
+            query: 'stopped'
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSocket();
+            initializeEventListeners();
+            updateTime();
+            setInterval(updateTime, 1000);
+            checkStatus();
+            setInterval(checkStatus, 5000);
+        });
+
+        // Socket.IO连接
+        function initializeSocket() {
+            socket = io();
+
+            socket.on('connect', function() {
+                updateConnectionStatus('已连接');
+                socket.emit('request_status');
+            });
+
+            socket.on('disconnect', function() {
+                updateConnectionStatus('连接断开');
+            });
+
+            socket.on('console_output', function(data) {
+                if (data.app === currentApp) {
+                    addConsoleOutput(data.line);
+                }
+            });
+
+            socket.on('status_update', function(data) {
+                updateAppStatus(data);
+            });
+        }
+
+        // 事件监听器
+        function initializeEventListeners() {
+            // 搜索按钮
+            document.getElementById('searchButton').addEventListener('click', performSearch);
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // 应用切换按钮
+            document.querySelectorAll('.app-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const app = this.dataset.app;
+                    switchToApp(app);
+                });
+            });
+        }
+
+        // 执行搜索
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                showMessage('请输入搜索内容', 'error');
+                return;
+            }
+
+            const button = document.getElementById('searchButton');
+            button.disabled = true;
+            button.innerHTML = '<span class="loading"></span> 搜索中...';
+
+            fetch('/api/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('搜索请求已发送到所有运行中的应用', 'success');
+                } else {
+                    showMessage(data.message || '搜索失败', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('搜索错误:', error);
+                showMessage('搜索请求失败', 'error');
+            })
+            .finally(() => {
+                button.disabled = false;
+                button.innerHTML = '搜索';
+            });
+        }
+
+        // 切换应用
+        function switchToApp(app) {
+            if (app === currentApp) return;
+
+            // 更新按钮状态
+            document.querySelectorAll('.app-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-app="${app}"]`).classList.add('active');
+
+            currentApp = app;
+
+            // 清空并加载新的控制台输出
+            document.getElementById('consoleOutput').innerHTML = '<div class="console-line">[系统] 切换到 ' + app + ' 应用</div>';
+            loadConsoleOutput(app);
+
+            // 更新嵌入页面
+            updateEmbeddedPage(app);
+        }
+
+        // 加载控制台输出
+        function loadConsoleOutput(app) {
+            fetch(`/api/output/${app}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.output.length > 0) {
+                    const consoleOutput = document.getElementById('consoleOutput');
+                    data.output.forEach(line => {
+                        const div = document.createElement('div');
+                        div.className = 'console-line';
+                        div.textContent = line;
+                        consoleOutput.appendChild(div);
+                    });
+                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                }
+            })
+            .catch(error => {
+                console.error('加载输出失败:', error);
+            });
+        }
+
+        // 添加控制台输出
+        function addConsoleOutput(line) {
+            const consoleOutput = document.getElementById('consoleOutput');
+            const div = document.createElement('div');
+            div.className = 'console-line';
+            div.textContent = line;
+            consoleOutput.appendChild(div);
+
+            // 保持最近100行
+            const lines = consoleOutput.children;
+            if (lines.length > 100) {
+                consoleOutput.removeChild(lines[0]);
+            }
+
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        // 更新嵌入页面
+        function updateEmbeddedPage(app) {
+            const header = document.getElementById('embeddedHeader');
+            const content = document.getElementById('embeddedContent');
+            
+            const appNames = {
+                insight: 'Insight Engine - 私有数据库分析',
+                media: 'Media Engine - 多模态能力',
+                query: 'Query Engine - 网页搜索'
+            };
+
+            header.textContent = appNames[app] || app;
+
+            // 如果应用正在运行，显示iframe
+            if (appStatus[app] === 'running') {
+                const ports = { insight: 8501, media: 8502, query: 8503 };
+                content.innerHTML = `<iframe src="http://localhost:${ports[app]}" style="width: 100%; height: 100%; border: none;"></iframe>`;
+            } else {
+                content.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #666; flex-direction: column;">
+                        <div style="margin-bottom: 10px;">${appNames[app]} 未运行</div>
+                        <div style="font-size: 12px;">状态: ${appStatus[app]}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // 检查应用状态
+        function checkStatus() {
+            fetch('/api/status')
+            .then(response => response.json())
+            .then(data => {
+                updateAppStatus(data);
+            })
+            .catch(error => {
+                console.error('状态检查失败:', error);
+            });
+        }
+
+        // 更新应用状态
+        function updateAppStatus(data) {
+            for (const [app, info] of Object.entries(data)) {
+                appStatus[app] = info.status;
+                const indicator = document.getElementById(`status-${app}`);
+                if (indicator) {
+                    indicator.className = `status-indicator ${info.status}`;
+                }
+            }
+
+            // 如果当前显示的应用状态发生变化，更新嵌入页面
+            updateEmbeddedPage(currentApp);
+        }
+
+        // 更新连接状态
+        function updateConnectionStatus(status) {
+            document.getElementById('connectionStatus').textContent = status;
+        }
+
+        // 更新时间
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('zh-CN');
+            document.getElementById('systemTime').textContent = timeString;
+        }
+
+        // 显示消息
+        function showMessage(text, type = 'info') {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.classList.add('show');
+
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
