@@ -15,16 +15,26 @@ from flask_socketio import SocketIO, emit
 import signal
 import atexit
 import requests
+import logging
+from pathlib import Path
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'weibo_analysis_system_2024'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+# 设置UTF-8编码环境
+os.environ['PYTHONIOENCODING'] = 'utf-8'
+os.environ['PYTHONUTF8'] = '1'
+
+# 创建日志目录
+LOG_DIR = Path('logs')
+LOG_DIR.mkdir(exist_ok=True)
+
 # 全局变量存储进程信息
 processes = {
-    'insight': {'process': None, 'port': 8501, 'status': 'stopped', 'output': []},
-    'media': {'process': None, 'port': 8502, 'status': 'stopped', 'output': []},
-    'query': {'process': None, 'port': 8503, 'status': 'stopped', 'output': []}
+    'insight': {'process': None, 'port': 8501, 'status': 'stopped', 'output': [], 'log_file': None},
+    'media': {'process': None, 'port': 8502, 'status': 'stopped', 'output': [], 'log_file': None},
+    'query': {'process': None, 'port': 8503, 'status': 'stopped', 'output': [], 'log_file': None}
 }
 
 # 输出队列
@@ -34,8 +44,36 @@ output_queues = {
     'query': Queue()
 }
 
+def write_log_to_file(app_name, line):
+    """将日志写入文件"""
+    try:
+        log_file_path = LOG_DIR / f"{app_name}.log"
+        with open(log_file_path, 'a', encoding='utf-8') as f:
+            f.write(line + '\n')
+            f.flush()
+    except Exception as e:
+        print(f"Error writing log for {app_name}: {e}")
+
+def read_log_from_file(app_name, tail_lines=None):
+    """从文件读取日志"""
+    try:
+        log_file_path = LOG_DIR / f"{app_name}.log"
+        if not log_file_path.exists():
+            return []
+        
+        with open(log_file_path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            lines = [line.rstrip('\n\r') for line in lines if line.strip()]
+            
+            if tail_lines:
+                return lines[-tail_lines:]
+            return lines
+    except Exception as e:
+        print(f"Error reading log for {app_name}: {e}")
+        return []
+
 def read_process_output(process, app_name):
-    """读取进程输出并放入队列"""
+    """读取进程输出并写入文件"""
     while True:
         try:
             if process.poll() is not None:
@@ -43,15 +81,14 @@ def read_process_output(process, app_name):
             
             output = process.stdout.readline()
             if output:
-                line = output.decode('utf-8', errors='ignore').strip()
+                # 使用UTF-8解码，忽略错误字符
+                line = output.decode('utf-8', errors='replace').strip()
                 if line:
                     timestamp = datetime.now().strftime('%H:%M:%S')
                     formatted_line = f"[{timestamp}] {line}"
                     
-                    # 添加到输出列表（保持最近100行）
-                    processes[app_name]['output'].append(formatted_line)
-                    if len(processes[app_name]['output']) > 100:
-                        processes[app_name]['output'].pop(0)
+                    # 写入日志文件
+                    write_log_to_file(app_name, formatted_line)
                     
                     # 发送到前端
                     socketio.emit('console_output', {
@@ -59,7 +96,9 @@ def read_process_output(process, app_name):
                         'line': formatted_line
                     })
         except Exception as e:
-            print(f"Error reading output for {app_name}: {e}")
+            error_msg = f"Error reading output for {app_name}: {e}"
+            print(error_msg)
+            write_log_to_file(app_name, f"[{datetime.now().strftime('%H:%M:%S')}] {error_msg}")
             break
 
 def start_streamlit_app(app_name, script_path, port):
@@ -72,6 +111,15 @@ def start_streamlit_app(app_name, script_path, port):
         if not os.path.exists(script_path):
             return False, f"文件不存在: {script_path}"
         
+        # 清空之前的日志文件
+        log_file_path = LOG_DIR / f"{app_name}.log"
+        if log_file_path.exists():
+            log_file_path.unlink()
+        
+        # 创建启动日志
+        start_msg = f"[{datetime.now().strftime('%H:%M:%S')}] 启动 {app_name} 应用..."
+        write_log_to_file(app_name, start_msg)
+        
         cmd = [
             sys.executable, '-m', 'streamlit', 'run',
             script_path,
@@ -81,6 +129,15 @@ def start_streamlit_app(app_name, script_path, port):
             '--logger.level', 'info'
         ]
         
+        # 设置环境变量确保UTF-8编码
+        env = os.environ.copy()
+        env.update({
+            'PYTHONIOENCODING': 'utf-8',
+            'PYTHONUTF8': '1',
+            'LANG': 'en_US.UTF-8',
+            'LC_ALL': 'en_US.UTF-8'
+        })
+        
         # 使用当前工作目录而不是脚本目录
         process = subprocess.Popen(
             cmd,
@@ -88,7 +145,9 @@ def start_streamlit_app(app_name, script_path, port):
             stderr=subprocess.STDOUT,
             bufsize=1,
             universal_newlines=False,
-            cwd=os.getcwd()
+            cwd=os.getcwd(),
+            env=env,
+            encoding=None  # 让我们手动处理编码
         )
         
         processes[app_name]['process'] = process
@@ -106,7 +165,9 @@ def start_streamlit_app(app_name, script_path, port):
         return True, f"{app_name} 应用启动中..."
         
     except Exception as e:
-        return False, f"启动失败: {str(e)}"
+        error_msg = f"启动失败: {str(e)}"
+        write_log_to_file(app_name, f"[{datetime.now().strftime('%H:%M:%S')}] {error_msg}")
+        return False, error_msg
 
 def stop_streamlit_app(app_name):
     """停止Streamlit应用"""
@@ -245,9 +306,12 @@ def get_output(app_name):
     if app_name not in processes:
         return jsonify({'success': False, 'message': '未知应用'})
     
+    # 从文件读取完整日志
+    output_lines = read_log_from_file(app_name)
+    
     return jsonify({
         'success': True,
-        'output': processes[app_name]['output']
+        'output': output_lines
     })
 
 @app.route('/api/search', methods=['POST'])

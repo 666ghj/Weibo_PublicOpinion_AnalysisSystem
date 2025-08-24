@@ -338,6 +338,11 @@
             checkStatus();
             setInterval(checkStatus, 5000);
             
+            // 定期刷新控制台输出
+            setInterval(() => {
+                refreshConsoleOutput();
+            }, 2000);
+            
             // 延迟预加载iframe以确保应用启动完成
             setTimeout(() => {
                 preloadIframes();
@@ -446,12 +451,18 @@
 
             // 清空并加载新的控制台输出
             document.getElementById('consoleOutput').innerHTML = '<div class="console-line">[系统] 切换到 ' + app + ' 应用</div>';
+            
+            // 重置行计数
+            lastLineCount[app] = 0;
             loadConsoleOutput(app);
 
             // 更新嵌入页面
             updateEmbeddedPage(app);
         }
 
+        // 存储最后显示的行数，避免重复加载
+        let lastLineCount = {};
+        
         // 加载控制台输出
         function loadConsoleOutput(app) {
             fetch(`/api/output/${app}`)
@@ -459,18 +470,57 @@
             .then(data => {
                 if (data.success && data.output.length > 0) {
                     const consoleOutput = document.getElementById('consoleOutput');
-                    data.output.forEach(line => {
+                    
+                    // 只添加新的行
+                    const lastCount = lastLineCount[app] || 0;
+                    const newLines = data.output.slice(lastCount);
+                    
+                    newLines.forEach(line => {
                         const div = document.createElement('div');
                         div.className = 'console-line';
                         div.textContent = line;
                         consoleOutput.appendChild(div);
                     });
+                    
+                    lastLineCount[app] = data.output.length;
                     consoleOutput.scrollTop = consoleOutput.scrollHeight;
                 }
             })
             .catch(error => {
                 console.error('加载输出失败:', error);
             });
+        }
+        
+        // 刷新当前应用的控制台输出
+        function refreshConsoleOutput() {
+            if (appStatus[currentApp] === 'running' || appStatus[currentApp] === 'starting') {
+                fetch(`/api/output/${currentApp}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.output.length > 0) {
+                        const consoleOutput = document.getElementById('consoleOutput');
+                        
+                        // 只添加新的行
+                        const lastCount = lastLineCount[currentApp] || 0;
+                        const newLines = data.output.slice(lastCount);
+                        
+                        if (newLines.length > 0) {
+                            newLines.forEach(line => {
+                                const div = document.createElement('div');
+                                div.className = 'console-line';
+                                div.textContent = line;
+                                consoleOutput.appendChild(div);
+                            });
+                            
+                            lastLineCount[currentApp] = data.output.length;
+                            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('刷新输出失败:', error);
+                });
+            }
         }
 
         // 添加控制台输出
