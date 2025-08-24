@@ -172,16 +172,32 @@
         /* 控制台输出 */
         .console-output {
             flex: 1;
-            padding: 15px;
             background-color: #000000;
             color: #00ff00;
             font-family: 'Courier New', monospace;
             font-size: 12px;
+            overflow: hidden; /* 隐藏滚动条，由内部面板控制 */
+            position: relative;
+            min-height: 0; /* 允许内容缩小 */
+            max-height: 100%; /* 限制最大高度 */
+        }
+        
+        /* 控制台面板 */
+        .console-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 15px;
             overflow-y: auto;
             white-space: pre-wrap;
             word-break: break-all;
-            min-height: 0; /* 允许内容缩小 */
-            max-height: 100%; /* 限制最大高度 */
+            display: none; /* 默认隐藏 */
+        }
+        
+        .console-panel.active {
+            display: block; /* 激活时显示 */
         }
 
         .console-line {
@@ -304,7 +320,20 @@
 
                 <!-- 控制台输出 -->
                 <div class="console-output" id="consoleOutput">
-                    <div class="console-line">[系统] 等待连接...</div>
+                    <!-- Insight Engine 控制台 -->
+                    <div class="console-panel active" id="console-insight">
+                        <div class="console-line">[系统] Insight Engine 控制台</div>
+                    </div>
+                    
+                    <!-- Media Engine 控制台 -->
+                    <div class="console-panel" id="console-media">
+                        <div class="console-line">[系统] Media Engine 控制台</div>
+                    </div>
+                    
+                    <!-- Query Engine 控制台 -->
+                    <div class="console-panel" id="console-query">
+                        <div class="console-line">[系统] Query Engine 控制台</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -338,6 +367,9 @@
             checkStatus();
             setInterval(checkStatus, 5000);
             
+            // 初始化行计数
+            lastLineCount = { insight: 1, media: 1, query: 1 }; // 跳过初始消息
+            
             // 定期刷新控制台输出
             setInterval(() => {
                 refreshConsoleOutput();
@@ -363,8 +395,16 @@
             });
 
             socket.on('console_output', function(data) {
-                if (data.app === currentApp) {
-                    addConsoleOutput(data.line);
+                // 直接添加到对应应用的控制台面板，不依赖currentApp
+                const consolePanel = document.getElementById(`console-${data.app}`);
+                if (consolePanel) {
+                    const div = document.createElement('div');
+                    div.className = 'console-line';
+                    div.textContent = data.line;
+                    consolePanel.appendChild(div);
+                    
+                    // 自动滚动到底部
+                    consolePanel.scrollTop = consolePanel.scrollHeight;
                 }
             });
 
@@ -449,12 +489,24 @@
 
             currentApp = app;
 
-            // 清空并加载新的控制台输出
-            document.getElementById('consoleOutput').innerHTML = '<div class="console-line">[系统] 切换到 ' + app + ' 应用</div>';
+            // 切换控制台面板显示
+            document.querySelectorAll('.console-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            document.getElementById(`console-${app}`).classList.add('active');
             
-            // 重置行计数
-            lastLineCount[app] = 0;
-            loadConsoleOutput(app);
+            // 只在面板为空时加载输出，不重置行计数
+            const consolePanel = document.getElementById(`console-${app}`);
+            if (consolePanel && consolePanel.children.length <= 1) { // 只有初始消息
+                loadConsoleOutput(app);
+            }
+            
+            // 切换后滚动到底部
+            setTimeout(() => {
+                if (consolePanel) {
+                    consolePanel.scrollTop = consolePanel.scrollHeight;
+                }
+            }, 100);
 
             // 更新嵌入页面
             updateEmbeddedPage(app);
@@ -469,7 +521,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success && data.output.length > 0) {
-                    const consoleOutput = document.getElementById('consoleOutput');
+                    const consolePanel = document.getElementById(`console-${app}`);
                     
                     // 只添加新的行
                     const lastCount = lastLineCount[app] || 0;
@@ -479,11 +531,11 @@
                         const div = document.createElement('div');
                         div.className = 'console-line';
                         div.textContent = line;
-                        consoleOutput.appendChild(div);
+                        consolePanel.appendChild(div);
                     });
                     
                     lastLineCount[app] = data.output.length;
-                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                    consolePanel.scrollTop = consolePanel.scrollHeight;
                 }
             })
             .catch(error => {
@@ -491,48 +543,57 @@
             });
         }
         
-        // 刷新当前应用的控制台输出
+        // 刷新所有应用的控制台输出
         function refreshConsoleOutput() {
-            if (appStatus[currentApp] === 'running' || appStatus[currentApp] === 'starting') {
-                fetch(`/api/output/${currentApp}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.output.length > 0) {
-                        const consoleOutput = document.getElementById('consoleOutput');
-                        
-                        // 只添加新的行
-                        const lastCount = lastLineCount[currentApp] || 0;
-                        const newLines = data.output.slice(lastCount);
-                        
-                        if (newLines.length > 0) {
-                            newLines.forEach(line => {
-                                const div = document.createElement('div');
-                                div.className = 'console-line';
-                                div.textContent = line;
-                                consoleOutput.appendChild(div);
-                            });
+            // 为每个应用刷新输出，不只是当前应用
+            Object.keys(appStatus).forEach(app => {
+                if (appStatus[app] === 'running' || appStatus[app] === 'starting') {
+                    fetch(`/api/output/${app}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.output.length > 0) {
+                            const consolePanel = document.getElementById(`console-${app}`);
                             
-                            lastLineCount[currentApp] = data.output.length;
-                            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                            // 只添加新的行
+                            const lastCount = lastLineCount[app] || 0;
+                            const newLines = data.output.slice(lastCount);
+                            
+                            if (newLines.length > 0) {
+                                newLines.forEach(line => {
+                                    const div = document.createElement('div');
+                                    div.className = 'console-line';
+                                    div.textContent = line;
+                                    consolePanel.appendChild(div);
+                                });
+                                
+                                lastLineCount[app] = data.output.length;
+                                // 只有当前显示的面板才自动滚动
+                                if (app === currentApp) {
+                                    consolePanel.scrollTop = consolePanel.scrollHeight;
+                                }
+                            }
                         }
-                    }
-                })
-                .catch(error => {
-                    console.error('刷新输出失败:', error);
-                });
-            }
+                    })
+                    .catch(error => {
+                        console.error(`刷新${app}输出失败:`, error);
+                    });
+                }
+            });
         }
 
         // 添加控制台输出
         function addConsoleOutput(line) {
-            const consoleOutput = document.getElementById('consoleOutput');
-            const div = document.createElement('div');
-            div.className = 'console-line';
-            div.textContent = line;
-            consoleOutput.appendChild(div);
+            // 根据当前应用添加到对应的控制台面板
+            const consolePanel = document.getElementById(`console-${currentApp}`);
+            if (consolePanel) {
+                const div = document.createElement('div');
+                div.className = 'console-line';
+                div.textContent = line;
+                consolePanel.appendChild(div);
 
-            // 自动滚动到底部显示最新内容
-            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                // 自动滚动到底部显示最新内容
+                consolePanel.scrollTop = consolePanel.scrollHeight;
+            }
         }
 
         // 预加载的iframe存储
