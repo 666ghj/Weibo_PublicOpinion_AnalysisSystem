@@ -50,15 +50,16 @@ def main():
     # 简化的研究查询展示区域
     
     # 如果有自动查询，使用它作为默认值，否则显示占位符
-    display_query = auto_query if auto_query else "等待从主页面接收搜索查询..."
+    display_query = auto_query if auto_query else "等待从主页面接收分析内容..."
     
     # 只读的查询展示区域
     st.text_area(
-        "",
+        "当前查询",
         value=display_query,
         height=100,
         disabled=True,
-        help="查询内容由主页面的搜索框控制"
+        help="查询内容由主页面的搜索框控制",
+        label_visibility="hidden"
     )
 
     # 自动搜索逻辑
