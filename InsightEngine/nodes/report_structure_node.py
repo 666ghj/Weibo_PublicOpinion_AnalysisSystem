@@ -79,7 +79,7 @@ class ReportStructureNode(StateMutationNode):
             cleaned_output = clean_json_tags(cleaned_output)
             
             # 记录清理后的输出用于调试
-            self.log_info(f"清理后的输出: {cleaned_output[:200]}...")
+            self.log_info(f"清理后的输出: {cleaned_output}")
             
             # 解析JSON
             try:

@@ -30,6 +30,39 @@ os.environ['PYTHONUTF8'] = '1'
 LOG_DIR = Path('logs')
 LOG_DIR.mkdir(exist_ok=True)
 
+# 初始化ForumEgine的forum.log文件
+def init_forum_log():
+    """初始化forum.log文件"""
+    try:
+        forum_log_file = LOG_DIR / "forum.log"
+        if not forum_log_file.exists():
+            with open(forum_log_file, 'w', encoding='utf-8') as f:
+                start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                f.write(f"=== ForumEgine 系统初始化 - {start_time} ===\n")
+            print(f"ForumEgine: forum.log 已初始化")
+    except Exception as e:
+        print(f"ForumEgine: 初始化forum.log失败: {e}")
+
+# 初始化forum.log
+init_forum_log()
+
+# 启动ForumEgine智能监控
+def start_forum_engine():
+    """启动ForumEgine智能监控"""
+    try:
+        from ForumEgine.monitor import start_forum_monitoring
+        print("ForumEgine: 启动智能监控...")
+        success = start_forum_monitoring()
+        if success:
+            print("ForumEgine: 智能监控已启动，将自动检测搜索活动")
+        else:
+            print("ForumEgine: 智能监控启动失败")
+    except Exception as e:
+        print(f"ForumEgine: 启动智能监控失败: {e}")
+
+# 启动ForumEgine
+start_forum_engine()
+
 # 全局变量存储进程信息
 processes = {
     'insight': {'process': None, 'port': 8501, 'status': 'stopped', 'output': [], 'log_file': None},
@@ -382,6 +415,43 @@ def test_log(app_name):
         'message': f'测试消息已写入 {app_name} 日志'
     })
 
+@app.route('/api/forum/start')
+def start_forum_monitoring_api():
+    """手动启动ForumEgine监控"""
+    try:
+        from ForumEgine.monitor import start_forum_monitoring
+        success = start_forum_monitoring()
+        if success:
+            return jsonify({'success': True, 'message': 'ForumEgine监控已启动'})
+        else:
+            return jsonify({'success': False, 'message': 'ForumEgine监控启动失败'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'启动监控失败: {str(e)}'})
+
+@app.route('/api/forum/stop')
+def stop_forum_monitoring_api():
+    """手动停止ForumEgine监控"""
+    try:
+        from ForumEgine.monitor import stop_forum_monitoring
+        stop_forum_monitoring()
+        return jsonify({'success': True, 'message': 'ForumEgine监控已停止'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'停止监控失败: {str(e)}'})
+
+@app.route('/api/forum/log')
+def get_forum_log():
+    """获取ForumEgine的forum.log内容"""
+    try:
+        from ForumEgine.monitor import get_forum_log
+        log_content = get_forum_log()
+        return jsonify({
+            'success': True,
+            'log_lines': log_content,
+            'total_lines': len(log_content)
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'读取forum.log失败: {str(e)}'})
+
 @app.route('/api/search', methods=['POST'])
 def search():
     """统一搜索接口"""
@@ -390,6 +460,9 @@ def search():
     
     if not query:
         return jsonify({'success': False, 'message': '搜索查询不能为空'})
+    
+    # ForumEgine智能监控已经在后台运行，会自动检测搜索活动
+    print("ForumEgine: 搜索请求已收到，智能监控将自动检测日志变化")
     
     # 检查哪些应用正在运行
     check_app_status()
@@ -417,6 +490,9 @@ def search():
                 results[app_name] = {'success': False, 'message': 'API调用失败'}
         except Exception as e:
             results[app_name] = {'success': False, 'message': str(e)}
+    
+    # 搜索完成后可以选择停止监控，或者让它继续运行以捕获后续的处理日志
+    # 这里我们让监控继续运行，用户可以通过其他接口手动停止
     
     return jsonify({
         'success': True,
