@@ -400,32 +400,20 @@
                 preloadIframes();
             }
             
-            // 向所有运行中的应用发送搜索请求（通过新窗口方式避免刷新现有iframe）
+            // 向所有运行中的应用发送搜索请求（通过刷新iframe传递参数）
             let totalRunning = 0;
             const ports = { insight: 8501, media: 8502, query: 8503 };
             
             Object.keys(appStatus).forEach(app => {
-                if (appStatus[app] === 'running') {
+                if (appStatus[app] === 'running' && preloadedIframes[app]) {
                     totalRunning++;
                     
-                    // 为每个应用创建一个临时的搜索iframe，避免干扰主iframe
-                    const searchIframe = document.createElement('iframe');
-                    searchIframe.style.display = 'none';
-                    searchIframe.style.position = 'absolute';
-                    searchIframe.style.top = '-9999px';
-                    
+                    // 构建搜索URL
                     const searchUrl = `http://localhost:${ports[app]}?query=${encodeURIComponent(query)}&auto_search=true`;
                     console.log(`向 ${app} 发送搜索请求: ${searchUrl}`);
                     
-                    searchIframe.src = searchUrl;
-                    document.body.appendChild(searchIframe);
-                    
-                    // 几秒后移除临时iframe
-                    setTimeout(() => {
-                        if (searchIframe.parentNode) {
-                            searchIframe.parentNode.removeChild(searchIframe);
-                        }
-                    }, 5000);
+                    // 直接更新主iframe的src来传递搜索参数
+                    preloadedIframes[app].src = searchUrl;
                 }
             });
             
@@ -436,7 +424,7 @@
             } else {
                 button.disabled = false;
                 button.innerHTML = '搜索';
-                showMessage(`已向 ${totalRunning} 个应用发送搜索请求`, 'success');
+                showMessage(`搜索请求已发送到 ${totalRunning} 个应用，页面将刷新以开始研究`, 'success');
             }
         }
 

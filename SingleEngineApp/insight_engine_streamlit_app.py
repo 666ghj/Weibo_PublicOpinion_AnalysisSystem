@@ -47,42 +47,33 @@ def main():
     max_reflections = 2
     max_content_length = 500000  # Kimi支持长文本
 
-    # 主界面
-    col1, col2 = st.columns([2, 1])
-
-    with col1:
-        st.header("研究查询")
-        
-        # 如果有自动查询，使用它作为默认值
-        default_query = auto_query if auto_query else ""
-        
-        query = st.text_area(
-            "请输入您要研究的问题",
-            value=default_query,
-            placeholder="例如：2025年人工智能发展趋势",
-            height=100
-        )
-
-    with col2:
-        st.header("状态信息")
-        if 'agent' in st.session_state and hasattr(st.session_state.agent, 'state'):
-            progress = st.session_state.agent.get_progress_summary()
-            st.metric("总段落数", progress['total_paragraphs'])
-            st.metric("已完成", progress['completed_paragraphs'])
-            st.progress(progress['progress_percentage'] / 100)
-        else:
-            st.info("尚未开始研究")
-
-    # 执行按钮
-    col1_btn, col2_btn, col3_btn = st.columns([1, 1, 1])
-    with col2_btn:
-        start_research = st.button("开始研究", type="primary", use_container_width=True)
+    # 简化的研究查询展示区域
+    st.header("研究查询")
     
+    # 如果有自动查询，使用它作为默认值，否则显示占位符
+    display_query = auto_query if auto_query else "等待从主页面接收搜索查询..."
+    
+    # 只读的查询展示区域
+    st.text_area(
+        "当前查询",
+        value=display_query,
+        height=100,
+        disabled=True,
+        help="查询内容由主页面的搜索框控制"
+    )
+
     # 自动搜索逻辑
+    start_research = False
+    query = auto_query
+    
     if auto_search and auto_query and 'auto_search_executed' not in st.session_state:
         st.session_state.auto_search_executed = True
         start_research = True
-        query = auto_query
+        st.success(f"🚀 接收到搜索请求：{auto_query}")
+        st.info("正在启动研究...")
+    elif auto_query and not auto_search:
+        st.info(f"📝 当前查询：{auto_query}")
+        st.warning("等待搜索启动信号...")
 
     # 验证配置
     if start_research:
