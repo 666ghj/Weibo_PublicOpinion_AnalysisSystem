@@ -168,7 +168,8 @@ def start_streamlit_app(app_name, script_path, port):
             '--server.port', str(port),
             '--server.headless', 'true',
             '--browser.gatherUsageStats', 'false',
-            '--logger.level', 'debug',  # 增加日志详细程度
+            # '--logger.level', 'debug',  # 增加日志详细程度
+            '--logger.level', 'info',
             '--server.enableCORS', 'false'
         ]
         

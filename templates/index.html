@@ -22,10 +22,11 @@
 
         .container {
             max-width: 100vw;
-            min-height: 100vh;
+            height: 100vh; /* 固定高度为视口高度 */
             display: flex;
             flex-direction: column;
             border: 2px solid #000000;
+            overflow: hidden; /* 防止整体滚动 */
         }
 
         /* 搜索框区域 */
@@ -117,6 +118,7 @@
             flex-direction: column;
             background-color: #ffffff;
             min-height: 0; /* 允许子元素缩小 */
+            overflow: hidden; /* 防止内容溢出 */
         }
 
         /* 应用切换按钮 */
@@ -178,10 +180,10 @@
             font-family: 'Courier New', monospace;
             font-size: 12px;
             overflow-y: auto;
+            overflow-x: hidden;
             white-space: pre-wrap;
             word-break: break-all;
             min-height: 0; /* 允许内容缩小 */
-            max-height: 100%; /* 限制最大高度 */
         }
 
         .console-line {
