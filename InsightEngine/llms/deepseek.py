@@ -7,6 +7,24 @@ import os
 from typing import Optional, Dict, Any
 from openai import OpenAI
 from .base import BaseLLM
+import sys
+
+# 添加utils目录到Python路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(os.path.dirname(current_dir))
+utils_dir = os.path.join(root_dir, 'utils')
+if utils_dir not in sys.path:
+    sys.path.append(utils_dir)
+
+try:
+    from retry_helper import with_retry, with_graceful_retry, LLM_RETRY_CONFIG
+except ImportError:
+    # 如果无法导入重试模块，使用空装饰器
+    def with_retry(config):
+        def decorator(func):
+            return func
+        return decorator
+    LLM_RETRY_CONFIG = None
 
 
 class DeepSeekLLM(BaseLLM):
@@ -39,6 +57,7 @@ class DeepSeekLLM(BaseLLM):
         """获取默认模型名称"""
         return "deepseek-chat"
     
+    @with_retry(LLM_RETRY_CONFIG)
     def invoke(self, system_prompt: str, user_prompt: str, **kwargs) -> str:
         """
         调用DeepSeek API生成回复

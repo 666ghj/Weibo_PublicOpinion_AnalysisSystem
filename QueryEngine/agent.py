@@ -51,7 +51,7 @@ class DeepSearchAgent:
         # 确保输出目录存在
         os.makedirs(self.config.output_dir, exist_ok=True)
         
-        print(f"Deep Search Agent 已初始化")
+        print(f"Query Agent已初始化")
         print(f"使用LLM: {self.llm_client.get_model_info()}")
         print(f"搜索工具集: TavilyNewsAgency (支持6种搜索工具)")
     

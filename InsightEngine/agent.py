@@ -62,7 +62,7 @@ class DeepSearchAgent:
         # 确保输出目录存在
         os.makedirs(self.config.output_dir, exist_ok=True)
         
-        print(f"Deep Search Agent 已初始化")
+        print(f"Insight Agent已初始化")
         print(f"使用LLM: {self.llm_client.get_model_info()}")
         print(f"搜索工具集: MediaCrawlerDB (支持5种本地数据库查询工具)")
         print(f"情感分析: WeiboMultilingualSentiment (支持22种语言的情感分析)")

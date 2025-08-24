@@ -14,6 +14,15 @@ from dataclasses import dataclass
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from config import GUIJI_QWEN3_API_KEY
 
+# 添加utils目录到Python路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(os.path.dirname(current_dir))
+utils_dir = os.path.join(root_dir, 'utils')
+if utils_dir not in sys.path:
+    sys.path.append(utils_dir)
+
+from retry_helper import with_graceful_retry, SEARCH_API_RETRY_CONFIG
+
 @dataclass
 class KeywordOptimizationResponse:
     """关键词优化响应"""
@@ -164,6 +173,7 @@ class KeywordOptimizer:
         
         return prompt
     
+    @with_graceful_retry(SEARCH_API_RETRY_CONFIG, default_return={"success": False, "error": "关键词优化服务暂时不可用"})
     def _call_qwen_api(self, system_prompt: str, user_prompt: str) -> Dict[str, Any]:
         """调用Qwen API"""
         headers = {

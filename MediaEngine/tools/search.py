@@ -22,6 +22,7 @@
 
 import os
 import json
+import sys
 from typing import List, Dict, Any, Optional, Literal
 
 # 运行前请确保已安装 requests 库: pip install requests
@@ -29,6 +30,15 @@ try:
     import requests
 except ImportError:
     raise ImportError("requests 库未安装，请运行 `pip install requests` 进行安装。")
+
+# 添加utils目录到Python路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(os.path.dirname(current_dir))
+utils_dir = os.path.join(root_dir, 'utils')
+if utils_dir not in sys.path:
+    sys.path.append(utils_dir)
+
+from retry_helper import with_graceful_retry, SEARCH_API_RETRY_CONFIG
 
 # --- 1. 数据结构定义 ---
 from dataclasses import dataclass, field
@@ -158,6 +168,7 @@ class BochaMultimodalSearch:
         return final_response
 
 
+    @with_graceful_retry(SEARCH_API_RETRY_CONFIG, default_return=BochaResponse(query="搜索失败"))
     def _search_internal(self, **kwargs) -> BochaResponse:
         """内部通用的搜索执行器，所有工具最终都调用此方法"""
         query = kwargs.get("query", "Unknown Query")
@@ -179,10 +190,10 @@ class BochaMultimodalSearch:
 
         except requests.exceptions.RequestException as e:
             print(f"搜索时发生网络错误: {str(e)}")
-            return BochaResponse(query=query)
+            raise e  # 让重试机制捕获并处理
         except Exception as e:
             print(f"处理响应时发生未知错误: {str(e)}")
-            return BochaResponse(query=query)
+            raise e  # 让重试机制捕获并处理
 
     # --- Agent 可用的工具方法 ---
 

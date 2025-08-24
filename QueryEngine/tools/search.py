@@ -22,7 +22,17 @@
 """
 
 import os
+import sys
 from typing import List, Dict, Any, Optional
+
+# 添加utils目录到Python路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(os.path.dirname(current_dir))
+utils_dir = os.path.join(root_dir, 'utils')
+if utils_dir not in sys.path:
+    sys.path.append(utils_dir)
+
+from retry_helper import with_graceful_retry, SEARCH_API_RETRY_CONFIG
 from dataclasses import dataclass, field
 
 # 运行前请确保已安装Tavily库: pip install tavily-python
@@ -82,6 +92,7 @@ class TavilyNewsAgency:
                 raise ValueError("Tavily API Key未找到！请设置TAVILY_API_KEY环境变量或在初始化时提供")
         self._client = TavilyClient(api_key=api_key)
 
+    @with_graceful_retry(SEARCH_API_RETRY_CONFIG, default_return=TavilyResponse(query="搜索失败"))
     def _search_internal(self, **kwargs) -> TavilyResponse:
         """内部通用的搜索执行器，所有工具最终都调用此方法"""
         try:
@@ -109,7 +120,7 @@ class TavilyNewsAgency:
             )
         except Exception as e:
             print(f"搜索时发生错误: {str(e)}")
-            return TavilyResponse(query=kwargs.get("query", "Unknown Query"))
+            raise e  # 让重试机制捕获并处理
 
     # --- Agent 可用的工具方法 ---
 

@@ -4,9 +4,26 @@ OpenAI LLM实现
 """
 
 import os
+import sys
 from typing import Optional, Dict, Any
 from openai import OpenAI
 from .base import BaseLLM
+
+# 添加utils目录到Python路径并导入重试模块
+try:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(os.path.dirname(current_dir))
+    utils_dir = os.path.join(root_dir, 'utils')
+    if utils_dir not in sys.path:
+        sys.path.append(utils_dir)
+    from retry_helper import with_retry, with_graceful_retry, LLM_RETRY_CONFIG
+except ImportError:
+    # 如果无法导入重试模块，使用空装饰器避免报错
+    def with_retry(config):
+        def decorator(func):
+            return func
+        return decorator
+    LLM_RETRY_CONFIG = None
 
 
 class OpenAILLM(BaseLLM):
@@ -35,6 +52,7 @@ class OpenAILLM(BaseLLM):
         """获取默认模型名称"""
         return "gpt-4o-mini"
     
+    @with_retry(LLM_RETRY_CONFIG)
     def invoke(self, system_prompt: str, user_prompt: str, **kwargs) -> str:
         """
         调用OpenAI API生成回复
