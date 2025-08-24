@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>微博舆情预测系统</title>
+    <title>致力于打造简洁通用的舆情分析平台</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <style>
         * {
@@ -261,10 +261,10 @@
     <div class="container">
         <!-- 搜索框区域 -->
         <div class="search-section">
-            <div class="search-title">搜索框</div>
+            <div class="search-title">致力于打造简洁通用的舆情分析平台</div>
             <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="请输入搜索内容...">
-                <button class="search-button" id="searchButton">搜索</button>
+                <input type="text" class="search-input" id="searchInput" placeholder="请输入要分析的内容...">
+                <button class="search-button" id="searchButton">开始</button>
             </div>
         </div>
 
@@ -275,7 +275,7 @@
                 <div class="embedded-header" id="embeddedHeader">嵌入的页面</div>
                 <div class="embedded-content" id="embeddedContent">
                     <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #666;">
-                        <span>只显示一个页面 - 点击按钮切换页面</span>
+                        <span>默认只显示第一个页面 - 点击按钮切换页面</span>
                     </div>
                 </div>
             </div>
@@ -526,9 +526,9 @@
             const content = document.getElementById('embeddedContent');
             
             const appNames = {
-                insight: 'Insight Engine - 私有数据库分析',
-                media: 'Media Engine - 多模态能力',
-                query: 'Query Engine - 网页搜索'
+                insight: 'Insight Agent - 私有数据库分析',
+                media: 'Media Agent - 多模态能力',
+                query: 'Query Agent - 网页搜索'
             };
 
             header.textContent = appNames[app] || app;

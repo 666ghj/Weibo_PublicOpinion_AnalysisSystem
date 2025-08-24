@@ -48,14 +48,13 @@ def main():
     max_content_length = 20000
 
     # 简化的研究查询展示区域
-    st.header("研究查询")
     
     # 如果有自动查询，使用它作为默认值，否则显示占位符
     display_query = auto_query if auto_query else "等待从主页面接收搜索查询..."
     
     # 只读的查询展示区域
     st.text_area(
-        "当前查询",
+        "",
         value=display_query,
         height=100,
         disabled=True,
@@ -69,10 +68,7 @@ def main():
     if auto_search and auto_query and 'auto_search_executed' not in st.session_state:
         st.session_state.auto_search_executed = True
         start_research = True
-        st.success(f"🚀 接收到搜索请求：{auto_query}")
-        st.info("正在启动研究...")
     elif auto_query and not auto_search:
-        st.info(f"📝 当前查询：{auto_query}")
         st.warning("等待搜索启动信号...")
 
     # 验证配置
