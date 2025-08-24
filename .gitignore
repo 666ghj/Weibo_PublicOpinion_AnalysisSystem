@@ -53,7 +53,7 @@ cover/
 *.pot
 
 # Django stuff:
-*.log
+# *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -273,9 +273,9 @@ docs/.vitepress/cache
 
 # ==== 日志和临时文件 ====
 # 日志文件
-*.log
-logs/
-*/logs/
+# *.log
+# logs/
+# */logs/
 
 # 临时文件
 temp/
