@@ -85,6 +85,7 @@
             flex: 1;
             display: flex;
             height: calc(100vh - 140px);
+            min-height: 0; /* 允许子元素缩小 */
         }
 
         /* 嵌入页面区域 */
@@ -115,6 +116,7 @@
             display: flex;
             flex-direction: column;
             background-color: #ffffff;
+            min-height: 0; /* 允许子元素缩小 */
         }
 
         /* 应用切换按钮 */
@@ -178,6 +180,8 @@
             overflow-y: auto;
             white-space: pre-wrap;
             word-break: break-all;
+            min-height: 0; /* 允许内容缩小 */
+            max-height: 100%; /* 限制最大高度 */
         }
 
         .console-line {
@@ -477,12 +481,7 @@
             div.textContent = line;
             consoleOutput.appendChild(div);
 
-            // 保持最近100行
-            const lines = consoleOutput.children;
-            if (lines.length > 100) {
-                consoleOutput.removeChild(lines[0]);
-            }
-
+            // 自动滚动到底部显示最新内容
             consoleOutput.scrollTop = consoleOutput.scrollHeight;
         }
 
