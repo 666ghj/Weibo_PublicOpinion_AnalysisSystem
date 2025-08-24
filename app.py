@@ -221,6 +221,7 @@ def start_app(app_name):
         processes[app_name]['port']
     )
     
+    
     if success:
         # 等待应用启动
         startup_success, startup_message = wait_for_app_startup(app_name, 15)

@@ -106,6 +106,7 @@
         .embedded-content {
             height: calc(100% - 60px);
             position: relative;
+            overflow: hidden;
         }
 
         /* 控制台输出区域 */
@@ -332,6 +333,11 @@
             setInterval(updateTime, 1000);
             checkStatus();
             setInterval(checkStatus, 5000);
+            
+            // 延迟预加载iframe以确保应用启动完成
+            setTimeout(() => {
+                preloadIframes();
+            }, 3000);
         });
 
         // Socket.IO连接
@@ -389,29 +395,49 @@
             button.disabled = true;
             button.innerHTML = '<span class="loading"></span> 搜索中...';
 
-            fetch('/api/search', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ query: query })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showMessage('搜索请求已发送到所有运行中的应用', 'success');
-                } else {
-                    showMessage(data.message || '搜索失败', 'error');
+            // 确保所有iframe已初始化
+            if (!iframesInitialized) {
+                preloadIframes();
+            }
+            
+            // 向所有运行中的应用发送搜索请求（通过新窗口方式避免刷新现有iframe）
+            let totalRunning = 0;
+            const ports = { insight: 8501, media: 8502, query: 8503 };
+            
+            Object.keys(appStatus).forEach(app => {
+                if (appStatus[app] === 'running') {
+                    totalRunning++;
+                    
+                    // 为每个应用创建一个临时的搜索iframe，避免干扰主iframe
+                    const searchIframe = document.createElement('iframe');
+                    searchIframe.style.display = 'none';
+                    searchIframe.style.position = 'absolute';
+                    searchIframe.style.top = '-9999px';
+                    
+                    const searchUrl = `http://localhost:${ports[app]}?query=${encodeURIComponent(query)}&auto_search=true`;
+                    console.log(`向 ${app} 发送搜索请求: ${searchUrl}`);
+                    
+                    searchIframe.src = searchUrl;
+                    document.body.appendChild(searchIframe);
+                    
+                    // 几秒后移除临时iframe
+                    setTimeout(() => {
+                        if (searchIframe.parentNode) {
+                            searchIframe.parentNode.removeChild(searchIframe);
+                        }
+                    }, 5000);
                 }
-            })
-            .catch(error => {
-                console.error('搜索错误:', error);
-                showMessage('搜索请求失败', 'error');
-            })
-            .finally(() => {
+            });
+            
+            if (totalRunning === 0) {
                 button.disabled = false;
                 button.innerHTML = '搜索';
-            });
+                showMessage('没有运行中的应用，无法执行搜索', 'error');
+            } else {
+                button.disabled = false;
+                button.innerHTML = '搜索';
+                showMessage(`已向 ${totalRunning} 个应用发送搜索请求`, 'success');
+            }
         }
 
         // 切换应用
@@ -472,6 +498,40 @@
             consoleOutput.scrollTop = consoleOutput.scrollHeight;
         }
 
+        // 预加载的iframe存储
+        let preloadedIframes = {};
+        let iframesInitialized = false;
+        
+        // 预加载所有iframe（只执行一次）
+        function preloadIframes() {
+            if (iframesInitialized) return;
+            
+            const ports = { insight: 8501, media: 8502, query: 8503 };
+            const content = document.getElementById('embeddedContent');
+            
+            for (const [app, port] of Object.entries(ports)) {
+                const iframe = document.createElement('iframe');
+                iframe.src = `http://localhost:${port}`;
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                iframe.style.position = 'absolute';
+                iframe.style.top = '0';
+                iframe.style.left = '0';
+                iframe.style.display = 'none';
+                iframe.id = `iframe-${app}`;
+                
+                // 直接添加到content区域
+                content.appendChild(iframe);
+                preloadedIframes[app] = iframe;
+                
+                console.log(`预加载 ${app} 应用完成`);
+            }
+            
+            iframesInitialized = true;
+            console.log('所有iframe预加载完成，准备进行无缝切换');
+        }
+
         // 更新嵌入页面
         function updateEmbeddedPage(app) {
             const header = document.getElementById('embeddedHeader');
@@ -485,16 +545,47 @@
 
             header.textContent = appNames[app] || app;
 
-            // 如果应用正在运行，显示iframe
+            // 如果应用正在运行，显示对应的iframe
             if (appStatus[app] === 'running') {
-                const ports = { insight: 8501, media: 8502, query: 8503 };
-                content.innerHTML = `<iframe src="http://localhost:${ports[app]}" style="width: 100%; height: 100%; border: none;"></iframe>`;
+                // 确保iframe已初始化
+                if (!iframesInitialized) {
+                    preloadIframes();
+                }
+                
+                // 隐藏所有iframe
+                Object.values(preloadedIframes).forEach(iframe => {
+                    iframe.style.display = 'none';
+                });
+                
+                // 移除占位符
+                const placeholder = content.querySelector('.status-placeholder');
+                if (placeholder) {
+                    placeholder.remove();
+                }
+                
+                // 显示当前应用的iframe
+                if (preloadedIframes[app]) {
+                    preloadedIframes[app].style.display = 'block';
+                    console.log(`切换到 ${app} 应用 - 无刷新切换`);
+                }
             } else {
-                content.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #666; flex-direction: column;">
-                        <div style="margin-bottom: 10px;">${appNames[app]} 未运行</div>
-                        <div style="font-size: 12px;">状态: ${appStatus[app]}</div>
-                    </div>
+                // 隐藏所有iframe
+                Object.values(preloadedIframes).forEach(iframe => {
+                    iframe.style.display = 'none';
+                });
+                
+                // 显示状态信息
+                let placeholder = content.querySelector('.status-placeholder');
+                if (!placeholder) {
+                    placeholder = document.createElement('div');
+                    placeholder.className = 'status-placeholder';
+                    placeholder.style.cssText = 'display: flex; align-items: center; justify-content: center; height: 100%; color: #666; flex-direction: column; position: absolute; top: 0; left: 0; width: 100%;';
+                    content.appendChild(placeholder);
+                }
+                
+                placeholder.innerHTML = `
+                    <div style="margin-bottom: 10px;">${appNames[app]} 未运行</div>
+                    <div style="font-size: 12px;">状态: ${appStatus[app]}</div>
                 `;
             }
         }
@@ -514,10 +605,13 @@
         // 更新应用状态
         function updateAppStatus(data) {
             for (const [app, info] of Object.entries(data)) {
-                appStatus[app] = info.status;
+                // 适配实际的API格式：{app: {status: string, port: int, output_lines: int}}
+                const status = info.status === 'running' ? 'running' : 'stopped';
+                appStatus[app] = status;
+                
                 const indicator = document.getElementById(`status-${app}`);
                 if (indicator) {
-                    indicator.className = `status-indicator ${info.status}`;
+                    indicator.className = `status-indicator ${status}`;
                 }
             }
 

@@ -20,12 +20,24 @@ def main():
     """主函数"""
     st.set_page_config(
         page_title="Insight Agent",
-        page_icon="",
+        page_icon="🔍",
         layout="wide"
     )
 
     st.title("Insight Agent")
     st.markdown("私有舆情数据库深度分析AI代理")
+
+    # 检查URL参数
+    try:
+        # 尝试使用新版本的query_params
+        query_params = st.query_params
+        auto_query = query_params.get('query', '')
+        auto_search = query_params.get('auto_search', 'false').lower() == 'true'
+    except AttributeError:
+        # 兼容旧版本
+        query_params = st.experimental_get_query_params()
+        auto_query = query_params.get('query', [''])[0]
+        auto_search = query_params.get('auto_search', ['false'])[0].lower() == 'true'
 
     # ----- 配置被硬编码 -----
     # 强制使用 Kimi
@@ -40,8 +52,13 @@ def main():
 
     with col1:
         st.header("研究查询")
+        
+        # 如果有自动查询，使用它作为默认值
+        default_query = auto_query if auto_query else ""
+        
         query = st.text_area(
             "请输入您要研究的问题",
+            value=default_query,
             placeholder="例如：2025年人工智能发展趋势",
             height=100
         )
@@ -60,6 +77,12 @@ def main():
     col1_btn, col2_btn, col3_btn = st.columns([1, 1, 1])
     with col2_btn:
         start_research = st.button("开始研究", type="primary", use_container_width=True)
+    
+    # 自动搜索逻辑
+    if auto_search and auto_query and 'auto_search_executed' not in st.session_state:
+        st.session_state.auto_search_executed = True
+        start_research = True
+        query = auto_query
 
     # 验证配置
     if start_research:
