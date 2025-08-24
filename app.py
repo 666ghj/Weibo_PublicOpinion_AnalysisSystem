@@ -74,27 +74,69 @@ def read_log_from_file(app_name, tail_lines=None):
 
 def read_process_output(process, app_name):
     """读取进程输出并写入文件"""
+    import select
+    import sys
+    
     while True:
         try:
             if process.poll() is not None:
+                # 进程结束，读取剩余输出
+                remaining_output = process.stdout.read()
+                if remaining_output:
+                    lines = remaining_output.decode('utf-8', errors='replace').split('\n')
+                    for line in lines:
+                        line = line.strip()
+                        if line:
+                            timestamp = datetime.now().strftime('%H:%M:%S')
+                            formatted_line = f"[{timestamp}] {line}"
+                            write_log_to_file(app_name, formatted_line)
+                            socketio.emit('console_output', {
+                                'app': app_name,
+                                'line': formatted_line
+                            })
                 break
             
-            output = process.stdout.readline()
-            if output:
-                # 使用UTF-8解码，忽略错误字符
-                line = output.decode('utf-8', errors='replace').strip()
-                if line:
-                    timestamp = datetime.now().strftime('%H:%M:%S')
-                    formatted_line = f"[{timestamp}] {line}"
-                    
-                    # 写入日志文件
-                    write_log_to_file(app_name, formatted_line)
-                    
-                    # 发送到前端
-                    socketio.emit('console_output', {
-                        'app': app_name,
-                        'line': formatted_line
-                    })
+            # 使用非阻塞读取
+            if sys.platform == 'win32':
+                # Windows下使用不同的方法
+                output = process.stdout.readline()
+                if output:
+                    line = output.decode('utf-8', errors='replace').strip()
+                    if line:
+                        timestamp = datetime.now().strftime('%H:%M:%S')
+                        formatted_line = f"[{timestamp}] {line}"
+                        
+                        # 写入日志文件
+                        write_log_to_file(app_name, formatted_line)
+                        
+                        # 发送到前端
+                        socketio.emit('console_output', {
+                            'app': app_name,
+                            'line': formatted_line
+                        })
+                else:
+                    # 没有输出时短暂休眠
+                    time.sleep(0.1)
+            else:
+                # Unix系统使用select
+                ready, _, _ = select.select([process.stdout], [], [], 0.1)
+                if ready:
+                    output = process.stdout.readline()
+                    if output:
+                        line = output.decode('utf-8', errors='replace').strip()
+                        if line:
+                            timestamp = datetime.now().strftime('%H:%M:%S')
+                            formatted_line = f"[{timestamp}] {line}"
+                            
+                            # 写入日志文件
+                            write_log_to_file(app_name, formatted_line)
+                            
+                            # 发送到前端
+                            socketio.emit('console_output', {
+                                'app': app_name,
+                                'line': formatted_line
+                            })
+                            
         except Exception as e:
             error_msg = f"Error reading output for {app_name}: {e}"
             print(error_msg)
@@ -126,16 +168,19 @@ def start_streamlit_app(app_name, script_path, port):
             '--server.port', str(port),
             '--server.headless', 'true',
             '--browser.gatherUsageStats', 'false',
-            '--logger.level', 'info'
+            '--logger.level', 'debug',  # 增加日志详细程度
+            '--server.enableCORS', 'false'
         ]
         
-        # 设置环境变量确保UTF-8编码
+        # 设置环境变量确保UTF-8编码和减少缓冲
         env = os.environ.copy()
         env.update({
             'PYTHONIOENCODING': 'utf-8',
             'PYTHONUTF8': '1',
             'LANG': 'en_US.UTF-8',
-            'LC_ALL': 'en_US.UTF-8'
+            'LC_ALL': 'en_US.UTF-8',
+            'PYTHONUNBUFFERED': '1',  # 禁用Python缓冲
+            'STREAMLIT_BROWSER_GATHER_USAGE_STATS': 'false'
         })
         
         # 使用当前工作目录而不是脚本目录
@@ -143,11 +188,12 @@ def start_streamlit_app(app_name, script_path, port):
             cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            bufsize=1,
+            bufsize=0,  # 无缓冲
             universal_newlines=False,
             cwd=os.getcwd(),
             env=env,
-            encoding=None  # 让我们手动处理编码
+            encoding=None,  # 让我们手动处理编码
+            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0
         )
         
         processes[app_name]['process'] = process
@@ -312,6 +358,27 @@ def get_output(app_name):
     return jsonify({
         'success': True,
         'output': output_lines
+    })
+
+@app.route('/api/test_log/<app_name>')
+def test_log(app_name):
+    """测试日志写入功能"""
+    if app_name not in processes:
+        return jsonify({'success': False, 'message': '未知应用'})
+    
+    # 写入测试消息
+    test_msg = f"[{datetime.now().strftime('%H:%M:%S')}] 测试日志消息 - {datetime.now()}"
+    write_log_to_file(app_name, test_msg)
+    
+    # 通过Socket.IO发送
+    socketio.emit('console_output', {
+        'app': app_name,
+        'line': test_msg
+    })
+    
+    return jsonify({
+        'success': True,
+        'message': f'测试消息已写入 {app_name} 日志'
     })
 
 @app.route('/api/search', methods=['POST'])
