@@ -700,3 +700,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print("\n正在关闭应用...")
         cleanup_processes()
+        
+    

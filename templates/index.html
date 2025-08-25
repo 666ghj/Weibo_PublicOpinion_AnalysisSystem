@@ -547,13 +547,13 @@
                 if (data.app === 'forum') {
                     const parsed = parseForumMessage(data.line);
                     if (parsed) {
-                        addForumMessage(parsed);
+                        // addForumMessage(parsed);
                     }
                 }
             });
 
             socket.on('forum_message', function(data) {
-                addForumMessage(data);
+                // addForumMessage(data);
             });
 
             socket.on('status_update', function(data) {
