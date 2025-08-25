@@ -57,9 +57,11 @@ class LogMonitor:
                 self.forum_log_file.unlink()
            
             # 创建新的forum.log文件并写入开始标记
+            start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            # 使用write_to_forum_log函数来写入开始标记，确保格式一致
             with open(self.forum_log_file, 'w', encoding='utf-8') as f:
-                start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                f.write(f"=== ForumEgine 监控开始 - {start_time} ===\n")
+                pass  # 先创建空文件
+            self.write_to_forum_log(f"=== ForumEgine 监控开始 - {start_time} ===", "SYSTEM")
                
             print(f"ForumEgine: forum.log 已清空并初始化")
             
@@ -71,13 +73,19 @@ class LogMonitor:
         except Exception as e:
             print(f"ForumEgine: 清空forum.log失败: {e}")
    
-    def write_to_forum_log(self, content: str):
+    def write_to_forum_log(self, content: str, source: str = None):
         """写入内容到forum.log（线程安全）"""
         try:
             with self.write_lock:  # 使用锁确保线程安全
                 with open(self.forum_log_file, 'a', encoding='utf-8') as f:
                     timestamp = datetime.now().strftime('%H:%M:%S')
-                    f.write(f"[{timestamp}] {content}\n")
+                    # 将内容中的实际换行符转换为\n字符串，确保整个记录在一行
+                    content_one_line = content.replace('\n', '\\n').replace('\r', '\\r')
+                    # 如果提供了来源标签，则在时间戳后添加
+                    if source:
+                        f.write(f"[{timestamp}] [{source}] {content_one_line}\n")
+                    else:
+                        f.write(f"[{timestamp}] {content_one_line}\n")
                     f.flush()
         except Exception as e:
             print(f"ForumEgine: 写入forum.log失败: {e}")
@@ -91,13 +99,16 @@ class LogMonitor:
         return False
     
     def is_valuable_content(self, line: str) -> bool:
-        """判断是否是有价值的内容（排除短小的提示信息）"""
+        """判断是否是有价值的内容（排除短小的提示信息和错误信息）"""
         # 如果包含"清理后的输出"，则认为是有价值的
         if "清理后的输出" in line:
             return True
         
-        # 排除常见的短小提示信息
+        # 排除常见的短小提示信息和错误信息
         exclude_patterns = [
+            "JSON解析失败",
+            "JSON修复失败",
+            "直接使用清理后的文本",
             "JSON解析成功",
             "成功生成",
             "已更新段落",
@@ -153,7 +164,15 @@ class LogMonitor:
                     json_obj = json.loads(json_part.strip())
                     return self.format_json_content(json_obj)
                 except json.JSONDecodeError:
-                    pass
+                    # 单行JSON解析失败，尝试修复
+                    fixed_json = self.fix_json_string(json_part.strip())
+                    if fixed_json:
+                        try:
+                            json_obj = json.loads(fixed_json)
+                            return self.format_json_content(json_obj)
+                        except json.JSONDecodeError:
+                            pass
+                    return None
             
             # 处理多行JSON
             json_text = json_part
@@ -163,51 +182,83 @@ class LogMonitor:
                 json_text += clean_line
             
             # 尝试解析JSON
-            json_obj = json.loads(json_text.strip())
-            return self.format_json_content(json_obj)
+            try:
+                json_obj = json.loads(json_text.strip())
+                return self.format_json_content(json_obj)
+            except json.JSONDecodeError:
+                # 多行JSON解析失败，尝试修复
+                fixed_json = self.fix_json_string(json_text.strip())
+                if fixed_json:
+                    try:
+                        json_obj = json.loads(fixed_json)
+                        return self.format_json_content(json_obj)
+                    except json.JSONDecodeError:
+                        pass
+                return None
             
-        except json.JSONDecodeError as e:
-            print(f"ForumEgine: JSON解析失败: {e}")
-            # 如果JSON解析失败，返回原始文本（去除时间戳）
-            if json_lines:
-                first_line = json_lines[0]
-                if "清理后的输出:" in first_line:
-                    json_start_pos = first_line.find("清理后的输出:")
-                    return first_line[json_start_pos:].strip()
-            return None
         except Exception as e:
-            print(f"ForumEgine: 提取JSON内容时出错: {e}")
+            # 其他异常也不打印错误信息，直接返回None
             return None
     
     def format_json_content(self, json_obj: dict) -> str:
         """格式化JSON内容为可读形式"""
         try:
-            # 提取主要内容
-            content_parts = []
-            
-            if "paragraph_latest_state" in json_obj:
-                content_parts.append(f"首次总结: {json_obj['paragraph_latest_state']}")
+            # 提取主要内容，优先选择反思总结，其次是首次总结
+            content = None
             
             if "updated_paragraph_latest_state" in json_obj:
-                content_parts.append(f"反思总结: {json_obj['updated_paragraph_latest_state']}")
+                content = json_obj["updated_paragraph_latest_state"]
+            elif "paragraph_latest_state" in json_obj:
+                content = json_obj["paragraph_latest_state"]
+            
+            # 如果找到了内容，直接返回（保持换行符为\n）
+            if content:
+                return content
             
             # 如果没有找到预期的字段，返回整个JSON的字符串表示
-            if not content_parts:
-                return f"清理后的输出: {json.dumps(json_obj, ensure_ascii=False, indent=2)}"
-            
-            return "\n".join(content_parts)
+            return f"清理后的输出: {json.dumps(json_obj, ensure_ascii=False, indent=2)}"
             
         except Exception as e:
             print(f"ForumEgine: 格式化JSON时出错: {e}")
             return f"清理后的输出: {json.dumps(json_obj, ensure_ascii=False, indent=2)}"
 
     def extract_node_content(self, line: str) -> Optional[str]:
-        """提取节点内容"""
-        # 移除时间戳部分，保留节点名称和消息
+        """提取节点内容，去除时间戳、节点名称等前缀"""
+        # 移除时间戳部分
         # 格式: [HH:MM:SS] [NodeName] message
         match = re.search(r'\[\d{2}:\d{2}:\d{2}\]\s*(.+)', line)
         if match:
-            return match.group(1).strip()
+            content = match.group(1).strip()
+            
+            # 移除所有的方括号标签（包括节点名称和应用名称）
+            content = re.sub(r'^\[.*?\]\s*', '', content)
+            
+            # 继续移除可能的多个连续标签
+            while re.match(r'^\[.*?\]\s*', content):
+                content = re.sub(r'^\[.*?\]\s*', '', content)
+            
+            # 移除常见前缀（如"首次总结: "、"反思总结: "等）
+            prefixes_to_remove = [
+                "首次总结: ",
+                "反思总结: ",
+                "清理后的输出: "
+            ]
+            
+            for prefix in prefixes_to_remove:
+                if content.startswith(prefix):
+                    content = content[len(prefix):]
+                    break
+            
+            # 移除可能存在的应用名标签（不在方括号内的）
+            app_names = ['INSIGHT', 'MEDIA', 'QUERY']
+            for app_name in app_names:
+                # 移除单独的APP_NAME（在行首）
+                content = re.sub(rf'^{app_name}\s+', '', content, flags=re.IGNORECASE)
+            
+            # 清理多余的空格
+            content = re.sub(r'\s+', ' ', content)
+            
+            return content.strip()
         return line.strip()
    
     def get_file_size(self, file_path: Path) -> int:
@@ -287,15 +338,17 @@ class LogMonitor:
                     if line.strip().endswith("}"):
                         # 单行JSON，立即处理
                         content = self.extract_json_content([line])
-                        if content:
-                            captured_contents.append(content)
+                        if content:  # 只有成功解析的内容才会被记录
+                            # 去除重复的标签和格式化
+                            clean_content = self._clean_content_tags(content, app_name)
+                            captured_contents.append(f"{clean_content}")
                         self.capturing_json[app_name] = False
                         self.json_buffer[app_name] = []
                         
                 elif self.is_valuable_content(line):
                     # 其他有价值的SummaryNode内容
-                    formatted_content = f"[{app_name.upper()}] {self.extract_node_content(line)}"
-                    captured_contents.append(formatted_content)
+                    clean_content = self._clean_content_tags(self.extract_node_content(line), app_name)
+                    captured_contents.append(f"{clean_content}")
                     
             elif self.capturing_json[app_name]:
                 # 正在捕获JSON的后续行
@@ -305,18 +358,43 @@ class LogMonitor:
                 if self.is_json_end_line(line):
                     # JSON结束，处理完整的JSON
                     content = self.extract_json_content(self.json_buffer[app_name])
-                    if content:
-                        captured_contents.append(f"[{app_name.upper()}] {content}")
+                    if content:  # 只有成功解析的内容才会被记录
+                        # 去除重复的标签和格式化
+                        clean_content = self._clean_content_tags(content, app_name)
+                        captured_contents.append(f"{clean_content}")
                     
                     # 重置状态
                     self.capturing_json[app_name] = False
                     self.json_buffer[app_name] = []
         
         return captured_contents
+    
+    def _clean_content_tags(self, content: str, app_name: str) -> str:
+        """清理内容中的重复标签和多余前缀"""
+        if not content:
+            return content
+            
+        # 先去除所有可能的标签格式（包括 [INSIGHT]、[MEDIA]、[QUERY] 等）
+        # 使用更强力的清理方式
+        all_app_names = ['INSIGHT', 'MEDIA', 'QUERY']
+        
+        for name in all_app_names:
+            # 去除 [APP_NAME] 格式（大小写不敏感）
+            content = re.sub(rf'\[{name}\]\s*', '', content, flags=re.IGNORECASE)
+            # 去除单独的 APP_NAME 格式
+            content = re.sub(rf'^{name}\s+', '', content, flags=re.IGNORECASE)
+        
+        # 去除任何其他的方括号标签
+        content = re.sub(r'^\[.*?\]\s*', '', content)
+        
+        # 去除可能的重复空格
+        content = re.sub(r'\s+', ' ', content)
+        
+        return content.strip()
    
     def monitor_logs(self):
         """智能监控日志文件"""
-        print("ForumEgine: 开始智能监控日志文件...")
+        print("ForumEgine: 论坛创建中...")
        
         # 初始化文件行数和位置 - 记录当前状态作为基线
         for app_name, log_file in self.monitored_logs.items():
@@ -324,7 +402,7 @@ class LogMonitor:
             self.file_positions[app_name] = self.get_file_size(log_file)
             self.capturing_json[app_name] = False
             self.json_buffer[app_name] = []
-            print(f"ForumEgine: {app_name} 基线行数: {self.file_line_counts[app_name]}")
+            # print(f"ForumEgine: {app_name} 基线行数: {self.file_line_counts[app_name]}")
        
         while self.is_monitoring:
             try:
@@ -347,7 +425,7 @@ class LogMonitor:
                         if not self.is_searching:
                             for line in new_lines:
                                 if line.strip() and 'FirstSummaryNode' in line:
-                                    print(f"ForumEgine: 在{app_name}中检测到FirstSummaryNode，开始监控记录")
+                                    print(f"ForumEgine: 在{app_name}中检测到第一次论坛发表内容")
                                     self.is_searching = True
                                     self.search_inactive_count = 0
                                     # 清空forum.log开始新会话
@@ -360,13 +438,15 @@ class LogMonitor:
                             captured_contents = self.process_lines_for_json(new_lines, app_name)
                             
                             for content in captured_contents:
-                                self.write_to_forum_log(content)
-                                print(f"ForumEgine: 捕获 - {content}")
+                                # 将app_name转换为大写作为标签（如 insight -> INSIGHT）
+                                source_tag = app_name.upper()
+                                self.write_to_forum_log(content, source_tag)
+                                # print(f"ForumEgine: 捕获 - {content}")
                                 captured_any = True
                    
                     elif current_lines < previous_lines:
                         any_shrink = True
-                        print(f"ForumEgine: 检测到 {app_name} 日志缩短，将重置基线")
+                        # print(f"ForumEgine: 检测到 {app_name} 日志缩短，将重置基线")
                         # 重置文件位置到新的文件末尾
                         self.file_positions[app_name] = self.get_file_size(log_file)
                         # 重置JSON捕获状态
@@ -380,23 +460,23 @@ class LogMonitor:
                 if self.is_searching:
                     if any_shrink:
                         # log变短，结束当前搜索会话，重置为等待状态
-                        print("ForumEgine: 日志缩短，结束当前搜索会话，回到等待状态")
+                        # print("ForumEgine: 日志缩短，结束当前搜索会话，回到等待状态")
                         self.is_searching = False
                         self.search_inactive_count = 0
                         # 写入结束标记
                         end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                        self.write_to_forum_log(f"=== ForumEgine 搜索会话结束 - {end_time} ===")
-                        print("ForumEgine: 已重置基线，等待下次FirstSummaryNode触发")
+                        self.write_to_forum_log(f"=== ForumEgine 论坛结束 - {end_time} ===", "SYSTEM")
+                        # print("ForumEgine: 已重置基线，等待下次FirstSummaryNode触发")
                     elif not any_growth and not captured_any:
                         # 没有增长也没有捕获内容，增加非活跃计数
                         self.search_inactive_count += 1
                         if self.search_inactive_count >= 30:  # 30秒无活动才结束
-                            print("ForumEgine: 长时间无活动，结束搜索会话")
+                            print("ForumEgine: 长时间无活动，结束论坛")
                             self.is_searching = False
                             self.search_inactive_count = 0
                             # 写入结束标记
                             end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                            self.write_to_forum_log(f"=== ForumEgine 搜索会话超时结束 - {end_time} ===")
+                            self.write_to_forum_log(f"=== ForumEgine 论坛结束 - {end_time} ===", "SYSTEM")
                     else:
                         self.search_inactive_count = 0  # 重置计数器
                
@@ -404,17 +484,17 @@ class LogMonitor:
                 time.sleep(1)
                
             except Exception as e:
-                print(f"ForumEgine: 监控过程中出错: {e}")
+                print(f"ForumEgine: 论坛记录中出错: {e}")
                 import traceback
                 traceback.print_exc()
                 time.sleep(2)
        
-        print("ForumEgine: 停止监控日志文件")
+        print("ForumEgine: 停止论坛日志文件")
    
     def start_monitoring(self):
         """开始智能监控"""
         if self.is_monitoring:
-            print("ForumEgine: 监控已经在运行中")
+            print("ForumEgine: 论坛已经在运行中")
             return False
        
         try:
@@ -423,18 +503,18 @@ class LogMonitor:
             self.monitor_thread = threading.Thread(target=self.monitor_logs, daemon=True)
             self.monitor_thread.start()
            
-            print("ForumEgine: 智能监控已启动")
+            print("ForumEgine: 论坛已启动")
             return True
            
         except Exception as e:
-            print(f"ForumEgine: 启动监控失败: {e}")
+            print(f"ForumEgine: 启动论坛失败: {e}")
             self.is_monitoring = False
             return False
    
     def stop_monitoring(self):
         """停止监控"""
         if not self.is_monitoring:
-            print("ForumEgine: 监控未运行")
+            print("ForumEgine: 论坛未运行")
             return
        
         try:
@@ -445,12 +525,12 @@ class LogMonitor:
            
             # 写入结束标记
             end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            self.write_to_forum_log(f"=== ForumEgine 监控结束 - {end_time} ===")
+            self.write_to_forum_log(f"=== ForumEgine 论坛结束 - {end_time} ===", "SYSTEM")
            
-            print("ForumEgine: 监控已停止")
+            print("ForumEgine: 论坛已停止")
            
         except Exception as e:
-            print(f"ForumEgine: 停止监控失败: {e}")
+            print(f"ForumEgine: 停止论坛失败: {e}")
    
     def get_forum_log_content(self) -> List[str]:
         """获取forum.log的内容"""
@@ -464,6 +544,87 @@ class LogMonitor:
         except Exception as e:
             print(f"ForumEgine: 读取forum.log失败: {e}")
             return []
+
+    def fix_json_string(self, json_text: str) -> str:
+        """修复JSON字符串中的常见问题，特别是未转义的双引号"""
+        try:
+            # 尝试直接解析，如果成功则返回原文本
+            json.loads(json_text)
+            return json_text
+        except json.JSONDecodeError:
+            pass
+        
+        # 修复未转义的双引号问题
+        # 这是一个更智能的修复方法，专门处理字符串值中的双引号
+        
+        try:
+            # 使用状态机方法修复JSON
+            # 遍历字符，跟踪是否在字符串值内部
+            
+            fixed_text = ""
+            i = 0
+            in_string = False
+            escape_next = False
+            
+            while i < len(json_text):
+                char = json_text[i]
+                
+                if escape_next:
+                    # 处理转义字符
+                    fixed_text += char
+                    escape_next = False
+                    i += 1
+                    continue
+                
+                if char == '\\':
+                    # 转义字符
+                    fixed_text += char
+                    escape_next = True
+                    i += 1
+                    continue
+                
+                if char == '"' and not escape_next:
+                    # 遇到双引号
+                    if in_string:
+                        # 在字符串内部，检查下一个字符
+                        # 如果下一个字符是冒号或者逗号或者大括号，说明这是字符串结束
+                        next_char_pos = i + 1
+                        while next_char_pos < len(json_text) and json_text[next_char_pos].isspace():
+                            next_char_pos += 1
+                        
+                        if next_char_pos < len(json_text):
+                            next_char = json_text[next_char_pos]
+                            if next_char in [':', ',', '}']:
+                                # 这是字符串结束，退出字符串状态
+                                in_string = False
+                                fixed_text += char
+                            else:
+                                # 这是字符串内部的引号，需要转义
+                                fixed_text += '\\"'
+                        else:
+                            # 文件结束，退出字符串状态
+                            in_string = False
+                            fixed_text += char
+                    else:
+                        # 字符串开始
+                        in_string = True
+                        fixed_text += char
+                else:
+                    # 其他字符
+                    fixed_text += char
+                
+                i += 1
+            
+            # 尝试解析修复后的JSON
+            try:
+                json.loads(fixed_text)
+                return fixed_text
+            except json.JSONDecodeError:
+                # 修复失败，返回None
+                return None
+                
+        except Exception:
+            return None
 
 # 全局监控器实例
 _monitor_instance = None

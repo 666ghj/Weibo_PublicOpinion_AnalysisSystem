@@ -19,7 +19,7 @@ import logging
 from pathlib import Path
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'weibo_analysis_system_2024'
+app.config['SECRET_KEY'] = 'Dedicated-to-creating-a-concise-and-versatile-public-opinion-analysis-platform'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 # 设置UTF-8编码环境
@@ -48,17 +48,26 @@ init_forum_log()
 
 # 启动ForumEgine智能监控
 def start_forum_engine():
-    """启动ForumEgine智能监控"""
+    """启动ForumEgine论坛"""
     try:
         from ForumEgine.monitor import start_forum_monitoring
-        print("ForumEgine: 启动智能监控...")
+        print("ForumEgine: 启动论坛...")
         success = start_forum_monitoring()
-        if success:
-            print("ForumEgine: 智能监控已启动，将自动检测搜索活动")
-        else:
-            print("ForumEgine: 智能监控启动失败")
+        if not success:
+            print("ForumEgine: 论坛启动失败")
     except Exception as e:
-        print(f"ForumEgine: 启动智能监控失败: {e}")
+        print(f"ForumEgine: 启动论坛失败: {e}")
+
+# 停止ForumEgine智能监控
+def stop_forum_engine():
+    """停止ForumEgine论坛"""
+    try:
+        from ForumEgine.monitor import stop_forum_monitoring
+        print("ForumEgine: 停止论坛...")
+        stop_forum_monitoring()
+        print("ForumEgine: 论坛已停止")
+    except Exception as e:
+        print(f"ForumEgine: 停止论坛失败: {e}")
 
 # 启动ForumEgine
 start_forum_engine()
@@ -417,26 +426,26 @@ def test_log(app_name):
 
 @app.route('/api/forum/start')
 def start_forum_monitoring_api():
-    """手动启动ForumEgine监控"""
+    """手动启动ForumEgine论坛"""
     try:
         from ForumEgine.monitor import start_forum_monitoring
         success = start_forum_monitoring()
         if success:
-            return jsonify({'success': True, 'message': 'ForumEgine监控已启动'})
+            return jsonify({'success': True, 'message': 'ForumEgine论坛已启动'})
         else:
-            return jsonify({'success': False, 'message': 'ForumEgine监控启动失败'})
+            return jsonify({'success': False, 'message': 'ForumEgine论坛启动失败'})
     except Exception as e:
-        return jsonify({'success': False, 'message': f'启动监控失败: {str(e)}'})
+        return jsonify({'success': False, 'message': f'启动论坛失败: {str(e)}'})
 
 @app.route('/api/forum/stop')
 def stop_forum_monitoring_api():
-    """手动停止ForumEgine监控"""
+    """手动停止ForumEgine论坛"""
     try:
         from ForumEgine.monitor import stop_forum_monitoring
         stop_forum_monitoring()
-        return jsonify({'success': True, 'message': 'ForumEgine监控已停止'})
+        return jsonify({'success': True, 'message': 'ForumEgine论坛已停止'})
     except Exception as e:
-        return jsonify({'success': False, 'message': f'停止监控失败: {str(e)}'})
+        return jsonify({'success': False, 'message': f'停止论坛失败: {str(e)}'})
 
 @app.route('/api/forum/log')
 def get_forum_log():
@@ -461,8 +470,8 @@ def search():
     if not query:
         return jsonify({'success': False, 'message': '搜索查询不能为空'})
     
-    # ForumEgine智能监控已经在后台运行，会自动检测搜索活动
-    print("ForumEgine: 搜索请求已收到，智能监控将自动检测日志变化")
+    # ForumEgine论坛已经在后台运行，会自动检测搜索活动
+    # print("ForumEgine: 搜索请求已收到，论坛将自动检测日志变化")
     
     # 检查哪些应用正在运行
     check_app_status()
@@ -521,6 +530,10 @@ if __name__ == '__main__':
     # 启动时自动启动所有Streamlit应用
     print("正在启动Streamlit应用...")
     
+    # 先停止ForumEgine监控器，避免文件占用冲突
+    print("停止ForumEgine监控器以避免文件冲突...")
+    stop_forum_engine()
+    
     script_paths = {
         'insight': 'SingleEngineApp/insight_engine_streamlit_app.py',
         'media': 'SingleEngineApp/media_engine_streamlit_app.py',
@@ -541,7 +554,9 @@ if __name__ == '__main__':
         else:
             print(f"错误: {script_path} 不存在")
     
-    print("所有应用启动完成，启动Flask服务器...")
+    start_forum_engine()
+    
+    print("启动Flask服务器...")
     
     try:
         # 启动Flask应用
