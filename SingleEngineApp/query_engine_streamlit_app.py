@@ -181,7 +181,7 @@ def display_results(agent: DeepSearchAgent, final_report: str):
     st.header("研究结果")
 
     # 结果标签页（已移除下载选项）
-    tab1, tab2 = st.tabs(["最终报告", "详细信息"])
+    tab1, tab2 = st.tabs(["研究小结", "引用信息"])
 
     with tab1:
         st.markdown(final_report)
