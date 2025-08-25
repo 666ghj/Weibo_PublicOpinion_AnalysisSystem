@@ -35,7 +35,13 @@ def init_forum_log():
     """初始化forum.log文件"""
     try:
         forum_log_file = LOG_DIR / "forum.log"
+        # 检查文件不存在则创建并且写一个开始，存在就清空写一个开始
         if not forum_log_file.exists():
+            with open(forum_log_file, 'w', encoding='utf-8') as f:
+                start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                f.write(f"=== ForumEgine 系统初始化 - {start_time} ===\n")
+            print(f"ForumEgine: forum.log 已初始化")
+        else:
             with open(forum_log_file, 'w', encoding='utf-8') as f:
                 start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 f.write(f"=== ForumEgine 系统初始化 - {start_time} ===\n")
@@ -69,9 +75,6 @@ def stop_forum_engine():
     except Exception as e:
         print(f"ForumEgine: 停止论坛失败: {e}")
 
-# 启动ForumEgine
-start_forum_engine()
-
 def parse_forum_log_line(line):
     """解析forum.log行内容，提取对话信息"""
     import re
@@ -83,16 +86,17 @@ def parse_forum_log_line(line):
     if match:
         timestamp, source, content = match.groups()
         
+        # 过滤掉系统消息和空内容
+        if source == 'SYSTEM' or not content.strip():
+            return None
+        
+        # 只处理三个Engine的消息
+        if source not in ['QUERY', 'INSIGHT', 'MEDIA']:
+            return None
+        
         # 根据来源确定消息类型和发送者
-        if source == 'SYSTEM':
-            message_type = 'system'
-            sender = '系统'
-        elif source in ['QUERY', 'INSIGHT', 'MEDIA']:
-            message_type = 'agent'
-            sender = f'{source} Engine'
-        else:
-            message_type = 'user'
-            sender = source
+        message_type = 'agent'
+        sender = f'{source} Engine'
         
         return {
             'type': message_type,
@@ -112,11 +116,16 @@ def monitor_forum_log():
     
     forum_log_file = LOG_DIR / "forum.log"
     last_position = 0
+    processed_lines = set()  # 用于跟踪已处理的行，避免重复
     
     # 如果文件存在，获取初始位置
     if forum_log_file.exists():
         with open(forum_log_file, 'r', encoding='utf-8', errors='ignore') as f:
-            f.seek(0, 2)  # 移动到文件末尾
+            # 初始化时读取所有现有行，避免重复处理
+            existing_lines = f.readlines()
+            for line in existing_lines:
+                line_hash = hash(line.strip())
+                processed_lines.add(line_hash)
             last_position = f.tell()
     
     while True:
@@ -130,12 +139,20 @@ def monitor_forum_log():
                         for line in new_lines:
                             line = line.rstrip('\n\r')
                             if line.strip():
+                                line_hash = hash(line.strip())
+                                
+                                # 避免重复处理同一行
+                                if line_hash in processed_lines:
+                                    continue
+                                
+                                processed_lines.add(line_hash)
+                                
                                 # 解析日志行并发送forum消息
                                 parsed_message = parse_forum_log_line(line)
                                 if parsed_message:
                                     socketio.emit('forum_message', parsed_message)
                                 
-                                # 同时发送到控制台
+                                # 只有在控制台显示forum时才发送控制台消息
                                 timestamp = datetime.now().strftime('%H:%M:%S')
                                 formatted_line = f"[{timestamp}] {line}"
                                 socketio.emit('console_output', {
@@ -144,6 +161,10 @@ def monitor_forum_log():
                                 })
                         
                         last_position = f.tell()
+                        
+                        # 清理processed_lines集合，避免内存泄漏（保留最近1000行的哈希）
+                        if len(processed_lines) > 1000:
+                            processed_lines.clear()
             
             time.sleep(1)  # 每秒检查一次
         except Exception as e:
