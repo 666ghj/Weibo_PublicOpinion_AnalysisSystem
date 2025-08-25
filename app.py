@@ -76,14 +76,16 @@ start_forum_engine()
 processes = {
     'insight': {'process': None, 'port': 8501, 'status': 'stopped', 'output': [], 'log_file': None},
     'media': {'process': None, 'port': 8502, 'status': 'stopped', 'output': [], 'log_file': None},
-    'query': {'process': None, 'port': 8503, 'status': 'stopped', 'output': [], 'log_file': None}
+    'query': {'process': None, 'port': 8503, 'status': 'stopped', 'output': [], 'log_file': None},
+    'forum': {'process': None, 'port': None, 'status': 'stopped', 'output': [], 'log_file': None}
 }
 
 # 输出队列
 output_queues = {
     'insight': Queue(),
     'media': Queue(),
-    'query': Queue()
+    'query': Queue(),
+    'forum': Queue()
 }
 
 def write_log_to_file(app_name, line):
@@ -285,23 +287,35 @@ def stop_streamlit_app(app_name):
 def check_app_status():
     """检查应用状态"""
     for app_name, info in processes.items():
-        if info['process'] is not None:
-            if info['process'].poll() is None:
-                # 进程仍在运行，检查端口是否可访问
-                try:
-                    response = requests.get(f"http://localhost:{info['port']}", timeout=2)
-                    if response.status_code == 200:
-                        info['status'] = 'running'
-                    else:
-                        info['status'] = 'starting'
-                except requests.exceptions.RequestException:
-                    info['status'] = 'starting'
-                except Exception:
-                    info['status'] = 'starting'
-            else:
-                # 进程已结束
-                info['process'] = None
+        if app_name == 'forum':
+            # ForumEngine特殊处理 - 检查是否有监控活动
+            try:
+                from ForumEgine.monitor import is_monitoring_active
+                if is_monitoring_active():
+                    info['status'] = 'running'
+                else:
+                    info['status'] = 'stopped'
+            except Exception:
                 info['status'] = 'stopped'
+        else:
+            # 普通Streamlit应用的状态检查
+            if info['process'] is not None:
+                if info['process'].poll() is None:
+                    # 进程仍在运行，检查端口是否可访问
+                    try:
+                        response = requests.get(f"http://localhost:{info['port']}", timeout=2)
+                        if response.status_code == 200:
+                            info['status'] = 'running'
+                        else:
+                            info['status'] = 'starting'
+                    except requests.exceptions.RequestException:
+                        info['status'] = 'starting'
+                    except Exception:
+                        info['status'] = 'starting'
+                else:
+                    # 进程已结束
+                    info['process'] = None
+                    info['status'] = 'stopped'
 
 def wait_for_app_startup(app_name, max_wait_time=30):
     """等待应用启动完成"""
@@ -395,8 +409,21 @@ def get_output(app_name):
     if app_name not in processes:
         return jsonify({'success': False, 'message': '未知应用'})
     
-    # 从文件读取完整日志
-    output_lines = read_log_from_file(app_name)
+    if app_name == 'forum':
+        # ForumEngine特殊处理 - 读取forum.log
+        try:
+            forum_log_file = LOG_DIR / "forum.log"
+            if forum_log_file.exists():
+                with open(forum_log_file, 'r', encoding='utf-8') as f:
+                    lines = f.readlines()
+                    output_lines = [line.rstrip('\n\r') for line in lines if line.strip()]
+            else:
+                output_lines = ["[系统] forum.log 文件不存在"]
+        except Exception as e:
+            output_lines = [f"[错误] 读取forum.log失败: {str(e)}"]
+    else:
+        # 从文件读取完整日志
+        output_lines = read_log_from_file(app_name)
     
     return jsonify({
         'success': True,
@@ -460,6 +487,75 @@ def get_forum_log():
         })
     except Exception as e:
         return jsonify({'success': False, 'message': f'读取forum.log失败: {str(e)}'})
+
+@app.route('/api/forum/dialogue')
+def get_forum_dialogue():
+    """获取ForumEgine的对话格式数据"""
+    try:
+        forum_log_file = LOG_DIR / "forum.log"
+        if not forum_log_file.exists():
+            return jsonify({
+                'success': True,
+                'messages': [],
+                'total_messages': 0
+            })
+        
+        messages = []
+        with open(forum_log_file, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            
+        for line in lines:
+            line = line.strip()
+            if not line or line.startswith('==='):
+                continue
+                
+            # 解析日志格式: [时间] [类型] 内容
+            if '] [' in line:
+                try:
+                    # 提取时间
+                    time_start = line.find('[') + 1
+                    time_end = line.find(']')
+                    timestamp = line[time_start:time_end]
+                    
+                    # 提取类型
+                    remaining = line[time_end+1:].strip()
+                    if remaining.startswith('[') and '] ' in remaining:
+                        type_end = remaining.find('] ')
+                        msg_type = remaining[1:type_end]
+                        content = remaining[type_end+2:]
+                        
+                        # 映射消息类型到显示名称
+                        type_mapping = {
+                            'QUERY': 'Query Agent',
+                            'MEDIA': 'Media Agent', 
+                            'INSIGHT': 'Insight Agent',
+                            'SYSTEM': '系统'
+                        }
+                        
+                        speaker = type_mapping.get(msg_type, msg_type)
+                        
+                        messages.append({
+                            'timestamp': timestamp,
+                            'speaker': speaker,
+                            'content': content,
+                            'type': msg_type.lower()
+                        })
+                except Exception as e:
+                    # 如果解析失败，作为系统消息处理
+                    messages.append({
+                        'timestamp': '',
+                        'speaker': '系统',
+                        'content': line,
+                        'type': 'system'
+                    })
+        
+        return jsonify({
+            'success': True,
+            'messages': messages,
+            'total_messages': len(messages)
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'解析forum.log失败: {str(e)}'})
 
 @app.route('/api/search', methods=['POST'])
 def search():
