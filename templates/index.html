@@ -312,12 +312,36 @@
         }
 
         /* 不同Engine的颜色区分 */
-        .forum-message.agent.QUERY {
+        .forum-message.agent:has(.forum-message-header:contains("Query Engine")) {
             background-color: #e8f4fd;
             border-color: #2196F3;
         }
 
-        .forum-message.agent.INSIGHT {
+        .forum-message.agent:has(.forum-message-header:contains("Insight Engine")) {
+            background-color: #f3e5f5;
+            border-color: #9c27b0;
+        }
+
+        .forum-message.agent:has(.forum-message-header:contains("Media Engine")) {
+            background-color: #e8f5e8;
+            border-color: #4caf50;
+        }
+
+        /* 备用方案：通过JavaScript添加的类 */
+        .forum-message.query-engine {
+            background-color: #e8f4fd;
+            border-color: #2196F3;
+        }
+
+        .forum-message.insight-engine {
+            background-color: #f3e5f5;
+            border-color: #9c27b0;
+        }
+
+        .forum-message.media-engine {
+            background-color: #e8f5e8;
+            border-color: #4caf50;
+        }
             background-color: #fff3e0;
             border-color: #FF9800;
         }
@@ -879,11 +903,15 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success && data.log_lines.length > forumLogLineCount) {
+                    console.log(`Forum: 发现新消息，当前行数: ${data.log_lines.length}, 上次处理: ${forumLogLineCount}`);
+                    
                     // 只处理新增的日志行
                     const newLines = data.log_lines.slice(forumLogLineCount);
-                    newLines.forEach(line => {
+                    newLines.forEach((line, index) => {
+                        console.log(`Forum: 处理新行 ${forumLogLineCount + index + 1}: ${line}`);
                         const parsed = parseForumMessage(line);
                         if (parsed) {
+                            console.log(`Forum: 解析成功，添加消息:`, parsed);
                             addForumMessage(parsed);
                         }
                     });
@@ -933,10 +961,17 @@
                             consoleOutput.appendChild(div);
                             
                             // 解析并添加到对话区
-                            parseForumMessage(line);
+                            const parsed = parseForumMessage(line);
+                            if (parsed) {
+                                addForumMessage(parsed);
+                            }
                         });
                         
+                        // 重置计数器以确保后续消息能正确显示
                         forumLogLineCount = data.log_lines.length;
+                    } else {
+                        // 如果没有日志，重置计数器
+                        forumLogLineCount = 0;
                     }
                     
                     // 如果有解析的消息，直接使用
@@ -971,7 +1006,10 @@
                         consoleOutput.appendChild(div);
                         
                         // 如果是论坛对话内容，也显示到左侧对话区
-                        parseForumMessage(line);
+                        const parsed = parseForumMessage(line);
+                        if (parsed) {
+                            addForumMessage(parsed);
+                        }
                     });
                     
                     forumLogLineCount = data.log_lines.length;
@@ -988,21 +1026,21 @@
             try {
                 // 解析日志行格式: [HH:MM:SS] [SOURCE] content
                 const timeMatch = logLine.match(/^\[(\d{2}:\d{2}:\d{2})\]/);
-                if (!timeMatch) return;
+                if (!timeMatch) return null;
                 
                 const timestamp = timeMatch[1];
                 const restContent = logLine.substring(timeMatch[0].length).trim();
                 
                 // 解析源标签
                 const sourceMatch = restContent.match(/^\[([^\]]+)\]\s*(.*)$/);
-                if (!sourceMatch) return;
+                if (!sourceMatch) return null;
                 
                 const source = sourceMatch[1];
                 const content = sourceMatch[2];
                 
                 // 过滤掉空内容或系统标记
                 if (!content || content.includes('=== ForumEgine')) {
-                    return;
+                    return null;
                 }
                 
                 // 根据源类型确定消息类型
@@ -1034,16 +1072,17 @@
                 // 处理内容中的转义字符
                 const displayContent = content.replace(/\\n/g, '\n').replace(/\\r/g, '');
                 
-                // 添加到对话区
-                addForumMessage({
+                // 返回解析后的消息对象
+                return {
                     type: messageType,
                     source: displayName,
                     content: displayContent,
                     timestamp: timestamp
-                });
+                };
                 
             } catch (error) {
                 console.error('解析论坛消息失败:', error);
+                return null;
             }
         }
 
@@ -1057,7 +1096,17 @@
             
             // 根据来源添加特定的CSS类用于颜色区分
             if (data.source) {
-                messageDiv.classList.add(data.source);
+                const sourceClass = data.source.toLowerCase().replace(/\s+/g, '-');
+                messageDiv.classList.add(sourceClass);
+                
+                // 添加具体的engine类
+                if (data.source.includes('Query')) {
+                    messageDiv.classList.add('query-engine');
+                } else if (data.source.includes('Insight')) {
+                    messageDiv.classList.add('insight-engine');
+                } else if (data.source.includes('Media')) {
+                    messageDiv.classList.add('media-engine');
+                }
             }
             
             // 构建消息头部，显示来源名称
