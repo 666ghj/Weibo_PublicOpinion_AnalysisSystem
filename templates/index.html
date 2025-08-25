@@ -91,7 +91,7 @@
 
         /* 嵌入页面区域 */
         .embedded-section {
-            flex: 1.5;
+            flex: 1.8; /* 稍微缩小左侧区域 */
             border-right: 2px solid #000000;
             background-color: #ffffff;
             position: relative;
@@ -113,7 +113,7 @@
 
         /* 控制台输出区域 */
         .console-section {
-            flex: 1.5;
+            flex: 1.2; /* 稍微扩大右侧区域 */
             display: flex;
             flex-direction: column;
             background-color: #ffffff;
@@ -190,69 +190,6 @@
             margin-bottom: 2px;
         }
 
-        /* 三方对话区域 */
-        .dialogue-container {
-            flex: 1;
-            padding: 15px;
-            background-color: #f8f8f8;
-            overflow-y: auto;
-            overflow-x: hidden;
-            min-height: 0;
-            display: none; /* 默认隐藏 */
-        }
-
-        .dialogue-message {
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            position: relative;
-        }
-
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .message-speaker {
-            color: #666;
-        }
-
-        .message-timestamp {
-            color: #999;
-            font-size: 10px;
-        }
-
-        .message-content {
-            line-height: 1.4;
-            color: #333;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        /* 不同角色的消息样式 */
-        .dialogue-message.query {
-            border-left: 4px solid #4CAF50;
-        }
-
-        .dialogue-message.media {
-            border-left: 4px solid #2196F3;
-        }
-
-        .dialogue-message.insight {
-            border-left: 4px solid #FF9800;
-        }
-
-        .dialogue-message.system {
-            border-left: 4px solid #9E9E9E;
-            background-color: #f5f5f5;
-        }
-
         /* 状态信息 */
         .status-bar {
             padding: 10px 20px;
@@ -300,29 +237,112 @@
         .message {
             position: fixed;
             top: 20px;
-            right: 20px;
-            padding: 10px 20px;
+            right: 0px;
+            padding: 15px 20px;
             border: 2px solid #000000;
             background-color: #ffffff;
-            z-index: 1000;
-            opacity: 0;
+            color: #000000;
+            font-weight: bold;
             transform: translateX(100%);
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease;
+            z-index: 1000;
         }
 
         .message.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .message.error {
-            background-color: #ffeeee;
-            border-color: #ff0000;
+            transform: translateX(-5%);
         }
 
         .message.success {
-            background-color: #eeffee;
-            border-color: #00ff00;
+            border-color: #00aa00;
+            background-color: #f0fff0;
+        }
+
+        .message.error {
+            border-color: #aa0000;
+            background-color: #fff0f0;
+        }
+
+        /* Forum Engine 专用样式 */
+        .forum-container {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+        }
+
+        .forum-container.active {
+            display: flex;
+        }
+
+        .forum-chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .forum-message {
+            margin-bottom: 20px;
+            min-width: 200px;
+            max-width: 85%;
+            padding: 15px;
+            border: 2px solid #000000;
+            border-radius: 0;
+            word-wrap: break-word;
+        }
+
+        .forum-message.user {
+            align-self: flex-end;
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .forum-message.system {
+            align-self: flex-start;
+            background-color: #f0f0f0;
+            color: #000000;
+            border-color: #666666;
+        }
+
+        .forum-message.agent {
+            align-self: center;
+            color: #000000;
+            min-width: 300px;
+            max-width: 90%;
+        }
+
+        /* 不同Engine的颜色区分 */
+        .forum-message.agent.QUERY {
+            background-color: #e8f4fd;
+            border-color: #2196F3;
+        }
+
+        .forum-message.agent.INSIGHT {
+            background-color: #fff3e0;
+            border-color: #FF9800;
+        }
+
+        .forum-message.agent.MEDIA {
+            background-color: #f3e5f5;
+            border-color: #9C27B0;
+        }
+
+        .forum-message-header {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .forum-message-content {
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .forum-timestamp {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -343,6 +363,17 @@
             <div class="embedded-section">
                 <div class="embedded-header" id="embeddedHeader">嵌入的页面</div>
                 <div class="embedded-content" id="embeddedContent">
+                    <!-- 论坛聊天界面 -->
+                    <div class="forum-container" id="forumContainer">
+                        <div class="forum-chat-area" id="forumChatArea">
+                            <div class="forum-message system">
+                                <div class="forum-message-header">系统消息</div>
+                                <div class="forum-message-content">ForumEngine 论坛已启动，正在监控日志文件...</div>
+                                <div class="forum-timestamp" id="forumStartTime"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #666;">
                         <span>默认只显示第一个页面 - 点击按钮切换页面</span>
                     </div>
@@ -366,7 +397,7 @@
                         Query Engine
                     </button>
                     <button class="app-button" data-app="forum">
-                        <span class="status-indicator" id="status-forum"></span>
+                        <span class="status-indicator running" id="status-forum"></span>
                         Forum Engine
                     </button>
                 </div>
@@ -374,14 +405,6 @@
                 <!-- 控制台输出 -->
                 <div class="console-output" id="consoleOutput">
                     <div class="console-line">[系统] 等待连接...</div>
-                </div>
-
-                <!-- 三方对话区域 -->
-                <div class="dialogue-container" id="dialogueContainer">
-                    <div style="text-align: center; color: #666; padding: 20px;">
-                        <p>ForumEngine 三方对话</p>
-                        <p style="font-size: 12px; margin-top: 10px;">展示Query、Media、Insight三个智能体的对话内容</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -404,7 +427,15 @@
             insight: 'stopped',
             media: 'stopped',
             query: 'stopped',
-            forum: 'stopped'
+            forum: 'running'  // Forum Engine 默认运行
+        };
+
+        // 应用名称映射
+        const appNames = {
+            insight: 'Insight Engine',
+            media: 'Media Engine', 
+            query: 'Query Engine',
+            forum: 'Forum Engine'
         };
 
         // 初始化
@@ -420,6 +451,14 @@
             setInterval(() => {
                 refreshConsoleOutput();
             }, 1000);
+            
+            // 定期刷新论坛对话（实时更新）
+            setInterval(() => {
+                refreshForumMessages();
+            }, 2000);
+            
+            // 初始化论坛相关功能
+            initializeForum();
             
             // 延迟预加载iframe以确保应用启动完成
             setTimeout(() => {
@@ -441,9 +480,22 @@
             });
 
             socket.on('console_output', function(data) {
+                // 处理控制台输出
                 if (data.app === currentApp) {
                     addConsoleOutput(data.line);
                 }
+                
+                // 如果是forum的输出，同时也处理为论坛消息
+                if (data.app === 'forum') {
+                    const parsed = parseForumMessage(data.line);
+                    if (parsed) {
+                        addForumMessage(parsed);
+                    }
+                }
+            });
+
+            socket.on('forum_message', function(data) {
+                addForumMessage(data);
             });
 
             socket.on('status_update', function(data) {
@@ -491,7 +543,7 @@
             let totalRunning = 0;
             const ports = { insight: 8501, media: 8502, query: 8503 };
             
-            Object.keys(ports).forEach(app => {
+            Object.keys(appStatus).forEach(app => {
                 if (appStatus[app] === 'running' && preloadedIframes[app]) {
                     totalRunning++;
                     
@@ -527,18 +579,27 @@
 
             currentApp = app;
 
+            // 根据应用类型处理不同的显示逻辑
             if (app === 'forum') {
-                // Forum应用：显示对话界面，隐藏控制台输出
-                document.getElementById('consoleOutput').style.display = 'none';
-                document.getElementById('dialogueContainer').style.display = 'block';
-                loadForumDialogue();
+                // 切换到论坛模式
+                document.getElementById('embeddedHeader').textContent = 'Forum Engine - 论坛对话';
+                
+                // 显示论坛容器，隐藏其他内容
+                document.getElementById('forumContainer').classList.add('active');
+                
+                // 清空控制台并加载forum日志
+                document.getElementById('consoleOutput').innerHTML = '<div class="console-line">[系统] 切换到论坛模式</div>';
+                loadForumLog();
+                
             } else {
-                // 其他应用：显示控制台输出，隐藏对话界面
-                document.getElementById('consoleOutput').style.display = 'block';
-                document.getElementById('dialogueContainer').style.display = 'none';
+                // 切换到普通Engine模式
+                document.getElementById('embeddedHeader').textContent = appNames[app];
+                
+                // 隐藏论坛容器
+                document.getElementById('forumContainer').classList.remove('active');
                 
                 // 清空并加载新的控制台输出
-                document.getElementById('consoleOutput').innerHTML = '<div class="console-line">[系统] 切换到 ' + app + ' 应用</div>';
+                document.getElementById('consoleOutput').innerHTML = '<div class="console-line">[系统] 切换到 ' + appNames[app] + '</div>';
                 
                 // 重置行计数
                 lastLineCount[app] = 0;
@@ -554,6 +615,11 @@
         
         // 加载控制台输出
         function loadConsoleOutput(app) {
+            if (app === 'forum') {
+                loadForumLog();
+                return;
+            }
+            
             fetch(`/api/output/${app}`)
             .then(response => response.json())
             .then(data => {
@@ -583,9 +649,11 @@
         // 刷新当前应用的控制台输出
         function refreshConsoleOutput() {
             if (currentApp === 'forum') {
-                // Forum应用：刷新对话内容
-                refreshForumDialogue();
-            } else if (appStatus[currentApp] === 'running' || appStatus[currentApp] === 'starting') {
+                refreshForumLog();
+                return;
+            }
+            
+            if (appStatus[currentApp] === 'running' || appStatus[currentApp] === 'starting') {
                 fetch(`/api/output/${currentApp}`)
                 .then(response => response.json())
                 .then(data => {
@@ -613,63 +681,6 @@
                     console.error('刷新输出失败:', error);
                 });
             }
-        }
-
-        // 加载Forum对话数据
-        function loadForumDialogue() {
-            fetch('/api/forum/dialogue')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    displayDialogueMessages(data.messages);
-                } else {
-                    console.error('加载Forum对话失败:', data.message);
-                }
-            })
-            .catch(error => {
-                console.error('加载Forum对话失败:', error);
-            });
-        }
-
-        // 刷新Forum对话数据
-        function refreshForumDialogue() {
-            if (currentApp === 'forum') {
-                loadForumDialogue();
-            }
-        }
-
-        // 显示对话消息
-        function displayDialogueMessages(messages) {
-            const container = document.getElementById('dialogueContainer');
-            container.innerHTML = ''; // 清空现有内容
-            
-            if (messages.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; color: #666; padding: 20px;">
-                        <p>暂无对话记录</p>
-                        <p style="font-size: 12px; margin-top: 10px;">当有搜索活动时，三个智能体的对话将在这里显示</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            messages.forEach(message => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `dialogue-message ${message.type}`;
-                
-                messageDiv.innerHTML = `
-                    <div class="message-header">
-                        <span class="message-speaker">${message.speaker}</span>
-                        <span class="message-timestamp">${message.timestamp}</span>
-                    </div>
-                    <div class="message-content">${message.content}</div>
-                `;
-                
-                container.appendChild(messageDiv);
-            });
-            
-            // 滚动到底部显示最新消息
-            container.scrollTop = container.scrollHeight;
         }
 
         // 添加控制台输出
@@ -723,22 +734,63 @@
             const header = document.getElementById('embeddedHeader');
             const content = document.getElementById('embeddedContent');
             
-            const appNames = {
-                insight: 'Insight Agent - 私有数据库分析',
-                media: 'Media Agent - 多模态能力',
-                query: 'Query Agent - 网页搜索',
-                forum: 'Forum Engine - 智能体对话监控'
-            };
+            // 如果是Forum Engine，直接显示论坛界面
+            if (app === 'forum') {
+                header.textContent = 'Forum Engine - 论坛对话';
+                
+                // 隐藏所有iframe
+                if (typeof preloadedIframes !== 'undefined') {
+                    Object.values(preloadedIframes).forEach(iframe => {
+                        iframe.style.display = 'none';
+                    });
+                }
+                
+                // 移除占位符
+                const placeholder = content.querySelector('.status-placeholder');
+                if (placeholder) {
+                    placeholder.remove();
+                }
+                
+                // 显示论坛容器
+                document.getElementById('forumContainer').classList.add('active');
+                return;
+            }
+            
+            // 隐藏论坛容器
+            document.getElementById('forumContainer').classList.remove('active');
 
             header.textContent = appNames[app] || app;
 
-            if (app === 'forum') {
-                // Forum应用：隐藏所有iframe，显示特殊说明
+            // 如果应用正在运行，显示对应的iframe
+            if (appStatus[app] === 'running') {
+                // 确保iframe已初始化
+                if (!iframesInitialized) {
+                    preloadIframes();
+                }
+                
+                // 隐藏所有iframe
                 Object.values(preloadedIframes).forEach(iframe => {
                     iframe.style.display = 'none';
                 });
                 
-                // 显示Forum说明
+                // 移除占位符
+                const placeholder = content.querySelector('.status-placeholder');
+                if (placeholder) {
+                    placeholder.remove();
+                }
+                
+                // 显示当前应用的iframe
+                if (preloadedIframes[app]) {
+                    preloadedIframes[app].style.display = 'block';
+                    console.log(`切换到 ${app} 应用 - 无刷新切换`);
+                }
+            } else {
+                // 隐藏所有iframe
+                Object.values(preloadedIframes).forEach(iframe => {
+                    iframe.style.display = 'none';
+                });
+                
+                // 显示状态信息
                 let placeholder = content.querySelector('.status-placeholder');
                 if (!placeholder) {
                     placeholder = document.createElement('div');
@@ -748,61 +800,9 @@
                 }
                 
                 placeholder.innerHTML = `
-                    <div style="text-align: center;">
-                        <h3 style="margin-bottom: 15px;">ForumEngine - 智能体对话监控</h3>
-                        <p style="margin-bottom: 10px;">监控三个智能体（Query、Media、Insight）的对话交互</p>
-                        <p style="font-size: 12px; color: #999;">右侧面板显示实时对话内容</p>
-                        <div style="margin-top: 20px; font-size: 14px;">
-                            <div style="color: #4CAF50;">● Query Agent - 网页搜索</div>
-                            <div style="color: #2196F3;">● Media Agent - 多模态分析</div>
-                            <div style="color: #FF9800;">● Insight Agent - 深度洞察</div>
-                        </div>
-                    </div>
+                    <div style="margin-bottom: 10px;">${appNames[app]} 未运行</div>
+                    <div style="font-size: 12px;">状态: ${appStatus[app]}</div>
                 `;
-            } else {
-                // 其他应用：正常的iframe显示逻辑
-                if (appStatus[app] === 'running') {
-                    // 确保iframe已初始化
-                    if (!iframesInitialized) {
-                        preloadIframes();
-                    }
-                    
-                    // 隐藏所有iframe
-                    Object.values(preloadedIframes).forEach(iframe => {
-                        iframe.style.display = 'none';
-                    });
-                    
-                    // 移除占位符
-                    const placeholder = content.querySelector('.status-placeholder');
-                    if (placeholder) {
-                        placeholder.remove();
-                    }
-                    
-                    // 显示当前应用的iframe
-                    if (preloadedIframes[app]) {
-                        preloadedIframes[app].style.display = 'block';
-                        console.log(`切换到 ${app} 应用 - 无刷新切换`);
-                    }
-                } else {
-                    // 隐藏所有iframe
-                    Object.values(preloadedIframes).forEach(iframe => {
-                        iframe.style.display = 'none';
-                    });
-                    
-                    // 显示状态信息
-                    let placeholder = content.querySelector('.status-placeholder');
-                    if (!placeholder) {
-                        placeholder = document.createElement('div');
-                        placeholder.className = 'status-placeholder';
-                        placeholder.style.cssText = 'display: flex; align-items: center; justify-content: center; height: 100%; color: #666; flex-direction: column; position: absolute; top: 0; left: 0; width: 100%;';
-                        content.appendChild(placeholder);
-                    }
-                    
-                    placeholder.innerHTML = `
-                        <div style="margin-bottom: 10px;">${appNames[app]} 未运行</div>
-                        <div style="font-size: 12px;">状态: ${appStatus[app]}</div>
-                    `;
-                }
             }
         }
 
@@ -850,13 +850,247 @@
         // 显示消息
         function showMessage(text, type = 'info') {
             const message = document.getElementById('message');
+            
+            // 清除之前的定时器
+            if (message.hideTimer) {
+                clearTimeout(message.hideTimer);
+            }
+            
             message.textContent = text;
             message.className = `message ${type}`;
             message.classList.add('show');
 
-            setTimeout(() => {
+            message.hideTimer = setTimeout(() => {
                 message.classList.remove('show');
+                // 延迟清除内容，等待动画完成
+                setTimeout(() => {
+                    message.textContent = '';
+                    message.className = 'message';
+                }, 300);
             }, 3000);
+        }
+
+        // Forum Engine 相关函数
+        let forumLogLineCount = 0;
+
+        // 实时刷新论坛消息（适用于所有页面）
+        function refreshForumMessages() {
+            fetch('/api/forum/log')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.log_lines.length > forumLogLineCount) {
+                    // 只处理新增的日志行
+                    const newLines = data.log_lines.slice(forumLogLineCount);
+                    newLines.forEach(line => {
+                        const parsed = parseForumMessage(line);
+                        if (parsed) {
+                            addForumMessage(parsed);
+                        }
+                    });
+                    forumLogLineCount = data.log_lines.length;
+                }
+            })
+            .catch(error => {
+                console.error('刷新论坛消息失败:', error);
+            });
+        }
+
+        // 初始化论坛功能
+        function initializeForum() {
+            // 设置论坛启动时间
+            const now = new Date();
+            document.getElementById('forumStartTime').textContent = now.toLocaleTimeString('zh-CN');
+            
+            // 初始化时加载一次论坛日志
+            refreshForumMessages();
+        }
+
+        // 加载论坛日志
+        function loadForumLog() {
+            fetch('/api/forum/log')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 清空对话区
+                    const chatArea = document.getElementById('forumChatArea');
+                    chatArea.innerHTML = `
+                        <div class="forum-message system">
+                            <div class="forum-message-header">系统消息</div>
+                            <div class="forum-message-content">ForumEngine 论坛已启动，正在监控日志文件...</div>
+                            <div class="forum-timestamp">${new Date().toLocaleTimeString('zh-CN')}</div>
+                        </div>
+                    `;
+                    
+                    // 加载控制台日志
+                    const consoleOutput = document.getElementById('consoleOutput');
+                    consoleOutput.innerHTML = '<div class="console-line">[系统] Forum Engine 日志输出</div>';
+                    
+                    if (data.log_lines && data.log_lines.length > 0) {
+                        data.log_lines.forEach(line => {
+                            const div = document.createElement('div');
+                            div.className = 'console-line';
+                            div.textContent = line;
+                            consoleOutput.appendChild(div);
+                            
+                            // 解析并添加到对话区
+                            parseForumMessage(line);
+                        });
+                        
+                        forumLogLineCount = data.log_lines.length;
+                    }
+                    
+                    // 如果有解析的消息，直接使用
+                    if (data.parsed_messages && data.parsed_messages.length > 0) {
+                        data.parsed_messages.forEach(message => {
+                            addForumMessage(message);
+                        });
+                    }
+                    
+                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                }
+            })
+            .catch(error => {
+                console.error('加载论坛日志失败:', error);
+            });
+        }
+
+        // 刷新论坛日志
+        function refreshForumLog() {
+            fetch('/api/forum/log')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.log_lines.length > forumLogLineCount) {
+                    const consoleOutput = document.getElementById('consoleOutput');
+                    
+                    // 只添加新的行
+                    const newLines = data.log_lines.slice(forumLogLineCount);
+                    newLines.forEach(line => {
+                        const div = document.createElement('div');
+                        div.className = 'console-line';
+                        div.textContent = line;
+                        consoleOutput.appendChild(div);
+                        
+                        // 如果是论坛对话内容，也显示到左侧对话区
+                        parseForumMessage(line);
+                    });
+                    
+                    forumLogLineCount = data.log_lines.length;
+                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                }
+            })
+            .catch(error => {
+                console.error('刷新论坛日志失败:', error);
+            });
+        }
+
+        // 解析论坛消息并添加到对话区
+        function parseForumMessage(logLine) {
+            try {
+                // 解析日志行格式: [HH:MM:SS] [SOURCE] content
+                const timeMatch = logLine.match(/^\[(\d{2}:\d{2}:\d{2})\]/);
+                if (!timeMatch) return;
+                
+                const timestamp = timeMatch[1];
+                const restContent = logLine.substring(timeMatch[0].length).trim();
+                
+                // 解析源标签
+                const sourceMatch = restContent.match(/^\[([^\]]+)\]\s*(.*)$/);
+                if (!sourceMatch) return;
+                
+                const source = sourceMatch[1];
+                const content = sourceMatch[2];
+                
+                // 过滤掉空内容或系统标记
+                if (!content || content.includes('=== ForumEgine')) {
+                    return;
+                }
+                
+                // 根据源类型确定消息类型
+                let messageType = 'system';
+                let displayName = '系统';
+                
+                switch(source.toUpperCase()) {
+                    case 'SYSTEM':
+                        messageType = 'system';
+                        displayName = '系统';
+                        break;
+                    case 'INSIGHT':
+                        messageType = 'agent';
+                        displayName = 'Insight Engine';
+                        break;
+                    case 'MEDIA':
+                        messageType = 'agent';
+                        displayName = 'Media Engine';
+                        break;
+                    case 'QUERY':
+                        messageType = 'agent';
+                        displayName = 'Query Engine';
+                        break;
+                    default:
+                        messageType = 'system';
+                        displayName = source;
+                }
+                
+                // 处理内容中的转义字符
+                const displayContent = content.replace(/\\n/g, '\n').replace(/\\r/g, '');
+                
+                // 添加到对话区
+                addForumMessage({
+                    type: messageType,
+                    source: displayName,
+                    content: displayContent,
+                    timestamp: timestamp
+                });
+                
+            } catch (error) {
+                console.error('解析论坛消息失败:', error);
+            }
+        }
+
+        // 添加论坛消息到对话区
+        function addForumMessage(data) {
+            const chatArea = document.getElementById('forumChatArea');
+            const messageDiv = document.createElement('div');
+            
+            const messageType = data.type || 'system';
+            messageDiv.className = `forum-message ${messageType}`;
+            
+            // 根据来源添加特定的CSS类用于颜色区分
+            if (data.source) {
+                messageDiv.classList.add(data.source);
+            }
+            
+            // 构建消息头部，显示来源名称
+            const headerText = data.sender || data.source || getMessageHeader(messageType);
+            
+            messageDiv.innerHTML = `
+                <div class="forum-message-header">${headerText}</div>
+                <div class="forum-message-content">${formatMessageContent(data.content)}</div>
+                <div class="forum-timestamp">${data.timestamp || new Date().toLocaleTimeString('zh-CN')}</div>
+            `;
+            
+            chatArea.appendChild(messageDiv);
+            
+            // 自动滚动到底部
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // 格式化消息内容
+        function formatMessageContent(content) {
+            if (!content) return '';
+            
+            // 将换行符转换为HTML换行
+            return content.replace(/\n/g, '<br>');
+        }
+
+        // 获取消息头部
+        function getMessageHeader(type) {
+            switch(type) {
+                case 'user': return '用户';
+                case 'agent': return 'AI助手';
+                case 'system': return '系统';
+                default: return '未知';
+            }
         }
     </script>
 </body>
