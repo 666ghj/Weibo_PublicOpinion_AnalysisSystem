@@ -1,11 +1,11 @@
-[17:27:18] 启动 query 应用...
-[17:27:20] 2025-08-26 17:27:20.327
-[17:27:20] Warning: the config option 'server.enableCORS=false' is not compatible with
-[17:27:20] 'server.enableXsrfProtection=true'.
-[17:27:20] As a result, 'server.enableCORS' is being overridden to 'true'.
-[17:27:20] More information:
-[17:27:20] In order to protect against CSRF attacks, we send a cookie with each request.
-[17:27:20] To do so, we must specify allowable origins, which places a restriction on
-[17:27:20] cross-origin resource sharing.
-[17:27:20] If cross origin resource sharing is required, please disable server.enableXsrfProtection.
-[17:27:20] 2025-08-26 17:27:20.646 Port 8503 is already in use
+[18:36:14] 启动 query 应用...
+[18:36:16] 2025-08-26 18:36:16.585
+[18:36:16] Warning: the config option 'server.enableCORS=false' is not compatible with
+[18:36:16] 'server.enableXsrfProtection=true'.
+[18:36:16] As a result, 'server.enableCORS' is being overridden to 'true'.
+[18:36:16] More information:
+[18:36:16] In order to protect against CSRF attacks, we send a cookie with each request.
+[18:36:16] To do so, we must specify allowable origins, which places a restriction on
+[18:36:16] cross-origin resource sharing.
+[18:36:16] If cross origin resource sharing is required, please disable server.enableXsrfProtection.
+[18:36:16] 2025-08-26 18:36:16.928 Port 8503 is already in use

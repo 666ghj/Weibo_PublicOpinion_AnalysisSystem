@@ -235,6 +235,144 @@
             animation: spin 1s ease-in-out infinite;
         }
 
+        /* 专门用于报告状态的加载指示器，不会让整个容器旋转 */
+        .report-loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffa500;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* 任务进度条样式 */
+        .task-progress-container {
+            margin: 0; /* 移除margin，使用父容器的gap控制间距 */
+            padding: 20px;
+            border: 2px solid #000000;
+            background-color: #f5f5f0;
+        }
+
+        .task-progress-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .task-progress-title {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .task-progress-bar {
+            width: 200px;
+            height: 20px;
+            background-color: #e8e8e0;
+            border: 1px solid #666666;
+            margin-left: 20px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .task-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6b8a5a 0%, #8fb584 100%);
+            transition: width 0.5s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            min-width: 2px; /* 确保即使是0%也有一点显示 */
+        }
+
+        .task-progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000000;
+            font-weight: bold;
+            font-size: 12px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .task-info-line {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 13px;
+            padding: 8px;
+            background-color: #f0f0e8;
+            border: 1px solid #d0d0c0;
+            border-radius: 3px;
+        }
+
+        .task-info-item {
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+        }
+
+        .task-info-item:last-child {
+            margin-right: 0;
+        }
+
+        .task-info-label {
+            font-weight: bold;
+            color: #666;
+            margin-right: 8px;
+        }
+
+        .task-info-value {
+            color: #000;
+        }
+
+        .task-status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .task-status-running {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .task-status-completed {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .task-status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .task-error-message {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #ffe6e6;
+            border-left: 4px solid #ff4444;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -445,9 +583,14 @@
 
         .report-content {
             flex: 1;
-            padding: 20px;
+            padding: 10px 20px 20px 20px; /* 减少上边距 */
             overflow-y: auto;
+            overflow-x: hidden;
             background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 0; /* 允许子元素缩小 */
+            gap: 15px; /* 统一子元素间距 */
         }
 
         .report-controls {
@@ -489,38 +632,45 @@
 
         .report-status {
             padding: 15px;
-            margin: 10px 0;
+            margin: 0; /* 移除margin，使用父容器的gap控制间距 */
             border: 2px solid #000000;
             background-color: #f8f9fa;
             font-family: 'Courier New', monospace;
         }
 
         .report-status.loading {
-            border-color: #ffa500;
-            background-color: #fff8e1;
+            border-color: #b8860b;
+            background-color: #faf5e6;
+            /* 确保loading状态的报告框不会旋转 */
+            animation: none;
         }
 
         .report-status.success {
-            border-color: #00aa00;
-            background-color: #f0fff0;
+            border-color: #4a6741;
+            background-color: #f0f5ed;
         }
 
         .report-status.error {
-            border-color: #aa0000;
-            background-color: #fff0f0;
+            border-color: #8b4513;
+            background-color: #fdf5e6;
         }
 
         .report-preview {
             border: 2px solid #000000;
             background-color: #ffffff;
             min-height: 400px;
+            max-height: none; /* 移除最大高度限制 */
             overflow-y: auto;
+            overflow-x: hidden;
+            flex: 1; /* 让预览区域占用剩余空间 */
         }
 
         .report-preview iframe {
             width: 100%;
-            height: 100%;
+            min-height: 400px;
             border: none;
+            /* 让iframe自适应内容高度 */
+            height: auto;
         }
 
         .report-loading {
@@ -812,7 +962,17 @@
                 // 清空控制台并加载report日志
                 document.getElementById('consoleOutput').innerHTML = '<div class="console-line">[系统] 切换到报告生成模式</div>';
                 loadReportLog();
-                loadReportInterface();
+                
+                // 只在报告界面未初始化时才重新加载
+                const reportContent = document.getElementById('reportContent');
+                if (!reportContent || reportContent.children.length === 0) {
+                    loadReportInterface();
+                }
+                
+                // 切换到report页面时检查是否可以自动生成报告
+                setTimeout(() => {
+                    checkReportLockStatus();
+                }, 500);
                 
             } else {
                 // 切换到普通Engine模式
@@ -1257,7 +1417,9 @@
         }
 
         // 刷新Report Engine日志
-        // 检查Report Engine锁定状态
+        // 检查Report Engine锁定状态并自动生成报告
+        let autoGenerateTriggered = false; // 防止重复触发
+        
         function checkReportLockStatus() {
             fetch('/api/report/status')
             .then(response => response.json())
@@ -1268,17 +1430,26 @@
                     // 文件准备就绪，解锁按钮
                     reportButton.classList.remove('locked');
                     reportButton.title = 'Report Engine - 智能报告生成\n所有引擎都有新文件，可以生成报告';
+                    
+                    // 如果当前在report页面且还没有触发自动生成，则自动生成报告
+                    if (currentApp === 'report' && !autoGenerateTriggered && !reportTaskId) {
+                        autoGenerateTriggered = true;
+                        console.log('检测到锁消失，自动开始生成报告');
+                        setTimeout(() => {
+                            generateReport();
+                        }, 1000); // 延迟1秒开始生成
+                    }
                 } else {
                     // 文件未准备就绪，锁定按钮
                     reportButton.classList.add('locked');
                     
                     // 构建详细的提示信息
-                    let titleInfo = 'Report Engine暂时锁定\n';
+                    let titleInfo = '\n';
                     
                     if (data.missing_files && data.missing_files.length > 0) {
                         titleInfo += '等待新文件:\n' + data.missing_files.join('\n');
                     } else {
-                        titleInfo += '等待三个分析引擎都产生新的报告文件';
+                        titleInfo += '等待三个Agent工作完毕';
                     }
                     
                     reportButton.title = titleInfo;
@@ -1512,42 +1683,17 @@
             const reportContent = document.getElementById('reportContent');
             
             let interfaceHTML = `
-                <div class="report-controls">
-                    <button class="report-button primary" onclick="generateReport()" id="generateBtn">
-                        生成最终报告
-                    </button>
-                    <button class="report-button" onclick="checkReportStatus()" id="statusBtn">
-                        检查状态
-                    </button>
+                <!-- 固定的状态信息块 -->
+                <div class="engine-status-info" id="engineStatusBlock">
+                    <div class="report-status" id="engineStatusContent">
+                        <div>正在初始化...</div>
+                    </div>
                 </div>
-            `;
-            
-            // 显示状态信息
-            if (statusData.initialized) {
-                interfaceHTML += `
-                    <div class="report-status success">
-                        <strong>ReportEngine状态:</strong> 已初始化<br>
-                        <strong>文件检查:</strong> ${statusData.engines_ready ? '准备就绪' : '文件未就绪'}<br>
-                        <strong>找到文件:</strong> ${statusData.files_found ? statusData.files_found.join(', ') : '无'}<br>
-                        ${statusData.missing_files && statusData.missing_files.length > 0 ? 
-                          `<strong>缺失文件:</strong> ${statusData.missing_files.join(', ')}` : ''}
-                    </div>
-                `;
-            } else {
-                interfaceHTML += `
-                    <div class="report-status error">
-                        <strong>ReportEngine状态:</strong> 未初始化
-                    </div>
-                `;
-            }
-            
-            // 如果有当前任务，显示任务状态
-            if (statusData.current_task) {
-                interfaceHTML += renderTaskStatus(statusData.current_task);
-            }
-            
-            // 添加报告预览区域
-            interfaceHTML += `
+                
+                <!-- 任务进度区域 -->
+                <div id="taskProgressArea"></div>
+                
+                <!-- 报告预览区域 -->
                 <div class="report-preview" id="reportPreview">
                     <div class="report-loading">
                         点击"生成最终报告"开始生成综合分析报告
@@ -1556,29 +1702,80 @@
             `;
             
             reportContent.innerHTML = interfaceHTML;
+            
+            // 立即更新状态信息
+            updateEngineStatusDisplay(statusData);
+            
+            // 如果有当前任务，显示任务状态
+            if (statusData.current_task) {
+                const taskArea = document.getElementById('taskProgressArea');
+                if (taskArea) {
+                    taskArea.innerHTML = renderTaskStatus(statusData.current_task);
+                }
+            }
         }
 
-        // 渲染任务状态
+        // 渲染任务状态（使用新的进度条样式）
         function renderTaskStatus(task) {
-            const statusClass = task.status === 'completed' ? 'success' : 
-                              task.status === 'error' ? 'error' : 'loading';
+            // 状态文本的中文映射
+            const statusText = {
+                'running': '正在生成',
+                'completed': '已完成',
+                'error': '生成失败',
+                'pending': '等待中'
+            };
+            
+            // 状态徽章样式
+            const statusBadgeClass = {
+                'running': 'task-status-running',
+                'completed': 'task-status-completed',
+                'error': 'task-status-error',
+                'pending': 'task-status-running'
+            };
+            
+            // 为运行状态添加加载指示器
+            const loadingIndicator = task.status !== 'completed' && task.status !== 'error' 
+                ? '<span class="report-loading-spinner"></span>' 
+                : '';
             
             let statusHTML = `
-                <div class="report-status ${statusClass}">
-                    <strong>任务ID:</strong> ${task.task_id}<br>
-                    <strong>查询:</strong> ${task.query}<br>
-                    <strong>状态:</strong> ${task.status}<br>
-                    <strong>进度:</strong> ${task.progress}%<br>
-                    <strong>创建时间:</strong> ${new Date(task.created_at).toLocaleString()}<br>
-                    <strong>更新时间:</strong> ${new Date(task.updated_at).toLocaleString()}
+                <div class="task-progress-container">
+                    <div class="task-progress-header">
+                        <div class="task-progress-title">
+                            ${loadingIndicator}报告生成任务
+                        </div>
+                        <div class="task-progress-bar">
+                            <div class="task-progress-fill" style="width: ${Math.min(Math.max(task.progress || 0, 0), 100)}%"></div>
+                            <div class="task-progress-text">${task.progress || 0}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="task-info-line">
+                        <div class="task-info-item">
+                            <span class="task-info-label">任务ID:</span>
+                            <span class="task-info-value">${task.task_id}</span>
+                        </div>
+                        <div class="task-info-item">
+                            <span class="task-info-label">查询内容:</span>
+                            <span class="task-info-value">${task.query}</span>
+                        </div>
+                        <div class="task-info-item">
+                            <span class="task-info-label">开始时间:</span>
+                            <span class="task-info-value">${new Date(task.created_at).toLocaleString()}</span>
+                        </div>
+                        <div class="task-info-item">
+                            <span class="task-info-label">更新时间:</span>
+                            <span class="task-info-value">${new Date(task.updated_at).toLocaleString()}</span>
+                        </div>
+                    </div>
             `;
             
             if (task.error_message) {
-                statusHTML += `<br><strong>错误信息:</strong> ${task.error_message}`;
-            }
-            
-            if (task.has_result) {
-                statusHTML += `<br><button class="report-button" onclick="viewReport('${task.task_id}')">查看报告</button>`;
+                statusHTML += `
+                    <div class="task-error-message">
+                        <strong>错误信息:</strong> ${task.error_message}
+                    </div>
+                `;
             }
             
             statusHTML += '</div>';
@@ -1596,9 +1793,10 @@
             const consoleOutput = document.getElementById('consoleOutput');
             consoleOutput.innerHTML = '<div class="console-line">[系统] 开始生成报告，日志已重置</div>';
             
-            const generateBtn = document.getElementById('generateBtn');
-            generateBtn.disabled = true;
-            generateBtn.textContent = '生成中...';
+            // 按钮已移除，无需操作按钮状态
+            
+            // 在现有状态信息后添加任务进度状态，而不是替换
+            addTaskProgressStatus('正在启动报告生成任务...', 'loading');
             
             fetch('/api/report/generate', {
                 method: 'POST',
@@ -1613,6 +1811,16 @@
                     reportTaskId = data.task_id;
                     showMessage('报告生成已启动', 'success');
                     
+                    // 更新任务状态显示
+                    updateTaskProgressStatus({
+                        task_id: data.task_id,
+                        query: query,
+                        status: 'running',
+                        progress: 5, // 初始进度设为5%，确保进度条可见
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    });
+                    
                     // 立即刷新一次日志以确保同步
                     setTimeout(() => {
                         refreshReportLog();
@@ -1621,16 +1829,18 @@
                     // 开始轮询任务状态
                     startProgressPolling(data.task_id);
                 } else {
-                    showMessage('启动失败: ' + data.error, 'error');
-                    generateBtn.disabled = false;
-                    generateBtn.textContent = '生成最终报告';
+                    updateTaskProgressStatus(null, 'error', '启动失败: ' + data.error);
+                    // 重置标志允许重新尝试
+                    autoGenerateTriggered = false;
+                    reportTaskId = null;
                 }
             })
             .catch(error => {
                 console.error('生成报告失败:', error);
-                showMessage('生成报告失败: ' + error.message, 'error');
-                generateBtn.disabled = false;
-                generateBtn.textContent = '生成最终报告';
+                updateTaskProgressStatus(null, 'error', '生成报告失败: ' + error.message);
+                // 重置标志允许重新尝试
+                autoGenerateTriggered = false;
+                reportTaskId = null;
             });
         }
 
@@ -1663,18 +1873,16 @@
                         // 自动显示报告
                         viewReport(taskId);
                         
-                        // 重新启用生成按钮
-                        const generateBtn = document.getElementById('generateBtn');
-                        generateBtn.disabled = false;
-                        generateBtn.textContent = '生成最终报告';
+                        // 重置自动生成标志，允许下次自动生成
+                        autoGenerateTriggered = false;
+                        reportTaskId = null;
                     } else if (data.task.status === 'error') {
                         clearInterval(reportPollingInterval);
                         showMessage('报告生成失败: ' + data.task.error_message, 'error');
                         
-                        // 重新启用生成按钮
-                        const generateBtn = document.getElementById('generateBtn');
-                        generateBtn.disabled = false;
-                        generateBtn.textContent = '生成最终报告';
+                        // 重置自动生成标志，允许重新尝试
+                        autoGenerateTriggered = false;
+                        reportTaskId = null;
                     }
                 }
             })
@@ -1683,20 +1891,61 @@
             });
         }
 
-        // 更新进度显示
-        function updateProgressDisplay(task) {
-            const reportContent = document.getElementById('reportContent');
-            const existingStatus = reportContent.querySelector('.report-status');
+        // 添加任务进度状态（使用固定区域）
+        function addTaskProgressStatus(message, status) {
+            const taskArea = document.getElementById('taskProgressArea');
             
-            if (existingStatus) {
-                existingStatus.outerHTML = renderTaskStatus(task);
+            if (taskArea) {
+                const loadingIndicator = status === 'loading' ? '<span class="report-loading-spinner"></span>' : '';
+                
+                taskArea.innerHTML = `
+                    <div class="task-progress-container">
+                        <div class="task-progress-header">
+                            ${loadingIndicator}任务状态: ${message}
+                        </div>
+                    </div>
+                `;
             }
+        }
+        
+        // 更新任务进度状态（使用固定区域）
+        function updateTaskProgressStatus(task, status = null, errorMessage = null) {
+            const taskArea = document.getElementById('taskProgressArea');
+            
+            if (!taskArea) {
+                console.error('taskProgressArea not found');
+                return;
+            }
+            
+            if (task) {
+                taskArea.innerHTML = renderTaskStatus(task);
+            } else if (status && errorMessage) {
+                const loadingIndicator = status === 'loading' ? '<span class="report-loading-spinner"></span>' : '';
+                const statusBadgeClass = status === 'error' ? 'task-status-error' : 'task-status-running';
+                const statusText = status === 'error' ? '错误' : '处理中';
+                
+                taskArea.innerHTML = `
+                    <div class="task-progress-container">
+                        <div class="task-progress-header">
+                            ${loadingIndicator}任务状态: ${statusText}
+                        </div>
+                        <div style="margin-top: 10px; font-size: 14px;">
+                            ${errorMessage}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // 更新进度显示（保持向后兼容）
+        function updateProgressDisplay(task) {
+            updateTaskProgressStatus(task);
         }
 
         // 查看报告
         function viewReport(taskId) {
             const reportPreview = document.getElementById('reportPreview');
-            reportPreview.innerHTML = '<div class="report-loading">加载报告中...</div>';
+            reportPreview.innerHTML = '<div class="report-loading"><span class="report-loading-spinner"></span>加载报告中...</div>';
             
             fetch(`/api/report/result/${taskId}`)
             .then(response => {
@@ -1706,12 +1955,33 @@
                     throw new Error('报告加载失败');
                 }
             })
-            .then(htmlContent => {
+            .then(rawContent => {
+                let htmlContent = rawContent;
+                
+                // 检查是否是JSON格式的响应（包含html_content字段）
+                try {
+                    if (rawContent.includes('"html_content":')) {
+                        // 提取JSON中的html_content
+                        const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
+                        if (jsonMatch) {
+                            const jsonData = JSON.parse(jsonMatch[0]);
+                            if (jsonData.html_content) {
+                                htmlContent = jsonData.html_content;
+                                // 处理转义字符
+                                htmlContent = htmlContent.replace(/\\"/g, '"').replace(/\\n/g, '\n');
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn('解析JSON格式报告失败，使用原始内容:', e);
+                }
+                
                 // 创建iframe来显示HTML内容
                 const iframe = document.createElement('iframe');
                 iframe.style.width = '100%';
-                iframe.style.height = '600px';
                 iframe.style.border = 'none';
+                iframe.style.minHeight = '800px'; // 增加最小高度
+                iframe.id = 'report-iframe';
                 
                 reportPreview.innerHTML = '';
                 reportPreview.appendChild(iframe);
@@ -1720,6 +1990,61 @@
                 iframe.contentDocument.open();
                 iframe.contentDocument.write(htmlContent);
                 iframe.contentDocument.close();
+                
+                // 等待内容加载完成后调整iframe高度
+                iframe.onload = function() {
+                    setTimeout(() => {
+                        try {
+                            // 获取iframe内容的实际高度
+                            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                            
+                            // 等待所有资源加载完成
+                            let contentHeight = 0;
+                            
+                            // 尝试多种方式获取内容高度
+                            if (iframeDoc.body) {
+                                contentHeight = Math.max(
+                                    iframeDoc.body.scrollHeight || 0,
+                                    iframeDoc.body.offsetHeight || 0,
+                                    iframeDoc.body.clientHeight || 0
+                                );
+                            }
+                            
+                            if (iframeDoc.documentElement) {
+                                contentHeight = Math.max(
+                                    contentHeight,
+                                    iframeDoc.documentElement.scrollHeight || 0,
+                                    iframeDoc.documentElement.offsetHeight || 0,
+                                    iframeDoc.documentElement.clientHeight || 0
+                                );
+                            }
+                            
+                            // 设置iframe高度为内容高度，最小800px
+                            const finalHeight = Math.max(contentHeight + 100, 800); // 添加100px的缓冲
+                            iframe.style.height = finalHeight + 'px';
+                            
+                            console.log(`报告iframe高度已调整为: ${finalHeight}px (内容高度: ${contentHeight}px)`);
+                            
+                            // 确保父容器也能正确显示
+                            reportPreview.style.minHeight = finalHeight + 'px';
+                            
+                        } catch (error) {
+                            console.error('调整iframe高度失败:', error);
+                            // 如果调整失败，使用更大的默认高度
+                            iframe.style.height = '1200px';
+                            reportPreview.style.minHeight = '1200px';
+                        }
+                    }, 1000); // 延迟1秒等待内容完全渲染
+                };
+                
+                // 备用方案：如果onload没有触发，延迟调整高度
+                setTimeout(() => {
+                    if (iframe.style.height === 'auto' || iframe.style.height === '') {
+                        iframe.style.height = '1200px';
+                        reportPreview.style.minHeight = '1200px';
+                        console.log('使用备用高度设置: 1200px');
+                    }
+                }, 3000);
             })
             .catch(error => {
                 console.error('查看报告失败:', error);
@@ -1731,9 +2056,65 @@
             });
         }
 
-        // 检查报告状态
+        // 检查报告状态（不重新加载整个界面）
         function checkReportStatus() {
-            loadReportInterface();
+            // 只更新状态信息，不重新渲染整个界面
+            fetch('/api/report/status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 更新ReportEngine状态指示器
+                    const indicator = document.getElementById('status-report');
+                    if (indicator) {
+                        if (data.initialized) {
+                            indicator.className = 'status-indicator running';
+                            appStatus.report = 'running';
+                        } else {
+                            indicator.className = 'status-indicator';
+                            appStatus.report = 'stopped';
+                        }
+                    }
+                    
+                    // 更新状态信息（如果存在）
+                    updateEngineStatusDisplay(data);
+                    
+                    showMessage('状态检查完成', 'success');
+                } else {
+                    showMessage('状态检查失败: ' + data.error, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('检查报告状态失败:', error);
+                showMessage('状态检查失败: ' + error.message, 'error');
+            });
+        }
+        
+        // 更新引擎状态显示（只更新文本内容）
+        function updateEngineStatusDisplay(statusData) {
+            const statusContent = document.getElementById('engineStatusContent');
+            
+            if (statusContent) {
+                // 确定状态样式
+                const statusClass = statusData.initialized ? 'success' : 'error';
+                
+                // 更新状态信息内容
+                let statusHTML = '';
+                if (statusData.initialized) {
+                    statusHTML = `
+                        <strong>ReportEngine状态:</strong> 已初始化<br>
+                        <strong>文件检查:</strong> ${statusData.engines_ready ? '准备就绪' : '文件未就绪'}<br>
+                        <strong>找到文件:</strong> ${statusData.files_found ? statusData.files_found.join(', ') : '无'}<br>
+                        ${statusData.missing_files && statusData.missing_files.length > 0 ? 
+                          `<strong>缺失文件:</strong> ${statusData.missing_files.join(', ')}` : ''}
+                    `;
+                } else {
+                    statusHTML = `<strong>ReportEngine状态:</strong> 未初始化`;
+                }
+                
+                // 更新内容和样式
+                statusContent.innerHTML = statusHTML;
+                statusContent.className = `report-status ${statusClass}`;
+            }
         }
     </script>
 </body>

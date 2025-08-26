@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能舆情分析报告</title>
+</head>
+<body>
+json
+{
+  "html_content": "<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能舆情分析报告 - 武汉大学</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #f4f7f9;
+            --card-bg-color: #ffffff;
+            --text-color: #333333;
+            --heading-color: #2c3e50;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --neutral-color: #95a5a6;
+            --font-family: 'Helvetica Neue', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft Yahei', sans-serif;
+        }
+
+        .dark-mode {
+            --primary-color: #ecf0f1;
+            --secondary-color: #3498db;
+            --background-color: #1e272e;
+            --card-bg-color: #2c3a47;
+            --text-color: #bdc3c7;
+            --heading-color: #ffffff;
+            --border-color: #4a6fa5;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 16px;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: var(--card-bg-color);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .sidebar h2 {
+            font-size: 1.2em;
+            color: var(--heading-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav li a {
+            display: block;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .sidebar nav li a:hover, .sidebar nav li a.active {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+        
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-x: hidden;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: var(--heading-color);
+            margin-bottom: 10px;
+        }
+
+        header .meta-info {
+            font-size: 0.9em;
+            color: var(--neutral-color);
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-header h3 {
+            color: var(--heading-color);
+            font-size: 1.5em;
+        }
+
+        .card-header .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s;
+        }
+
+        .card-header.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .card-content {
+            max-height: 5000px; 
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out, padding 0.5s ease;
+        }
+
+        .card-content.collapsed {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: -20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--card-bg-color), color-mix(in srgb, var(--card-bg-color) 80%, var(--secondary-color)));
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-box .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--heading-color);
+        }
+
+        .stat-box .label {
+            font-size: 0.9em;
+            color: var(--neutral-color);
+        }
+
+        .topic-list li {
+            background-color: var(--background-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .topic-list li strong {
+            color: var(--heading-color);
+        }
+
+        .alert-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 5px solid;
+        }
+
+        .alert-warning {
+            background-color: color-mix(in srgb, var(--warning-color) 15%, transparent);
+            border-color: var(--warning-color);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 40px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 13px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            border: 2px solid var(--background-color);
+        }
+        .timeline-item .time {
+            font-weight: bold;
+            color: var(--secondary-color);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        th {
+            background-color: color-mix(in srgb, var(--primary-color) 10%, var(--card-bg-color));
+            color: var(--heading-color);
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+
+        @media (max-width: 1024px) {
+            .container { flex-direction: column; }
+            .sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .controls { position: absolute; }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content { padding: 20px; }
+            header h1 { font-size: 2em; }
+            .grid-container { grid-template-columns: 1fr; }
+            .controls { display: none; }
+        }
+
+        @media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .sidebar, .controls, .card-header .toggle-icon { display: none; }
+            .main-content { padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+            .card-content, .card-content.collapsed { max-height: none !important; overflow: visible; padding: 20px !important; margin: 0 !important; }
+            .card-header { border-bottom: 1px solid #ccc; }
+            .chart-container { height: 300px; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button id="theme-toggle" class="control-btn">🌙 暗色模式</button>
+        <button onclick="window.print()" class="control-btn">🖨️ 打印/导出PDF</button>
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h2>导航目录</h2>
+            <nav>
+                <ul>
+                    <li><a href="#s1">1.0 舆情概览</a></li>
+                    <li><a href="#s2">2.0 关键数据趋势</a></li>
+                    <li><a href="#s3">3.0 舆情动态时间轴</a></li>
+                    <li><a href="#s4">4.0 热点话题追踪</a></li>
+                    <li><a href="#s5">5.0 重点渠道表现</a></li>
+                    <li><a href="#s6">6.0 负面与风险监测</a></li>
+                    <li><a href="#s7">7.0 简报与关注点</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>智能舆情分析报告</h1>
+                <p class="meta-info">分析对象：武汉大学 | 数据周期：2024-03-01 至 2024-04-30</p>
+            </header>
+
+            <section id="s1" class="card">
+                <div class="card-header">
+                    <h3>1.0 本期舆情概览</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <h4>1.1 核心数据看板</h4>
+                    <div class="grid-container">
+                        <div class="stat-box">
+                            <div class="value">210万+</div>
+                            <div class="label">相关声量</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="value">3.8亿+</div>
+                            <div class="label">总阅读/播放量</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="value">420万+</div>
+                            <div class="label">总互动量</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="value" style="color: var(--success-color);">51%</div>
+                            <div class="label">正面情绪占比</div>
+                        </div>
+                    </div>
+
+                    <h4>1.2 本期舆情热度 TOP 3</h4>
+                    <ul class="topic-list">
+                        <li><strong>TOP 1: 武大樱花季 (阅读量 ≈3.8亿)</strong><br>#武大樱花预约# 话题引爆社交媒体，讨论集中于预约难度、校园美景与游客管理，情感呈现“浪漫”与“焦虑”交织的两极化特征。</li>
+                        <li><strong>TOP 2: 学科实力与就业前景讨论 (赞同/讨论 ≈5万)</strong><br>以知乎为中心，关于测绘遥感“世界第一”的自豪感，与对毕业生实际薪资水平的焦虑形成鲜明对比，引发“名校光环vs现实压力”的深度探讨。</li>
+                        <li><strong>TOP 3: 校史渊源与文化认同 (讨论量 ≈2万)</strong><br>围绕建校史（1893 vs 1913）的“玩梗”与严肃讨论并存，体现了师生校友对学校历史的强烈关注和身份认同感。</li>
+                    </ul>
+
+                    <h4>1.3 重点预警</h4>
+                    <div class="alert-box alert-warning">
+                        <strong>潜在风险：</strong>毕业生就业焦虑情绪正在从个体吐槽向群体性议题演化，尤其是顶尖学科与市场薪酬的“体感落差”可能影响未来的招生吸引力和品牌声誉。需关注并加强正面引导。
+                    </div>
+                </div>
+            </section>
+
+            <section id="s2" class="card">
+                <div class="card-header">
+                    <h3>2.0 关键数据趋势</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <h4>2.1 声量与情感走势</h4>
+                    <div class="chart-container">
+                        <canvas id="trendsChart"></canvas>
+                    </div>
+                    <p><strong>分析：</strong>声量在三月中下旬达到顶峰，与“樱花季”高度相关。正面情绪（蓝色）随樱花季和学术成就讨论而上扬，但负面/焦虑情绪（红色）也同步增长，尤其体现在樱花预约困难和后续的就业薪资讨论中，展现了舆论的双重性。</p>
+                    <h4>2.2 整体情感分布</h4>
+                     <div class="chart-container" style="height:350px;">
+                        <canvas id="sentimentPieChart"></canvas>
+                    </div>
+                    <p><strong>分析：</strong>整体舆论以正面情绪为主（51%），主要来源于对学校历史、学术成就、美丽校园的自豪感与喜爱。负面情绪（34%）则集中于现实压力，如就业、内卷、资源分配等。中性讨论（15%）多为信息咨询与事实陈述。</p>
+                </div>
+            </section>
+
+            <section id="s3" class="card">
+                <div class="card-header">
+                    <h3>3.0 本周期舆情动态时间轴</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <span class="time">3月上旬</span>
+                            <p>樱花季预热，小红书、抖音出现大量“赏樱攻略”，正面期待情绪高涨。</p>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="time">3月15日</span>
+                            <p>樱花预约通道开放，#武大樱花预约# 冲上微博热搜，因访问量过大导致系统卡顿，引发大量“抢票像春运”的吐槽，负面情绪首次高峰。</p>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="time">3月下旬</span>
+                            <p>樱花盛开期，游客与学生发布的校园美景图文、视频刷屏，正面情感压倒负面，形成本周期声量与正面情绪最高峰。</p>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="time">4月上旬</span>
+                            <p>知乎出现高赞问题：“如何看待武大测绘遥感世界第一，但毕业生薪资并不突出？”，引发大规模讨论，焦虑情绪显著上升。</p>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="time">4月中旬</span>
+                            <p>B站“阿牙”医生等口腔医学KOL视频受关注，正面口碑持续发酵。同时，关于规培生待遇低的讨论在小范围内传播。</p>
+                        </div>
+                         <div class="timeline-item">
+                            <span class="time">4月下旬</span>
+                            <p>校友雷军、陈东升等商业成就被媒体报道，引发一波对武大“人才培养”的自豪感讨论。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="s4" class="card">
+                <div class="card-header">
+                    <h3>4.0 热点话题追踪</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <h4>4.1 本期热点事件详情</h4>
+                    <h5>话题一：樱花季的“浪漫”与“烦恼”</h5>
+                    <p>樱花季是武汉大学最具代表性的公共事件。舆论场呈现清晰的两面：一方面，是海量的赞美与向往，通过精美的图文和视频，将武大樱花塑造成一个浪漫的文化符号；另一方面，是围绕“预约难”和“游客过多影响教学”的抱怨和争议。这种矛盾体现了大学作为公共文化资源与维护正常教学秩序之间的张力。</p>
+                    
+                    <h5>话题二：学术光环下的现实焦虑</h5>
+                    <p>“测绘遥感世界第一”等学术成就为学校带来巨大的声誉和自豪感。然而，当这些宏大叙事与毕业生面临的“就业薪资”、“工作压力”等具体问题碰撞时，产生了强烈的舆论张力。用户讨论不再满足于抽象的排名，而是更关心“顶尖学科”能否直接转化为个体优越的职业发展。这种“自豪与焦虑并存”的心态，是当前高学历人群普遍心态的缩影。</p>
+
+                    <h4>4.2 新增/突发话题</h4>
+                     <p><strong>国际交流成本讨论：</strong>在关于国际合作的讨论中，有声音指出哈佛等顶尖名校的交换项目成本高昂（如“300美元房租劝退普通家庭”），普通家庭学生难以企及。这个话题虽未大规模发酵，但触及了教育公平和资源普惠性的敏感点，值得关注。</p>
+                </div>
+            </section>
+            
+            <section id="s5" class="card">
+                <div class="card-header">
+                    <h3>5.0 重点渠道表现</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <h4>5.1 核心媒体平台表现</h4>
+                     <div class="chart-container" style="height:350px;">
+                        <canvas id="sourceDistributionChart"></canvas>
+                    </div>
+                    <p><strong>渠道分析：</strong></p>
+                     <ul>
+                        <li><strong>微博:</strong> 主要舆论场和话题引爆点，#武大樱花预约#等热搜源头，情绪放大效应明显。</li>
+                        <li><strong>知乎:</strong> 深度讨论的核心阵地，关于学科实力、就业前景、校史等严肃话题的发源地，观点专业，影响力深远。</li>
+                        <li><strong>小红书/抖音:</strong> 视觉化、生活化内容的集散地，主导了“最美大学”的形象塑造，以正面、浪漫内容为主。</li>
+                        <li><strong>B站:</strong> 知识科普与校园生活展示平台，涌现了如口腔医学科普等优质内容，有助于专业形象的软性传播。</li>
+</body>
+</html>

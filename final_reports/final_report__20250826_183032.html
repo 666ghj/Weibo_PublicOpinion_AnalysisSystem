@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能舆情分析报告</title>
+</head>
+<body>
+json
+{
+  "html_content": "<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能舆情分析报告 - 武汉大学</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+        :root {
+            --bg-color: #f4f7fa;
+            --bg-secondary-color: #ffffff;
+            --text-color: #333;
+            --text-secondary-color: #666;
+            --border-color: #e0e6ed;
+            --primary-color: #1a5c9c; /* 武大蓝 */
+            --accent-color: #d1a047;
+            --positive-color: #28a745;
+            --negative-color: #dc3545;
+            --neutral-color: #ffc107;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --bg-secondary-color: #1e1e1e;
+            --text-color: #e0e0e0;
+            --text-secondary-color: #a0a0a0;
+            --border-color: #333;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-secondary-color);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav li a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-secondary-color);
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .sidebar nav li a:hover, .sidebar nav li a.active {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px 40px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        header .report-meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary-color);
+        }
+
+        .controls button {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .controls button:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        .card {
+            background-color: var(--bg-secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .card-header .toggle-icon {
+            font-weight: bold;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card.collapsed .card-content {
+            max-height: 0;
+            overflow: hidden;
+            padding-top: 0;
+            margin-top: 0;
+        }
+        .card.collapsed .card-header .toggle-icon {
+             transform: rotate(-90deg);
+        }
+
+        .card-content {
+            max-height: 5000px; /* Large value */
+            transition: max-height 0.7s ease-in-out, margin-top 0.3s, padding-top 0.3s;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-box {
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+
+        .stat-box .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .stat-box .label {
+            font-size: 0.9rem;
+            color: var(--text-secondary-color);
+        }
+
+        .stat-box.total {
+            border-color: var(--primary-color);
+        }
+        .stat-box.reads {
+            border-color: var(--accent-color);
+        }
+        .stat-box.interactions {
+            border-color: var(--positive-color);
+        }
+        .stat-box.negative {
+            border-color: var(--negative-color);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--border-color);
+        }
+        .timeline-item {
+            position: relative;
+            margin-left: 60px;
+            margin-bottom: 30px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -49px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--bg-secondary-color);
+            border: 4px solid var(--primary-color);
+        }
+        .timeline-item.alert::before {
+            border-color: var(--negative-color);
+        }
+        .timeline-time {
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 5px;
+        }
+        .timeline-content {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        ul.custom-list {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        ul.custom-list li {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        ul.custom-list li::before {
+            content: '•';
+            position: absolute;
+            left: -20px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .tag.positive { background-color: var(--positive-color); color: #fff; }
+        .tag.negative { background-color: var(--negative-color); color: #fff; }
+        .tag.neutral { background-color: var(--neutral-color); color: #333; }
+        .tag.pride { background-color: #4a90e2; color: #fff; }
+        .tag.anxiety { background-color: #f5a623; color: #fff; }
+        .tag.romance { background-color: #e83e8c; color: #fff; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background-color: var(--bg-color);
+            font-weight: 600;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            main { padding: 20px; }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            header h1 { font-size: 1.6rem; margin-bottom: 10px; }
+            .controls { width: 100%; text-align: right;}
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body { 
+                --bg-color: #ffffff !important;
+                --bg-secondary-color: #ffffff !important;
+                --text-color: #000000 !important;
+                --border-color: #dddddd !important;
+                --primary-color: #003366 !important;
+            }
+            .sidebar, .controls, .card-header .toggle-icon { display: none; }
+            main { padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .card.collapsed .card-content { max-height: 100% !important; }
+            a { text-decoration: none; color: inherit; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>舆情分析报告</h2>
+                <p style="font-size:0.9em; color: var(--text-secondary-color);">武汉大学</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#overview" class="active">1.0 舆情概览</a></li>
+                    <li><a href="#trends">2.0 关键数据趋势</a></li>
+                    <li><a href="#timeline">3.0 舆情动态时间轴</a></li>
+                    <li><a href="#hot-topics">4.0 热点话题追踪</a></li>
+                    <li><a href="#channels">5.0 重点渠道表现</a></li>
+                    <li><a href="#risks">6.0 负面与风险监测</a></li>
+                    <li><a href="#summary">7.0 简报与关注点</a></li>
+                    <li><a href="#appendix">8.0 数据附录</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main>
+            <header>
+                <div>
+                    <h1>智能舆情分析报告：武汉大学</h1>
+                    <div class="report-meta">报告周期：2024-03-01 至 2025-08-26</div>
+                </div>
+                <div class="controls">
+                    <button id="theme-toggle">🌙 切换模式</button>
+                    <button onclick="window.print()">🖨️ 打印/导出</button>
+                </div>
+            </header>
+
+            <!-- 1.0 舆情概览 -->
+            <section id="overview" class="card">
+                <div class="card-header collapser">
+                    <h2>1.0 本期舆情概览</h2>
+                    <span class="toggle-icon">-</span>
+                </div>
+                <div class="card-content">
+                    <div class="grid-container" style="margin-bottom: 30px;">
+                        <div class="stat-box total"><div class="value">≈ 210万</div><div class="label">相关信息总量</div></div>
+                        <div class="stat-box reads"><div class="value">≈ 3.8亿</div><div class="label">总阅读量</div></div>
+                        <div class="stat-box interactions"><div class="value">≈ 420万</div><div class="label">总互动量</div></div>
+                        <div class="stat-box negative"><div class="value">24%</div><div class="label">负面情感占比</div></div>
+                    </div>
+                    <div class="grid-container">
+                        <div>
+                            <h3>本期舆情热度 TOP 3</h3>
+                            <ul class="custom-list">
+                                <li><span class="tag negative">高风险</span> 杨景媛学术不端及图书馆诬告案</li>
+                                <li><span class="tag romance">热议</span> 樱花季预约与校园开放讨论</li>
+                                <li><span class="tag anxiety">关注</span> 优势学科声誉与毕业生就业薪资反差</li>
+                            </ul>
+                        </div>
+                        <div>
+                             <h3>整体情感分布</h3>
+                            <div class="chart-container" style="height: 200px;">
+                                <canvas id="sentimentPieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2.0 关键数据趋势 -->
+            <section id="trends" class="card">
+                <div class="card-header collapser">
+                    <h2>2.0 关键数据趋势</h2>
+                    <span class="toggle-icon">-</span>
+                </div>
+                <div class="card-content">
+                     <div class="grid-container">
+                        <div>
+                            <h3>声量走势</h3>
+                            <div class="chart-container">
+                                <canvas id="volumeLineChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>情感趋势</h3>
+                            <div class="chart-container">
+                                <canvas id="sentimentTrendLineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3.0 舆情动态时间轴 -->
+            <section id="timeline" class="card">
+                <div class="card-header collapser">
+                    <h2>3.0 舆情动态时间轴</h2>
+                    <span class="toggle-icon">-</span>
+                </div>
+                <div class="card-content">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-time">2024年3月-4月</span>
+                            <div class="timeline-content">
+                                <strong>樱花季热议期：</strong>微博话题 #武大樱花预约# 阅读量超3.8亿，引发关于“抢票难”和校园开放度的广泛讨论，情感呈现“浪漫”与“焦虑”交织的两极化特征。
+                            </div>
+                        </div>
+                        <div class="timeline-item alert">
+                            <span class="timeline-time">2025年7月</span>
+                            <div class="timeline-content">
+                                <strong>学术不端事件发酵：</strong>硕士毕业生杨景媛在“图书馆诬告案”败诉后，其学位论文被曝严重学术造假，包括数据伪造、常识错误等，舆情开始迅速升温。
+                            </div>
+                        </div>
+                         <div class="timeline-item alert">
+                            <span class="timeline-time">2025年7月31日</span>
+                            <div class="timeline-content">
+                                <strong>外部机构介入：</strong>香港浸会大学就杨景媛录取资格发出道德核查函，启动独立审查程序，将事件关注度推向更高层次。
+                            </div>
+                        </div>
+                        <div class="timeline-item alert">
+                            <span class="timeline-time">2025年8月1日</span>
+                            <div class="timeline-content">
+                                <strong>官方首次回应：</strong>在央媒关注后，武汉大学宣布成立工作专班，对杨景媛学术不端问题进行全面调查复核。但因回应滞后，引发公众对校方处理效率的质疑。
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-time">2025年8月6日</span>
+                            <div class="timeline-content">
+                                <strong>信息混乱与澄清：</strong>网络流传“港浸大撤销杨景媛录取资格”消息，后被证实为谣言，校方表示按程序处理，进一步加剧了公众对处理结果的关切与等待。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4.0 热点话题追踪 -->
+            <section id="hot-topics" class="card">
+                <div class="card-header collapser">
+                    <h2>4.0 热点话题追踪</h2>
+                    <span class="toggle-icon">-</span>
+                </div>
+                <div class="card-content">
+                    <h3>4.1 核心热点：学术不端与“图书馆诬告案”复合型危机</h3>
+                    <p>本周期内，舆情风暴的核心是围绕毕业生杨景媛的复合型事件。该事件融合了 <span class="tag negative">学术诚信</span>、<span class="tag negative">程序正义</span>、<span class="tag negative">师德师风</span> 和 <span class="tag negative">大学治理</span> 四大敏感议题，引发全网高度关注。主要舆情观点聚焦于：</p>
+                    <ul class="custom-list">
+                        <li><b>对学术不端“零容忍”的强烈呼吁：</b>公众对论文中出现的低级错误（如“1049年”）、数据造假等行为感到震惊，要求严肃处理，并质疑导师、答辩委员会的审查责任。</li>
+                        <li><b>对高校管理机制的系统性质疑：</b>事件暴露了研究生培养、学位授予审核流程中可能存在的漏洞。校方在事发后反应迟缓，被批评为“拖延”和“被动应对”，损害了学校公信力。</li>
+                        <li><b>对公平与正义的朴素追求：</b>受害者肖同学的遭遇（被诬告、受处分、失保研资格）与杨景媛一度的“顺利”形成鲜明对比，激起网民对高校学生奖惩机制公平性的强烈不满。</li>
+                    </ul>
+                    <h3 style="margin-top:20px;">4.2 新增关注点：学科声
+</body>
+</html>

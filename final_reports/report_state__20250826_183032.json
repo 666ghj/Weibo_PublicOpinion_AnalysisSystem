@@ -1,0 +1,15 @@
+{
+  "task_id": "report_20250826_182801",
+  "query": "",
+  "status": "completed",
+  "progress": 100.0,
+  "selected_template": "",
+  "has_html_content": true,
+  "html_content_length": 17880,
+  "metadata": {
+    "query": "",
+    "template_used": "日常或定期舆情监测报告模板",
+    "generation_time": 0.0,
+    "timestamp": "2025-08-26T18:28:01.727460"
+  }
+}

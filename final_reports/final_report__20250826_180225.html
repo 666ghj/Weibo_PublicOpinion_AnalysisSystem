@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能舆情分析报告</title>
+</head>
+<body>
+json
+{
+  "html_content": "<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能舆情分析报告 - 武汉大学</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #2980b9;
+            --bg-color: #ecf0f1;
+            --card-bg-color: #ffffff;
+            --text-color: #34495e;
+            --heading-color: #2c3e50;
+            --border-color: #dce4e8;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #c0392b;
+            --neutral-color: #95a5a6;
+        }
+
+        body.dark-mode {
+            --primary-color: #ecf0f1;
+            --secondary-color: #3498db;
+            --accent-color: #5dade2;
+            --bg-color: #2c3e50;
+            --card-bg-color: #34495e;
+            --text-color: #bdc3c7;
+            --heading-color: #ffffff;
+            --border-color: #4a627a;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 16px;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: var(--card-bg-color);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .sidebar h2 {
+            color: var(--heading-color);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav li a {
+            display: block;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .sidebar nav li a:hover, .sidebar nav li a.active {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px 40px;
+            overflow-x: hidden;
+        }
+
+        header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            color: var(--heading-color);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header .report-meta {
+            font-size: 0.9em;
+            color: var(--neutral-color);
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+
+        h2.section-title {
+            color: var(--heading-color);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .stat-item .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--heading-color);
+        }
+
+        .stat-item .label {
+            font-size: 0.9em;
+            color: var(--neutral-color);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        details {
+            background: var(--bg-color);
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--accent-color);
+            font-size: 1.1em;
+        }
+
+        summary::marker {
+            color: var(--secondary-color);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            border-left: 2px solid var(--secondary-color);
+        }
+
+        .timeline-item {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -37px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--card-bg-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .timeline-item .time {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .topic-card {
+            border-left: 5px solid;
+            padding-left: 20px;
+        }
+        .topic-card.danger { border-color: var(--danger-color); }
+        .topic-card.warning { border-color: var(--warning-color); }
+        .topic-card.success { border-color: var(--success-color); }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: #fff;
+            margin-right: 5px;
+        }
+        .tag.positive { background-color: var(--success-color); }
+        .tag.negative { background-color: var(--danger-color); }
+        .tag.neutral { background-color: var(--neutral-color); }
+
+        .toolbar {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .toolbar button {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .toolbar button:hover {
+            transform: translateY(-3px);
+            background-color: var(--accent-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--heading-color);
+        }
+
+        blockquote {
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 15px;
+            margin: 15px 0;
+            font-style: italic;
+            color: var(--neutral-color);
+        }
+
+        @media (max-width: 1200px) {
+            .container { flex-direction: column; }
+            .sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .main-content { padding: 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            header h1 { font-size: 2em; }
+            h2.section-title { font-size: 1.5em; }
+        }
+
+        @media print {
+            .sidebar, .toolbar, header .report-meta, details summary::marker {
+                display: none;
+            }
+            body, .main-content, .card {
+                background: #fff !important;
+                color: #000 !important;
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                margin: 0;
+            }
+            .container { display: block; }
+            .card { margin-bottom: 20px; page-break-inside: avoid; }
+            a { text-decoration: none; color: inherit; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>报告导航</h2>
+            <nav>
+                <ul>
+                    <li><a href="#overview">1.0 舆情概览</a></li>
+                    <li><a href="#trends">2.0 关键数据趋势</a></li>
+                    <li><a href="#timeline">3.0 舆情动态时间轴</a></li>
+                    <li><a href="#hot-topics">4.0 热点话题追踪</a></li>
+                    <li><a href="#channels">5.0 重点渠道表现</a></li>
+                    <li><a href="#risks">6.0 负面与风险监测</a></li>
+                    <li><a href="#summary">7.0 简报与关注点</a></li>
+                    <li><a href="#appendix">8.0 数据附录</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>智能舆情分析报告：武汉大学</h1>
+                <div class="report-meta">报告周期：近期综合数据 | 生成时间：2025-08-26</div>
+            </header>
+
+            <section id="overview" class="card">
+                <h2 class="section-title">1.0 本周/月舆情概览</h2>
+                <details open>
+                    <summary>1.1 核心数据看板</summary>
+                    <div class="dashboard" style="margin-top: 20px;">
+                        <div class="stat-item"><div class="value">≈2.1M</div><div class="label">相关信息量</div></div>
+                        <div class="stat-item"><div class="value">≈3.8亿</div><div class="label">总阅读量</div></div>
+                        <div class="stat-item"><div class="value">≈4.2M</div><div class="label">总互动量</div></div>
+                        <div class="stat-item" style="border-color: var(--danger-color);"><div class="value">42.5%</div><div class="label">负面/焦虑情绪占比</div></div>
+                    </div>
+                </details>
+                <details open>
+                    <summary>1.2 本期舆情热度 TOP 3</summary>
+                    <ol style="margin-top:15px; padding-left:20px;">
+                        <li><b>学术诚信危机：</b>杨景媛学术不端及图书馆诬告案引发全网对学校学术审查和危机处理能力的质疑。</li>
+                        <li><b>校园文化与公共形象：</b>樱花季预约难、游客冲突等周期性话题，反映了“最美大学”光环下的管理压力。</li>
+                        <li><b>学术声望与现实焦虑：</b>“世界第一”学科与毕业生就业薪资的巨大反差，引发在校生和校友的普遍焦虑。</li>
+                    </ol>
+                </details>
+                <details>
+                    <summary>1.3 重点预警</summary>
+                    <p style="margin-top:15px;"><span class="tag negative">高风险</span>学术不端事件调查仍在进行中，校方最终处理结果将直接影响舆论走向，可能引发第二波舆情高峰。需警惕“反应迟缓”、“包庇”等负面标签被固化。</p>
+                </details>
+            </section>
+
+            <section id="trends" class="card">
+                <h2 class="section-title">2.0 关键数据趋势</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>2.1 声量走势</h3>
+                        <div class="chart-container"><canvas id="volumeTrendChart"></canvas></div>
+                    </div>
+                    <div>
+                        <h3>2.2 情感趋势</h3>
+                        <div class="chart-container"><canvas id="sentimentTrendChart"></canvas></div>
+                    </div>
+                    <div>
+                        <h3>整体情感分布</h3>
+                        <div class="chart-container" style="height:300px"><canvas id="sentimentPieChart"></canvas></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="timeline" class="card">
+                <h2 class="section-title">3.0 本周期舆情动态时间轴</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">2025年7月</div>
+                        <p>武汉大学硕士毕业生杨景媛被曝硕士论文严重造假，同时其诬告肖姓学弟性骚扰案败诉的背景被挖出，事件开始在社交媒体发酵。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">2025年7月31日</div>
+                        <p>香港浸会大学就杨景媛录取争议发表声明，表示将启动独立审查程序，舆论关注度升级。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">2025年8月1日</div>
+                        <p>在央媒关注后，武汉大学官方宣布成立工作专班，对杨景媛学术不端问题进行全面调查复核，但因反应速度慢于公众预期而受到批评。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">2025年8月6日</div>
+                        <p>网络流传“香港浸会大学撤销杨景媛录取资格”的消息，后被证实为谣言，校方表示仍在按程序处理，引发公众对处理效率的进一步质疑。</p>
+                    </div>
+                     <div class="timeline-item">
+                        <div class="time">近期其他热点</div>
+                        <p>春季樱花节期间，#武大樱花预约# 话题登上热搜，引发关于校园开放与管理的讨论。同时，关于顶尖学科毕业生就业薪资的讨论在知乎、B站等平台持续发酵。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="hot-topics" class="card">
+                <h2 class="section-title">4.0 热点话题追踪</h2>
+                <details open>
+                    <summary>4.1 热点事件详情</summary>
+                    <article class="topic-card danger" style="margin-top: 20px;">
+                        <h4>议题一：学术诚信危机与信任重创 (杨景媛事件)</h4>
+                        <p><b>核心问题：</b>杨景媛学术不端事件与图书馆诬告案交织，暴露了学校在研究生培养、论文审核、学生管理及危机公关等方面的系统性漏洞。</p>
+                        <p><b>舆论焦点：</b></p>
+                        <ul>
+                            <li><b>学术审查失效：</b>公众普遍质疑导师指导责任、答辩委员会的审查职能以及学位授予的严肃性。</li>
+                            <li><b>危机应对迟缓：</b>校方在事件发酵初期反应滞后，“等上级安排”等言论被视为官僚主义，错失了引导舆论、修复信任的最佳窗口。</li>
+                            <li><b>程序正义缺失：</b>对被诬告学生肖同学的处理与对杨景媛的“保研”形成鲜明对比，引发对高校公平正义的强烈质疑。</li>
+                        </ul>
+                        <blockquote>“百年名校的声誉，可能因为一次不作为而蒙上难以擦拭的污点。” - 微博高赞评论</blockquote>
+                    </article>
+                    <article class="topic-card warning" style="margin-top: 20px;">
+                        <h4>议题二：学术光环与现实焦虑的拉锯</h4>
+                        <p><b>核心现象：</b>以“测绘遥感世界第一”为代表的顶尖学科声望与相关专业毕业生面临的就业市场现实（如薪资、工作压力）形成巨大反差，引发学生群体的普遍焦虑和讨论。</p>
+                        <p><b>情感洞察：</b>这种情绪并非否定学校的学术成就，而是一种更复杂的“爱之深、忧之切”。学生们既为母校的荣誉感到自豪，也为自己未来的职业发展感到迷茫。这种“骄傲与焦虑并存”是当前高学历人才市场竞争激烈下的普遍心态在武大的集中体现。</p>
+                         <table>
+                            <thead><tr><th>学科</th><th>高光叙事</th><th>焦虑痛点</th><th>情感走势</th></tr></thead>
+                            <tbody>
+                                <tr><td>测绘遥感</td><td>知乎“世界第一”高赞</td><td>“毕业买不起武汉一平米”</td><td>自豪感被现实焦虑稀释</td></tr>
+                                <tr><td>法学</td><td>省考“双第一”报喜</td><td>红圈所实习薪资低，压力大</td><td>精英光环下的生存挣扎</td></tr>
+                                <tr><td>口腔医学</td><td>B站科普视频百万播放</td><td>规培薪资低，工作强度大</td><td>信赖感与个人辛酸并存</td></tr>
+                            </tbody>
+                        </table>
+                    </article>
+                     <article class="topic-card success" style="margin-top: 20px;">
+                        <h4>议题三：百年校史与校园文化的“开放剧本”</h4>
+                        <p><b>核心观察：</b>武汉大学的深厚历史与优美环境是舆论场中的“正面资产”，持续产生积极情感价值。从樱花季的浪漫想象，到对民国老建筑的怀旧，再到对校史的趣味解读（如“学大汉武立国”梗），都构成了强大的品牌护城河。</p>
+                        <p><b>双面性：</b>然而，这种高关注度也带来了管理挑战。樱花季的“抢票难”和游客冲突，以及对校园过度商业化的担忧，表明公众对这片“精神家园”有着极高的期待和保护欲。</p>
+                        <blockquote>“历史是武大人共同的‘开放剧本’，人人可改台词，却从未离场。” - 洞察引擎分析</blockquote>
+                    </article>
+                </details>
+
+</body>
+</html>
