@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能舆情分析报告</title>
+</head>
+<body>
+json
+{
+  "html_content": "<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武汉大学智能舆情分析报告</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #f4f6f9;
+            --card-bg-color: #ffffff;
+            --text-color: #34495e;
+            --heading-color: #2c3e50;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+        }
+
+        [data-theme='dark'] {
+            --primary-color: #ecf0f1;
+            --secondary-color: #3498db;
+            --background-color: #1a1a1a;
+            --card-bg-color: #2c2c2c;
+            --text-color: #bdc3c7;
+            --heading-color: #ffffff;
+            --border-color: #444444;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--card-bg-color);
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            color: var(--heading-color);
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+
+        header .subtitle {
+            font-size: 1.1em;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .control-btn {
+            background: var(--background-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .control-btn:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+            border-color: var(--secondary-color);
+        }
+
+        nav {
+            position: sticky;
+            top: 20px;
+            background-color: var(--card-bg-color);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            z-index: 1000;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        .report-section {
+            background-color: var(--card-bg-color);
+            margin-bottom: 25px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .report-section h2 {
+            color: var(--heading-color);
+            font-size: 1.8em;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .report-section h3 {
+            color: var(--heading-color);
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .report-section h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 80%;
+            width: 5px;
+            background-color: var(--secondary-color);
+            border-radius: 3px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .kpi-card, .topic-card, .channel-card, .risk-card {
+            background-color: var(--background-color);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .kpi-card:hover, .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .kpi-card .value {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .kpi-card .label {
+            font-size: 1em;
+            color: var(--text-color);
+            margin-top: 5px;
+        }
+
+        .topic-card .rank {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-right: 15px;
+        }
+
+        .topic-card .title {
+            font-size: 1.2em;
+            font-weight: 500;
+            color: var(--heading-color);
+        }
+
+        .topic-card .description {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .alert-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-box.warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-color: var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 50px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            border: 3px solid var(--card-bg-color);
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        details {
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 15px;
+            background-color: var(--background-color);
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 1.1em;
+            color: var(--heading-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        summary::after {
+            content: '＋';
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+        details[open] summary::after {
+            transform: rotate(45deg);
+        }
+
+        .details-content {
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .details-content p {
+            margin-bottom: 10px;
+        }
+
+        .details-content strong {
+            color: var(--heading-color);
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .tag.positive { background-color: rgba(46, 204, 113, 0.2); color: #27ae60; }
+        .tag.negative { background-color: rgba(231, 76, 60, 0.2); color: var(--accent-color); }
+        .tag.neutral { background-color: rgba(52, 152, 219, 0.2); color: var(--secondary-color); }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media print {
+            body { 
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+            }
+            header, nav, .control-btn, footer, summary::after {
+                display: none !important;
+            }
+            .container {
+                padding: 0;
+                max-width: 100%;
+            }
+            .report-section {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 20px;
+                page-break-inside: avoid;
+            }
+            details[open] .details-content {
+                display: block;
+            }
+            details {
+                border: none;
+            }
+            details summary {
+                background: none;
+                font-weight: bold;
+            }
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div>
+                <h1>武汉大学智能舆情分析报告</h1>
+                <p class="subtitle">数据周期：2024-03-01 至 2024-04-30</p>
+            </div>
+            <div class="header-controls">
+                <button id="theme-toggle" class="control-btn">🌙 暗色模式</button>
+                <button onclick="window.print()" class="control-btn">🖨️ 打印/导出PDF</button>
+            </div>
+        </header>
+
+        <nav id="toc">
+            <ul>
+                <li><a href="#section-1">舆情概览</a></li>
+                <li><a href="#section-2">数据趋势</a></li>
+                <li><a href="#section-3">动态时间轴</a></li>
+                <li><a href="#section-4">热点追踪</a></li>
+                <li><a href="#section-5">渠道表现</a></li>
+                <li><a href="#section-6">风险监测</a></li>
+                <li><a href="#section-7">简报与关注</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="section-1" class="report-section">
+                <h2>1.0 本期舆情概览</h2>
+                <h3>1.1 核心数据看板</h3>
+                <div class="grid-container">
+                    <div class="kpi-card">
+                        <div class="value">~210万</div>
+                        <div class="label">相关信息量</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value">3.8亿+</div>
+                        <div class="label">总阅读/播放量</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value">~420万</div>
+                        <div class="label">总互动量</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height: 350px;">
+                    <canvas id="sentimentPieChart"></canvas>
+                </div>
+
+                <h3>1.2 本期舆情热度 TOP 3</h3>
+                <div class="grid-container">
+                    <div class="topic-card">
+                        <div style="display:flex; align-items:center;"><span class="rank">1</span> <span class="title">樱花季的全民热议与管理挑战</span></div>
+                        <p class="description">#武大樱花预约# 话题引爆社交媒体，兼具“浪漫滤镜”与“抢票焦虑”，学生与游客的体验冲突成为焦点。</p>
+                    </div>
+                    <div class="topic-card">
+                        <div style="display:flex; align-items:center;"><span class="rank">2</span> <span class="title">学科荣耀与毕业生现实焦虑的碰撞</span></div>
+                        <p class="description">“世界第一”的学科声誉与毕业生“工资条沉默”形成鲜明对比，引发对名校光环与现实就业的深度讨论。</p>
+                    </div>
+                    <div class="topic-card">
+                        <div style="display:flex; align-items:center;"><span class="rank">3</span> <span class="title">百年校史的多元解读与身份认同</span></div>
+                        <p class="description">关于校史起点的讨论和“学大汉武立国”等网络梗的流行，展现了师生校友对学校历史既严肃又活泼的文化认同。</p>
+                    </div>
+                </div>
+
+                <h3>1.3 重点预警</h3>
+                <div class="alert-box warning">
+                    <span style="font-size: 1.5em;">⚠️</span>
+                    <div>
+                        <strong>潜在风险提示：</strong> 毕业生薪资预期与学科声誉的巨大落差可能持续发酵，影响招生和人才吸引力。同时，校园开放与校内资源、管理压力之间的矛盾在重大活动期间（如樱花季、校庆）易被激化，需提前预案。
+                    </div>
+                </div>
+            </section>
+
+            <section id="section-2" class="report-section">
+                <h2>2.0 关键数据趋势</h2>
+                <h3>2.1 声量走势</h3>
+                <p>在本监测周期内，舆情声量呈现多个波峰。第一个主要高峰出现在三月中上旬，与“樱花季”预约通道开放和相关讨论高度相关。第二个高峰出现在四月初，由春季招聘、毕业生薪资讨论及部分学科的“红黑榜”话题带动。整体声量维持在较高水平，显示公众对武汉大学的持续高度关注。</p>
+                <h3>2.2 情感趋势</h3>
+                <div class="chart-container">
+                    <canvas id="sentimentTrendChart"></canvas>
+                </div>
+                <p style="margin-top: 15px;">情感趋势图揭示了公众情绪的复杂性。以核心议题“学科声誉”为例，<span class="tag positive">自豪感</span>虽是主流情绪，但呈缓慢下降趋势；而<span class="tag negative">焦虑感</span>（主要关于就业、内卷）则呈明显上升趋势。这表明，在宏大的正面叙事之下，个体层面的压力与关切正在成为不可忽视的舆情力量。</p>
+            </section>
+
+            <section id="section-3" class="report-section">
+                <h2>3.0 本周期舆情动态时间轴</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2024年3月上旬</div>
+                        <p><strong>事件
+</body>
+</html>

@@ -18,9 +18,24 @@ import requests
 import logging
 from pathlib import Path
 
+# 导入ReportEngine
+try:
+    from ReportEngine.flask_interface import report_bp, initialize_report_engine
+    REPORT_ENGINE_AVAILABLE = True
+except ImportError as e:
+    print(f"ReportEngine导入失败: {e}")
+    REPORT_ENGINE_AVAILABLE = False
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Dedicated-to-creating-a-concise-and-versatile-public-opinion-analysis-platform'
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+# 注册ReportEngine Blueprint
+if REPORT_ENGINE_AVAILABLE:
+    app.register_blueprint(report_bp, url_prefix='/api/report')
+    print("ReportEngine接口已注册")
+else:
+    print("ReportEngine不可用，跳过接口注册")
 
 # 设置UTF-8编码环境
 os.environ['PYTHONIOENCODING'] = 'utf-8'
@@ -691,6 +706,15 @@ if __name__ == '__main__':
             print(f"错误: {script_path} 不存在")
     
     start_forum_engine()
+    
+    # 初始化ReportEngine
+    if REPORT_ENGINE_AVAILABLE:
+        print("初始化ReportEngine...")
+        if initialize_report_engine():
+            print("ReportEngine初始化成功")
+            print("ReportEngine文件基准已建立，开始监控文件变化")
+        else:
+            print("ReportEngine初始化失败")
     
     print("启动Flask服务器...")
     

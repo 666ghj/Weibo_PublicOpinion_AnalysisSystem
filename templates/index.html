@@ -153,6 +153,30 @@
             background-color: #f0f0f0;
         }
 
+        .app-button.locked {
+            background-color: #f5f5f5;
+            color: #999999;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .app-button.locked:hover {
+            background-color: #f5f5f5;
+        }
+
+        .app-button.locked::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            font-size: 12px;
+        }
+
+        .app-button.locked .status-indicator {
+            background-color: #cccccc;
+        }
+
         .status-indicator {
             position: absolute;
             top: 5px;
@@ -406,6 +430,107 @@
             opacity: 0.6;
             margin-top: 5px;
         }
+
+        /* Report Engine 专用样式 */
+        .report-container {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .report-container.active {
+            display: flex;
+        }
+
+        .report-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #ffffff;
+        }
+
+        .report-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-bottom: 2px solid #000000;
+            background-color: #f8f9fa;
+        }
+
+        .report-button {
+            padding: 10px 20px;
+            border: 2px solid #000000;
+            background-color: #ffffff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .report-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .report-button:disabled {
+            background-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+
+        .report-button.primary {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .report-button.primary:hover {
+            background-color: #333333;
+        }
+
+        .report-status {
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #000000;
+            background-color: #f8f9fa;
+            font-family: 'Courier New', monospace;
+        }
+
+        .report-status.loading {
+            border-color: #ffa500;
+            background-color: #fff8e1;
+        }
+
+        .report-status.success {
+            border-color: #00aa00;
+            background-color: #f0fff0;
+        }
+
+        .report-status.error {
+            border-color: #aa0000;
+            background-color: #fff0f0;
+        }
+
+        .report-preview {
+            border: 2px solid #000000;
+            background-color: #ffffff;
+            min-height: 400px;
+            overflow-y: auto;
+        }
+
+        .report-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .report-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #666;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -429,6 +554,13 @@
                     <div class="forum-container" id="forumContainer">
                         <div class="forum-chat-area" id="forumChatArea">
                             <!-- 动态添加的Engine对话消息将在这里显示 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 报告引擎界面 -->
+                    <div class="report-container" id="reportContainer">
+                        <div class="report-content" id="reportContent">
+                            <!-- 报告内容将在这里显示 -->
                         </div>
                     </div>
                     
@@ -458,6 +590,10 @@
                         <span class="status-indicator running" id="status-forum"></span>
                         Forum Engine
                     </button>
+                    <button class="app-button locked" data-app="report" title="需等待其余三个Agent工作完毕">
+                        <span class="status-indicator" id="status-report"></span>
+                        Report Engine
+                    </button>
                 </div>
 
                 <!-- 控制台输出 -->
@@ -485,7 +621,8 @@
             insight: 'stopped',
             media: 'stopped',
             query: 'stopped',
-            forum: 'running'  // Forum Engine 默认运行
+            forum: 'running',  // Forum Engine 默认运行
+            report: 'stopped'  // Report Engine
         };
 
         // 应用名称映射
@@ -493,7 +630,8 @@
             insight: 'Insight Engine',
             media: 'Media Engine', 
             query: 'Query Engine',
-            forum: 'Forum Engine'
+            forum: 'Forum Engine',
+            report: 'Report Engine'
         };
 
         // 初始化
@@ -504,6 +642,10 @@
             setInterval(updateTime, 1000);
             checkStatus();
             setInterval(checkStatus, 5000);
+            
+            // 初始化Report Engine锁定状态检查
+            checkReportLockStatus();
+            reportLockCheckInterval = setInterval(checkReportLockStatus, 10000); // 每10秒检查一次
             
             // 定期刷新控制台输出
             setInterval(() => {
@@ -629,6 +771,15 @@
         function switchToApp(app) {
             if (app === currentApp) return;
 
+            // 检查Report Engine是否被锁定
+            if (app === 'report') {
+                const reportButton = document.querySelector(`[data-app="report"]`);
+                if (reportButton.classList.contains('locked')) {
+                    showMessage('需等待其余三个Agent工作完毕', 'error');
+                    return;
+                }
+            }
+
             // 更新按钮状态
             document.querySelectorAll('.app-button').forEach(btn => {
                 btn.classList.remove('active');
@@ -644,17 +795,32 @@
                 
                 // 显示论坛容器，隐藏其他内容
                 document.getElementById('forumContainer').classList.add('active');
+                document.getElementById('reportContainer').classList.remove('active');
                 
                 // 清空控制台并加载forum日志
                 document.getElementById('consoleOutput').innerHTML = '<div class="console-line">[系统] 切换到论坛模式</div>';
                 loadForumLog();
                 
+            } else if (app === 'report') {
+                // 切换到报告模式
+                document.getElementById('embeddedHeader').textContent = 'Report Engine - 智能报告生成';
+                
+                // 显示报告容器，隐藏其他内容
+                document.getElementById('reportContainer').classList.add('active');
+                document.getElementById('forumContainer').classList.remove('active');
+                
+                // 清空控制台并加载report日志
+                document.getElementById('consoleOutput').innerHTML = '<div class="console-line">[系统] 切换到报告生成模式</div>';
+                loadReportLog();
+                loadReportInterface();
+                
             } else {
                 // 切换到普通Engine模式
                 document.getElementById('embeddedHeader').textContent = appNames[app];
                 
-                // 隐藏论坛容器
+                // 隐藏论坛和报告容器
                 document.getElementById('forumContainer').classList.remove('active');
+                document.getElementById('reportContainer').classList.remove('active');
                 
                 // 清空并加载新的控制台输出
                 document.getElementById('consoleOutput').innerHTML = '<div class="console-line">[系统] 切换到 ' + appNames[app] + '</div>';
@@ -675,6 +841,11 @@
         function loadConsoleOutput(app) {
             if (app === 'forum') {
                 loadForumLog();
+                return;
+            }
+            
+            if (app === 'report') {
+                loadReportLog();
                 return;
             }
             
@@ -708,6 +879,11 @@
         function refreshConsoleOutput() {
             if (currentApp === 'forum') {
                 refreshForumLog();
+                return;
+            }
+            
+            if (currentApp === 'report') {
+                refreshReportLog();
                 return;
             }
             
@@ -809,13 +985,38 @@
                     placeholder.remove();
                 }
                 
-                // 显示论坛容器
+                // 显示论坛容器，隐藏报告容器
                 document.getElementById('forumContainer').classList.add('active');
+                document.getElementById('reportContainer').classList.remove('active');
                 return;
             }
             
-            // 隐藏论坛容器
+            // 如果是Report Engine，显示报告界面
+            if (app === 'report') {
+                header.textContent = 'Report Engine - 智能报告生成';
+                
+                // 隐藏所有iframe
+                if (typeof preloadedIframes !== 'undefined') {
+                    Object.values(preloadedIframes).forEach(iframe => {
+                        iframe.style.display = 'none';
+                    });
+                }
+                
+                // 移除占位符
+                const placeholder = content.querySelector('.status-placeholder');
+                if (placeholder) {
+                    placeholder.remove();
+                }
+                
+                // 显示报告容器，隐藏论坛容器
+                document.getElementById('reportContainer').classList.add('active');
+                document.getElementById('forumContainer').classList.remove('active');
+                return;
+            }
+            
+            // 隐藏论坛和报告容器
             document.getElementById('forumContainer').classList.remove('active');
+            document.getElementById('reportContainer').classList.remove('active');
 
             header.textContent = appNames[app] || app;
 
@@ -930,6 +1131,10 @@
 
         // Forum Engine 相关函数
         let forumLogLineCount = 0;
+        
+        // Report Engine 相关函数
+        let reportLogLineCount = 0;
+        let reportLockCheckInterval = null;
 
         // 实时刷新论坛消息（适用于所有页面）
         function refreshForumMessages() {
@@ -1051,6 +1256,100 @@
             });
         }
 
+        // 刷新Report Engine日志
+        // 检查Report Engine锁定状态
+        function checkReportLockStatus() {
+            fetch('/api/report/status')
+            .then(response => response.json())
+            .then(data => {
+                const reportButton = document.querySelector('[data-app="report"]');
+                
+                if (data.success && data.engines_ready) {
+                    // 文件准备就绪，解锁按钮
+                    reportButton.classList.remove('locked');
+                    reportButton.title = 'Report Engine - 智能报告生成\n所有引擎都有新文件，可以生成报告';
+                } else {
+                    // 文件未准备就绪，锁定按钮
+                    reportButton.classList.add('locked');
+                    
+                    // 构建详细的提示信息
+                    let titleInfo = 'Report Engine暂时锁定\n';
+                    
+                    if (data.missing_files && data.missing_files.length > 0) {
+                        titleInfo += '等待新文件:\n' + data.missing_files.join('\n');
+                    } else {
+                        titleInfo += '等待三个分析引擎都产生新的报告文件';
+                    }
+                    
+                    reportButton.title = titleInfo;
+                }
+            })
+            .catch(error => {
+                console.error('检查Report Engine状态失败:', error);
+                // 出错时默认锁定
+                const reportButton = document.querySelector('[data-app="report"]');
+                reportButton.classList.add('locked');
+                reportButton.title = 'Report Engine状态检查失败';
+            });
+        }
+
+        function refreshReportLog() {
+            fetch('/api/report/log')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.log_lines.length > reportLogLineCount) {
+                    const consoleOutput = document.getElementById('consoleOutput');
+                    
+                    // 只添加新的行
+                    const newLines = data.log_lines.slice(reportLogLineCount);
+                    newLines.forEach(line => {
+                        const div = document.createElement('div');
+                        div.className = 'console-line';
+                        div.textContent = line;
+                        consoleOutput.appendChild(div);
+                    });
+                    
+                    reportLogLineCount = data.log_lines.length;
+                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                }
+            })
+            .catch(error => {
+                console.error('刷新Report日志失败:', error);
+            });
+        }
+
+        // 加载Report Engine日志
+        function loadReportLog() {
+            fetch('/api/report/log')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const consoleOutput = document.getElementById('consoleOutput');
+                    consoleOutput.innerHTML = '<div class="console-line">[系统] Report Engine 日志监控已启动</div>';
+                    
+                    if (data.log_lines && data.log_lines.length > 0) {
+                        data.log_lines.forEach(line => {
+                            const div = document.createElement('div');
+                            div.className = 'console-line';
+                            div.textContent = line;
+                            consoleOutput.appendChild(div);
+                        });
+                        
+                        // 重置计数器以确保后续消息能正确显示
+                        reportLogLineCount = data.log_lines.length;
+                    } else {
+                        // 如果没有日志，重置计数器
+                        reportLogLineCount = 0;
+                    }
+                    
+                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                }
+            })
+            .catch(error => {
+                console.error('加载Report日志失败:', error);
+            });
+        }
+
         // 解析论坛消息并添加到对话区
         function parseForumMessage(logLine) {
             try {
@@ -1161,6 +1460,280 @@
                 case 'system': return '系统';
                 default: return '未知';
             }
+        }
+
+        // Report Engine 相关函数
+        let reportTaskId = null;
+        let reportPollingInterval = null;
+
+        // 加载报告界面
+        function loadReportInterface() {
+            const reportContent = document.getElementById('reportContent');
+            
+            // 检查ReportEngine状态
+            fetch('/api/report/status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 更新ReportEngine状态指示器
+                    const indicator = document.getElementById('status-report');
+                    if (indicator) {
+                        if (data.initialized) {
+                            indicator.className = 'status-indicator running';
+                            appStatus.report = 'running';
+                        } else {
+                            indicator.className = 'status-indicator';
+                            appStatus.report = 'stopped';
+                        }
+                    }
+                    
+                    // 渲染报告界面
+                    renderReportInterface(data);
+                } else {
+                    reportContent.innerHTML = `
+                        <div class="report-status error">
+                            <strong>错误:</strong> ${data.error}
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('加载报告界面失败:', error);
+                reportContent.innerHTML = `
+                    <div class="report-status error">
+                        <strong>加载失败:</strong> ${error.message}
+                    </div>
+                `;
+            });
+        }
+
+        // 渲染报告界面
+        function renderReportInterface(statusData) {
+            const reportContent = document.getElementById('reportContent');
+            
+            let interfaceHTML = `
+                <div class="report-controls">
+                    <button class="report-button primary" onclick="generateReport()" id="generateBtn">
+                        生成最终报告
+                    </button>
+                    <button class="report-button" onclick="checkReportStatus()" id="statusBtn">
+                        检查状态
+                    </button>
+                </div>
+            `;
+            
+            // 显示状态信息
+            if (statusData.initialized) {
+                interfaceHTML += `
+                    <div class="report-status success">
+                        <strong>ReportEngine状态:</strong> 已初始化<br>
+                        <strong>文件检查:</strong> ${statusData.engines_ready ? '准备就绪' : '文件未就绪'}<br>
+                        <strong>找到文件:</strong> ${statusData.files_found ? statusData.files_found.join(', ') : '无'}<br>
+                        ${statusData.missing_files && statusData.missing_files.length > 0 ? 
+                          `<strong>缺失文件:</strong> ${statusData.missing_files.join(', ')}` : ''}
+                    </div>
+                `;
+            } else {
+                interfaceHTML += `
+                    <div class="report-status error">
+                        <strong>ReportEngine状态:</strong> 未初始化
+                    </div>
+                `;
+            }
+            
+            // 如果有当前任务，显示任务状态
+            if (statusData.current_task) {
+                interfaceHTML += renderTaskStatus(statusData.current_task);
+            }
+            
+            // 添加报告预览区域
+            interfaceHTML += `
+                <div class="report-preview" id="reportPreview">
+                    <div class="report-loading">
+                        点击"生成最终报告"开始生成综合分析报告
+                    </div>
+                </div>
+            `;
+            
+            reportContent.innerHTML = interfaceHTML;
+        }
+
+        // 渲染任务状态
+        function renderTaskStatus(task) {
+            const statusClass = task.status === 'completed' ? 'success' : 
+                              task.status === 'error' ? 'error' : 'loading';
+            
+            let statusHTML = `
+                <div class="report-status ${statusClass}">
+                    <strong>任务ID:</strong> ${task.task_id}<br>
+                    <strong>查询:</strong> ${task.query}<br>
+                    <strong>状态:</strong> ${task.status}<br>
+                    <strong>进度:</strong> ${task.progress}%<br>
+                    <strong>创建时间:</strong> ${new Date(task.created_at).toLocaleString()}<br>
+                    <strong>更新时间:</strong> ${new Date(task.updated_at).toLocaleString()}
+            `;
+            
+            if (task.error_message) {
+                statusHTML += `<br><strong>错误信息:</strong> ${task.error_message}`;
+            }
+            
+            if (task.has_result) {
+                statusHTML += `<br><button class="report-button" onclick="viewReport('${task.task_id}')">查看报告</button>`;
+            }
+            
+            statusHTML += '</div>';
+            return statusHTML;
+        }
+
+        // 生成报告
+        function generateReport() {
+            const query = document.getElementById('searchInput').value.trim() || '智能舆情分析报告';
+            
+            // 重置日志计数器，因为后台会清空日志文件
+            reportLogLineCount = 0;
+            
+            // 清空控制台显示
+            const consoleOutput = document.getElementById('consoleOutput');
+            consoleOutput.innerHTML = '<div class="console-line">[系统] 开始生成报告，日志已重置</div>';
+            
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.disabled = true;
+            generateBtn.textContent = '生成中...';
+            
+            fetch('/api/report/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: query })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    reportTaskId = data.task_id;
+                    showMessage('报告生成已启动', 'success');
+                    
+                    // 立即刷新一次日志以确保同步
+                    setTimeout(() => {
+                        refreshReportLog();
+                    }, 500);
+                    
+                    // 开始轮询任务状态
+                    startProgressPolling(data.task_id);
+                } else {
+                    showMessage('启动失败: ' + data.error, 'error');
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = '生成最终报告';
+                }
+            })
+            .catch(error => {
+                console.error('生成报告失败:', error);
+                showMessage('生成报告失败: ' + error.message, 'error');
+                generateBtn.disabled = false;
+                generateBtn.textContent = '生成最终报告';
+            });
+        }
+
+        // 开始进度轮询
+        function startProgressPolling(taskId) {
+            if (reportPollingInterval) {
+                clearInterval(reportPollingInterval);
+            }
+            
+            reportPollingInterval = setInterval(() => {
+                checkTaskProgress(taskId);
+            }, 2000);
+        }
+
+        // 检查任务进度
+        function checkTaskProgress(taskId) {
+            fetch(`/api/report/progress/${taskId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateProgressDisplay(data.task);
+                    
+                    // 在检查进度时也刷新日志
+                    refreshReportLog();
+                    
+                    if (data.task.status === 'completed') {
+                        clearInterval(reportPollingInterval);
+                        showMessage('报告生成完成！', 'success');
+                        
+                        // 自动显示报告
+                        viewReport(taskId);
+                        
+                        // 重新启用生成按钮
+                        const generateBtn = document.getElementById('generateBtn');
+                        generateBtn.disabled = false;
+                        generateBtn.textContent = '生成最终报告';
+                    } else if (data.task.status === 'error') {
+                        clearInterval(reportPollingInterval);
+                        showMessage('报告生成失败: ' + data.task.error_message, 'error');
+                        
+                        // 重新启用生成按钮
+                        const generateBtn = document.getElementById('generateBtn');
+                        generateBtn.disabled = false;
+                        generateBtn.textContent = '生成最终报告';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('检查进度失败:', error);
+            });
+        }
+
+        // 更新进度显示
+        function updateProgressDisplay(task) {
+            const reportContent = document.getElementById('reportContent');
+            const existingStatus = reportContent.querySelector('.report-status');
+            
+            if (existingStatus) {
+                existingStatus.outerHTML = renderTaskStatus(task);
+            }
+        }
+
+        // 查看报告
+        function viewReport(taskId) {
+            const reportPreview = document.getElementById('reportPreview');
+            reportPreview.innerHTML = '<div class="report-loading">加载报告中...</div>';
+            
+            fetch(`/api/report/result/${taskId}`)
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('报告加载失败');
+                }
+            })
+            .then(htmlContent => {
+                // 创建iframe来显示HTML内容
+                const iframe = document.createElement('iframe');
+                iframe.style.width = '100%';
+                iframe.style.height = '600px';
+                iframe.style.border = 'none';
+                
+                reportPreview.innerHTML = '';
+                reportPreview.appendChild(iframe);
+                
+                // 将HTML内容写入iframe
+                iframe.contentDocument.open();
+                iframe.contentDocument.write(htmlContent);
+                iframe.contentDocument.close();
+            })
+            .catch(error => {
+                console.error('查看报告失败:', error);
+                reportPreview.innerHTML = `
+                    <div class="report-loading">
+                        报告加载失败: ${error.message}
+                    </div>
+                `;
+            });
+        }
+
+        // 检查报告状态
+        function checkReportStatus() {
+            loadReportInterface();
         }
     </script>
 </body>

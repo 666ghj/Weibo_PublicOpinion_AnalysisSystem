@@ -1,0 +1,31 @@
+2025-08-26 17:05:45,220 - ReportEngine - INFO - 已加载 query 报告: 3769 字符
+2025-08-26 17:05:45,222 - ReportEngine - INFO - 已加载 media 报告: 3279 字符
+2025-08-26 17:05:45,224 - ReportEngine - INFO - 已加载 insight 报告: 2217 字符
+2025-08-26 17:05:45,225 - ReportEngine - INFO - 已加载论坛日志: 47 字符
+2025-08-26 17:05:45,226 - ReportEngine - INFO - 开始生成报告: 智能舆情分析报告
+2025-08-26 17:05:45,227 - ReportEngine - INFO - 输入数据 - 报告数量: 3, 论坛日志长度: 47
+2025-08-26 17:05:45,227 - ReportEngine - INFO - 选择报告模板...
+2025-08-26 17:05:45,227 - ReportEngine - INFO - [TemplateSelectionNode] 开始模板选择...
+2025-08-26 17:05:45,230 - ReportEngine - INFO - [TemplateSelectionNode] 尝试使用LLM进行模板选择...
+2025-08-26 17:05:58,747 - ReportEngine - INFO - [TemplateSelectionNode] LLM原始响应: ```json
+{
+  "template_name": "日常或定期舆情监测报告模板",
+  "selection_reason": "查询内容“智能舆情分析报告”为通用性描述，未指定具体分析主题（如品牌、竞品或特定事件），也未体现紧急性或危机情况。这种常规性的、主题不明确的报告需求，最适合使用“日常或定期舆情监测报告模板”进行数据汇总和常规汇报。"
+}
+```...
+2025-08-26 17:05:58,747 - ReportEngine - INFO - [TemplateSelectionNode] LLM选择模板: 日常或定期舆情监测报告模板
+2025-08-26 17:05:58,747 - ReportEngine - INFO - 选择模板: 日常或定期舆情监测报告模板
+2025-08-26 17:05:58,747 - ReportEngine - INFO - 选择理由: 查询内容“智能舆情分析报告”为通用性描述，未指定具体分析主题（如品牌、竞品或特定事件），也未体现紧急性或危机情况。这种常规性的、主题不明确的报告需求，最适合使用“日常或定期舆情监测报告模板”进行数据汇总和常规汇报。
+2025-08-26 17:05:58,748 - ReportEngine - INFO - 多轮生成HTML报告...
+2025-08-26 17:05:58,748 - ReportEngine - INFO - [HTMLGenerationNode] 开始生成HTML报告...
+2025-08-26 17:08:25,596 - ReportEngine - INFO - [HTMLGenerationNode] 处理LLM原始输出，长度: 14702 字符
+2025-08-26 17:08:25,596 - ReportEngine - INFO - [HTMLGenerationNode] 不是JSON格式，直接使用原始输出
+2025-08-26 17:08:25,597 - ReportEngine - INFO - [HTMLGenerationNode] HTML缺少基本结构，添加包装
+2025-08-26 17:08:25,597 - ReportEngine - INFO - [HTMLGenerationNode] HTML处理完成，最终长度: 14344 字符
+2025-08-26 17:08:25,597 - ReportEngine - INFO - [HTMLGenerationNode] HTML报告生成完成
+2025-08-26 17:08:25,597 - ReportEngine - INFO - HTML报告生成完成
+2025-08-26 17:08:25,598 - ReportEngine - INFO - 报告已保存到: final_reports\final_report__20250826_170825.html
+2025-08-26 17:08:25,599 - ReportEngine - INFO - 状态已保存到: final_reports\report_state__20250826_170825.json
+2025-08-26 17:08:25,599 - ReportEngine - INFO - 报告生成完成，耗时: 160.37 秒
+2025-08-26 17:27:19,107 - ReportEngine - INFO - Report Agent已初始化
+2025-08-26 17:27:19,108 - ReportEngine - INFO - 使用LLM: {'provider': 'Gemini', 'model': 'gemini-2.5-pro', 'api_base': 'https://www.chataiapi.com/v1', 'purpose': 'Report Generation'}
