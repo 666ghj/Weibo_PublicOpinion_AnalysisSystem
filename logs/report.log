@@ -1,20 +1,20 @@
-2025-08-26 18:38:19,528 - ReportEngine - INFO - 已加载 query 报告: 3509 字符
-2025-08-26 18:38:19,530 - ReportEngine - INFO - 已加载 media 报告: 3279 字符
-2025-08-26 18:38:19,532 - ReportEngine - INFO - 已加载 insight 报告: 2217 字符
-2025-08-26 18:38:19,532 - ReportEngine - INFO - 已加载论坛日志: 47 字符
-2025-08-26 18:38:19,533 - ReportEngine - INFO - 开始生成报告: 智能舆情分析报告
-2025-08-26 18:38:19,533 - ReportEngine - INFO - 输入数据 - 报告数量: 3, 论坛日志长度: 47
-2025-08-26 18:38:19,533 - ReportEngine - INFO - 选择报告模板...
-2025-08-26 18:38:19,533 - ReportEngine - INFO - [TemplateSelectionNode] 开始模板选择...
-2025-08-26 18:38:19,538 - ReportEngine - INFO - [TemplateSelectionNode] 尝试使用LLM进行模板选择...
-2025-08-26 18:38:30,615 - ReportEngine - INFO - [TemplateSelectionNode] LLM原始响应: ```json
+2025-08-26 19:39:03,249 - ReportEngine - INFO - 已加载 query 报告: 3509 字符
+2025-08-26 19:39:03,251 - ReportEngine - INFO - 已加载 media 报告: 3279 字符
+2025-08-26 19:39:03,252 - ReportEngine - INFO - 已加载 insight 报告: 2217 字符
+2025-08-26 19:39:03,253 - ReportEngine - INFO - 已加载论坛日志: 47 字符
+2025-08-26 19:39:03,254 - ReportEngine - INFO - 开始生成报告: 智能舆情分析报告
+2025-08-26 19:39:03,257 - ReportEngine - INFO - 输入数据 - 报告数量: 3, 论坛日志长度: 47
+2025-08-26 19:39:03,257 - ReportEngine - INFO - 选择报告模板...
+2025-08-26 19:39:03,258 - ReportEngine - INFO - [TemplateSelectionNode] 开始模板选择...
+2025-08-26 19:39:03,261 - ReportEngine - INFO - [TemplateSelectionNode] 尝试使用LLM进行模板选择...
+2025-08-26 19:39:14,686 - ReportEngine - INFO - [TemplateSelectionNode] LLM原始响应: ```json
 {
   "template_name": "日常或定期舆情监测报告模板",
-  "selection_reason": "用户的查询内容“智能舆情分析报告”是一个宽泛的描述，没有明确指出特定的分析主题（如品牌、竞品、危机或热点事件）。在这种情况下，该查询最符合常规性、周期性的舆情监控需求。因此，选择“日常或定期舆情监测报告模板”作为通用和基础的报告形式最为合适。"
+  "selection_reason": "查询内容“智能舆情分析报告”主题宽泛，未指定特定品牌、竞争对手或突发事件，且提及多个分析引擎和日志，表明这是一种常规性、周期性的监测需求，因此最适合使用日常或定期监测报告模板。"
 }
 ```...
-2025-08-26 18:38:30,615 - ReportEngine - INFO - [TemplateSelectionNode] LLM选择模板: 日常或定期舆情监测报告模板
-2025-08-26 18:38:30,615 - ReportEngine - INFO - 选择模板: 日常或定期舆情监测报告模板
-2025-08-26 18:38:30,616 - ReportEngine - INFO - 选择理由: 用户的查询内容“智能舆情分析报告”是一个宽泛的描述，没有明确指出特定的分析主题（如品牌、竞品、危机或热点事件）。在这种情况下，该查询最符合常规性、周期性的舆情监控需求。因此，选择“日常或定期舆情监测报告模板”作为通用和基础的报告形式最为合适。
-2025-08-26 18:38:30,616 - ReportEngine - INFO - 多轮生成HTML报告...
-2025-08-26 18:38:30,616 - ReportEngine - INFO - [HTMLGenerationNode] 开始生成HTML报告...
+2025-08-26 19:39:14,686 - ReportEngine - INFO - [TemplateSelectionNode] LLM选择模板: 日常或定期舆情监测报告模板
+2025-08-26 19:39:14,686 - ReportEngine - INFO - 选择模板: 日常或定期舆情监测报告模板
+2025-08-26 19:39:14,687 - ReportEngine - INFO - 选择理由: 查询内容“智能舆情分析报告”主题宽泛，未指定特定品牌、竞争对手或突发事件，且提及多个分析引擎和日志，表明这是一种常规性、周期性的监测需求，因此最适合使用日常或定期监测报告模板。
+2025-08-26 19:39:14,687 - ReportEngine - INFO - 多轮生成HTML报告...
+2025-08-26 19:39:14,687 - ReportEngine - INFO - [HTMLGenerationNode] 开始生成HTML报告...

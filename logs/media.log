@@ -1,11 +1,11 @@
-[18:36:14] 启动 media 应用...
-[18:36:16] 2025-08-26 18:36:16.594
-[18:36:16] Warning: the config option 'server.enableCORS=false' is not compatible with
-[18:36:16] 'server.enableXsrfProtection=true'.
-[18:36:16] As a result, 'server.enableCORS' is being overridden to 'true'.
-[18:36:16] More information:
-[18:36:16] In order to protect against CSRF attacks, we send a cookie with each request.
-[18:36:16] To do so, we must specify allowable origins, which places a restriction on
-[18:36:16] cross-origin resource sharing.
-[18:36:16] If cross origin resource sharing is required, please disable server.enableXsrfProtection.
-[18:36:16] 2025-08-26 18:36:16.937 Port 8502 is already in use
+[19:38:30] 启动 media 应用...
+[19:38:31] 2025-08-26 19:38:31.735
+[19:38:31] Warning: the config option 'server.enableCORS=false' is not compatible with
+[19:38:31] 'server.enableXsrfProtection=true'.
+[19:38:31] As a result, 'server.enableCORS' is being overridden to 'true'.
+[19:38:31] More information:
+[19:38:31] In order to protect against CSRF attacks, we send a cookie with each request.
+[19:38:31] To do so, we must specify allowable origins, which places a restriction on
+[19:38:31] cross-origin resource sharing.
+[19:38:31] If cross origin resource sharing is required, please disable server.enableXsrfProtection.
+[19:38:32] 2025-08-26 19:38:32.010 Port 8502 is already in use

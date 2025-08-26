@@ -96,7 +96,7 @@ class GeminiLLM(BaseLLM):
                 "model": self.default_model,
                 "messages": messages,
                 "temperature": kwargs.get("temperature", 0.7),
-                "max_tokens": kwargs.get("max_tokens", 8000),
+                "max_tokens": kwargs.get("max_tokens", 50000),  # 增加到50000以支持20000字输出
                 "stream": False
             }
             

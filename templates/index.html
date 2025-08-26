@@ -884,6 +884,28 @@
             button.disabled = true;
             button.innerHTML = '<span class="loading"></span> 搜索中...';
 
+            // 清除现有报告，重置自动生成标志，为新搜索做准备
+            const reportPreview = document.getElementById('reportPreview');
+            if (reportPreview) {
+                reportPreview.innerHTML = '<div class="report-loading">等待新的搜索结果生成报告...</div>';
+            }
+            
+            // 清除任务进度显示
+            const taskProgressArea = document.getElementById('taskProgressArea');
+            if (taskProgressArea) {
+                taskProgressArea.innerHTML = '';
+            }
+            
+            // 重置自动生成相关标志
+            autoGenerateTriggered = false;
+            reportTaskId = null;
+            
+            // 停止可能正在进行的轮询
+            if (reportPollingInterval) {
+                clearInterval(reportPollingInterval);
+                reportPollingInterval = null;
+            }
+
             // 确保所有iframe已初始化
             if (!iframesInitialized) {
                 preloadIframes();
@@ -1431,10 +1453,14 @@
                     reportButton.classList.remove('locked');
                     reportButton.title = 'Report Engine - 智能报告生成\n所有引擎都有新文件，可以生成报告';
                     
-                    // 如果当前在report页面且还没有触发自动生成，则自动生成报告
-                    if (currentApp === 'report' && !autoGenerateTriggered && !reportTaskId) {
+                    // 检查是否已经有报告在显示
+                    const reportPreview = document.getElementById('reportPreview');
+                    const hasReport = reportPreview && reportPreview.querySelector('iframe');
+                    
+                    // 如果当前在report页面且还没有触发自动生成且没有正在进行的任务且没有已显示的报告，则自动生成报告
+                    if (currentApp === 'report' && !autoGenerateTriggered && !reportTaskId && !hasReport) {
                         autoGenerateTriggered = true;
-                        console.log('检测到锁消失，自动开始生成报告');
+                        console.log('检测到锁消失且无现有报告，自动开始生成报告');
                         setTimeout(() => {
                             generateReport();
                         }, 1000); // 延迟1秒开始生成
@@ -1873,7 +1899,7 @@
                         // 自动显示报告
                         viewReport(taskId);
                         
-                        // 重置自动生成标志，允许下次自动生成
+                        // 重置自动生成标志，允许下次有新内容时自动生成
                         autoGenerateTriggered = false;
                         reportTaskId = null;
                     } else if (data.task.status === 'error') {

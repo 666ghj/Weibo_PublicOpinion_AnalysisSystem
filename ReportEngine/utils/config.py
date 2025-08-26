@@ -19,7 +19,7 @@ class Config:
     gemini_model: str = "gemini-2.5-pro"
     
     # 报告配置
-    max_content_length: int = 50000
+    max_content_length: int = 500000  # 增加到500000字符以支持30000字输入和20000字输出
     output_dir: str = "final_reports"
     template_dir: str = "ReportEngine/report_template"
     
@@ -53,7 +53,7 @@ class Config:
                 gemini_api_key=getattr(config_module, "GEMINI_API_KEY", None),
                 default_llm_provider=getattr(config_module, "DEFAULT_LLM_PROVIDER", "gemini"),
                 gemini_model=getattr(config_module, "GEMINI_MODEL", "gemini-2.5-pro"),
-                max_content_length=getattr(config_module, "MAX_CONTENT_LENGTH", 50000),
+                max_content_length=getattr(config_module, "MAX_CONTENT_LENGTH", 500000),
                 output_dir=getattr(config_module, "REPORT_OUTPUT_DIR", "final_reports"),
                 template_dir=getattr(config_module, "TEMPLATE_DIR", "ReportEngine/report_template"),
                 log_file=getattr(config_module, "REPORT_LOG_FILE", "logs/report.log"),
@@ -76,7 +76,7 @@ class Config:
                 gemini_api_key=config_dict.get("GEMINI_API_KEY"),
                 default_llm_provider=config_dict.get("DEFAULT_LLM_PROVIDER", "gemini"),
                 gemini_model=config_dict.get("GEMINI_MODEL", "gemini-2.5-pro"),
-                max_content_length=int(config_dict.get("MAX_CONTENT_LENGTH", "50000")),
+                max_content_length=int(config_dict.get("MAX_CONTENT_LENGTH", "500000")),
                 output_dir=config_dict.get("REPORT_OUTPUT_DIR", "final_reports"),
                 template_dir=config_dict.get("TEMPLATE_DIR", "ReportEngine/report_template"),
                 log_file=config_dict.get("REPORT_LOG_FILE", "logs/report.log"),

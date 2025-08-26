@@ -270,7 +270,7 @@ class HTMLGenerationNode(StateMutationNode):
         
         {f'<h2>InsightEngine分析结果</h2><div class="section"><pre>{insight_report}</pre></div>' if insight_report else ''}
         
-        {f'<h2>论坛监控数据</h2><div class="section"><pre>{forum_logs[:2000]}{"..." if len(forum_logs) > 2000 else ""}</pre></div>' if forum_logs else ''}
+        {f'<h2>论坛监控数据</h2><div class="section"><pre>{forum_logs}</pre></div>' if forum_logs else ''}
         
         <h2>综合结论</h2>
         <div class="section">
