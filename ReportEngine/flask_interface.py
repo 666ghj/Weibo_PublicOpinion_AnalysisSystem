@@ -40,9 +40,10 @@ def initialize_report_engine():
 class ReportTask:
     """报告生成任务"""
     
-    def __init__(self, query: str, task_id: str):
+    def __init__(self, query: str, task_id: str, custom_template: str = ""):
         self.task_id = task_id
         self.query = query
+        self.custom_template = custom_template
         self.status = "pending"  # pending, running, completed, error
         self.progress = 0
         self.result = None
@@ -98,7 +99,7 @@ def check_engines_ready() -> Dict[str, Any]:
     )
 
 
-def run_report_generation(task: ReportTask, query: str):
+def run_report_generation(task: ReportTask, query: str, custom_template: str = ""):
     """在后台线程中运行报告生成"""
     global current_task
     
@@ -123,6 +124,7 @@ def run_report_generation(task: ReportTask, query: str):
             query=query,
             reports=content['reports'],
             forum_logs=content['forum_logs'],
+            custom_template=custom_template,
             save_report=True
         )
         
@@ -183,6 +185,7 @@ def generate_report():
         # 获取请求参数
         data = request.get_json() or {}
         query = data.get('query', '智能舆情分析报告')
+        custom_template = data.get('custom_template', '')
         
         # 清空日志文件
         clear_report_log()
@@ -205,7 +208,7 @@ def generate_report():
         
         # 创建新任务
         task_id = f"report_{int(time.time())}"
-        task = ReportTask(query, task_id)
+        task = ReportTask(query, task_id, custom_template)
         
         with task_lock:
             current_task = task
@@ -213,7 +216,7 @@ def generate_report():
         # 在后台线程中运行报告生成
         thread = threading.Thread(
             target=run_report_generation,
-            args=(task, query),
+            args=(task, query, custom_template),
             daemon=True
         )
         thread.start()

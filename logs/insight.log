@@ -1,16 +1,15 @@
-[19:38:27] 启动 insight 应用...
-[19:38:28] 2025-08-26 19:38:28.588
-[19:38:28] Warning: the config option 'server.enableCORS=false' is not compatible with
-[19:38:28] 'server.enableXsrfProtection=true'.
-[19:38:28] As a result, 'server.enableCORS' is being overridden to 'true'.
-[19:38:28] More information:
-[19:38:28] In order to protect against CSRF attacks, we send a cookie with each request.
-[19:38:28] To do so, we must specify allowable origins, which places a restriction on
-[19:38:28] cross-origin resource sharing.
-[19:38:28] If cross origin resource sharing is required, please disable server.enableXsrfProtection.
-[19:38:30] 2025-08-26 19:38:30.221 Did not auto detect external IP.
-[19:38:30] Please go to https://docs.streamlit.io/ for debugging hints.
-[19:38:30] You can now view your Streamlit app in your browser.
-[19:38:30] Local URL: http://localhost:8501
-[19:38:30] Network URL: http://10.122.232.27:8501
-[19:38:47] WeiboMultilingualSentimentAnalyzer 已创建，调用 initialize() 来加载模型
+[21:56:10] 启动 insight 应用...
+[21:56:11] 2025-08-26 21:56:11.288
+[21:56:11] Warning: the config option 'server.enableCORS=false' is not compatible with
+[21:56:11] 'server.enableXsrfProtection=true'.
+[21:56:11] As a result, 'server.enableCORS' is being overridden to 'true'.
+[21:56:11] More information:
+[21:56:11] In order to protect against CSRF attacks, we send a cookie with each request.
+[21:56:11] To do so, we must specify allowable origins, which places a restriction on
+[21:56:11] cross-origin resource sharing.
+[21:56:11] If cross origin resource sharing is required, please disable server.enableXsrfProtection.
+[21:56:12] You can now view your Streamlit app in your browser.
+[21:56:12] Local URL: http://localhost:8501
+[21:56:12] Network URL: http://10.122.232.27:8501
+[21:56:12] External URL: http://59.64.129.42:8501
+[21:56:25] WeiboMultilingualSentimentAnalyzer 已创建，调用 initialize() 来加载模型

@@ -81,6 +81,49 @@
             cursor: not-allowed;
         }
 
+        .upload-button {
+            padding: 15px 20px;
+            border: none;
+            border-left: 2px solid #000000;
+            background-color: #ffffff;
+            color: #000000;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .upload-button input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-status {
+            font-size: 12px;
+            margin-top: 10px;
+            text-align: center;
+            color: #666666;
+        }
+
+        .upload-status.success {
+            color: #4a6741;
+        }
+
+        .upload-status.error {
+            color: #8b4513;
+        }
+
         /* 主内容区域 */
         .main-content {
             flex: 1;
@@ -660,8 +703,8 @@
             background-color: #ffffff;
             min-height: 400px;
             max-height: none; /* 移除最大高度限制 */
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow-y: hidden; /* 强制不显示垂直滚动条 */
+            overflow-x: hidden; /* 强制不显示水平滚动条 */
             flex: 1; /* 让预览区域占用剩余空间 */
         }
 
@@ -671,6 +714,15 @@
             border: none;
             /* 让iframe自适应内容高度 */
             height: auto;
+            /* 强制不显示滚动条 */
+            overflow: hidden;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        /* 隐藏webkit浏览器的滚动条 */
+        .report-preview iframe::-webkit-scrollbar {
+            display: none;
         }
 
         .report-loading {
@@ -691,7 +743,12 @@
             <div class="search-box">
                 <input type="text" class="search-input" id="searchInput" placeholder="请输入要分析的内容...">
                 <button class="search-button" id="searchButton">开始</button>
+                <button class="upload-button" id="uploadButton">
+                    上传模板
+                    <input type="file" id="templateFileInput" accept=".md,.txt" title="上传自定义报告模板(支持 .md 和 .txt 文件)">
+                </button>
             </div>
+            <div class="upload-status" id="uploadStatus"></div>
         </div>
 
         <!-- 主内容区域 -->
@@ -774,6 +831,7 @@
             forum: 'running',  // Forum Engine 默认运行
             report: 'stopped'  // Report Engine
         };
+        let customTemplate = ''; // 存储用户上传的自定义模板内容
 
         // 应用名称映射
         const appNames = {
@@ -782,6 +840,15 @@
             query: 'Query Engine',
             forum: 'Forum Engine',
             report: 'Report Engine'
+        };
+
+        // 页面头部显示的完整Agent介绍
+        const agentTitles = {
+            insight: 'Insight Agent - 私有数据库挖掘',
+            media: 'Media Agent - 多模态内容分析', 
+            query: 'Query Agent - 精准信息搜索',
+            forum: 'Forum Agent - 多智能体交流',
+            report: 'Report Agent - 最终报告生成'
         };
 
         // 初始化
@@ -862,6 +929,9 @@
                     performSearch();
                 }
             });
+
+            // 文件上传
+            document.getElementById('templateFileInput').addEventListener('change', handleTemplateUpload);
 
             // 应用切换按钮
             document.querySelectorAll('.app-button').forEach(button => {
@@ -963,7 +1033,7 @@
             // 根据应用类型处理不同的显示逻辑
             if (app === 'forum') {
                 // 切换到论坛模式
-                document.getElementById('embeddedHeader').textContent = 'Forum Engine - 论坛对话';
+                document.getElementById('embeddedHeader').textContent = 'Forum Agent - 多智能体交流';
                 
                 // 显示论坛容器，隐藏其他内容
                 document.getElementById('forumContainer').classList.add('active');
@@ -975,7 +1045,7 @@
                 
             } else if (app === 'report') {
                 // 切换到报告模式
-                document.getElementById('embeddedHeader').textContent = 'Report Engine - 智能报告生成';
+                document.getElementById('embeddedHeader').textContent = 'Report Agent - 最终报告生成';
                 
                 // 显示报告容器，隐藏其他内容
                 document.getElementById('reportContainer').classList.add('active');
@@ -998,7 +1068,7 @@
                 
             } else {
                 // 切换到普通Engine模式
-                document.getElementById('embeddedHeader').textContent = appNames[app];
+                document.getElementById('embeddedHeader').textContent = agentTitles[app] || appNames[app];
                 
                 // 隐藏论坛和报告容器
                 document.getElementById('forumContainer').classList.remove('active');
@@ -1152,7 +1222,7 @@
             
             // 如果是Forum Engine，直接显示论坛界面
             if (app === 'forum') {
-                header.textContent = 'Forum Engine - 论坛对话';
+                header.textContent = 'Forum Agent - 多智能体交流';
                 
                 // 隐藏所有iframe
                 if (typeof preloadedIframes !== 'undefined') {
@@ -1175,7 +1245,7 @@
             
             // 如果是Report Engine，显示报告界面
             if (app === 'report') {
-                header.textContent = 'Report Engine - 智能报告生成';
+                header.textContent = 'Report Agent - 最终报告生成';
                 
                 // 隐藏所有iframe
                 if (typeof preloadedIframes !== 'undefined') {
@@ -1200,7 +1270,7 @@
             document.getElementById('forumContainer').classList.remove('active');
             document.getElementById('reportContainer').classList.remove('active');
 
-            header.textContent = appNames[app] || app;
+            header.textContent = agentTitles[app] || appNames[app] || app;
 
             // 如果应用正在运行，显示对应的iframe
             if (appStatus[app] === 'running') {
@@ -1309,6 +1379,71 @@
                     message.className = 'message';
                 }, 300);
             }, 3000);
+        }
+
+        // 处理模板文件上传
+        function handleTemplateUpload(event) {
+            const file = event.target.files[0];
+            const statusDiv = document.getElementById('uploadStatus');
+            
+            if (!file) {
+                statusDiv.textContent = '';
+                statusDiv.className = 'upload-status';
+                customTemplate = '';
+                return;
+            }
+
+            // 检查文件类型
+            const allowedTypes = ['text/markdown', 'text/plain', '.md', '.txt'];
+            const fileName = file.name.toLowerCase();
+            const isValidType = fileName.endsWith('.md') || fileName.endsWith('.txt') || 
+                              allowedTypes.includes(file.type);
+
+            if (!isValidType) {
+                statusDiv.textContent = '错误: 请选择 .md 或 .txt 文件';
+                statusDiv.className = 'upload-status error';
+                customTemplate = '';
+                event.target.value = ''; // 清空文件输入
+                return;
+            }
+
+            // 检查文件大小 (最大 1MB)
+            const maxSize = 1024 * 1024; // 1MB
+            if (file.size > maxSize) {
+                statusDiv.textContent = '错误: 文件大小不能超过 1MB';
+                statusDiv.className = 'upload-status error';
+                customTemplate = '';
+                event.target.value = '';
+                return;
+            }
+
+            statusDiv.textContent = '正在读取文件...';
+            statusDiv.className = 'upload-status';
+
+            // 读取文件内容
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    customTemplate = e.target.result;
+                    statusDiv.textContent = `成功: 已加载自定义模板 "${file.name}" (${(file.size/1024).toFixed(1)}KB)`;
+                    statusDiv.className = 'upload-status success';
+                    showMessage(`自定义模板已加载: ${file.name}`, 'success');
+                } catch (error) {
+                    statusDiv.textContent = '错误: 文件读取失败';
+                    statusDiv.className = 'upload-status error';
+                    customTemplate = '';
+                    event.target.value = '';
+                }
+            };
+
+            reader.onerror = function() {
+                statusDiv.textContent = '错误: 文件读取失败';
+                statusDiv.className = 'upload-status error';
+                customTemplate = '';
+                event.target.value = '';
+            };
+
+            reader.readAsText(file, 'utf-8');
         }
 
         // Forum Engine 相关函数
@@ -1824,12 +1959,19 @@
             // 在现有状态信息后添加任务进度状态，而不是替换
             addTaskProgressStatus('正在启动报告生成任务...', 'loading');
             
+            // 构建请求数据，包含自定义模板（如果有的话）
+            const requestData = { query: query };
+            if (customTemplate && customTemplate.trim()) {
+                requestData.custom_template = customTemplate;
+                console.log('使用自定义模板生成报告');
+            }
+            
             fetch('/api/report/generate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ query: query })
+                body: JSON.stringify(requestData)
             })
             .then(response => response.json())
             .then(data => {
@@ -2007,6 +2149,10 @@
                 iframe.style.width = '100%';
                 iframe.style.border = 'none';
                 iframe.style.minHeight = '800px'; // 增加最小高度
+                iframe.style.overflow = 'hidden'; // 强制不显示滚动条
+                iframe.style.scrollbarWidth = 'none'; // Firefox
+                iframe.style.msOverflowStyle = 'none'; // IE and Edge
+                iframe.scrolling = 'no'; // 传统方式禁用滚动
                 iframe.id = 'report-iframe';
                 
                 reportPreview.innerHTML = '';
@@ -2016,6 +2162,36 @@
                 iframe.contentDocument.open();
                 iframe.contentDocument.write(htmlContent);
                 iframe.contentDocument.close();
+                
+                // 确保iframe内部文档也不显示滚动条
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                if (iframeDoc) {
+                    // 设置body样式
+                    if (iframeDoc.body) {
+                        iframeDoc.body.style.overflow = 'hidden';
+                        iframeDoc.body.style.scrollbarWidth = 'none';
+                        iframeDoc.body.style.msOverflowStyle = 'none';
+                    }
+                    // 设置html样式
+                    if (iframeDoc.documentElement) {
+                        iframeDoc.documentElement.style.overflow = 'hidden';
+                        iframeDoc.documentElement.style.scrollbarWidth = 'none';
+                        iframeDoc.documentElement.style.msOverflowStyle = 'none';
+                    }
+                    // 添加CSS规则隐藏webkit滚动条
+                    const style = iframeDoc.createElement('style');
+                    style.textContent = `
+                        body::-webkit-scrollbar, html::-webkit-scrollbar {
+                            display: none !important;
+                        }
+                        body, html {
+                            overflow: hidden !important;
+                            scrollbar-width: none !important;
+                            -ms-overflow-style: none !important;
+                        }
+                    `;
+                    iframeDoc.head.appendChild(style);
+                }
                 
                 // 等待内容加载完成后调整iframe高度
                 iframe.onload = function() {

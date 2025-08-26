@@ -1,20 +1,29 @@
-2025-08-26 19:39:03,249 - ReportEngine - INFO - 已加载 query 报告: 3509 字符
-2025-08-26 19:39:03,251 - ReportEngine - INFO - 已加载 media 报告: 3279 字符
-2025-08-26 19:39:03,252 - ReportEngine - INFO - 已加载 insight 报告: 2217 字符
-2025-08-26 19:39:03,253 - ReportEngine - INFO - 已加载论坛日志: 47 字符
-2025-08-26 19:39:03,254 - ReportEngine - INFO - 开始生成报告: 智能舆情分析报告
-2025-08-26 19:39:03,257 - ReportEngine - INFO - 输入数据 - 报告数量: 3, 论坛日志长度: 47
-2025-08-26 19:39:03,257 - ReportEngine - INFO - 选择报告模板...
-2025-08-26 19:39:03,258 - ReportEngine - INFO - [TemplateSelectionNode] 开始模板选择...
-2025-08-26 19:39:03,261 - ReportEngine - INFO - [TemplateSelectionNode] 尝试使用LLM进行模板选择...
-2025-08-26 19:39:14,686 - ReportEngine - INFO - [TemplateSelectionNode] LLM原始响应: ```json
+2025-08-26 21:25:52,488 - ReportEngine - INFO - 已加载 query 报告: 2217 字符
+2025-08-26 21:25:52,491 - ReportEngine - INFO - 已加载 media 报告: 2217 字符
+2025-08-26 21:25:52,492 - ReportEngine - INFO - 已加载 insight 报告: 2217 字符
+2025-08-26 21:25:52,496 - ReportEngine - INFO - 已加载论坛日志: 47 字符
+2025-08-26 21:25:52,497 - ReportEngine - INFO - 开始生成报告: 智能舆情分析报告
+2025-08-26 21:25:52,498 - ReportEngine - INFO - 输入数据 - 报告数量: 3, 论坛日志长度: 47
+2025-08-26 21:25:52,499 - ReportEngine - INFO - 选择报告模板...
+2025-08-26 21:25:52,502 - ReportEngine - INFO - [TemplateSelectionNode] 开始模板选择...
+2025-08-26 21:25:52,511 - ReportEngine - INFO - [TemplateSelectionNode] 尝试使用LLM进行模板选择...
+2025-08-26 21:26:11,585 - ReportEngine - INFO - [TemplateSelectionNode] LLM原始响应: ```json
 {
-  "template_name": "日常或定期舆情监测报告模板",
-  "selection_reason": "查询内容“智能舆情分析报告”主题宽泛，未指定特定品牌、竞争对手或突发事件，且提及多个分析引擎和日志，表明这是一种常规性、周期性的监测需求，因此最适合使用日常或定期监测报告模板。"
+  "template_name": "企业品牌声誉分析报告模板",
+  "selection_reason": "报告核心是针对特定实体“珞珈山”（武汉大学）在固定周期内（两个月）的网络形象进行全面、多维度的深度分析，涵盖了历史声誉、核心学科口碑、师生舆情等多个层面。这完全符合“企业品牌声誉分析报告模板”用于对品牌进行全面、深度评估与复盘的核心任务，旨在进行战略性、全局性的分析，而非日常监测或针对单一事件。"
 }
-```...
-2025-08-26 19:39:14,686 - ReportEngine - INFO - [TemplateSelectionNode] LLM选择模板: 日常或定期舆情监测报告模板
-2025-08-26 19:39:14,686 - ReportEngine - INFO - 选择模板: 日常或定期舆情监测报告模板
-2025-08-26 19:39:14,687 - ReportEngine - INFO - 选择理由: 查询内容“智能舆情分析报告”主题宽泛，未指定特定品牌、竞争对手或突发事件，且提及多个分析引擎和日志，表明这是一种常规性、周期性的监测需求，因此最适合使用日常或定期监测报告模板。
-2025-08-26 19:39:14,687 - ReportEngine - INFO - 多轮生成HTML报告...
-2025-08-26 19:39:14,687 - ReportEngine - INFO - [HTMLGenerationNode] 开始生成HTML报告...
+```
+2025-08-26 21:26:11,586 - ReportEngine - INFO - [TemplateSelectionNode] LLM选择模板: 企业品牌声誉分析报告模板
+2025-08-26 21:26:11,586 - ReportEngine - INFO - 选择模板: 企业品牌声誉分析报告模板
+2025-08-26 21:26:11,586 - ReportEngine - INFO - 选择理由: 报告核心是针对特定实体“珞珈山”（武汉大学）在固定周期内（两个月）的网络形象进行全面、多维度的深度分析，涵盖了历史声誉、核心学科口碑、师生舆情等多个层面。这完全符合“企业品牌声誉分析报告模板”用于对品牌进行全面、深度评估与复盘的核心任务，旨在进行战略性、全局性的分析，而非日常监测或针对单一事件。
+2025-08-26 21:26:11,587 - ReportEngine - INFO - 多轮生成HTML报告...
+2025-08-26 21:26:11,587 - ReportEngine - INFO - [HTMLGenerationNode] 开始生成HTML报告...
+2025-08-26 21:28:24,877 - ReportEngine - INFO - [HTMLGenerationNode] 处理LLM原始输出，长度: 30739 字符
+2025-08-26 21:28:24,877 - ReportEngine - INFO - [HTMLGenerationNode] HTML处理完成，最终长度: 30727 字符
+2025-08-26 21:28:24,877 - ReportEngine - INFO - [HTMLGenerationNode] HTML报告生成完成
+2025-08-26 21:28:24,877 - ReportEngine - INFO - HTML报告生成完成
+2025-08-26 21:28:24,878 - ReportEngine - INFO - 报告已保存到: final_reports\final_report__20250826_212824.html
+2025-08-26 21:28:24,879 - ReportEngine - INFO - 状态已保存到: final_reports\report_state__20250826_212824.json
+2025-08-26 21:28:24,879 - ReportEngine - INFO - 报告生成完成，耗时: 152.38 秒
+2025-08-26 21:56:12,352 - ReportEngine - INFO - Report Agent已初始化
+2025-08-26 21:56:12,352 - ReportEngine - INFO - 使用LLM: {'provider': 'Gemini', 'model': 'gemini-2.5-pro', 'api_base': 'https://www.chataiapi.com/v1', 'purpose': 'Report Generation'}

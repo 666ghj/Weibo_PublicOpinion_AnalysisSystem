@@ -191,7 +191,8 @@ class ReportAgent:
         if self.config.default_llm_provider == "gemini":
             return GeminiLLM(
                 api_key=self.config.gemini_api_key,
-                model_name=self.config.gemini_model
+                model_name=self.config.gemini_model,
+                config=self.config  # 传入配置对象以支持动态超时设置
             )
         else:
             raise ValueError(f"不支持的LLM提供商: {self.config.default_llm_provider}")

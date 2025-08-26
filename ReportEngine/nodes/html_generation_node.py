@@ -55,13 +55,13 @@ class HTMLGenerationNode(StateMutationNode):
                 "selected_template": input_data.get('selected_template', '')
             }
             
-            # 转换为JSON格式
+            # 转换为JSON格式传递给LLM
             message = json.dumps(llm_input, ensure_ascii=False, indent=2)
             
             # 调用LLM生成HTML
             response = self.llm_client.invoke(SYSTEM_PROMPT_HTML_GENERATION, message)
             
-            # 处理响应
+            # 处理响应（简化版）
             processed_response = self.process_output(response)
             
             self.log_info("HTML报告生成完成")
@@ -101,72 +101,34 @@ class HTMLGenerationNode(StateMutationNode):
             output: LLM原始输出
             
         Returns:
-            清理后的HTML内容
+            HTML内容
         """
         try:
             self.log_info(f"处理LLM原始输出，长度: {len(output)} 字符")
             
-            html_content = ""
+            html_content = output.strip()
             
-            # 尝试解析JSON响应
-            try:
-                result = json.loads(output)
-                html_content = result.get('html_content', '')
-                self.log_info("成功从JSON中提取html_content")
-            except json.JSONDecodeError:
-                self.log_info("不是JSON格式，直接使用原始输出")
+            # 清理markdown代码块标记（如果存在）
+            if html_content.startswith('```html'):
+                html_content = html_content[7:]  # 移除 '```html'
+                if html_content.endswith('```'):
+                    html_content = html_content[:-3]  # 移除结尾的 '```'
+            elif html_content.startswith('```') and html_content.endswith('```'):
+                html_content = html_content[3:-3]  # 移除前后的 '```'
+            
+            html_content = html_content.strip()
+            
+            # 如果内容为空，返回原始输出
+            if not html_content:
+                self.log_info("处理后内容为空，返回原始输出")
                 html_content = output
             
-            # 如果还是没有内容，尝试其他提取方法
-            if not html_content.strip():
-                # 查找HTML标记
-                if '<!DOCTYPE html>' in output:
-                    start_idx = output.find('<!DOCTYPE html>')
-                    html_content = output[start_idx:]
-                elif '<html' in output:
-                    start_idx = output.find('<html')
-                    html_content = output[start_idx:]
-                else:
-                    html_content = output
-            
-            # 清理markdown代码块标记
-            if html_content.startswith('```html'):
-                html_content = html_content.replace('```html', '').replace('```', '').strip()
-            elif html_content.startswith('```'):
-                html_content = html_content.replace('```', '').strip()
-            
-            # 处理转义字符
-            html_content = html_content.replace('\\n', '\n')
-            html_content = html_content.replace('\\t', '\t')
-            html_content = html_content.replace('\\r', '\r')
-            html_content = html_content.replace('\\"', '"')
-            html_content = html_content.replace("\\'", "'")
-            
-            # 验证HTML内容
-            if not html_content.strip():
-                raise ValueError("生成的HTML内容为空")
-            
-            # 确保HTML有基本结构
-            if not html_content.strip().startswith('<!DOCTYPE') and not html_content.strip().startswith('<html'):
-                self.log_info("HTML缺少基本结构，添加包装")
-                html_content = f"""<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能舆情分析报告</title>
-</head>
-<body>
-{html_content}
-</body>
-</html>"""
-            
             self.log_info(f"HTML处理完成，最终长度: {len(html_content)} 字符")
-            return html_content.strip()
+            return html_content
             
         except Exception as e:
-            self.log_error(f"处理HTML输出失败: {str(e)}")
-            return self._generate_error_html(str(e))
+            self.log_error(f"处理HTML输出失败: {str(e)}，返回原始输出")
+            return output
     
     def _generate_fallback_html(self, input_data: Dict[str, Any]) -> str:
         """
@@ -288,53 +250,4 @@ class HTMLGenerationNode(StateMutationNode):
         
         return html_content
     
-    def _generate_error_html(self, error_message: str) -> str:
-        """
-        生成错误HTML页面
-        
-        Args:
-            error_message: 错误信息
-            
-        Returns:
-            错误HTML内容
-        """
-        return f"""<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>报告生成失败</title>
-    <style>
-        body {{
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-            background: #f8f9fa;
-        }}
-        .error-container {{
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin: 0 auto;
-        }}
-        .error-title {{
-            color: #e74c3c;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }}
-        .error-message {{
-            color: #666;
-            margin-bottom: 20px;
-        }}
-    </style>
-</head>
-<body>
-    <div class="error-container">
-        <div class="error-title">报告生成失败</div>
-        <div class="error-message">错误信息: {error_message}</div>
-        <p>请检查输入数据或稍后重试。</p>
-    </div>
-</body>
-</html>"""
+

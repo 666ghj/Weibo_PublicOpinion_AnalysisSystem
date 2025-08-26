@@ -19,9 +19,14 @@ class Config:
     gemini_model: str = "gemini-2.5-pro"
     
     # 报告配置
-    max_content_length: int = 500000  # 增加到500000字符以支持30000字输入和20000字输出
+    max_content_length: int = 200000
     output_dir: str = "final_reports"
     template_dir: str = "ReportEngine/report_template"
+    
+    # 超时配置 - 专门为长报告生成优化（平均生成时间7分钟）
+    api_timeout: float = 900.0      # API调用超时时间（秒），设置为15分钟，适应7分钟平均生成时间
+    max_retry_delay: float = 180.0  # 最大重试延迟（秒），设置为3分钟
+    max_retries: int = 8            # 最大重试次数，增加到8次
     
     # 日志配置
     log_file: str = "logs/report.log"
@@ -53,9 +58,12 @@ class Config:
                 gemini_api_key=getattr(config_module, "GEMINI_API_KEY", None),
                 default_llm_provider=getattr(config_module, "DEFAULT_LLM_PROVIDER", "gemini"),
                 gemini_model=getattr(config_module, "GEMINI_MODEL", "gemini-2.5-pro"),
-                max_content_length=getattr(config_module, "MAX_CONTENT_LENGTH", 500000),
+                max_content_length=getattr(config_module, "MAX_CONTENT_LENGTH", 200000),
                 output_dir=getattr(config_module, "REPORT_OUTPUT_DIR", "final_reports"),
                 template_dir=getattr(config_module, "TEMPLATE_DIR", "ReportEngine/report_template"),
+                api_timeout=getattr(config_module, "REPORT_API_TIMEOUT", 900.0),
+                max_retry_delay=getattr(config_module, "REPORT_MAX_RETRY_DELAY", 180.0),
+                max_retries=getattr(config_module, "REPORT_MAX_RETRIES", 8),
                 log_file=getattr(config_module, "REPORT_LOG_FILE", "logs/report.log"),
                 enable_pdf_export=getattr(config_module, "ENABLE_PDF_EXPORT", True),
                 chart_style=getattr(config_module, "CHART_STYLE", "modern")
@@ -76,9 +84,12 @@ class Config:
                 gemini_api_key=config_dict.get("GEMINI_API_KEY"),
                 default_llm_provider=config_dict.get("DEFAULT_LLM_PROVIDER", "gemini"),
                 gemini_model=config_dict.get("GEMINI_MODEL", "gemini-2.5-pro"),
-                max_content_length=int(config_dict.get("MAX_CONTENT_LENGTH", "500000")),
+                max_content_length=int(config_dict.get("MAX_CONTENT_LENGTH", "200000")),
                 output_dir=config_dict.get("REPORT_OUTPUT_DIR", "final_reports"),
                 template_dir=config_dict.get("TEMPLATE_DIR", "ReportEngine/report_template"),
+                api_timeout=float(config_dict.get("REPORT_API_TIMEOUT", "900.0")),
+                max_retry_delay=float(config_dict.get("REPORT_MAX_RETRY_DELAY", "180.0")),
+                max_retries=int(config_dict.get("REPORT_MAX_RETRIES", "8")),
                 log_file=config_dict.get("REPORT_LOG_FILE", "logs/report.log"),
                 enable_pdf_export=config_dict.get("ENABLE_PDF_EXPORT", "true").lower() == "true",
                 chart_style=config_dict.get("CHART_STYLE", "modern")
@@ -127,6 +138,9 @@ def print_config(config: Config):
     print(f"最大内容长度: {config.max_content_length}")
     print(f"输出目录: {config.output_dir}")
     print(f"模板目录: {config.template_dir}")
+    print(f"API超时时间: {config.api_timeout}秒（{config.api_timeout/60:.1f}分钟）")
+    print(f"最大重试延迟: {config.max_retry_delay}秒（{config.max_retry_delay/60:.1f}分钟）")
+    print(f"最大重试次数: {config.max_retries}次")
     print(f"日志文件: {config.log_file}")
     print(f"PDF导出: {config.enable_pdf_export}")
     print(f"图表样式: {config.chart_style}")

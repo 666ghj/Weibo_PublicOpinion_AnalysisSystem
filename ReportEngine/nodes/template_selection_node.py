@@ -51,13 +51,7 @@ class TemplateSelectionNode(BaseNode):
             self.log_info("未找到预设模板，使用内置默认模板")
             return self._get_fallback_template()
         
-        # 首先尝试简单关键词匹配
-        simple_match = self._simple_keyword_matching(query, available_templates)
-        if simple_match:
-            self.log_info(f"通过关键词匹配选择模板: {simple_match['template_name']}")
-            return simple_match
-        
-        # 如果关键词匹配失败，尝试LLM选择
+        # 使用LLM进行模板选择
         try:
             llm_result = self._llm_template_selection(query, reports, forum_logs, available_templates)
             if llm_result:
@@ -65,54 +59,10 @@ class TemplateSelectionNode(BaseNode):
         except Exception as e:
             self.log_error(f"LLM模板选择失败: {str(e)}")
         
-        # 所有方法都失败，使用默认的社会热点事件模板
-        default_template = self._get_default_social_event_template(available_templates)
-        if default_template:
-            return default_template
-        
-        # 最后备选方案
+        # 如果LLM选择失败，使用备选方案
         return self._get_fallback_template()
     
-    def _simple_keyword_matching(self, query: str, available_templates: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-        """基于关键词的简单模板匹配"""
-        query_lower = query.lower()
-        
-        # 关键词映射
-        keyword_mapping = {
-            '企业': ['企业品牌'],
-            '品牌': ['企业品牌'],
-            '声誉': ['企业品牌'],
-            '市场': ['市场竞争'],
-            '竞争': ['市场竞争'],
-            '格局': ['市场竞争'],
-            '政策': ['政策', '行业'],
-            '行业': ['政策', '行业'],
-            '动态': ['政策', '行业'],
-            '突发': ['突发事件', '危机'],
-            '危机': ['突发事件', '危机'],
-            '公关': ['突发事件', '危机'],
-            '日常': ['日常', '定期'],
-            '定期': ['日常', '定期'],
-            '监测': ['日常', '定期'],
-            '热点': ['社会公共热点'],
-            '社会': ['社会公共热点'],
-            '事件': ['社会公共热点'],
-        }
-        
-        # 检查查询中的关键词
-        for keyword, template_keywords in keyword_mapping.items():
-            if keyword in query_lower:
-                # 查找匹配的模板
-                for template in available_templates:
-                    for template_keyword in template_keywords:
-                        if template_keyword in template['name']:
-                            return {
-                                'template_name': template['name'],
-                                'template_content': template['content'],
-                                'selection_reason': f'基于关键词"{keyword}"匹配选择'
-                            }
-        
-        return None
+
     
     def _llm_template_selection(self, query: str, reports: List[Any], forum_logs: str, 
                               available_templates: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
@@ -122,15 +72,46 @@ class TemplateSelectionNode(BaseNode):
         # 构建模板列表
         template_list = "\n".join([f"- {t['name']}: {t['description']}" for t in available_templates])
         
+        # 构建报告内容摘要
+        reports_summary = ""
+        if reports:
+            reports_summary = "\n\n=== 分析引擎报告内容 ===\n"
+            for i, report in enumerate(reports, 1):
+                # 获取报告内容，支持不同的数据格式
+                if isinstance(report, dict):
+                    content = report.get('content', str(report))
+                elif hasattr(report, 'content'):
+                    content = report.content
+                else:
+                    content = str(report)
+                
+                # 截断过长的内容，保留前1000个字符
+                if len(content) > 1000:
+                    content = content[:1000] + "...(内容已截断)"
+                
+                reports_summary += f"\n报告{i}内容:\n{content}\n"
+        
+        # 构建论坛日志摘要
+        forum_summary = ""
+        if forum_logs and forum_logs.strip():
+            forum_summary = "\n\n=== 三个引擎的讨论内容 ===\n"
+            # 截断过长的日志内容，保留前800个字符
+            if len(forum_logs) > 800:
+                forum_content = forum_logs[:800] + "...(讨论内容已截断)"
+            else:
+                forum_content = forum_logs
+            forum_summary += forum_content
+        
         user_message = f"""查询内容: {query}
 
 报告数量: {len(reports)} 个分析引擎报告
 论坛日志: {'有' if forum_logs else '无'}
+{reports_summary}{forum_summary}
 
 可用模板:
 {template_list}
 
-请选择最合适的模板。"""
+请根据查询内容、报告内容和论坛日志的具体情况，选择最合适的模板。"""
         
         # 调用LLM
         response = self.llm_client.invoke(SYSTEM_PROMPT_TEMPLATE_SELECTION, user_message)
@@ -140,7 +121,7 @@ class TemplateSelectionNode(BaseNode):
             self.log_error("LLM返回空响应")
             return None
         
-        self.log_info(f"LLM原始响应: {response[:200]}...")
+        self.log_info(f"LLM原始响应: {response}")
         
         # 尝试解析JSON响应
         try:
@@ -250,18 +231,7 @@ class TemplateSelectionNode(BaseNode):
         
         return "通用报告模板"
     
-    def _get_default_social_event_template(self, available_templates: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-        """获取默认的社会热点事件分析模板"""
-        # 查找社会热点事件分析模板
-        for template in available_templates:
-            if '社会公共热点事件' in template['name'] or '热点' in template['name']:
-                self.log_info(f"使用默认模板: {template['name']}")
-                return {
-                    'template_name': template['name'],
-                    'template_content': template['content'],
-                    'selection_reason': '默认使用社会热点事件分析模板'
-                }
-        return None
+
     
     def _get_fallback_template(self) -> Dict[str, Any]:
         """获取备用默认模板（空模板，让LLM自行发挥）"""
