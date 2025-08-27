@@ -40,6 +40,7 @@ def main():
 
     st.title("Insight Agent")
     st.markdown("私有舆情数据库深度分析AI代理")
+    st.markdown("24小时全自动从包括微博、知乎、github、酷安等 13个 社媒平台、技术论坛广泛的爬取舆情数据")
 
     # 检查URL参数
     try:
@@ -186,7 +187,7 @@ def execute_research(query: str, config: Config):
 
 def display_results(agent: DeepSearchAgent, final_report: str):
     """显示研究结果"""
-    st.header("研究结果")
+    st.header("工作结束")
 
     # 结果标签页（已移除下载选项）
     tab1, tab2 = st.tabs(["研究小结", "引用信息"])

@@ -40,6 +40,8 @@ def main():
 
     st.title("Media Agent")
     st.markdown("具备强大多模态能力的AI代理")
+    st.markdown("突破传统文本交流限制，广泛的浏览抖音、快手、小红书的视频、图文、直播")
+    st.markdown("使用现代化搜索引擎提供的诸如日历卡、天气卡、股票卡等多模态结构化信息进一步增强能力")
 
     # 检查URL参数
     try:

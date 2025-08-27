@@ -81,7 +81,7 @@ class DeepSeekLLM(BaseLLM):
                 "model": self.default_model,
                 "messages": messages,
                 "temperature": kwargs.get("temperature", 0.7),
-                "max_tokens": kwargs.get("max_tokens", 4000),
+                "max_tokens": kwargs.get("max_tokens", 30000),  # 提高到30000以支持一万字报告
                 "stream": False
             }
             

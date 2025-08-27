@@ -40,6 +40,7 @@ def main():
 
     st.title("Query Agent")
     st.markdown("具备强大网页搜索能力的AI代理")
+    st.markdown("广度爬取官方报道与新闻，注重国内外资源相结合理解舆情")
 
     # 检查URL参数
     try:
