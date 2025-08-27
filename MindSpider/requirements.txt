@@ -1,0 +1,51 @@
+# MindSpider AI爬虫项目依赖包
+# 整合BroadTopicExtraction和DeepSentimentCrawling模块的核心依赖
+
+# ===============================
+# 数据库相关
+# ===============================
+pymysql==1.1.0
+aiomysql==0.2.0
+aiosqlite==0.21.0
+
+# ===============================
+# HTTP请求和网络
+# ===============================
+httpx==0.28.1
+requests==2.32.3
+aiofiles~=23.2.1
+
+# ===============================
+# 话题提取模块依赖
+# ===============================
+numpy
+pandas==2.2.3
+regex
+tqdm
+python-dateutil
+pytz
+
+# ===============================
+# MediaCrawler爬虫依赖
+# ===============================
+Pillow==9.5.0
+playwright==1.45.0
+tenacity==8.2.2
+opencv-python
+redis~=4.6.0
+pydantic==2.5.2
+fastapi==0.110.2
+uvicorn==0.29.0
+python-dotenv==1.0.1
+jieba==0.42.1
+wordcloud==1.9.3
+matplotlib==3.9.0
+parsel==1.9.1
+pyexecjs==1.5.1
+
+# ===============================
+# 工具包
+# ===============================
+beautifulsoup4
+lxml
+loguru
