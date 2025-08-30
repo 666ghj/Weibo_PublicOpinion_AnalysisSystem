@@ -471,6 +471,16 @@ We welcome all forms of contributions!
 - New features need corresponding test cases
 - Update related documentation
 
+## 🦖 Next Development Plan
+
+The system has currently completed only the first two steps of the "three-step approach": requirement input -> detailed analysis. The missing step is prediction, and directly handing this over to LLM lacks persuasiveness.
+
+<div align="center">
+<img src="static/image/banner_compressed.png" alt="banner" width="800">
+</div>
+
+Currently, after a long period of crawling and collection, we have accumulated massive data on topic popularity trends over time, trending events, and other change patterns across the entire network. We now have the conditions to develop prediction models. Our team will apply our technical reserves in time series models, graph neural networks, multimodal fusion, and other prediction model technologies to achieve truly data-driven public opinion prediction functionality.
+
 ## 📄 License
 
 This project is licensed under the [GPL-2.0 License](LICENSE). Please see the LICENSE file for details.
