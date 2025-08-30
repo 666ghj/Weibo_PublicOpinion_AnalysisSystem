@@ -14,7 +14,7 @@
 
 ## 📝 Project Overview
 
-**"WeiYu"** is an innovative multi-agent public opinion analysis system built from scratch, featuring universal simplicity across all platforms.
+**"WeiYu"** is an innovative multi-agent public opinion analysis system built from scratch, not limited to Weibo, and features universal simplicity and applicability across all platforms.
 
 See the system-generated research report on "Wuhan University Public Opinion":[In-depth Analysis Report on Wuhan University's Brand Reputation](./final_reports/final_report__20250827_131630.html)
 
