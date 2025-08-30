@@ -2,9 +2,8 @@
 
 <img src="static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="600">
 
-# 微舆 - 致力于打造简洁通用的舆情分析平台
-
 [![GitHub Stars](https://img.shields.io/github/stars/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/stargazers)
+[![GitHub Watchers](https://img.shields.io/github/watchers/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/watchers)
 [![GitHub Forks](https://img.shields.io/github/forks/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/network)
 [![GitHub Issues](https://img.shields.io/github/issues/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/issues)
 [![GitHub License](https://img.shields.io/github/license/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE)
@@ -13,188 +12,143 @@
 
 </div>
 
-<div align="center">
-<img src="static/image/system_schematic.png" alt="banner" width="800">
-</div>
-
 ## 📝 项目概述
 
-**微博舆情分析多智能体系统**是一个从零构建的创新型舆情分析平台，采用多Agent协作架构，致力于提供准确、实时、全面的微博舆情监测与分析服务。系统通过五个专门化的AI Agent协同工作，实现了从数据采集、情感分析到报告生成的全流程自动化。
+“**微舆**” 是一个从0实现的创新型 多智能体 舆情分析系统，全平台简洁通用。
 
-### 🚀 核心亮点
+查看系统以“武汉大学舆情”为例，生成的研究报告：[武汉大学品牌声誉深度分析报告](./final_reports/final_report__20250827_131630.html)
 
-- **多智能体协作架构**：5个专门化Agent各司其职，协同工作完成舆情分析全流程
-- **全方位数据采集**：整合微博爬虫、新闻搜索、多媒体内容等多维度数据源
-- **深度情感分析**：基于微调BERT/GPT-2/Qwen模型的精准多语言情感识别
-- **智能报告生成**：自动生成结构化HTML分析报告，支持自定义模板
-- **Agent论坛交流**：ForumEngine提供Agent间信息共享和协作决策平台
-- **高性能异步处理**：支持并发处理多个舆情任务，实时状态监控
-- **云端数据支持**：提供便捷云数据库服务，日均10万+真实数据
+不仅仅体现在报告质量上，相比同类产品，我们拥有🚀六大优势：
+
+1. **AI驱动的全域监控**：AI爬虫集群7x24小时不间断作业，全面覆盖微博、小红书、抖音、快手等10+国内外关键社媒。不仅实时捕获热点内容，更能下钻至海量用户评论，让您听到最真实、最广泛的大众声音。
+
+2. **超越LLM的复合分析引擎**：我们不仅依赖设计的5类专业Agent，更融合了微调模型、统计模型等中间件。通过多模型协同工作，确保了分析结果的深度、准度与多维视角。
+
+3. **强大的多模态能力**：突破图文限制，能深度解析抖音、快手等短视频内容，并精准提取现代搜索引擎中的天气、日历、股票等结构化多模态信息卡片，让您全面掌握舆情动态。
+
+4. **Agent“论坛”协作机制**：为不同Agent赋予独特的工具集与思维模式，通过“论坛”机制进行链式思维碰撞与辩论。这不仅避免了单一模型的思维局限与交流导致的同质化，更催生出更高质量的集体智能与决策支持。
+
+5. **公私域数据无缝融合**：平台不仅分析公开舆情，还提供高安全性的接口，支持您将内部业务数据库与舆情数据无缝集成。打通数据壁垒，为垂直业务提供“外部趋势+内部洞察”的强大分析能力。
+
+6. **轻量化与高扩展性框架**：基于纯Python模块化设计，实现轻量化、一键式部署。代码结构清晰，开发者可轻松集成自定义模型与业务逻辑，实现平台的快速扩展与深度定制。
+
+**始于舆情，而不止于舆情**。“微舆”的目标，是成为驱动一切业务场景的简洁通用的数据分析引擎。
+
+<div align="center">
+<img src="static/image/system_schematic.png" alt="banner" width="800">
+
+告别传统的数据看板，在“微舆”，一切由一个简单的问题开始，您只需像对话一样，提出您的分析需求
+</div>
 
 ## 🏗️ 系统架构
 
 ### 整体架构图
 
-```mermaid
-graph TB
-    subgraph "前端展示层"
-        UI[Web界面<br/>Flask + Streamlit]
-    end
-    
-    subgraph "多Agent协作层"
-        QE[QueryEngine<br/>新闻搜索Agent]
-        ME[MediaEngine<br/>多媒体搜索Agent]
-        IE[InsightEngine<br/>深度洞察Agent]
-        RE[ReportEngine<br/>报告生成Agent]
-        Forum[ForumEngine<br/>Agent论坛交流中心]
-    end
-    
-    subgraph "数据处理层"
-        MS[MindSpider<br/>微博爬虫系统]
-        SA[SentimentAnalysis<br/>情感分析模型集合]
-        DB[(MySQL<br/>数据库)]
-    end
-    
-    subgraph "外部服务层"
-        LLM[LLM API<br/>DeepSeek/Kimi/Gemini]
-        Search[搜索API<br/>Tavily/Bocha]
-    end
-    
-    UI --> QE
-    UI --> ME
-    UI --> IE
-    UI --> RE
-    
-    QE --> Search
-    ME --> Search
-    IE --> MS
-    IE --> SA
-    
-    QE --> LLM
-    ME --> LLM
-    IE --> LLM
-    RE --> LLM
-    
-    MS --> DB
-    SA --> DB
-    
-    %% Agent论坛交流机制
-    QE <--> Forum
-    ME <--> Forum
-    IE <--> Forum
-    RE <--> Forum
-```
+还在画...
 
-### Agent协作流程
-
-系统核心工作流程基于多Agent协作模式：
-
-1. **QueryEngine（新闻查询Agent）**：使用Tavily API搜索权威新闻报道，提供官方信息源
-2. **MediaEngine（多媒体搜索Agent）**：通过Bocha API进行多模态内容搜索，获取社交媒体观点
-3. **InsightEngine（深度洞察Agent）**：查询本地微博数据库，结合多种情感分析模型进行深度分析
-4. **ForumEngine（论坛监控Agent）**：实时监控各Agent日志输出，提取关键信息并促进协作
-5. **ReportEngine（报告生成Agent）**：基于所有Agent的分析结果，使用Gemini LLM生成综合HTML报告
-
-### 项目代码结构
+### 项目代码结构树
 
 ```
 Weibo_PublicOpinion_AnalysisSystem/
-├── QueryEngine/                    # 新闻查询引擎Agent
+├── QueryEngine/                   # 国内外新闻广度搜索Agent
 │   ├── agent.py                   # Agent主逻辑
 │   ├── llms/                      # LLM接口封装
 │   ├── nodes/                     # 处理节点
 │   ├── tools/                     # 搜索工具
-│   └── utils/                     # 工具函数
-├── MediaEngine/                    # 多媒体搜索引擎Agent
+│   ├── utils/                     # 工具函数
+│   └── ...                        # 其他模块
+├── MediaEngine/                   # 强大的多模态理解Agent
 │   ├── agent.py                   # Agent主逻辑
 │   ├── llms/                      # LLM接口
 │   ├── tools/                     # 搜索工具
-│   └── ...                       # 其他模块
-├── InsightEngine/                 # 数据洞察引擎Agent
+│   └── ...                        # 其他模块
+├── InsightEngine/                 # 私有数据库挖掘Agent
 │   ├── agent.py                   # Agent主逻辑
 │   ├── llms/                      # LLM接口封装
-│   │   ├── deepseek.py           # DeepSeek API
-│   │   ├── kimi.py               # Kimi API
-│   │   ├── openai_llm.py         # OpenAI格式API
-│   │   └── base.py               # LLM基类
+│   │   ├── deepseek.py            # DeepSeek API
+│   │   ├── kimi.py                # Kimi API
+│   │   ├── openai_llm.py          # OpenAI格式API
+│   │   └── base.py                # LLM基类
 │   ├── nodes/                     # 处理节点
-│   │   ├── first_search_node.py  # 首次搜索节点
-│   │   ├── reflection_node.py    # 反思节点
-│   │   ├── summary_nodes.py      # 总结节点
-│   │   ├── search_node.py        # 搜索节点
-│   │   ├── sentiment_node.py     # 情感分析节点
-│   │   └── insight_node.py       # 洞察生成节点
+│   │   ├── first_search_node.py   # 首次搜索节点
+│   │   ├── reflection_node.py     # 反思节点
+│   │   ├── summary_nodes.py       # 总结节点
+│   │   ├── search_node.py         # 搜索节点
+│   │   ├── sentiment_node.py      # 情感分析节点
+│   │   └── insight_node.py        # 洞察生成节点
 │   ├── tools/                     # 数据库查询和分析工具
-│   │   ├── media_crawler_db.py   # 数据库查询工具
-│   │   └── sentiment_analyzer.py # 情感分析集成工具
+│   │   ├── media_crawler_db.py    # 数据库查询工具
+│   │   └── sentiment_analyzer.py  # 情感分析集成工具
 │   ├── state/                     # 状态管理
 │   │   ├── __init__.py
-│   │   └── state.py              # Agent状态定义
+│   │   └── state.py               # Agent状态定义
 │   ├── prompts/                   # 提示词模板
 │   │   ├── __init__.py
-│   │   └── prompts.py            # 各类提示词
+│   │   └── prompts.py             # 各类提示词
 │   └── utils/                     # 工具函数
 │       ├── __init__.py
-│       ├── config.py             # 配置管理
-│       └── helpers.py            # 辅助函数
-├── ReportEngine/                  # 报告生成引擎Agent
+│       ├── config.py              # 配置管理
+│       └── helpers.py             # 辅助函数
+├── ReportEngine/                  # 多轮报告生成Agent
 │   ├── agent.py                   # Agent主逻辑
 │   ├── llms/                      # LLM接口
-│   │   └── gemini.py             # Gemini API专用
+│   │   └── gemini.py              # Gemini API专用
 │   ├── nodes/                     # 报告生成节点
-│   │   ├── template_selection.py # 模板选择节点
-│   │   └── html_generation.py    # HTML生成节点
+│   │   ├── template_selection.py  # 模板选择节点
+│   │   └── html_generation.py     # HTML生成节点
 │   ├── report_template/           # 报告模板库
 │   │   ├── 社会公共热点事件分析.md
 │   │   ├── 商业品牌舆情监测.md
-│   │   └── ...                   # 更多模板
+│   │   └── ...                    # 更多模板
 │   └── flask_interface.py         # Flask API接口
-├── ForumEngine/                   # 论坛交流引擎Agent
+├── ForumEngine/                   # 论坛引擎简易实现
 │   └── monitor.py                 # 日志监控和论坛管理
 ├── MindSpider/                    # 微博爬虫系统
 │   ├── main.py                    # 爬虫主程序
 │   ├── BroadTopicExtraction/      # 话题提取模块
-│   │   ├── get_today_news.py     # 今日新闻获取
-│   │   └── topic_extractor.py    # 话题提取器
-│   ├── DeepSentimentCrawling/     # 深度情感爬取
-│   │   ├── MediaCrawler/         # 媒体爬虫核心
-│   │   └── platform_crawler.py  # 平台爬虫管理
+│   │   ├── get_today_news.py      # 今日新闻获取
+│   │   └── topic_extractor.py     # 话题提取器
+│   ├── DeepSentimentCrawling/     # 深度舆情爬取
+│   │   ├── MediaCrawler/          # 媒体爬虫核心
+│   │   └── platform_crawler.py    # 平台爬虫管理
 │   └── schema/                    # 数据库结构
-│       └── init_database.py      # 数据库初始化
+│       └── init_database.py       # 数据库初始化
 ├── SentimentAnalysisModel/        # 情感分析模型集合
 │   ├── WeiboSentiment_Finetuned/  # 微调BERT/GPT-2模型
-│   ├── WeiboMultilingualSentiment/ # 多语言情感分析
-│   ├── WeiboSentiment_SmallQwen/   # 小型Qwen模型
+│   ├── WeiboMultilingualSentiment/# 多语言情感分析（推荐）
+│   ├── WeiboSentiment_SmallQwen/  # 小参数Qwen3微调
 │   └── WeiboSentiment_MachineLearning/ # 传统机器学习方法
 ├── SingleEngineApp/               # 单独Agent的Streamlit应用
 │   ├── query_engine_streamlit_app.py
 │   ├── media_engine_streamlit_app.py
 │   └── insight_engine_streamlit_app.py
 ├── templates/                     # Flask模板
-│   └── index.html                # 主界面模板
+│   └── index.html                 # 主界面前端
 ├── static/                        # 静态资源
-├── logs/                         # 运行日志目录
-├── app.py                        # Flask主应用入口
-├── config.py                     # 全局配置文件
-└── requirements.txt              # Python依赖包清单
+├── logs/                          # 运行日志目录
+├── final_reports/                 # 最终生成的HTML报告文件
+├── utils/                         # 通用工具函数
+├── app.py                         # Flask主应用入口
+├── config.py                      # 全局配置文件
+└── requirements.txt               # Python依赖包清单
 ```
 
 ## 🚀 快速开始
 
 ### 环境要求
 
-- **操作系统**: Windows 10/11（Linux/macOS也支持）
-- **Python版本**: 3.11+
+- **操作系统**: Windows、Linux、MacOS
+- **Python版本**: 3.9+
 - **Conda**: Anaconda或Miniconda
-- **数据库**: MySQL 8.0+（可选择我们的云数据库服务）
-- **内存**: 建议8GB以上
+- **数据库**: MySQL（可选择我们的云数据库服务）
+- **内存**: 建议2GB以上
 
 ### 1. 创建Conda环境
 
 ```bash
-# 创建名为pytorch_python11的conda环境
-conda create -n pytorch_python11 python=3.11
-conda activate pytorch_python11
+# 创建conda环境
+conda create -n your_conda_name python=3.11
+conda activate your_conda_name
 ```
 
 ### 2. 安装依赖包
@@ -203,6 +157,7 @@ conda activate pytorch_python11
 # 基础依赖安装
 pip install -r requirements.txt
 
+#========下面是可选项========
 # 如果需要本地情感分析功能，安装PyTorch
 # CPU版本
 pip install torch torchvision torchaudio
@@ -225,7 +180,7 @@ playwright install chromium
 
 #### 4.1 配置API密钥
 
-编辑 `config.py` 文件，填入您的API密钥：
+编辑 `config.py` 文件，填入您的API密钥（您也可以选择自己的模型、搜索代理）：
 
 ```python
 # MySQL数据库配置
@@ -266,10 +221,9 @@ python schema/init_database.py
 
 **选择2：使用云数据库服务（推荐）**
 
-我们提供便捷的云数据库服务，包含日均10万+真实微博数据，目前推广期间**免费申请**！
+我们提供便捷的云数据库服务，包含日均10万+真实舆情数据，目前推广期间**免费申请**！
 
-- 真实微博数据，实时更新
-- 预处理的情感标注数据
+- 真实舆情数据，实时更新
 - 多维度标签分类
 - 高可用云端服务
 - 专业技术支持
@@ -282,11 +236,13 @@ python schema/init_database.py
 
 ```bash
 # 在项目根目录下，激活conda环境
-conda activate pytorch_python11
+conda activate your_conda_name
 
-# 启动主应用（自动启动所有Agent）
+# 启动主应用即可
 python app.py
 ```
+
+> 注：数据爬取需要单独操作，见5.3指引
 
 访问 http://localhost:5000 即可使用完整系统
 
@@ -305,6 +261,8 @@ streamlit run SingleEngineApp/insight_engine_streamlit_app.py --server.port 8501
 
 #### 5.3 爬虫系统单独使用
 
+这部分有详细的配置文档：[MindeSpider使用说明](./MindSpider/README.md)
+
 ```bash
 # 进入爬虫目录
 cd MindSpider
@@ -322,65 +280,13 @@ python main.py --broad-topic --date 2024-01-20
 python main.py --deep-sentiment --platforms xhs dy wb
 ```
 
-## 💾 数据库配置
-
-### 本地数据库配置
-
-1. **安装MySQL 8.0+**
-2. **创建数据库**：
-   ```sql
-   CREATE DATABASE weibo_analysis CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   ```
-3. **运行初始化脚本**：
-   ```bash
-   cd MindSpider
-   python schema/init_database.py
-   ```
-
-### 自动爬取配置
-
-配置自动爬取任务，实现数据的持续更新：
-
-```python
-# MindSpider/config.py 中配置爬虫参数
-CRAWLER_CONFIG = {
-    'max_pages': 200,         # 最大爬取页数
-    'delay': 1,               # 请求延迟（秒）
-    'timeout': 30,            # 超时时间（秒）
-    'platforms': ['xhs', 'dy', 'wb', 'bili'],  # 爬取平台
-    'daily_keywords': 100,    # 每日关键词数量
-    'max_notes_per_keyword': 50,  # 每关键词最大内容数
-    'use_proxy': False,       # 是否使用代理
-}
-```
-
-### 云数据库服务（推荐）
-
-**为什么选择我们的云数据库服务？**
-
-- **丰富数据源**：日均10万+真实微博数据，涵盖各行业热点话题
-- **高质量标注**：专业团队人工标注的情感数据，准确率95%+
-- **多维度分析**：包含话题分类、情感倾向、影响力评分等多维标签
-- **实时更新**：24小时不间断数据采集，确保时效性
-- **技术支持**：专业团队提供技术支持和定制化服务
-
-**申请方式**：
-📧 邮件联系：670939375@qq.com
-📝 邮件标题：申请微博舆情云数据库访问
-📝 邮件内容：请说明您的使用场景和预期数据量需求
-
-**推广期福利**：
-- 免费提供基础版云数据库访问
-- 免费技术支持和部署指导
-- 优先体验新功能特性
-
 ## ⚙️ 高级配置
 
 ### 修改关键参数
 
 #### Agent配置参数
 
-每个Agent都有专门的配置文件，可根据需求调整：
+每个Agent都有专门的配置文件，可根据需求调整，下面是部分示例：
 
 ```python
 # QueryEngine/utils/config.py
@@ -406,7 +312,7 @@ class Config:
 ```python
 # InsightEngine/tools/sentiment_analyzer.py
 SENTIMENT_CONFIG = {
-    'model_type': 'multilingual',     # 可选: 'bert', 'multilingual', 'qwen'
+    'model_type': 'multilingual',     # 可选: 'bert', 'multilingual', 'qwen'等
     'confidence_threshold': 0.8,      # 置信度阈值
     'batch_size': 32,                 # 批处理大小
     'max_sequence_length': 512,       # 最大序列长度
@@ -420,7 +326,7 @@ SENTIMENT_CONFIG = {
 ```python
 # 在各Engine的utils/config.py中配置
 class Config:
-    default_llm_provider = "deepseek"  # 可选: "deepseek", "openai", "kimi", "gemini"
+    default_llm_provider = "deepseek"  # 可选: "deepseek", "openai", "kimi", "gemini"，"qwen"等
     
     # DeepSeek配置
     deepseek_api_key = "your_api_key"
@@ -444,7 +350,21 @@ class Config:
 
 系统集成了多种情感分析方法，可根据需求选择：
 
-#### 1. 基于BERT的微调模型（精度最高）
+#### 1. 多语言情感分析
+
+```bash
+cd SentimentAnalysisModel/WeiboMultilingualSentiment
+python predict.py --text "This product is amazing!" --lang "en"
+```
+
+#### 2. 小参数Qwen3微调
+
+```bash
+cd SentimentAnalysisModel/WeiboSentiment_SmallQwen
+python predict_universal.py --text "这次活动办得很成功"
+```
+
+#### 3. 基于BERT的微调模型
 
 ```bash
 # 使用BERT中文模型
@@ -452,32 +372,18 @@ cd SentimentAnalysisModel/WeiboSentiment_Finetuned/BertChinese-Lora
 python predict.py --text "这个产品真的很不错"
 ```
 
-#### 2. GPT-2 LoRA微调模型（速度较快）
+#### 4. GPT-2 LoRA微调模型
 
 ```bash
 cd SentimentAnalysisModel/WeiboSentiment_Finetuned/GPT2-Lora
 python predict.py --text "今天心情不太好"
 ```
 
-#### 3. 小型Qwen模型（平衡型）
-
-```bash
-cd SentimentAnalysisModel/WeiboSentiment_SmallQwen
-python predict_universal.py --text "这次活动办得很成功"
-```
-
-#### 4. 传统机器学习方法（轻量级）
+#### 5. 传统机器学习方法
 
 ```bash
 cd SentimentAnalysisModel/WeiboSentiment_MachineLearning
 python predict.py --model_type "svm" --text "服务态度需要改进"
-```
-
-#### 5. 多语言情感分析（支持22种语言）
-
-```bash
-cd SentimentAnalysisModel/WeiboMultilingualSentiment
-python predict.py --text "This product is amazing!" --lang "en"
 ```
 
 ### 接入自定义业务数据库
@@ -538,45 +444,13 @@ class DeepSearchAgent:
 
 ### 自定义报告模板
 
-#### 1. 创建模板文件
-
-在 `ReportEngine/report_template/` 目录下创建新的Markdown模板：
-
-```markdown
-<!-- 企业品牌监测报告.md -->
-# 企业品牌舆情监测报告
-
-## 📊 执行摘要
-{executive_summary}
-
-## 🔍 品牌提及分析
-### 提及量趋势
-{mention_trend}
-
-### 情感分布
-{sentiment_distribution}
-
-## 📈 竞品对比分析
-{competitor_analysis}
-
-## 🎯 关键观点摘要
-{key_insights}
-
-## ⚠️ 风险预警
-{risk_alerts}
-
-## 📋 改进建议
-{recommendations}
-
----
-*报告类型：企业品牌舆情监测*  
-*生成时间：{generation_time}*  
-*数据来源：{data_sources}*
-```
-
-#### 2. 在Web界面中使用
+#### 1. 在Web界面中上传
 
 系统支持上传自定义模板文件（.md或.txt格式），可在生成报告时选择使用。
+
+#### 2. 创建模板文件
+
+在 `ReportEngine/report_template/` 目录下创建新的模板，我们的Agent会自行选用最合适的模板。
 
 ## 🤝 贡献指南
 
@@ -590,15 +464,6 @@ class DeepSearchAgent:
 4. **推送到分支**：`git push origin feature/AmazingFeature`
 5. **开启Pull Request**
 
-### 贡献类型
-
-- 🐛 Bug修复
-- ✨ 新功能开发
-- 📚 文档完善
-- 🎨 UI/UX改进
-- ⚡ 性能优化
-- 🧪 测试用例添加
-
 ### 开发规范
 
 - 代码遵循PEP8规范
@@ -608,7 +473,7 @@ class DeepSearchAgent:
 
 ## 📄 许可证
 
-本项目采用 [MIT许可证](LICENSE)。详细信息请参阅LICENSE文件。
+本项目采用 [GPL-2.0许可证](LICENSE)。详细信息请参阅LICENSE文件。
 
 ## 🎉 支持与联系
 
@@ -621,8 +486,6 @@ class DeepSearchAgent:
 ### 联系方式
 
 - 📧 **邮箱**：670939375@qq.com
-- 💬 **QQ群**：[加入技术交流群]
-- 🐦 **微信**：[扫码添加技术支持]
 
 ### 商务合作
 
@@ -635,8 +498,8 @@ class DeepSearchAgent:
 
 **免费云数据库服务申请**：
 📧 发送邮件至：670939375@qq.com  
-📝 标题：微博舆情云数据库申请  
-📝 说明：您的使用场景和需求  
+📝 标题：微舆云数据库申请  
+📝 说明：您的使用场景和需求
 
 ## 👥 贡献者
 
@@ -649,7 +512,5 @@ class DeepSearchAgent:
 <div align="center">
 
 **⭐ 如果这个项目对您有帮助，请给我们一个星标！**
-
-Made with ❤️ by [微博舆情分析团队](https://github.com/666ghj)
 
 </div>

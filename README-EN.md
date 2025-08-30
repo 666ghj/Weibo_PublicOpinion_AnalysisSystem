@@ -1,10 +1,9 @@
 <div align="center">
 
-# 📊 Weibo Public Opinion Multi-Agent Analysis System
-
 <img src="static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="600">
 
 [![GitHub Stars](https://img.shields.io/github/stars/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/stargazers)
+[![GitHub Watchers](https://img.shields.io/github/watchers/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/watchers)
 [![GitHub Forks](https://img.shields.io/github/forks/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/network)
 [![GitHub Issues](https://img.shields.io/github/issues/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/issues)
 [![GitHub License](https://img.shields.io/github/license/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/blob/main/LICENSE)
@@ -13,196 +12,152 @@
 
 </div>
 
-<div align="center">
-<img src="static/image/banner_compressed.png" alt="banner" width="800">
-</div>
-
 ## 📝 Project Overview
 
-**Weibo Public Opinion Multi-Agent Analysis System** is an innovative public opinion analysis platform built from scratch, utilizing multi-agent collaborative architecture to provide accurate, real-time, and comprehensive Weibo public opinion monitoring and analysis services. The system achieves full-process automation from data collection and sentiment analysis to report generation through the collaboration of five specialized AI agents.
+**"WeiYu"** is an innovative multi-agent public opinion analysis system built from scratch, featuring universal simplicity across all platforms.
 
-### 🚀 Key Features
+See the system-generated research report on "Wuhan University Public Opinion":[In-depth Analysis Report on Wuhan University's Brand Reputation](./final_reports/final_report__20250827_131630.html)
 
-- **Multi-Agent Collaborative Architecture**: 5 specialized agents working together to complete the full process of public opinion analysis
-- **Comprehensive Data Collection**: Integrating Weibo crawlers, news search, multimedia content, and other multi-dimensional data sources
-- **Deep Sentiment Analysis**: Precise multilingual sentiment recognition based on fine-tuned BERT/GPT-2/Qwen models
-- **Intelligent Report Generation**: Automatically generate structured HTML analysis reports with custom template support
-- **Agent Forum Communication**: ForumEngine provides information sharing and collaborative decision-making platform for agents
-- **High-Performance Asynchronous Processing**: Support concurrent processing of multiple public opinion tasks with real-time status monitoring
-- **Cloud Data Support**: Convenient cloud database service with 100,000+ daily real data
+Beyond just report quality, compared to similar products, we have 🚀 six major advantages:
+
+1. **AI-Driven Comprehensive Monitoring**: AI crawler clusters operate 24/7 non-stop, comprehensively covering 10+ key domestic and international social media platforms including Weibo, Xiaohongshu, TikTok, Kuaishou, etc. Not only capturing trending content in real-time, but also drilling down to massive user comments, letting you hear the most authentic and widespread public voice.
+
+2. **Composite Analysis Engine Beyond LLM**: We not only rely on 5 types of professionally designed Agents, but also integrate middleware such as fine-tuned models and statistical models. Through multi-model collaborative work, we ensure the depth, accuracy, and multi-dimensional perspective of analysis results.
+
+3. **Powerful Multimodal Capabilities**: Breaking through text and image limitations, capable of deep analysis of short video content from TikTok, Kuaishou, etc., and precisely extracting structured multimodal information cards such as weather, calendar, stocks from modern search engines, giving you comprehensive control over public opinion dynamics.
+
+4. **Agent "Forum" Collaboration Mechanism**: Endowing different Agents with unique toolsets and thinking patterns, conducting chain-of-thought collision and debate through the "forum" mechanism. This not only avoids the thinking limitations of single models and homogenization caused by communication, but also catalyzes higher-quality collective intelligence and decision support.
+
+5. **Seamless Integration of Public and Private Domain Data**: The platform not only analyzes public opinion, but also provides high-security interfaces supporting seamless integration of your internal business databases with public opinion data. Breaking through data barriers, providing powerful analysis capabilities of "external trends + internal insights" for vertical businesses.
+
+6. **Lightweight and Highly Extensible Framework**: Based on pure Python modular design, achieving lightweight, one-click deployment. Clear code structure allows developers to easily integrate custom models and business logic, enabling rapid platform expansion and deep customization.
+
+**Starting with public opinion, but not limited to public opinion**. The goal of "WeiYu" is to become a simple and universal data analysis engine that drives all business scenarios.
+
+<div align="center">
+<img src="static/image/system_schematic.png" alt="banner" width="800">
+
+Say goodbye to traditional data dashboards. In "WeiYu", everything starts with a simple question - you just need to ask your analysis needs like a conversation
+</div>
 
 ## 🏗️ System Architecture
 
 ### Overall Architecture Diagram
 
-```mermaid
-graph TB
-    subgraph "Frontend Display Layer"
-        UI[Web Interface<br/>Flask + Streamlit]
-    end
-    
-    subgraph "Multi-Agent Collaboration Layer"
-        QE[QueryEngine<br/>News Search Agent]
-        ME[MediaEngine<br/>Multimedia Search Agent]
-        IE[InsightEngine<br/>Deep Insight Agent]
-        RE[ReportEngine<br/>Report Generation Agent]
-        Forum[ForumEngine<br/>Agent Forum Communication Center]
-    end
-    
-    subgraph "Data Processing Layer"
-        MS[MindSpider<br/>Weibo Crawler System]
-        SA[SentimentAnalysis<br/>Sentiment Analysis Model Collection]
-        DB[(MySQL<br/>Database)]
-    end
-    
-    subgraph "External Service Layer"
-        LLM[LLM API<br/>DeepSeek/Kimi/Gemini]
-        Search[Search API<br/>Tavily/Bocha]
-    end
-    
-    UI --> QE
-    UI --> ME
-    UI --> IE
-    UI --> RE
-    
-    QE --> Search
-    ME --> Search
-    IE --> MS
-    IE --> SA
-    
-    QE --> LLM
-    ME --> LLM
-    IE --> LLM
-    RE --> LLM
-    
-    MS --> DB
-    SA --> DB
-    
-    %% Agent Forum Communication Mechanism
-    QE <--> Forum
-    ME <--> Forum
-    IE <--> Forum
-    RE <--> Forum
-```
+Still drawing...
 
-### Agent Collaboration Workflow
-
-The system's core workflow is based on multi-agent collaboration:
-
-1. **QueryEngine (News Query Agent)**: Uses Tavily API to search authoritative news reports, providing official information sources
-2. **MediaEngine (Multimedia Search Agent)**: Conducts multimodal content search through Bocha API to gather social media perspectives
-3. **InsightEngine (Deep Insight Agent)**: Queries local Weibo database, combines multiple sentiment analysis models for deep analysis
-4. **ForumEngine (Forum Monitoring Agent)**: Real-time monitoring of agent log outputs, extracts key information and promotes collaboration
-5. **ReportEngine (Report Generation Agent)**: Based on analysis results from all agents, uses Gemini LLM to generate comprehensive HTML reports
-
-### Project Code Structure
+### Project Code Structure Tree
 
 ```
 Weibo_PublicOpinion_AnalysisSystem/
-├── QueryEngine/                    # News Query Engine Agent
+├── QueryEngine/                   # Domestic and international news breadth search Agent
 │   ├── agent.py                   # Agent main logic
 │   ├── llms/                      # LLM interface wrapper
 │   ├── nodes/                     # Processing nodes
 │   ├── tools/                     # Search tools
-│   └── utils/                     # Utility functions
-├── MediaEngine/                    # Multimedia Search Engine Agent
+│   ├── utils/                     # Utility functions
+│   └── ...                        # Other modules
+├── MediaEngine/                   # Powerful multimodal understanding Agent
 │   ├── agent.py                   # Agent main logic
 │   ├── llms/                      # LLM interfaces
 │   ├── tools/                     # Search tools
-│   └── ...                       # Other modules
-├── InsightEngine/                 # Data Insight Engine Agent
+│   └── ...                        # Other modules
+├── InsightEngine/                 # Private database mining Agent
 │   ├── agent.py                   # Agent main logic
 │   ├── llms/                      # LLM interface wrapper
-│   │   ├── deepseek.py           # DeepSeek API
-│   │   ├── kimi.py               # Kimi API
-│   │   ├── openai_llm.py         # OpenAI format API
-│   │   └── base.py               # LLM base class
+│   │   ├── deepseek.py            # DeepSeek API
+│   │   ├── kimi.py                # Kimi API
+│   │   ├── openai_llm.py          # OpenAI format API
+│   │   └── base.py                # LLM base class
 │   ├── nodes/                     # Processing nodes
-│   │   ├── first_search_node.py  # First search node
-│   │   ├── reflection_node.py    # Reflection node
-│   │   ├── summary_nodes.py      # Summary nodes
-│   │   ├── search_node.py        # Search node
-│   │   ├── sentiment_node.py     # Sentiment analysis node
-│   │   └── insight_node.py       # Insight generation node
+│   │   ├── first_search_node.py   # First search node
+│   │   ├── reflection_node.py     # Reflection node
+│   │   ├── summary_nodes.py       # Summary node
+│   │   ├── search_node.py         # Search node
+│   │   ├── sentiment_node.py      # Sentiment analysis node
+│   │   └── insight_node.py        # Insight generation node
 │   ├── tools/                     # Database query and analysis tools
-│   │   ├── media_crawler_db.py   # Database query tool
-│   │   └── sentiment_analyzer.py # Sentiment analysis integration tool
+│   │   ├── media_crawler_db.py    # Database query tool
+│   │   └── sentiment_analyzer.py  # Sentiment analysis integration tool
 │   ├── state/                     # State management
 │   │   ├── __init__.py
-│   │   └── state.py              # Agent state definition
+│   │   └── state.py               # Agent state definition
 │   ├── prompts/                   # Prompt templates
 │   │   ├── __init__.py
-│   │   └── prompts.py            # Various prompts
+│   │   └── prompts.py             # Various prompts
 │   └── utils/                     # Utility functions
 │       ├── __init__.py
-│       ├── config.py             # Configuration management
-│       └── helpers.py            # Helper functions
-├── ReportEngine/                  # Report Generation Engine Agent
+│       ├── config.py              # Configuration management
+│       └── helpers.py             # Helper functions
+├── ReportEngine/                  # Multi-round report generation Agent
 │   ├── agent.py                   # Agent main logic
 │   ├── llms/                      # LLM interfaces
-│   │   └── gemini.py             # Gemini API dedicated
+│   │   └── gemini.py              # Gemini API dedicated
 │   ├── nodes/                     # Report generation nodes
-│   │   ├── template_selection.py # Template selection node
-│   │   └── html_generation.py    # HTML generation node
+│   │   ├── template_selection.py  # Template selection node
+│   │   └── html_generation.py     # HTML generation node
 │   ├── report_template/           # Report template library
 │   │   ├── 社会公共热点事件分析.md
 │   │   ├── 商业品牌舆情监测.md
-│   │   └── ...                   # More templates
+│   │   └── ...                    # More templates
 │   └── flask_interface.py         # Flask API interface
-├── ForumEngine/                   # Forum Communication Engine Agent
+├── ForumEngine/                   # Forum engine simple implementation
 │   └── monitor.py                 # Log monitoring and forum management
-├── MindSpider/                    # Weibo Crawler System
+├── MindSpider/                    # Weibo crawler system
 │   ├── main.py                    # Crawler main program
 │   ├── BroadTopicExtraction/      # Topic extraction module
-│   │   ├── get_today_news.py     # Today's news fetching
-│   │   └── topic_extractor.py    # Topic extractor
+│   │   ├── get_today_news.py      # Today's news fetching
+│   │   └── topic_extractor.py     # Topic extractor
 │   ├── DeepSentimentCrawling/     # Deep sentiment crawling
-│   │   ├── MediaCrawler/         # Media crawler core
-│   │   └── platform_crawler.py  # Platform crawler management
+│   │   ├── MediaCrawler/          # Media crawler core
+│   │   └── platform_crawler.py    # Platform crawler management
 │   └── schema/                    # Database schema
-│       └── init_database.py      # Database initialization
-├── SentimentAnalysisModel/        # Sentiment Analysis Model Collection
+│       └── init_database.py       # Database initialization
+├── SentimentAnalysisModel/        # Sentiment analysis model collection
 │   ├── WeiboSentiment_Finetuned/  # Fine-tuned BERT/GPT-2 models
-│   ├── WeiboMultilingualSentiment/ # Multilingual sentiment analysis
-│   ├── WeiboSentiment_SmallQwen/   # Small Qwen model
+│   ├── WeiboMultilingualSentiment/# Multilingual sentiment analysis (recommended)
+│   ├── WeiboSentiment_SmallQwen/  # Small parameter Qwen3 fine-tuning
 │   └── WeiboSentiment_MachineLearning/ # Traditional machine learning methods
-├── SingleEngineApp/               # Individual Agent Streamlit apps
+├── SingleEngineApp/               # Individual Agent Streamlit applications
 │   ├── query_engine_streamlit_app.py
 │   ├── media_engine_streamlit_app.py
 │   └── insight_engine_streamlit_app.py
 ├── templates/                     # Flask templates
-│   └── index.html                # Main interface template
+│   └── index.html                 # Main interface frontend
 ├── static/                        # Static resources
-├── logs/                         # Runtime log directory
-├── app.py                        # Flask main application entry
-├── config.py                     # Global configuration file
-└── requirements.txt              # Python dependency list
+├── logs/                          # Runtime log directory
+├── final_reports/                 # Final generated HTML report files
+├── utils/                         # Common utility functions
+├── app.py                         # Flask main application entry
+├── config.py                      # Global configuration file
+└── requirements.txt               # Python dependency list
 ```
 
 ## 🚀 Quick Start
 
 ### System Requirements
 
-- **Operating System**: Windows 10/11 (Linux/macOS also supported)
-- **Python Version**: 3.11+
+- **Operating System**: Windows, Linux, MacOS
+- **Python Version**: 3.9+
 - **Conda**: Anaconda or Miniconda
-- **Database**: MySQL 8.0+ (or choose our cloud database service)
-- **Memory**: 8GB+ recommended
+- **Database**: MySQL (optional, you can choose our cloud database service)
+- **Memory**: 2GB+ recommended
 
 ### 1. Create Conda Environment
 
 ```bash
-# Create conda environment named pytorch_python11
-conda create -n pytorch_python11 python=3.11
-conda activate pytorch_python11
+# Create conda environment
+conda create -n your_conda_name python=3.11
+conda activate your_conda_name
 ```
 
 ### 2. Install Dependencies
 
 ```bash
-# Install basic dependencies
+# Basic dependency installation
 pip install -r requirements.txt
 
+#========Below are optional========
 # If you need local sentiment analysis functionality, install PyTorch
 # CPU version
 pip install torch torchvision torchaudio
@@ -225,7 +180,7 @@ playwright install chromium
 
 #### 4.1 Configure API Keys
 
-Edit the `config.py` file and fill in your API keys:
+Edit the `config.py` file and fill in your API keys (you can also choose your own models and search proxies):
 
 ```python
 # MySQL Database Configuration
@@ -266,10 +221,9 @@ python schema/init_database.py
 
 **Option 2: Use Cloud Database Service (Recommended)**
 
-We provide convenient cloud database service with 100,000+ daily real Weibo data, currently **free application** during the promotion period!
+We provide convenient cloud database service with 100,000+ daily real public opinion data, currently **free application** during the promotion period!
 
-- Real Weibo data, updated in real-time
-- Pre-processed sentiment annotation data
+- Real public opinion data, updated in real-time
 - Multi-dimensional tag classification
 - High-availability cloud service
 - Professional technical support
@@ -282,11 +236,13 @@ We provide convenient cloud database service with 100,000+ daily real Weibo data
 
 ```bash
 # In project root directory, activate conda environment
-conda activate pytorch_python11
+conda activate your_conda_name
 
-# Start main application (automatically starts all agents)
+# Start main application
 python app.py
 ```
+
+> Note: Data crawling requires separate operation, see section 5.3 for guidance
 
 Visit http://localhost:5000 to use the complete system
 
@@ -303,7 +259,9 @@ streamlit run SingleEngineApp/media_engine_streamlit_app.py --server.port 8502
 streamlit run SingleEngineApp/insight_engine_streamlit_app.py --server.port 8501
 ```
 
-#### 5.3 Standalone Crawler System
+#### 5.3 Crawler System Standalone Use
+
+This section has detailed configuration documentation: [MindSpider Usage Guide](./MindSpider/README.md)
 
 ```bash
 # Enter crawler directory
@@ -321,58 +279,6 @@ python main.py --broad-topic --date 2024-01-20
 # Run deep crawling only
 python main.py --deep-sentiment --platforms xhs dy wb
 ```
-
-## 💾 Database Configuration
-
-### Local Database Configuration
-
-1. **Install MySQL 8.0+**
-2. **Create Database**:
-   ```sql
-   CREATE DATABASE weibo_analysis CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   ```
-3. **Run Initialization Script**:
-   ```bash
-   cd MindSpider
-   python schema/init_database.py
-   ```
-
-### Auto-Crawling Configuration
-
-Configure automatic crawling tasks for continuous data updates:
-
-```python
-# Configure crawler parameters in MindSpider/config.py
-CRAWLER_CONFIG = {
-    'max_pages': 200,         # Maximum pages to crawl
-    'delay': 1,               # Request delay (seconds)
-    'timeout': 30,            # Timeout (seconds)
-    'platforms': ['xhs', 'dy', 'wb', 'bili'],  # Crawling platforms
-    'daily_keywords': 100,    # Daily keywords count
-    'max_notes_per_keyword': 50,  # Max content per keyword
-    'use_proxy': False,       # Whether to use proxy
-}
-```
-
-### Cloud Database Service (Recommended)
-
-**Why Choose Our Cloud Database Service?**
-
-- **Rich Data Sources**: 100,000+ daily real Weibo data covering hot topics across all industries
-- **High-Quality Annotations**: Professional team manually annotated sentiment data with 95%+ accuracy
-- **Multi-Dimensional Analysis**: Including topic classification, sentiment tendency, influence scoring and other multi-dimensional tags
-- **Real-Time Updates**: 24/7 continuous data collection ensuring timeliness
-- **Technical Support**: Professional team providing technical support and customization services
-
-**Application Method**:
-📧 Email Contact: 670939375@qq.com
-📝 Email Subject: Apply for Weibo Public Opinion Cloud Database Access
-📝 Email Content: Please describe your use case and expected data volume requirements
-
-**Promotion Period Benefits**:
-- Free basic cloud database access
-- Free technical support and deployment guidance
-- Priority access to new features
 
 ## ⚙️ Advanced Configuration
 
@@ -420,7 +326,7 @@ The system supports multiple LLM providers, switchable in each agent's configura
 ```python
 # Configure in each Engine's utils/config.py
 class Config:
-    default_llm_provider = "deepseek"  # Options: "deepseek", "openai", "kimi", "gemini"
+    default_llm_provider = "deepseek"  # Options: "deepseek", "openai", "kimi", "gemini", "qwen"
     
     # DeepSeek configuration
     deepseek_api_key = "your_api_key"
@@ -444,7 +350,21 @@ class Config:
 
 The system integrates multiple sentiment analysis methods, selectable based on needs:
 
-#### 1. BERT-based Fine-tuned Model (Highest Accuracy)
+#### 1. Multilingual Sentiment Analysis
+
+```bash
+cd SentimentAnalysisModel/WeiboMultilingualSentiment
+python predict.py --text "This product is amazing!" --lang "en"
+```
+
+#### 2. Small Parameter Qwen3 Fine-tuning
+
+```bash
+cd SentimentAnalysisModel/WeiboSentiment_SmallQwen
+python predict_universal.py --text "This event was very successful"
+```
+
+#### 3. BERT-based Fine-tuned Model
 
 ```bash
 # Use BERT Chinese model
@@ -452,32 +372,18 @@ cd SentimentAnalysisModel/WeiboSentiment_Finetuned/BertChinese-Lora
 python predict.py --text "This product is really great"
 ```
 
-#### 2. GPT-2 LoRA Fine-tuned Model (Faster Speed)
+#### 4. GPT-2 LoRA Fine-tuned Model
 
 ```bash
 cd SentimentAnalysisModel/WeiboSentiment_Finetuned/GPT2-Lora
 python predict.py --text "I'm not feeling great today"
 ```
 
-#### 3. Small Qwen Model (Balanced)
-
-```bash
-cd SentimentAnalysisModel/WeiboSentiment_SmallQwen
-python predict_universal.py --text "This event was very successful"
-```
-
-#### 4. Traditional Machine Learning Methods (Lightweight)
+#### 5. Traditional Machine Learning Methods
 
 ```bash
 cd SentimentAnalysisModel/WeiboSentiment_MachineLearning
 python predict.py --model_type "svm" --text "Service attitude needs improvement"
-```
-
-#### 5. Multilingual Sentiment Analysis (Supports 22 Languages)
-
-```bash
-cd SentimentAnalysisModel/WeiboMultilingualSentiment
-python predict.py --text "This product is amazing!" --lang "en"
 ```
 
 ### Integrate Custom Business Database
@@ -538,45 +444,13 @@ class DeepSearchAgent:
 
 ### Custom Report Templates
 
-#### 1. Create Template Files
-
-Create new Markdown templates in the `ReportEngine/report_template/` directory:
-
-```markdown
-<!-- Enterprise Brand Monitoring Report.md -->
-# Enterprise Brand Public Opinion Monitoring Report
-
-## 📊 Executive Summary
-{executive_summary}
-
-## 🔍 Brand Mention Analysis
-### Mention Volume Trends
-{mention_trend}
-
-### Sentiment Distribution
-{sentiment_distribution}
-
-## 📈 Competitor Analysis
-{competitor_analysis}
-
-## 🎯 Key Insights Summary
-{key_insights}
-
-## ⚠️ Risk Alerts
-{risk_alerts}
-
-## 📋 Improvement Recommendations
-{recommendations}
-
----
-*Report Type: Enterprise Brand Public Opinion Monitoring*  
-*Generation Time: {generation_time}*  
-*Data Sources: {data_sources}*
-```
-
-#### 2. Use in Web Interface
+#### 1. Upload in Web Interface
 
 The system supports uploading custom template files (.md or .txt format), selectable when generating reports.
+
+#### 2. Create Template Files
+
+Create new templates in the `ReportEngine/report_template/` directory, and our Agent will automatically select the most appropriate template.
 
 ## 🤝 Contributing Guide
 
@@ -590,15 +464,6 @@ We welcome all forms of contributions!
 4. **Push to branch**: `git push origin feature/AmazingFeature`
 5. **Open Pull Request**
 
-### Contribution Types
-
-- 🐛 Bug fixes
-- ✨ New feature development
-- 📚 Documentation improvements
-- 🎨 UI/UX improvements
-- ⚡ Performance optimization
-- 🧪 Test case additions
-
 ### Development Standards
 
 - Code follows PEP8 standards
@@ -608,7 +473,7 @@ We welcome all forms of contributions!
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE). Please see the LICENSE file for details.
+This project is licensed under the [GPL-2.0 License](LICENSE). Please see the LICENSE file for details.
 
 ## 🎉 Support & Contact
 
@@ -621,8 +486,6 @@ This project is licensed under the [MIT License](LICENSE). Please see the LICENS
 ### Contact Information
 
 - 📧 **Email**: 670939375@qq.com
-- 💬 **QQ Group**: [Join Technical Discussion Group]
-- 🐦 **WeChat**: [Scan QR Code for Technical Support]
 
 ### Business Cooperation
 
@@ -635,7 +498,7 @@ This project is licensed under the [MIT License](LICENSE). Please see the LICENS
 
 **Free Cloud Database Service Application**:
 📧 Send email to: 670939375@qq.com  
-📝 Subject: Weibo Public Opinion Cloud Database Application  
+📝 Subject: WeiYu Cloud Database Application  
 📝 Description: Your use case and requirements  
 
 ## 👥 Contributors
@@ -649,7 +512,5 @@ Thanks to these excellent contributors:
 <div align="center">
 
 **⭐ If this project helps you, please give us a star!**
-
-Made with ❤️ by [Weibo Public Opinion Analysis Team](https://github.com/666ghj)
 
 </div>
