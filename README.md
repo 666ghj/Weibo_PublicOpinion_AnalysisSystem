@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="600">
+<img src="static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="800">
 
 [![GitHub Stars](https://img.shields.io/github/stars/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/stargazers)
 [![GitHub Watchers](https://img.shields.io/github/watchers/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/watchers)
