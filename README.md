@@ -59,8 +59,10 @@ Weibo_PublicOpinion_AnalysisSystem/
 │   └── ...                        # 其他模块
 ├── MediaEngine/                   # 强大的多模态理解Agent
 │   ├── agent.py                   # Agent主逻辑
+│   ├── nodes/                     # 处理节点
 │   ├── llms/                      # LLM接口
 │   ├── tools/                     # 搜索工具
+│   ├── utils/                     # 工具函数
 │   └── ...                        # 其他模块
 ├── InsightEngine/                 # 私有数据库挖掘Agent
 │   ├── agent.py                   # Agent主逻辑
@@ -70,14 +72,14 @@ Weibo_PublicOpinion_AnalysisSystem/
 │   │   ├── openai_llm.py          # OpenAI格式API
 │   │   └── base.py                # LLM基类
 │   ├── nodes/                     # 处理节点
-│   │   ├── first_search_node.py   # 首次搜索节点
-│   │   ├── reflection_node.py     # 反思节点
-│   │   ├── summary_nodes.py       # 总结节点
+│   │   ├── base_node.py           # 基础节点类
+│   │   ├── formatting_node.py     # 格式化节点
+│   │   ├── report_structure_node.py # 报告结构节点
 │   │   ├── search_node.py         # 搜索节点
-│   │   ├── sentiment_node.py      # 情感分析节点
-│   │   └── insight_node.py        # 洞察生成节点
+│   │   └── summary_node.py        # 总结节点
 │   ├── tools/                     # 数据库查询和分析工具
-│   │   ├── media_crawler_db.py    # 数据库查询工具
+│   │   ├── keyword_optimizer.py   # Qwen关键词优化中间件
+│   │   ├── search.py              # 数据库操作工具集
 │   │   └── sentiment_analyzer.py  # 情感分析集成工具
 │   ├── state/                     # 状态管理
 │   │   ├── __init__.py
@@ -88,7 +90,7 @@ Weibo_PublicOpinion_AnalysisSystem/
 │   └── utils/                     # 工具函数
 │       ├── __init__.py
 │       ├── config.py              # 配置管理
-│       └── helpers.py             # 辅助函数
+│       └── text_processing.py     # 文本处理工具
 ├── ReportEngine/                  # 多轮报告生成Agent
 │   ├── agent.py                   # Agent主逻辑
 │   ├── llms/                      # LLM接口
@@ -105,14 +107,21 @@ Weibo_PublicOpinion_AnalysisSystem/
 │   └── monitor.py                 # 日志监控和论坛管理
 ├── MindSpider/                    # 微博爬虫系统
 │   ├── main.py                    # 爬虫主程序
+│   ├── config.py                  # 爬虫配置文件
 │   ├── BroadTopicExtraction/      # 话题提取模块
+│   │   ├── database_manager.py    # 数据库管理器
 │   │   ├── get_today_news.py      # 今日新闻获取
+│   │   ├── main.py                # 话题提取主程序
 │   │   └── topic_extractor.py     # 话题提取器
 │   ├── DeepSentimentCrawling/     # 深度舆情爬取
+│   │   ├── keyword_manager.py     # 关键词管理器
+│   │   ├── main.py                # 深度爬取主程序
 │   │   ├── MediaCrawler/          # 媒体爬虫核心
 │   │   └── platform_crawler.py    # 平台爬虫管理
 │   └── schema/                    # 数据库结构
-│       └── init_database.py       # 数据库初始化
+│       ├── db_manager.py          # 数据库管理器
+│       ├── init_database.py       # 数据库初始化
+│       └── mindspider_tables.sql  # 数据库表结构
 ├── SentimentAnalysisModel/        # 情感分析模型集合
 │   ├── WeiboSentiment_Finetuned/  # 微调BERT/GPT-2模型
 │   ├── WeiboMultilingualSentiment/# 多语言情感分析（推荐）

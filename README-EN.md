@@ -59,8 +59,10 @@ Weibo_PublicOpinion_AnalysisSystem/
 │   └── ...                        # Other modules
 ├── MediaEngine/                   # Powerful multimodal understanding Agent
 │   ├── agent.py                   # Agent main logic
+│   ├── nodes/                     # Processing nodes
 │   ├── llms/                      # LLM interfaces
 │   ├── tools/                     # Search tools
+│   ├── utils/                     # Utility functions
 │   └── ...                        # Other modules
 ├── InsightEngine/                 # Private database mining Agent
 │   ├── agent.py                   # Agent main logic
@@ -70,14 +72,14 @@ Weibo_PublicOpinion_AnalysisSystem/
 │   │   ├── openai_llm.py          # OpenAI format API
 │   │   └── base.py                # LLM base class
 │   ├── nodes/                     # Processing nodes
-│   │   ├── first_search_node.py   # First search node
-│   │   ├── reflection_node.py     # Reflection node
-│   │   ├── summary_nodes.py       # Summary node
+│   │   ├── base_node.py           # Base node class
+│   │   ├── formatting_node.py     # Formatting node
+│   │   ├── report_structure_node.py # Report structure node
 │   │   ├── search_node.py         # Search node
-│   │   ├── sentiment_node.py      # Sentiment analysis node
-│   │   └── insight_node.py        # Insight generation node
+│   │   └── summary_node.py        # Summary node
 │   ├── tools/                     # Database query and analysis tools
-│   │   ├── media_crawler_db.py    # Database query tool
+│   │   ├── keyword_optimizer.py   # Qwen keyword optimization middleware
+│   │   ├── search.py              # Database operation toolkit
 │   │   └── sentiment_analyzer.py  # Sentiment analysis integration tool
 │   ├── state/                     # State management
 │   │   ├── __init__.py
@@ -88,7 +90,7 @@ Weibo_PublicOpinion_AnalysisSystem/
 │   └── utils/                     # Utility functions
 │       ├── __init__.py
 │       ├── config.py              # Configuration management
-│       └── helpers.py             # Helper functions
+│       └── text_processing.py     # Text processing tools
 ├── ReportEngine/                  # Multi-round report generation Agent
 │   ├── agent.py                   # Agent main logic
 │   ├── llms/                      # LLM interfaces
@@ -105,14 +107,21 @@ Weibo_PublicOpinion_AnalysisSystem/
 │   └── monitor.py                 # Log monitoring and forum management
 ├── MindSpider/                    # Weibo crawler system
 │   ├── main.py                    # Crawler main program
+│   ├── config.py                  # Crawler configuration file
 │   ├── BroadTopicExtraction/      # Topic extraction module
+│   │   ├── database_manager.py    # Database manager
 │   │   ├── get_today_news.py      # Today's news fetching
+│   │   ├── main.py                # Topic extraction main program
 │   │   └── topic_extractor.py     # Topic extractor
 │   ├── DeepSentimentCrawling/     # Deep sentiment crawling
+│   │   ├── keyword_manager.py     # Keyword manager
+│   │   ├── main.py                # Deep crawling main program
 │   │   ├── MediaCrawler/          # Media crawler core
 │   │   └── platform_crawler.py    # Platform crawler management
 │   └── schema/                    # Database schema
-│       └── init_database.py       # Database initialization
+│       ├── db_manager.py          # Database manager
+│       ├── init_database.py       # Database initialization
+│       └── mindspider_tables.sql  # Database table structure
 ├── SentimentAnalysisModel/        # Sentiment analysis model collection
 │   ├── WeiboSentiment_Finetuned/  # Fine-tuned BERT/GPT-2 models
 │   ├── WeiboMultilingualSentiment/# Multilingual sentiment analysis (recommended)
