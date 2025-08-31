@@ -12,7 +12,7 @@
 
 </div>
 
-## 📝 Project Overview
+## ⚡ Project Overview
 
 **"WeiYu"** is an innovative multi-agent public opinion analysis system built from scratch, not limited to Weibo, and features universal simplicity and applicability across all platforms.
 
