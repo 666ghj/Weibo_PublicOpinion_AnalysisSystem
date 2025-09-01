@@ -44,7 +44,9 @@ Say goodbye to traditional data dashboards. In "WeiYu", everything starts with a
 
 ### Overall Architecture Diagram
 
-Still drawing...
+<div align="center">
+<img src="static/image/framework.png" alt="banner" width="800">
+</div>
 
 ### Project Code Structure Tree
 

@@ -44,7 +44,9 @@
 
 ### 整体架构图
 
-还在画...
+<div align="center">
+<img src="static/image/framework.png" alt="banner" width="800">
+</div>
 
 ### 项目代码结构树
 
