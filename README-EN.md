@@ -56,7 +56,7 @@ Say goodbye to traditional data dashboards. In "WeiYu", everything starts with a
 <img src="static/image/framework.png" alt="banner" width="800">
 </div>
 
-### Complete Analysis Workflow
+### A Complete Analysis Workflow
 
 | Step | Phase Name | Main Operations | Participating Components |
 |------|------------|-----------------|-------------------------|
