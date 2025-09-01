@@ -56,15 +56,18 @@
 <img src="static/image/framework.png" alt="banner" width="800">
 </div>
 
-一次完整的分析流程：
-1. 用户提问 → Flask主应用接收查询
-2. 并行启动 → 三个Agent同时开始工作
-3. 初步分析 → 各Agent使用专属工具进行概览搜索
-4. 策略制定 → 基于初步结果制定分块研究策略
-5. 深度研究 → 多轮搜索与反思机制调用各自工具
-6. 论坛协作 → ForumEngine接受各Agent关键发现并促进Agent交流
-7. 结果整合 → Report Agent收集所有分析结果和论坛内容
-8. 报告生成 → 动态选择模板和样式，多轮生成最终报告
+### 完整分析流程
+
+| 步骤 | 阶段名称 | 主要操作 | 参与组件 |
+|------|----------|----------|----------|
+| 1 | 用户提问 | Flask主应用接收查询 | Flask主应用 |
+| 2 | 并行启动 | 三个Agent同时开始工作 | Query Agent、Media Agent、Insight Agent |
+| 3 | 初步分析 | 各Agent使用专属工具进行概览搜索 | 各Agent + 专属工具集 |
+| 4 | 策略制定 | 基于初步结果制定分块研究策略 | 各Agent内部决策模块 |
+| 5 | 深度研究 | 多轮搜索与反思机制调用各自工具 | 各Agent + 反思机制 |
+| 6 | 论坛协作 | ForumEngine接受各Agent关键发现并促进Agent交流 | ForumEngine + 所有Agent |
+| 7 | 结果整合 | Report Agent收集所有分析结果和论坛内容 | Report Agent |
+| 8 | 报告生成 | 动态选择模板和样式，多轮生成最终报告 | Report Agent + 模板引擎 |
 
 ### 项目代码结构树
 

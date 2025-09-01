@@ -56,15 +56,18 @@ Say goodbye to traditional data dashboards. In "WeiYu", everything starts with a
 <img src="static/image/framework.png" alt="banner" width="800">
 </div>
 
-A complete analysis workflow:
-1. User Query → Flask main application receives the query
-2. Parallel Launch → Three Agents start working simultaneously
-3. Preliminary Analysis → Each Agent uses dedicated tools for overview search
-4. Strategy Formulation → Develop segmented research strategies based on preliminary results
-5. In-depth Research → Multi-round search and reflection mechanisms calling respective tools
-6. Forum Collaboration → ForumEngine accepts key findings from each Agent and facilitates Agent communication
-7. Result Integration → Report Agent collects all analysis results and forum content
-8. Report Generation → Dynamically select templates and styles, generate final reports through multiple rounds
+### Complete Analysis Workflow
+
+| Step | Phase Name | Main Operations | Participating Components |
+|------|------------|-----------------|-------------------------|
+| 1 | User Query | Flask main application receives the query | Flask Main Application |
+| 2 | Parallel Launch | Three Agents start working simultaneously | Query Agent, Media Agent, Insight Agent |
+| 3 | Preliminary Analysis | Each Agent uses dedicated tools for overview search | Each Agent + Dedicated Toolsets |
+| 4 | Strategy Formulation | Develop segmented research strategies based on preliminary results | Internal Decision Modules of Each Agent |
+| 5 | In-depth Research | Multi-round search and reflection mechanisms calling respective tools | Each Agent + Reflection Mechanisms |
+| 6 | Forum Collaboration | ForumEngine accepts key findings from each Agent and facilitates Agent communication | ForumEngine + All Agents |
+| 7 | Result Integration | Report Agent collects all analysis results and forum content | Report Agent |
+| 8 | Report Generation | Dynamically select templates and styles, generate final reports through multiple rounds | Report Agent + Template Engine |
 
 ### Project Code Structure Tree
 
