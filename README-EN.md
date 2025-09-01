@@ -44,9 +44,27 @@ Say goodbye to traditional data dashboards. In "WeiYu", everything starts with a
 
 ### Overall Architecture Diagram
 
+**Insight Agent** Private Database Mining: AI agent for in-depth analysis of private public opinion databases
+
+**Media Agent** Multimodal Content Analysis: AI agent with powerful multimodal capabilities
+
+**Query Agent** Precise Information Search: AI agent with domestic and international web search capabilities
+
+**Report Agent** Intelligent Report Generation: Multi-round report generation AI agent with built-in templates
+
 <div align="center">
 <img src="static/image/framework.png" alt="banner" width="800">
 </div>
+
+A complete analysis workflow:
+1. User Query → Flask main application receives the query
+2. Parallel Launch → Three Agents start working simultaneously
+3. Preliminary Analysis → Each Agent uses dedicated tools for overview search
+4. Strategy Formulation → Develop segmented research strategies based on preliminary results
+5. In-depth Research → Multi-round search and reflection mechanisms calling respective tools
+6. Forum Collaboration → ForumEngine accepts key findings from each Agent and facilitates Agent communication
+7. Result Integration → Report Agent collects all analysis results and forum content
+8. Report Generation → Dynamically select templates and styles, generate final reports through multiple rounds
 
 ### Project Code Structure Tree
 

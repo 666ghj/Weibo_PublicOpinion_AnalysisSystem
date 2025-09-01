@@ -44,9 +44,27 @@
 
 ### 整体架构图
 
+**Insight Agent** 私有数据库挖掘：私有舆情数据库深度分析AI代理
+
+**Media Agent** 多模态内容分析：具备强大多模态能力的AI代理
+
+**Query Agent** 精准信息搜索：具备国内外网页搜索能力的AI代理
+
+**Report Agent** 智能报告生成：内置模板的多轮报告生成AI代理
+
 <div align="center">
 <img src="static/image/framework.png" alt="banner" width="800">
 </div>
+
+一次完整的分析流程：
+1. 用户提问 → Flask主应用接收查询
+2. 并行启动 → 三个Agent同时开始工作
+3. 初步分析 → 各Agent使用专属工具进行概览搜索
+4. 策略制定 → 基于初步结果制定分块研究策略
+5. 深度研究 → 多轮搜索与反思机制调用各自工具
+6. 论坛协作 → ForumEngine接受各Agent关键发现并促进Agent交流
+7. 结果整合 → Report Agent收集所有分析结果和论坛内容
+8. 报告生成 → 动态选择模板和样式，多轮生成最终报告
 
 ### 项目代码结构树
 
