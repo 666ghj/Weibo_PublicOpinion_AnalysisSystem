@@ -12,6 +12,14 @@ import json
 from typing import Dict, Optional, List
 from threading import Lock
 
+# 导入论坛主持人模块
+try:
+    from .llm_host import generate_host_speech
+    HOST_AVAILABLE = True
+except ImportError:
+    print("ForumEgine: 论坛主持人模块未找到，将以纯监控模式运行")
+    HOST_AVAILABLE = False
+
 class LogMonitor:
     """基于文件变化的智能日志监控器"""
    
@@ -35,6 +43,12 @@ class LogMonitor:
         self.is_searching = False  # 是否正在搜索
         self.search_inactive_count = 0  # 搜索非活跃计数器
         self.write_lock = Lock()  # 写入锁，防止并发写入冲突
+        
+        # 主持人相关状态
+        self.agent_speech_count = 0  # agent发言计数器
+        self.host_speech_threshold = 5  # 每5条agent发言触发一次主持人发言
+        self.last_host_speech_time = None  # 上次主持人发言时间
+        self.min_host_interval = 30  # 主持人发言最小间隔（秒）
        
         # 目标节点名称 - 直接匹配字符串
         self.target_nodes = [
@@ -69,6 +83,10 @@ class LogMonitor:
             self.capturing_json = {}
             self.json_buffer = {}
             self.json_start_line = {}
+            
+            # 重置主持人相关状态
+            self.agent_speech_count = 0
+            self.last_host_speech_time = None
            
         except Exception as e:
             print(f"ForumEgine: 清空forum.log失败: {e}")
@@ -369,6 +387,42 @@ class LogMonitor:
         
         return captured_contents
     
+    def _trigger_host_speech(self):
+        """触发主持人发言"""
+        if not HOST_AVAILABLE:
+            return
+        
+        try:
+            # 检查时间间隔
+            current_time = time.time()
+            if self.last_host_speech_time:
+                if current_time - self.last_host_speech_time < self.min_host_interval:
+                    return  # 间隔太短，跳过
+            
+            # 获取当前forum.log的内容
+            forum_logs = self.get_forum_log_content()
+            if not forum_logs:
+                return
+            
+            print("ForumEgine: 正在生成主持人发言...")
+            
+            # 调用主持人生成发言
+            host_speech = generate_host_speech(forum_logs)
+            
+            if host_speech:
+                # 写入主持人发言到forum.log
+                self.write_to_forum_log(host_speech, "HOST")
+                self.last_host_speech_time = current_time
+                print(f"ForumEgine: 主持人发言已记录")
+                
+                # 重置计数器
+                self.agent_speech_count = 0
+            else:
+                print("ForumEgine: 主持人发言生成失败")
+                
+        except Exception as e:
+            print(f"ForumEgine: 触发主持人发言时出错: {e}")
+    
     def _clean_content_tags(self, content: str, app_name: str) -> str:
         """清理内容中的重复标签和多余前缀"""
         if not content:
@@ -443,6 +497,18 @@ class LogMonitor:
                                 self.write_to_forum_log(content, source_tag)
                                 # print(f"ForumEgine: 捕获 - {content}")
                                 captured_any = True
+                                
+                                # 增加agent发言计数
+                                self.agent_speech_count += 1
+                                
+                                # 检查是否需要触发主持人发言
+                                if self.agent_speech_count >= self.host_speech_threshold:
+                                    # 在单独的线程中触发主持人发言，避免阻塞监控
+                                    host_thread = threading.Thread(
+                                        target=self._trigger_host_speech,
+                                        daemon=True
+                                    )
+                                    host_thread.start()
                    
                     elif current_lines < previous_lines:
                         any_shrink = True
@@ -463,6 +529,9 @@ class LogMonitor:
                         # print("ForumEgine: 日志缩短，结束当前搜索会话，回到等待状态")
                         self.is_searching = False
                         self.search_inactive_count = 0
+                        # 重置主持人相关状态
+                        self.agent_speech_count = 0
+                        self.last_host_speech_time = None
                         # 写入结束标记
                         end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                         self.write_to_forum_log(f"=== ForumEgine 论坛结束 - {end_time} ===", "SYSTEM")
@@ -474,6 +543,9 @@ class LogMonitor:
                             print("ForumEgine: 长时间无活动，结束论坛")
                             self.is_searching = False
                             self.search_inactive_count = 0
+                            # 重置主持人相关状态
+                            self.agent_speech_count = 0
+                            self.last_host_speech_time = None
                             # 写入结束标记
                             end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                             self.write_to_forum_log(f"=== ForumEgine 论坛结束 - {end_time} ===", "SYSTEM")
