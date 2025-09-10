@@ -513,6 +513,38 @@ The system has currently completed only the first two steps of the "three-step a
 
 Currently, after a long period of crawling and collection, we have accumulated massive data on topic popularity trends over time, trending events, and other change patterns across the entire network. We now have the conditions to develop prediction models. Our team will apply our technical reserves in time series models, graph neural networks, multimodal fusion, and other prediction model technologies to achieve truly data-driven public opinion prediction functionality.
 
+## ⚠️ Disclaimer
+
+**Important Notice: This project is for educational, academic research, and learning purposes only**
+
+1. **Compliance Statement**:
+   - All code, tools, and functionalities in this project are intended solely for educational, academic research, and learning purposes
+   - Commercial use or profit-making activities are strictly prohibited
+   - Any illegal, non-compliant, or rights-infringing activities are strictly prohibited
+
+2. **Web Scraping Disclaimer**:
+   - The web scraping functionality in this project is intended only for technical learning and research purposes
+   - Users must comply with the target websites' robots.txt protocols and terms of use
+   - Users must comply with relevant laws and regulations and must not engage in malicious scraping or data abuse
+   - Users are solely responsible for any legal consequences arising from the use of web scraping functionality
+
+3. **Data Usage Disclaimer**:
+   - The data analysis functionality in this project is intended only for academic research purposes
+   - Using analysis results for commercial decision-making or profit-making purposes is strictly prohibited
+   - Users should ensure the legality and compliance of the data being analyzed
+
+4. **Technical Disclaimer**:
+   - This project is provided "as is" without any express or implied warranties
+   - The authors are not responsible for any direct or indirect losses caused by the use of this project
+   - Users should evaluate the applicability and risks of this project independently
+
+5. **Liability Limitation**:
+   - Users should fully understand relevant laws and regulations before using this project
+   - Users should ensure their usage complies with local legal and regulatory requirements
+   - Users are solely responsible for any consequences arising from the illegal use of this project
+
+**Please carefully read and understand the above disclaimer before using this project. Using this project indicates that you have agreed to and accepted all the above terms.**
+
 ## 📄 License
 
 This project is licensed under the [GPL-2.0 License](LICENSE). Please see the LICENSE file for details.
