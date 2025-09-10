@@ -17,7 +17,7 @@ try:
     from .llm_host import generate_host_speech
     HOST_AVAILABLE = True
 except ImportError:
-    print("ForumEgine: 论坛主持人模块未找到，将以纯监控模式运行")
+    print("ForumEngine: 论坛主持人模块未找到，将以纯监控模式运行")
     HOST_AVAILABLE = False
 
 class LogMonitor:
@@ -75,9 +75,9 @@ class LogMonitor:
             # 使用write_to_forum_log函数来写入开始标记，确保格式一致
             with open(self.forum_log_file, 'w', encoding='utf-8') as f:
                 pass  # 先创建空文件
-            self.write_to_forum_log(f"=== ForumEgine 监控开始 - {start_time} ===", "SYSTEM")
+            self.write_to_forum_log(f"=== ForumEngine 监控开始 - {start_time} ===", "SYSTEM")
                
-            print(f"ForumEgine: forum.log 已清空并初始化")
+            print(f"ForumEngine: forum.log 已清空并初始化")
             
             # 重置JSON捕获状态
             self.capturing_json = {}
@@ -89,7 +89,7 @@ class LogMonitor:
             self.last_host_speech_time = None
            
         except Exception as e:
-            print(f"ForumEgine: 清空forum.log失败: {e}")
+            print(f"ForumEngine: 清空forum.log失败: {e}")
    
     def write_to_forum_log(self, content: str, source: str = None):
         """写入内容到forum.log（线程安全）"""
@@ -106,7 +106,7 @@ class LogMonitor:
                         f.write(f"[{timestamp}] {content_one_line}\n")
                     f.flush()
         except Exception as e:
-            print(f"ForumEgine: 写入forum.log失败: {e}")
+            print(f"ForumEngine: 写入forum.log失败: {e}")
    
     def is_target_log_line(self, line: str) -> bool:
         """检查是否是目标日志行（SummaryNode）"""
@@ -237,7 +237,7 @@ class LogMonitor:
             return f"清理后的输出: {json.dumps(json_obj, ensure_ascii=False, indent=2)}"
             
         except Exception as e:
-            print(f"ForumEgine: 格式化JSON时出错: {e}")
+            print(f"ForumEngine: 格式化JSON时出错: {e}")
             return f"清理后的输出: {json.dumps(json_obj, ensure_ascii=False, indent=2)}"
 
     def extract_node_content(self, line: str) -> Optional[str]:
@@ -327,7 +327,7 @@ class LogMonitor:
                     new_lines = [line.strip() for line in new_lines if line.strip()]
                    
         except Exception as e:
-            print(f"ForumEgine: 读取{app_name}日志失败: {e}")
+            print(f"ForumEngine: 读取{app_name}日志失败: {e}")
        
         return new_lines
    
@@ -404,7 +404,7 @@ class LogMonitor:
             if not forum_logs:
                 return
             
-            print("ForumEgine: 正在生成主持人发言...")
+            print("ForumEngine: 正在生成主持人发言...")
             
             # 调用主持人生成发言
             host_speech = generate_host_speech(forum_logs)
@@ -413,15 +413,15 @@ class LogMonitor:
                 # 写入主持人发言到forum.log
                 self.write_to_forum_log(host_speech, "HOST")
                 self.last_host_speech_time = current_time
-                print(f"ForumEgine: 主持人发言已记录")
+                print(f"ForumEngine: 主持人发言已记录")
                 
                 # 重置计数器
                 self.agent_speech_count = 0
             else:
-                print("ForumEgine: 主持人发言生成失败")
+                print("ForumEngine: 主持人发言生成失败")
                 
         except Exception as e:
-            print(f"ForumEgine: 触发主持人发言时出错: {e}")
+            print(f"ForumEngine: 触发主持人发言时出错: {e}")
     
     def _clean_content_tags(self, content: str, app_name: str) -> str:
         """清理内容中的重复标签和多余前缀"""
@@ -448,7 +448,7 @@ class LogMonitor:
    
     def monitor_logs(self):
         """智能监控日志文件"""
-        print("ForumEgine: 论坛创建中...")
+        print("ForumEngine: 论坛创建中...")
        
         # 初始化文件行数和位置 - 记录当前状态作为基线
         for app_name, log_file in self.monitored_logs.items():
@@ -456,7 +456,7 @@ class LogMonitor:
             self.file_positions[app_name] = self.get_file_size(log_file)
             self.capturing_json[app_name] = False
             self.json_buffer[app_name] = []
-            # print(f"ForumEgine: {app_name} 基线行数: {self.file_line_counts[app_name]}")
+            # print(f"ForumEngine: {app_name} 基线行数: {self.file_line_counts[app_name]}")
        
         while self.is_monitoring:
             try:
@@ -479,7 +479,7 @@ class LogMonitor:
                         if not self.is_searching:
                             for line in new_lines:
                                 if line.strip() and 'FirstSummaryNode' in line:
-                                    print(f"ForumEgine: 在{app_name}中检测到第一次论坛发表内容")
+                                    print(f"ForumEngine: 在{app_name}中检测到第一次论坛发表内容")
                                     self.is_searching = True
                                     self.search_inactive_count = 0
                                     # 清空forum.log开始新会话
@@ -495,7 +495,7 @@ class LogMonitor:
                                 # 将app_name转换为大写作为标签（如 insight -> INSIGHT）
                                 source_tag = app_name.upper()
                                 self.write_to_forum_log(content, source_tag)
-                                # print(f"ForumEgine: 捕获 - {content}")
+                                # print(f"ForumEngine: 捕获 - {content}")
                                 captured_any = True
                                 
                                 # 增加agent发言计数
@@ -512,7 +512,7 @@ class LogMonitor:
                    
                     elif current_lines < previous_lines:
                         any_shrink = True
-                        # print(f"ForumEgine: 检测到 {app_name} 日志缩短，将重置基线")
+                        # print(f"ForumEngine: 检测到 {app_name} 日志缩短，将重置基线")
                         # 重置文件位置到新的文件末尾
                         self.file_positions[app_name] = self.get_file_size(log_file)
                         # 重置JSON捕获状态
@@ -526,7 +526,7 @@ class LogMonitor:
                 if self.is_searching:
                     if any_shrink:
                         # log变短，结束当前搜索会话，重置为等待状态
-                        # print("ForumEgine: 日志缩短，结束当前搜索会话，回到等待状态")
+                        # print("ForumEngine: 日志缩短，结束当前搜索会话，回到等待状态")
                         self.is_searching = False
                         self.search_inactive_count = 0
                         # 重置主持人相关状态
@@ -534,13 +534,13 @@ class LogMonitor:
                         self.last_host_speech_time = None
                         # 写入结束标记
                         end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                        self.write_to_forum_log(f"=== ForumEgine 论坛结束 - {end_time} ===", "SYSTEM")
-                        # print("ForumEgine: 已重置基线，等待下次FirstSummaryNode触发")
+                        self.write_to_forum_log(f"=== ForumEngine 论坛结束 - {end_time} ===", "SYSTEM")
+                        # print("ForumEngine: 已重置基线，等待下次FirstSummaryNode触发")
                     elif not any_growth and not captured_any:
                         # 没有增长也没有捕获内容，增加非活跃计数
                         self.search_inactive_count += 1
                         if self.search_inactive_count >= 900:  # 15分钟无活动才结束
-                            print("ForumEgine: 长时间无活动，结束论坛")
+                            print("ForumEngine: 长时间无活动，结束论坛")
                             self.is_searching = False
                             self.search_inactive_count = 0
                             # 重置主持人相关状态
@@ -548,7 +548,7 @@ class LogMonitor:
                             self.last_host_speech_time = None
                             # 写入结束标记
                             end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                            self.write_to_forum_log(f"=== ForumEgine 论坛结束 - {end_time} ===", "SYSTEM")
+                            self.write_to_forum_log(f"=== ForumEngine 论坛结束 - {end_time} ===", "SYSTEM")
                     else:
                         self.search_inactive_count = 0  # 重置计数器
                
@@ -556,17 +556,17 @@ class LogMonitor:
                 time.sleep(1)
                
             except Exception as e:
-                print(f"ForumEgine: 论坛记录中出错: {e}")
+                print(f"ForumEngine: 论坛记录中出错: {e}")
                 import traceback
                 traceback.print_exc()
                 time.sleep(2)
        
-        print("ForumEgine: 停止论坛日志文件")
+        print("ForumEngine: 停止论坛日志文件")
    
     def start_monitoring(self):
         """开始智能监控"""
         if self.is_monitoring:
-            print("ForumEgine: 论坛已经在运行中")
+            print("ForumEngine: 论坛已经在运行中")
             return False
        
         try:
@@ -575,18 +575,18 @@ class LogMonitor:
             self.monitor_thread = threading.Thread(target=self.monitor_logs, daemon=True)
             self.monitor_thread.start()
            
-            print("ForumEgine: 论坛已启动")
+            print("ForumEngine: 论坛已启动")
             return True
            
         except Exception as e:
-            print(f"ForumEgine: 启动论坛失败: {e}")
+            print(f"ForumEngine: 启动论坛失败: {e}")
             self.is_monitoring = False
             return False
    
     def stop_monitoring(self):
         """停止监控"""
         if not self.is_monitoring:
-            print("ForumEgine: 论坛未运行")
+            print("ForumEngine: 论坛未运行")
             return
        
         try:
@@ -597,12 +597,12 @@ class LogMonitor:
            
             # 写入结束标记
             end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            self.write_to_forum_log(f"=== ForumEgine 论坛结束 - {end_time} ===", "SYSTEM")
+            self.write_to_forum_log(f"=== ForumEngine 论坛结束 - {end_time} ===", "SYSTEM")
            
-            print("ForumEgine: 论坛已停止")
+            print("ForumEngine: 论坛已停止")
            
         except Exception as e:
-            print(f"ForumEgine: 停止论坛失败: {e}")
+            print(f"ForumEngine: 停止论坛失败: {e}")
    
     def get_forum_log_content(self) -> List[str]:
         """获取forum.log的内容"""
@@ -614,7 +614,7 @@ class LogMonitor:
                 return [line.rstrip('\n\r') for line in f.readlines()]
                
         except Exception as e:
-            print(f"ForumEgine: 读取forum.log失败: {e}")
+            print(f"ForumEngine: 读取forum.log失败: {e}")
             return []
 
     def fix_json_string(self, json_text: str) -> str:
@@ -709,11 +709,11 @@ def get_monitor() -> LogMonitor:
     return _monitor_instance
 
 def start_forum_monitoring():
-    """启动ForumEgine智能监控"""
+    """启动ForumEngine智能监控"""
     return get_monitor().start_monitoring()
 
 def stop_forum_monitoring():
-    """停止ForumEgine监控"""
+    """停止ForumEngine监控"""
     get_monitor().stop_monitoring()
 
 def get_forum_log():

@@ -1701,7 +1701,7 @@
                 
                 // 只处理三个Engine的消息，过滤掉系统消息和空内容
                 if (!['QUERY', 'INSIGHT', 'MEDIA'].includes(source.toUpperCase()) || 
-                    !content || content.includes('=== ForumEgine')) {
+                    !content || content.includes('=== ForumEngine')) {
                     return null;
                 }
                 

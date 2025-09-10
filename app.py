@@ -45,7 +45,7 @@ os.environ['PYTHONUTF8'] = '1'
 LOG_DIR = Path('logs')
 LOG_DIR.mkdir(exist_ok=True)
 
-# 初始化ForumEgine的forum.log文件
+# 初始化ForumEngine的forum.log文件
 def init_forum_log():
     """初始化forum.log文件"""
     try:
@@ -54,41 +54,41 @@ def init_forum_log():
         if not forum_log_file.exists():
             with open(forum_log_file, 'w', encoding='utf-8') as f:
                 start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                f.write(f"=== ForumEgine 系统初始化 - {start_time} ===\n")
-            print(f"ForumEgine: forum.log 已初始化")
+                f.write(f"=== ForumEngine 系统初始化 - {start_time} ===\n")
+            print(f"ForumEngine: forum.log 已初始化")
         else:
             with open(forum_log_file, 'w', encoding='utf-8') as f:
                 start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                f.write(f"=== ForumEgine 系统初始化 - {start_time} ===\n")
-            print(f"ForumEgine: forum.log 已初始化")
+                f.write(f"=== ForumEngine 系统初始化 - {start_time} ===\n")
+            print(f"ForumEngine: forum.log 已初始化")
     except Exception as e:
-        print(f"ForumEgine: 初始化forum.log失败: {e}")
+        print(f"ForumEngine: 初始化forum.log失败: {e}")
 
 # 初始化forum.log
 init_forum_log()
 
-# 启动ForumEgine智能监控
+# 启动ForumEngine智能监控
 def start_forum_engine():
-    """启动ForumEgine论坛"""
+    """启动ForumEngine论坛"""
     try:
-        from ForumEgine.monitor import start_forum_monitoring
-        print("ForumEgine: 启动论坛...")
+        from ForumEngine.monitor import start_forum_monitoring
+        print("ForumEngine: 启动论坛...")
         success = start_forum_monitoring()
         if not success:
-            print("ForumEgine: 论坛启动失败")
+            print("ForumEngine: 论坛启动失败")
     except Exception as e:
-        print(f"ForumEgine: 启动论坛失败: {e}")
+        print(f"ForumEngine: 启动论坛失败: {e}")
 
-# 停止ForumEgine智能监控
+# 停止ForumEngine智能监控
 def stop_forum_engine():
-    """停止ForumEgine论坛"""
+    """停止ForumEngine论坛"""
     try:
-        from ForumEgine.monitor import stop_forum_monitoring
-        print("ForumEgine: 停止论坛...")
+        from ForumEngine.monitor import stop_forum_monitoring
+        print("ForumEngine: 停止论坛...")
         stop_forum_monitoring()
-        print("ForumEgine: 论坛已停止")
+        print("ForumEngine: 论坛已停止")
     except Exception as e:
-        print(f"ForumEgine: 停止论坛失败: {e}")
+        print(f"ForumEngine: 停止论坛失败: {e}")
 
 def parse_forum_log_line(line):
     """解析forum.log行内容，提取对话信息"""
@@ -558,30 +558,30 @@ def test_log(app_name):
 
 @app.route('/api/forum/start')
 def start_forum_monitoring_api():
-    """手动启动ForumEgine论坛"""
+    """手动启动ForumEngine论坛"""
     try:
-        from ForumEgine.monitor import start_forum_monitoring
+        from ForumEngine.monitor import start_forum_monitoring
         success = start_forum_monitoring()
         if success:
-            return jsonify({'success': True, 'message': 'ForumEgine论坛已启动'})
+            return jsonify({'success': True, 'message': 'ForumEngine论坛已启动'})
         else:
-            return jsonify({'success': False, 'message': 'ForumEgine论坛启动失败'})
+            return jsonify({'success': False, 'message': 'ForumEngine论坛启动失败'})
     except Exception as e:
         return jsonify({'success': False, 'message': f'启动论坛失败: {str(e)}'})
 
 @app.route('/api/forum/stop')
 def stop_forum_monitoring_api():
-    """手动停止ForumEgine论坛"""
+    """手动停止ForumEngine论坛"""
     try:
-        from ForumEgine.monitor import stop_forum_monitoring
+        from ForumEngine.monitor import stop_forum_monitoring
         stop_forum_monitoring()
-        return jsonify({'success': True, 'message': 'ForumEgine论坛已停止'})
+        return jsonify({'success': True, 'message': 'ForumEngine论坛已停止'})
     except Exception as e:
         return jsonify({'success': False, 'message': f'停止论坛失败: {str(e)}'})
 
 @app.route('/api/forum/log')
 def get_forum_log():
-    """获取ForumEgine的forum.log内容"""
+    """获取ForumEngine的forum.log内容"""
     try:
         forum_log_file = LOG_DIR / "forum.log"
         if not forum_log_file.exists():
@@ -621,8 +621,8 @@ def search():
     if not query:
         return jsonify({'success': False, 'message': '搜索查询不能为空'})
     
-    # ForumEgine论坛已经在后台运行，会自动检测搜索活动
-    # print("ForumEgine: 搜索请求已收到，论坛将自动检测日志变化")
+    # ForumEngine论坛已经在后台运行，会自动检测搜索活动
+    # print("ForumEngine: 搜索请求已收到，论坛将自动检测日志变化")
     
     # 检查哪些应用正在运行
     check_app_status()
@@ -681,8 +681,8 @@ if __name__ == '__main__':
     # 启动时自动启动所有Streamlit应用
     print("正在启动Streamlit应用...")
     
-    # 先停止ForumEgine监控器，避免文件占用冲突
-    print("停止ForumEgine监控器以避免文件冲突...")
+    # 先停止ForumEngine监控器，避免文件占用冲突
+    print("停止ForumEngine监控器以避免文件冲突...")
     stop_forum_engine()
     
     script_paths = {

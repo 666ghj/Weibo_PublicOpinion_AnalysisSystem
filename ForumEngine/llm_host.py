@@ -111,12 +111,12 @@ class ForumHost:
                 timestamp, speaker, content = match.groups()
                 
                 # 记录会话开始
-                if 'ForumEgine 监控开始' in content:
+                if 'ForumEngine 监控开始' in content:
                     parsed['session_start'] = timestamp
                     continue
                 
                 # 记录会话结束
-                if 'ForumEgine 论坛结束' in content:
+                if 'ForumEngine 论坛结束' in content:
                     parsed['session_end'] = timestamp
                     continue
                 
