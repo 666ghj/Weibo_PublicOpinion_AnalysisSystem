@@ -127,7 +127,8 @@ Weibo_PublicOpinion_AnalysisSystem/
 │   │   └── ...                    # More templates
 │   └── flask_interface.py         # Flask API interface
 ├── ForumEngine/                   # Forum engine simple implementation
-│   └── monitor.py                 # Log monitoring and forum management
+│   ├── monitor.py                 # Log monitoring and forum management
+│   └── llm_host.py                # Forum host LLM module
 ├── MindSpider/                    # Weibo crawler system
 │   ├── main.py                    # Crawler main program
 │   ├── config.py                  # Crawler configuration file

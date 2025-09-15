@@ -127,7 +127,8 @@ Weibo_PublicOpinion_AnalysisSystem/
 │   │   └── ...                    # 更多模板
 │   └── flask_interface.py         # Flask API接口
 ├── ForumEngine/                   # 论坛引擎简易实现
-│   └── monitor.py                 # 日志监控和论坛管理
+│   ├── monitor.py                 # 日志监控和论坛管理
+│   └── llm_host.py                # 论坛主持人LLM模块
 ├── MindSpider/                    # 微博爬虫系统
 │   ├── main.py                    # 爬虫主程序
 │   ├── config.py                  # 爬虫配置文件
