@@ -34,6 +34,8 @@
 
 **始于舆情，而不止于舆情**。“微舆”的目标，是成为驱动一切业务场景的简洁通用的数据分析引擎。
 
+> 举个例子. 你只需简单修改Agent工具集的api参数与prompt，就可以把他变成一个金融领域的市场分析系统
+
 <div align="center">
 <img src="static/image/system_schematic.png" alt="banner" width="800">
 
@@ -171,6 +173,8 @@ Weibo_PublicOpinion_AnalysisSystem/
 ```
 
 ## 🚀 快速开始
+
+> 如果你是初次学习一个Agent系统的搭建，可以从一个非常简单的demo开始：[Deep Search Agent Demo](https://github.com/666ghj/DeepSearchAgent-Demo)
 
 ### 环境要求
 

@@ -34,6 +34,8 @@ Beyond just report quality, compared to similar products, we have 🚀 six major
 
 **Starting with public opinion, but not limited to public opinion**. The goal of "WeiYu" is to become a simple and universal data analysis engine that drives all business scenarios.
 
+> For example, you only need to simply modify the API parameters and prompts of the Agent toolset to transform it into a financial market analysis system.
+
 <div align="center">
 <img src="static/image/system_schematic.png" alt="banner" width="800">
 
@@ -171,6 +173,8 @@ Weibo_PublicOpinion_AnalysisSystem/
 ```
 
 ## 🚀 Quick Start
+
+> If you are new to building Agent systems, you can start with a very simple demo: [Deep Search Agent Demo](https://github.com/666ghj/DeepSearchAgent-Demo)
 
 ### System Requirements
 
