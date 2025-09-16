@@ -131,7 +131,12 @@ class LogMonitor:
             "已更新段落",
             "正在生成",
             "开始处理",
-            "处理完成"
+            "处理完成",
+            "已读取HOST发言",
+            "读取HOST发言失败",
+            "未找到HOST发言",
+            "调试输出",
+            "信息记录"
         ]
         
         for pattern in exclude_patterns:

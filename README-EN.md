@@ -58,16 +58,18 @@ Say goodbye to traditional data dashboards. In "WeiYu", everything starts with a
 
 ### A Complete Analysis Workflow
 
-| Step | Phase Name | Main Operations | Participating Components |
-|------|------------|-----------------|-------------------------|
-| 1 | User Query | Flask main application receives the query | Flask Main Application |
-| 2 | Parallel Launch | Three Agents start working simultaneously | Query Agent, Media Agent, Insight Agent |
-| 3 | Preliminary Analysis | Each Agent uses dedicated tools for overview search | Each Agent + Dedicated Toolsets |
-| 4 | Strategy Formulation | Develop segmented research strategies based on preliminary results | Internal Decision Modules of Each Agent |
-| 5 | In-depth Research | Multi-round search and reflection mechanisms calling respective tools | Each Agent + Reflection Mechanisms |
-| 6 | Forum Collaboration | ForumEngine accepts key findings from each Agent and facilitates Agent communication | ForumEngine + All Agents |
-| 7 | Result Integration | Report Agent collects all analysis results and forum content | Report Agent |
-| 8 | Report Generation | Dynamically select templates and styles, generate final reports through multiple rounds | Report Agent + Template Engine |
+| Step | Phase Name | Main Operations | Participating Components | Cycle Nature |
+|------|------------|-----------------|-------------------------|--------------|
+| 1 | User Query | Flask main application receives the query | Flask Main Application | - |
+| 2 | Parallel Launch | Three Agents start working simultaneously | Query Agent, Media Agent, Insight Agent | - |
+| 3 | Preliminary Analysis | Each Agent uses dedicated tools for overview search | Each Agent + Dedicated Toolsets | - |
+| 4 | Strategy Formulation | Develop segmented research strategies based on preliminary results | Internal Decision Modules of Each Agent | - |
+| 5-N | **Iterative Phase** | **Forum Collaboration + In-depth Research** | **ForumEngine + All Agents** | **Multi-round cycles** |
+| 5.1 | In-depth Research | Each Agent conducts specialized search guided by forum host | Each Agent + Reflection Mechanisms + Forum Guidance | Each cycle |
+| 5.2 | Forum Collaboration | ForumEngine monitors Agent communications and generates host summaries | ForumEngine + LLM Host | Each cycle |
+| 5.3 | Communication Integration | Each Agent adjusts research directions based on discussions | Each Agent + forum_reader tool | Each cycle |
+| N+1 | Result Integration | Report Agent collects all analysis results and forum content | Report Agent | - |
+| N+2 | Report Generation | Dynamically select templates and styles, generate final reports through multiple rounds | Report Agent + Template Engine | - |
 
 ### Project Code Structure Tree
 
@@ -161,6 +163,8 @@ Weibo_PublicOpinion_AnalysisSystem/
 ├── logs/                          # Runtime log directory
 ├── final_reports/                 # Final generated HTML report files
 ├── utils/                         # Common utility functions
+│   ├── forum_reader.py            # Agent forum communication
+│   └── retry_helper.py            # Network request retry mechanism tool
 ├── app.py                         # Flask main application entry
 ├── config.py                      # Global configuration file
 └── requirements.txt               # Python dependency list
