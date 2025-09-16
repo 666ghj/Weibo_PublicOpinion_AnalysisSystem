@@ -45,10 +45,9 @@ class LogMonitor:
         self.write_lock = Lock()  # 写入锁，防止并发写入冲突
         
         # 主持人相关状态
-        self.agent_speech_count = 0  # agent发言计数器
+        self.agent_speeches_buffer = []  # agent发言缓冲区
         self.host_speech_threshold = 5  # 每5条agent发言触发一次主持人发言
-        self.last_host_speech_time = None  # 上次主持人发言时间
-        self.min_host_interval = 30  # 主持人发言最小间隔（秒）
+        self.is_host_generating = False  # 主持人是否正在生成发言
        
         # 目标节点名称 - 直接匹配字符串
         self.target_nodes = [
@@ -85,8 +84,8 @@ class LogMonitor:
             self.json_start_line = {}
             
             # 重置主持人相关状态
-            self.agent_speech_count = 0
-            self.last_host_speech_time = None
+            self.agent_speeches_buffer = []
+            self.is_host_generating = False
            
         except Exception as e:
             print(f"ForumEngine: 清空forum.log失败: {e}")
@@ -388,40 +387,41 @@ class LogMonitor:
         return captured_contents
     
     def _trigger_host_speech(self):
-        """触发主持人发言"""
-        if not HOST_AVAILABLE:
+        """触发主持人发言（同步执行）"""
+        if not HOST_AVAILABLE or self.is_host_generating:
             return
         
         try:
-            # 检查时间间隔
-            current_time = time.time()
-            if self.last_host_speech_time:
-                if current_time - self.last_host_speech_time < self.min_host_interval:
-                    return  # 间隔太短，跳过
+            # 设置生成标志
+            self.is_host_generating = True
             
-            # 获取当前forum.log的内容
-            forum_logs = self.get_forum_log_content()
-            if not forum_logs:
+            # 获取缓冲区的5条发言
+            recent_speeches = self.agent_speeches_buffer[:5]
+            if len(recent_speeches) < 5:
+                self.is_host_generating = False
                 return
             
             print("ForumEngine: 正在生成主持人发言...")
             
-            # 调用主持人生成发言
-            host_speech = generate_host_speech(forum_logs)
+            # 调用主持人生成发言（传入最近5条）
+            host_speech = generate_host_speech(recent_speeches)
             
             if host_speech:
                 # 写入主持人发言到forum.log
                 self.write_to_forum_log(host_speech, "HOST")
-                self.last_host_speech_time = current_time
                 print(f"ForumEngine: 主持人发言已记录")
                 
-                # 重置计数器
-                self.agent_speech_count = 0
+                # 清空已处理的5条发言
+                self.agent_speeches_buffer = self.agent_speeches_buffer[5:]
             else:
                 print("ForumEngine: 主持人发言生成失败")
+            
+            # 重置生成标志
+            self.is_host_generating = False
                 
         except Exception as e:
             print(f"ForumEngine: 触发主持人发言时出错: {e}")
+            self.is_host_generating = False
     
     def _clean_content_tags(self, content: str, app_name: str) -> str:
         """清理内容中的重复标签和多余前缀"""
@@ -498,17 +498,15 @@ class LogMonitor:
                                 # print(f"ForumEngine: 捕获 - {content}")
                                 captured_any = True
                                 
-                                # 增加agent发言计数
-                                self.agent_speech_count += 1
+                                # 将发言添加到缓冲区（格式化为完整的日志行）
+                                timestamp = datetime.now().strftime('%H:%M:%S')
+                                log_line = f"[{timestamp}] [{source_tag}] {content}"
+                                self.agent_speeches_buffer.append(log_line)
                                 
                                 # 检查是否需要触发主持人发言
-                                if self.agent_speech_count >= self.host_speech_threshold:
-                                    # 在单独的线程中触发主持人发言，避免阻塞监控
-                                    host_thread = threading.Thread(
-                                        target=self._trigger_host_speech,
-                                        daemon=True
-                                    )
-                                    host_thread.start()
+                                if len(self.agent_speeches_buffer) >= self.host_speech_threshold and not self.is_host_generating:
+                                    # 同步触发主持人发言
+                                    self._trigger_host_speech()
                    
                     elif current_lines < previous_lines:
                         any_shrink = True
@@ -530,8 +528,8 @@ class LogMonitor:
                         self.is_searching = False
                         self.search_inactive_count = 0
                         # 重置主持人相关状态
-                        self.agent_speech_count = 0
-                        self.last_host_speech_time = None
+                        self.agent_speeches_buffer = []
+                        self.is_host_generating = False
                         # 写入结束标记
                         end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                         self.write_to_forum_log(f"=== ForumEngine 论坛结束 - {end_time} ===", "SYSTEM")
@@ -544,8 +542,8 @@ class LogMonitor:
                             self.is_searching = False
                             self.search_inactive_count = 0
                             # 重置主持人相关状态
-                            self.agent_speech_count = 0
-                            self.last_host_speech_time = None
+                            self.agent_speeches_buffer = []
+                            self.is_host_generating = False
                             # 写入结束标记
                             end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                             self.write_to_forum_log(f"=== ForumEngine 论坛结束 - {end_time} ===", "SYSTEM")

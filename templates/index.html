@@ -593,6 +593,18 @@
             background-color: #f2ebf3;
             border-color: #8e6a9f;
         }
+        
+        /* HOST主持人样式 */
+        .forum-message.host {
+            align-self: stretch;
+            background-color: #fff8dc;  /* 浅黄色背景 */
+            border-color: #daa520;  /* 金色边框 */
+            color: #000000;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 0 20px 0;
+            font-style: italic;  /* 斜体字体显示主持人发言 */
+        }
 
         .forum-message-header {
             font-weight: bold;
@@ -847,7 +859,7 @@
             insight: 'Insight Agent - 私有数据库挖掘',
             media: 'Media Agent - 多模态内容分析', 
             query: 'Query Agent - 精准信息搜索',
-            forum: 'Forum Agent - 多智能体交流',
+            forum: 'Forum Engine - 多智能体交流',
             report: 'Report Agent - 最终报告生成'
         };
 
@@ -1033,7 +1045,7 @@
             // 根据应用类型处理不同的显示逻辑
             if (app === 'forum') {
                 // 切换到论坛模式
-                document.getElementById('embeddedHeader').textContent = 'Forum Agent - 多智能体交流';
+                document.getElementById('embeddedHeader').textContent = 'Forum Engine - 多智能体交流';
                 
                 // 显示论坛容器，隐藏其他内容
                 document.getElementById('forumContainer').classList.add('active');
@@ -1222,7 +1234,7 @@
             
             // 如果是Forum Engine，直接显示论坛界面
             if (app === 'forum') {
-                header.textContent = 'Forum Agent - 多智能体交流';
+                header.textContent = 'Forum Engine - 多智能体交流';
                 
                 // 隐藏所有iframe
                 if (typeof preloadedIframes !== 'undefined') {
@@ -1699,14 +1711,14 @@
                 const source = sourceMatch[1];
                 const content = sourceMatch[2];
                 
-                // 只处理三个Engine的消息，过滤掉系统消息和空内容
-                if (!['QUERY', 'INSIGHT', 'MEDIA'].includes(source.toUpperCase()) || 
+                // 处理四种消息类型：三个Engine和HOST，过滤掉系统消息和空内容
+                if (!['QUERY', 'INSIGHT', 'MEDIA', 'HOST'].includes(source.toUpperCase()) || 
                     !content || content.includes('=== ForumEngine')) {
                     return null;
                 }
                 
                 // 根据源类型确定消息类型
-                const messageType = 'agent';
+                let messageType = 'agent';
                 let displayName = '';
                 
                 switch(source.toUpperCase()) {
@@ -1718,6 +1730,10 @@
                         break;
                     case 'QUERY':
                         displayName = 'Query Engine';
+                        break;
+                    case 'HOST':
+                        messageType = 'host';
+                        displayName = 'Forum Host';
                         break;
                 }
                 
@@ -1758,6 +1774,8 @@
                     messageDiv.classList.add('insight-engine');
                 } else if (data.source.toLowerCase().includes('media')) {
                     messageDiv.classList.add('media-engine');
+                } else if (data.source.toLowerCase().includes('host')) {
+                    messageDiv.classList.add('host');
                 }
             }
             
@@ -1790,6 +1808,7 @@
                 case 'user': return '用户';
                 case 'agent': return 'AI助手';
                 case 'system': return '系统';
+                case 'host': return '论坛主持人';
                 default: return '未知';
             }
         }
