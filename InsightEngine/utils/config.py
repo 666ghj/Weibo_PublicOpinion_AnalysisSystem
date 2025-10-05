@@ -15,6 +15,11 @@ class Config:
     deepseek_api_key: Optional[str] = None
     openai_api_key: Optional[str] = None
     kimi_api_key: Optional[str] = None
+
+    # OpenAI兼容API地址
+    deepseek_api_base: str = "https://api.deepseek.com"
+    openai_api_base: str = "https://api.openai.com/v1"
+    kimi_api_base: str = "https://api.moonshot.cn/v1"
     
     # 数据库配置
     db_host: Optional[str] = None
@@ -85,6 +90,11 @@ class Config:
             return cls(
                 deepseek_api_key=getattr(config_module, "DEEPSEEK_API_KEY", None),
                 openai_api_key=getattr(config_module, "OPENAI_API_KEY", None),
+                kimi_api_key=getattr(config_module, "KIMI_API_KEY", None),
+
+                deepseek_api_base=getattr(config_module, "DEEPSEEK_API_BASE", "https://api.deepseek.com"),
+                openai_api_base=getattr(config_module, "OPENAI_API_BASE", "https://api.openai.com/v1"),
+                kimi_api_base=getattr(config_module, "KIMI_API_BASE", "https://api.moonshot.cn/v1"),
                 
                 db_host=getattr(config_module, "DB_HOST", None),
                 db_user=getattr(config_module, "DB_USER", None),
@@ -131,6 +141,10 @@ class Config:
                 deepseek_api_key=config_dict.get("DEEPSEEK_API_KEY"),
                 openai_api_key=config_dict.get("OPENAI_API_KEY"),
                 kimi_api_key=config_dict.get("KIMI_API_KEY"),
+
+                deepseek_api_base=config_dict.get("DEEPSEEK_API_BASE", "https://api.deepseek.com"),
+                openai_api_base=config_dict.get("OPENAI_API_BASE", "https://api.openai.com/v1"),
+                kimi_api_base=config_dict.get("KIMI_API_BASE", "https://api.moonshot.cn/v1"),
                 
                 db_host=config_dict.get("DB_HOST"),
                 db_user=config_dict.get("DB_USER"),
@@ -205,7 +219,10 @@ def print_config(config: Config):
     print(f"LLM提供商: {config.default_llm_provider}")
     print(f"DeepSeek模型: {config.deepseek_model}")
     print(f"OpenAI模型: {config.openai_model}")
-
+    print(f"DeepSeek API地址: {config.deepseek_api_base}")
+    print(f"OpenAI API地址: {config.openai_api_base}")
+    print(f"Kimi API地址: {config.kimi_api_base}")
+    
     print(f"搜索超时: {config.search_timeout}秒")
     print(f"最大内容长度: {config.max_content_length}")
     print(f"最大反思次数: {config.max_reflections}")

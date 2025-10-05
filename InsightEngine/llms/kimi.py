@@ -30,7 +30,7 @@ except ImportError:
 class KimiLLM(BaseLLM):
     """Kimi LLM实现类"""
 
-    def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None, api_base: Optional[str] = None):
         """
         初始化Kimi客户端
 
@@ -43,13 +43,15 @@ class KimiLLM(BaseLLM):
             if not api_key:
                 raise ValueError("Kimi API Key未找到！请设置KIMI_API_KEY环境变量或在初始化时提供")
 
-        super().__init__(api_key, model_name)
+        base_url = api_base or os.getenv("KIMI_API_BASE") or "https://api.moonshot.cn/v1"
+
+        super().__init__(api_key, model_name, base_url)
 
         # 初始化OpenAI客户端，使用Kimi的endpoint
-        self.client = OpenAI(
-            api_key=self.api_key,
-            base_url="https://api.moonshot.cn/v1"
-        )
+        client_kwargs = {"api_key": self.api_key}
+        if self.api_base:
+            client_kwargs["base_url"] = self.api_base
+        self.client = OpenAI(**client_kwargs)
 
         self.default_model = model_name or self.get_default_model()
 
@@ -136,7 +138,7 @@ class KimiLLM(BaseLLM):
         return {
             "provider": "Kimi",
             "model": self.default_model,
-            "api_base": "https://api.moonshot.cn/v1",
+            "api_base": self.api_base,
             "max_context_length": "长文本支持（200K+ tokens）"
         }
 

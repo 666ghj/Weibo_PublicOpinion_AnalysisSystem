@@ -15,6 +15,9 @@ class Config:
     deepseek_api_key: Optional[str] = None
     openai_api_key: Optional[str] = None
     tavily_api_key: Optional[str] = None
+
+    deepseek_api_base: str = "https://api.deepseek.com"
+    openai_api_base: str = "https://api.openai.com/v1"
     
     # 模型配置
     default_llm_provider: str = "deepseek"  # deepseek 或 openai
@@ -66,6 +69,9 @@ class Config:
                 deepseek_api_key=getattr(config_module, "DEEPSEEK_API_KEY", None),
                 openai_api_key=getattr(config_module, "OPENAI_API_KEY", None),
                 tavily_api_key=getattr(config_module, "TAVILY_API_KEY", None),
+
+                deepseek_api_base=getattr(config_module, "DEEPSEEK_API_BASE", "https://api.deepseek.com"),
+                openai_api_base=getattr(config_module, "OPENAI_API_BASE", "https://api.openai.com/v1"),
                 default_llm_provider=getattr(config_module, "DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=getattr(config_module, "DEEPSEEK_MODEL", "deepseek-chat"),
                 openai_model=getattr(config_module, "OPENAI_MODEL", "gpt-4o-mini"),
@@ -93,6 +99,9 @@ class Config:
                 deepseek_api_key=config_dict.get("DEEPSEEK_API_KEY"),
                 openai_api_key=config_dict.get("OPENAI_API_KEY"),
                 tavily_api_key=config_dict.get("TAVILY_API_KEY"),
+
+                deepseek_api_base=config_dict.get("DEEPSEEK_API_BASE", "https://api.deepseek.com"),
+                openai_api_base=config_dict.get("OPENAI_API_BASE", "https://api.openai.com/v1"),
                 default_llm_provider=config_dict.get("DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=config_dict.get("DEEPSEEK_MODEL", "deepseek-chat"),
                 openai_model=config_dict.get("OPENAI_MODEL", "gpt-4o-mini"),
@@ -147,6 +156,8 @@ def print_config(config: Config):
     print(f"LLM提供商: {config.default_llm_provider}")
     print(f"DeepSeek模型: {config.deepseek_model}")
     print(f"OpenAI模型: {config.openai_model}")
+    print(f"DeepSeek API地址: {config.deepseek_api_base}")
+    print(f"OpenAI API地址: {config.openai_api_base}")
     print(f"最大搜索结果数: {config.max_search_results}")
     print(f"搜索超时: {config.search_timeout}秒")
     print(f"最大内容长度: {config.max_content_length}")

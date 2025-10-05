@@ -60,12 +60,14 @@ class DeepSearchAgent:
         if self.config.default_llm_provider == "deepseek":
             return DeepSeekLLM(
                 api_key=self.config.deepseek_api_key,
-                model_name=self.config.deepseek_model
+                model_name=self.config.deepseek_model,
+                api_base=self.config.deepseek_api_base
             )
         elif self.config.default_llm_provider == "openai":
             return OpenAILLM(
                 api_key=self.config.openai_api_key,
-                model_name=self.config.openai_model
+                model_name=self.config.openai_model,
+                api_base=self.config.openai_api_base
             )
         else:
             raise ValueError(f"不支持的LLM提供商: {self.config.default_llm_provider}")

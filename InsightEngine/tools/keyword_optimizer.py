@@ -3,16 +3,20 @@
 使用Qwen AI将Agent生成的搜索词优化为更适合舆情数据库查询的关键词
 """
 
-import requests
 import json
 import sys
 import os
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
+from openai import OpenAI
 
 # 添加项目根目录到Python路径以导入config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from config import GUIJI_QWEN3_API_KEY
+from config import (
+    GUIJI_QWEN3_API_KEY,
+    GUIJI_QWEN3_API_BASE,
+    GUIJI_QWEN3_KEYWORD_MODEL,
+)
 
 # 添加utils目录到Python路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -38,19 +42,24 @@ class KeywordOptimizer:
     使用硅基流动的Qwen3模型将Agent生成的搜索词优化为更贴近真实舆情的关键词
     """
     
-    def __init__(self, api_key: str = None):
+    def __init__(self, api_key: str = None, api_base: Optional[str] = None, model_name: Optional[str] = None):
         """
         初始化关键词优化器
-        
+
         Args:
             api_key: 硅基流动API密钥，如果不提供则从配置文件读取
         """
-        self.api_key = api_key or GUIJI_QWEN3_API_KEY
-        self.base_url = "https://api.siliconflow.cn/v1/chat/completions"
-        self.model = "Qwen/Qwen3-30B-A3B-Instruct-2507"
-        
+        self.api_key = api_key or os.getenv("GUIJI_QWEN3_API_KEY") or GUIJI_QWEN3_API_KEY
+        self.api_base = api_base or os.getenv("GUIJI_QWEN3_API_BASE") or GUIJI_QWEN3_API_BASE
+        self.model = model_name or os.getenv("GUIJI_QWEN3_KEYWORD_MODEL") or GUIJI_QWEN3_KEYWORD_MODEL
+
         if not self.api_key:
             raise ValueError("未找到硅基流动API密钥，请在config.py中设置GUIJI_QWEN3_API_KEY")
+
+        client_kwargs = {"api_key": self.api_key}
+        if self.api_base:
+            client_kwargs["base_url"] = self.api_base
+        self.client = OpenAI(**client_kwargs)
     
     def optimize_keywords(self, original_query: str, context: str = "") -> KeywordOptimizationResponse:
         """
@@ -176,35 +185,23 @@ class KeywordOptimizer:
     @with_graceful_retry(SEARCH_API_RETRY_CONFIG, default_return={"success": False, "error": "关键词优化服务暂时不可用"})
     def _call_qwen_api(self, system_prompt: str, user_prompt: str) -> Dict[str, Any]:
         """调用Qwen API"""
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
-        }
-        
-        data = {
-            "model": self.model,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            "max_tokens": 10000,
-            "temperature": 0.7
-        }
-        
         try:
-            response = requests.post(self.base_url, headers=headers, json=data, timeout=30)
-            response.raise_for_status()
-            
-            result = response.json()
-            
-            if "choices" in result and len(result["choices"]) > 0:
-                content = result["choices"][0]["message"]["content"]
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                max_tokens=10000,
+                temperature=0.7,
+            )
+
+            if response.choices and response.choices[0].message:
+                content = response.choices[0].message.content
                 return {"success": True, "content": content}
-            else:
-                return {"success": False, "error": "API返回格式异常"}
-                
-        except requests.exceptions.RequestException as e:
-            return {"success": False, "error": f"网络请求错误: {str(e)}"}
+
+            return {"success": False, "error": "API返回为空"}
+
         except Exception as e:
             return {"success": False, "error": f"API调用异常: {str(e)}"}
     
