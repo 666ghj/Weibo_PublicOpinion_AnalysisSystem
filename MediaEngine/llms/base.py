@@ -9,17 +9,18 @@ from typing import Optional, Dict, Any
 
 class BaseLLM(ABC):
     """LLM基础抽象类"""
-    
-    def __init__(self, api_key: str, model_name: Optional[str] = None):
+
+    def __init__(self, api_key: str, model_name: Optional[str] = None, api_base: Optional[str] = None):
         """
         初始化LLM客户端
-        
+
         Args:
             api_key: API密钥
             model_name: 模型名称，如果不指定则使用默认模型
         """
         self.api_key = api_key
         self.model_name = model_name
+        self.api_base = api_base
         
     @abstractmethod
     def invoke(self, system_prompt: str, user_prompt: str, **kwargs) -> str:
