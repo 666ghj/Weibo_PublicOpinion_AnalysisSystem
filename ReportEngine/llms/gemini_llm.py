@@ -49,11 +49,11 @@ except ImportError:
 
 class GeminiLLM(BaseLLM):
     """Report Engine Gemini LLM实现类"""
-    
-    def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None, config=None):
+
+    def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None, api_base: Optional[str] = None, config=None):
         """
         初始化Gemini客户端
-        
+
         Args:
             api_key: Gemini API密钥，如果不提供则从config或环境变量读取
             model_name: 模型名称，默认使用gemini-2.5-pro
@@ -69,25 +69,33 @@ class GeminiLLM(BaseLLM):
             
             if not api_key:
                 raise ValueError("Gemini API Key未找到！请在config.py中设置GEMINI_API_KEY或设置环境变量")
-        
-        super().__init__(api_key, model_name)
-        
+
+        # 解析API地址
+        base_url = api_base
+        if base_url is None and config and hasattr(config, "GEMINI_API_BASE"):
+            base_url = getattr(config, "GEMINI_API_BASE")
+        if base_url is None:
+            base_url = os.getenv("GEMINI_API_BASE")
+        if base_url is None:
+            base_url = "https://www.chataiapi.com/v1"
+
+        super().__init__(api_key, model_name, base_url)
+
         # 存储配置对象
         self.config = config
-        
+
         # 从配置获取超时时间，默认15分钟（适应7分钟平均生成时间）
         timeout = config.api_timeout if config and hasattr(config, 'api_timeout') else 900.0
-        
+
         # 创建针对此实例的重试配置
         self.retry_config = create_report_retry_config(config)
-        
+
         # 初始化OpenAI客户端，使用Gemini的中转endpoint
         # 专门为报告生成设置长超时（15分钟），适应7分钟平均生成时间
-        self.client = OpenAI(
-            api_key=self.api_key,
-            base_url="https://www.chataiapi.com/v1",
-            timeout=timeout
-        )
+        client_kwargs = {"api_key": self.api_key, "timeout": timeout}
+        if self.api_base:
+            client_kwargs["base_url"] = self.api_base
+        self.client = OpenAI(**client_kwargs)
         
         self.default_model = model_name or self.get_default_model()
     
@@ -188,6 +196,6 @@ class GeminiLLM(BaseLLM):
         return {
             "provider": "Gemini",
             "model": self.default_model,
-            "api_base": "https://www.chataiapi.com/v1",
+            "api_base": self.api_base,
             "purpose": "Report Generation"
         }
