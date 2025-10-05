@@ -180,6 +180,7 @@ SYSTEM_PROMPT_FIRST_SEARCH = f"""
 2. 制定最佳的搜索查询
 3. 如果选择search_news_by_date工具，必须同时提供start_date和end_date参数（格式：YYYY-MM-DD）
 4. 解释你的选择理由
+5. 仔细核查新闻中的可疑点，破除谣言和误导，尽力还原事件原貌
 
 注意：除了search_news_by_date工具外，其他工具都不需要额外参数。
 请按照以下JSON模式定义格式化输出（文字请使用中文）：
@@ -289,6 +290,7 @@ SYSTEM_PROMPT_REFLECTION = f"""
 3. 制定精确的搜索查询
 4. 如果选择search_news_by_date工具，必须同时提供start_date和end_date参数（格式：YYYY-MM-DD）
 5. 解释你的选择和推理
+6. 仔细核查新闻中的可疑点，破除谣言和误导，尽力还原事件原貌
 
 注意：除了search_news_by_date工具外，其他工具都不需要额外参数。
 请按照以下JSON模式定义格式化输出：
@@ -412,6 +414,7 @@ SYSTEM_PROMPT_REPORT_FORMATTING = f"""
    - 严格区分事实和观点
    - 用专业的新闻语言表述
    - 确保信息的准确性和客观性
+   - 仔细核查新闻中的可疑点，破除谣言和误导，尽力还原事件原貌
 
 2. **多源验证体系**：
    - 详细标注每个信息的来源
