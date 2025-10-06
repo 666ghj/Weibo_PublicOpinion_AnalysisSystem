@@ -8,7 +8,6 @@ BroadTopicExtraction模块 - 话题提取器
 import sys
 import json
 import re
-import os
 from pathlib import Path
 from typing import List, Dict, Tuple
 from openai import OpenAI
@@ -27,18 +26,11 @@ class TopicExtractor:
     
     def __init__(self):
         """初始化话题提取器"""
-        api_key = getattr(config, "DEEPSEEK_API_KEY", None) or os.getenv("DEEPSEEK_API_KEY")
-        if not api_key:
-            raise ValueError("未找到DeepSeek API Key，请在config.py或环境变量中进行配置")
-
-        api_base = getattr(config, "DEEPSEEK_API_BASE", None) or os.getenv("DEEPSEEK_API_BASE") or "https://api.deepseek.com"
-        self.model = getattr(config, "DEEPSEEK_MODEL", "deepseek-chat")
-
-        client_kwargs = {"api_key": api_key}
-        if api_base:
-            client_kwargs["base_url"] = api_base
-
-        self.client = OpenAI(**client_kwargs)
+        self.client = OpenAI(
+            api_key=config.DEEPSEEK_API_KEY,
+            base_url="https://api.deepseek.com"
+        )
+        self.model = "deepseek-chat"
     
     def extract_keywords_and_summary(self, news_list: List[Dict], max_keywords: int = 100) -> Tuple[List[str], str]:
         """
