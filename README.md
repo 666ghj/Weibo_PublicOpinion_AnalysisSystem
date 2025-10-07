@@ -8,8 +8,6 @@
 
 <img src="static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="700">
 
-微舆：人人可用的多Agent舆情分析助手
-
 <a href="https://trendshift.io/repositories/12461" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12461" alt="666ghj%2FWeibo_PublicOpinion_AnalysisSystem | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
 [![GitHub Stars](https://img.shields.io/github/stars/666ghj/Weibo_PublicOpinion_AnalysisSystem?style=flat-square)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/stargazers)
