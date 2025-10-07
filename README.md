@@ -1,9 +1,3 @@
-谢谢大家的热情！这三件事情是我马上就要做的：
-
-1. 实现docker部署。
-2. 最简配置流程，统一所有模型api接入方式。
-3. 部署在线网站，大家可以直接使用查看效果。
-
 <div align="center">
 
 <img src="static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="700">
