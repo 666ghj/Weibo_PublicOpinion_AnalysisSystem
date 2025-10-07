@@ -292,13 +292,14 @@ class DeepSearchAgent:
             情感分析结果字典，如果失败则返回None
         """
         try:
-            # 初始化情感分析器（如果尚未初始化）
-            if not self.sentiment_analyzer.is_initialized:
+            # 初始化情感分析器（如果尚未初始化且未被禁用）
+            if not self.sentiment_analyzer.is_initialized and not self.sentiment_analyzer.is_disabled:
                 print("    初始化情感分析模型...")
                 if not self.sentiment_analyzer.initialize():
-                    print("    ❌ 情感分析模型初始化失败")
-                    return None
-            
+                    print("     情感分析模型初始化失败，将直接透传原始文本")
+            elif self.sentiment_analyzer.is_disabled:
+                print("     情感分析功能已禁用，直接透传原始文本")
+
             # 将查询结果转换为字典格式
             results_dict = []
             for result in results:
@@ -337,34 +338,46 @@ class DeepSearchAgent:
         print(f"  → 执行独立情感分析")
         
         try:
-            # 初始化情感分析器（如果尚未初始化）
-            if not self.sentiment_analyzer.is_initialized:
+            # 初始化情感分析器（如果尚未初始化且未被禁用）
+            if not self.sentiment_analyzer.is_initialized and not self.sentiment_analyzer.is_disabled:
                 print("    初始化情感分析模型...")
                 if not self.sentiment_analyzer.initialize():
-                    return {
-                        "success": False,
-                        "error": "情感分析模型初始化失败",
-                        "results": []
-                    }
+                    print("     情感分析模型初始化失败，将直接透传原始文本")
+            elif self.sentiment_analyzer.is_disabled:
+                print("     情感分析功能已禁用，直接透传原始文本")
             
             # 执行分析
             if isinstance(texts, str):
                 result = self.sentiment_analyzer.analyze_single_text(texts)
-                return {
-                    "success": True,
-                    "total_analyzed": 1,
-                    "results": [result.__dict__]
+                result_dict = result.__dict__
+                response = {
+                    "success": result.success and result.analysis_performed,
+                    "total_analyzed": 1 if result.analysis_performed and result.success else 0,
+                    "results": [result_dict]
                 }
+                if not result.analysis_performed:
+                    response["success"] = False
+                    response["warning"] = result.error_message or "情感分析功能不可用，已直接返回原始文本"
+                return response
             else:
-                batch_result = self.sentiment_analyzer.analyze_batch(texts, show_progress=True)
-                return {
-                    "success": True,
-                    "total_analyzed": batch_result.total_processed,
+                texts_list = list(texts)
+                batch_result = self.sentiment_analyzer.analyze_batch(texts_list, show_progress=True)
+                response = {
+                    "success": batch_result.analysis_performed and batch_result.success_count > 0,
+                    "total_analyzed": batch_result.total_processed if batch_result.analysis_performed else 0,
                     "success_count": batch_result.success_count,
                     "failed_count": batch_result.failed_count,
-                    "average_confidence": batch_result.average_confidence,
+                    "average_confidence": batch_result.average_confidence if batch_result.analysis_performed else 0.0,
                     "results": [result.__dict__ for result in batch_result.results]
                 }
+                if not batch_result.analysis_performed:
+                    warning = next(
+                        (r.error_message for r in batch_result.results if r.error_message),
+                        "情感分析功能不可用，已直接返回原始文本"
+                    )
+                    response["success"] = False
+                    response["warning"] = warning
+                return response
                 
         except Exception as e:
             print(f"    ❌ 情感分析过程中发生错误: {str(e)}")
@@ -486,11 +499,11 @@ class DeepSearchAgent:
                     search_kwargs["end_date"] = end_date
                     print(f"  - 时间范围: {start_date} 到 {end_date}")
                 else:
-                    print(f"  ⚠️  日期格式错误（应为YYYY-MM-DD），改用全局搜索")
+                    print(f"    日期格式错误（应为YYYY-MM-DD），改用全局搜索")
                     print(f"      提供的日期: start_date={start_date}, end_date={end_date}")
                     search_tool = "search_topic_globally"
             elif search_tool == "search_topic_by_date":
-                print(f"  ⚠️  search_topic_by_date工具缺少时间参数，改用全局搜索")
+                print(f"    search_topic_by_date工具缺少时间参数，改用全局搜索")
                 search_tool = "search_topic_globally"
         
         # 处理需要平台参数的工具
@@ -500,7 +513,7 @@ class DeepSearchAgent:
                 search_kwargs["platform"] = platform
                 print(f"  - 指定平台: {platform}")
             else:
-                print(f"  ⚠️  search_topic_on_platform工具缺少平台参数，改用全局搜索")
+                print(f"    search_topic_on_platform工具缺少平台参数，改用全局搜索")
                 search_tool = "search_topic_globally"
         
         # 处理限制参数，使用配置文件中的默认值而不是agent提供的参数
@@ -615,11 +628,11 @@ class DeepSearchAgent:
                         search_kwargs["end_date"] = end_date
                         print(f"    时间范围: {start_date} 到 {end_date}")
                     else:
-                        print(f"    ⚠️  日期格式错误（应为YYYY-MM-DD），改用全局搜索")
+                        print(f"      日期格式错误（应为YYYY-MM-DD），改用全局搜索")
                         print(f"        提供的日期: start_date={start_date}, end_date={end_date}")
                         search_tool = "search_topic_globally"
                 elif search_tool == "search_topic_by_date":
-                    print(f"    ⚠️  search_topic_by_date工具缺少时间参数，改用全局搜索")
+                    print(f"      search_topic_by_date工具缺少时间参数，改用全局搜索")
                     search_tool = "search_topic_globally"
             
             # 处理需要平台参数的工具
@@ -629,7 +642,7 @@ class DeepSearchAgent:
                     search_kwargs["platform"] = platform
                     print(f"    指定平台: {platform}")
                 else:
-                    print(f"    ⚠️  search_topic_on_platform工具缺少平台参数，改用全局搜索")
+                    print(f"      search_topic_on_platform工具缺少平台参数，改用全局搜索")
                     search_tool = "search_topic_globally"
             
             # 处理限制参数
