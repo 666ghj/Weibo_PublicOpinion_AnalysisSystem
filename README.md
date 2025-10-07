@@ -4,8 +4,6 @@
 2. 最简配置流程，统一所有模型api接入方式。
 3. 部署在线网站，大家可以直接使用查看效果。
 
-回复到上限了，再次谢谢您的star！
-
 <div align="center">
 
 <img src="static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="800">
