@@ -16,6 +16,9 @@ class Config:
     openai_api_key: Optional[str] = None
     gemini_api_key: Optional[str] = None
     bocha_api_key: Optional[str] = None
+    deepseek_base_url: str = "https://api.deepseek.com"
+    openai_base_url: Optional[str] = None
+    gemini_base_url: str = "https://www.chataiapi.com/v1"
     
     # 模型配置
     default_llm_provider: str = "deepseek"  # deepseek、openai 或 gemini
@@ -72,6 +75,9 @@ class Config:
                 deepseek_api_key=getattr(config_module, "DEEPSEEK_API_KEY", None),
                 openai_api_key=getattr(config_module, "OPENAI_API_KEY", None),
                 gemini_api_key=getattr(config_module, "GEMINI_API_KEY", None),
+                deepseek_base_url=getattr(config_module, "DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
+                openai_base_url=getattr(config_module, "OPENAI_BASE_URL", None),
+                gemini_base_url=getattr(config_module, "GEMINI_BASE_URL", "https://www.chataiapi.com/v1"),
                 bocha_api_key=getattr(config_module, "BOCHA_API_KEY", None),
                 default_llm_provider=getattr(config_module, "DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=getattr(config_module, "DEEPSEEK_MODEL", "deepseek-chat"),
@@ -100,6 +106,9 @@ class Config:
                 deepseek_api_key=config_dict.get("DEEPSEEK_API_KEY"),
                 openai_api_key=config_dict.get("OPENAI_API_KEY"),
                 gemini_api_key=config_dict.get("GEMINI_API_KEY"),
+                deepseek_base_url=config_dict.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
+                openai_base_url=config_dict.get("OPENAI_BASE_URL"),
+                gemini_base_url=config_dict.get("GEMINI_BASE_URL", "https://www.chataiapi.com/v1"),
                 bocha_api_key=config_dict.get("BOCHA_API_KEY"),
                 default_llm_provider=config_dict.get("DEFAULT_LLM_PROVIDER", "deepseek"),
                 deepseek_model=config_dict.get("DEEPSEEK_MODEL", "deepseek-chat"),

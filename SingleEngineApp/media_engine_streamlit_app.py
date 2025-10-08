@@ -27,7 +27,13 @@ except locale.Error:
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from MediaEngine import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, BOCHA_Web_Search_API_KEY, GEMINI_API_KEY
+from config import (
+    DEEPSEEK_API_KEY,
+    DEEPSEEK_BASE_URL,
+    BOCHA_Web_Search_API_KEY,
+    GEMINI_API_KEY,
+    GEMINI_BASE_URL,
+)
 
 
 def main():
@@ -112,6 +118,8 @@ def main():
             openai_api_key=None,
             gemini_api_key=gemini_key,
             bocha_api_key=bocha_key,
+            deepseek_base_url=DEEPSEEK_BASE_URL,
+            gemini_base_url=GEMINI_BASE_URL,
             default_llm_provider=llm_provider,
             deepseek_model="deepseek-chat",  # 保留默认值以兼容
             openai_model="gpt-4o-mini",  # 保留默认值以兼容

@@ -13,6 +13,7 @@ class Config:
     """Report Engine配置类"""
     # API密钥
     gemini_api_key: Optional[str] = None
+    gemini_base_url: str = "https://www.chataiapi.com/v1"
     
     # 模型配置
     default_llm_provider: str = "gemini"
@@ -56,6 +57,7 @@ class Config:
             
             return cls(
                 gemini_api_key=getattr(config_module, "GEMINI_API_KEY", None),
+                gemini_base_url=getattr(config_module, "GEMINI_BASE_URL", "https://www.chataiapi.com/v1"),
                 default_llm_provider=getattr(config_module, "DEFAULT_LLM_PROVIDER", "gemini"),
                 gemini_model=getattr(config_module, "GEMINI_MODEL", "gemini-2.5-pro"),
                 max_content_length=getattr(config_module, "MAX_CONTENT_LENGTH", 200000),
@@ -82,6 +84,7 @@ class Config:
             
             return cls(
                 gemini_api_key=config_dict.get("GEMINI_API_KEY"),
+                gemini_base_url=config_dict.get("GEMINI_BASE_URL", "https://www.chataiapi.com/v1"),
                 default_llm_provider=config_dict.get("DEFAULT_LLM_PROVIDER", "gemini"),
                 gemini_model=config_dict.get("GEMINI_MODEL", "gemini-2.5-pro"),
                 max_content_length=int(config_dict.get("MAX_CONTENT_LENGTH", "200000")),

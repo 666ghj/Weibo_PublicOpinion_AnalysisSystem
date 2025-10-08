@@ -72,7 +72,8 @@ class DeepSearchAgent:
         if self.config.default_llm_provider == "deepseek":
             return DeepSeekLLM(
                 api_key=self.config.deepseek_api_key,
-                model_name=self.config.deepseek_model
+                model_name=self.config.deepseek_model,
+                base_url=self.config.deepseek_base_url
             )
         elif self.config.default_llm_provider == "openai":
             return OpenAILLM(
@@ -82,7 +83,8 @@ class DeepSearchAgent:
         elif self.config.default_llm_provider == "kimi":
             return KimiLLM(
                 api_key=self.config.kimi_api_key,
-                model_name=self.config.kimi_model
+                model_name=self.config.kimi_model,
+                base_url=self.config.kimi_base_url
             )
         else:
             raise ValueError(f"不支持的LLM提供商: {self.config.default_llm_provider}")

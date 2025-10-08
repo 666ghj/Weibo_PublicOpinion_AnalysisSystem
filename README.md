@@ -230,7 +230,7 @@ playwright install chromium
 
 #### 4.1 配置API密钥
 
-编辑 `config.py` 文件，填入您的API密钥（您也可以选择自己的模型、搜索代理）：
+编辑 `config.py` 文件，填入您的API密钥（您也可以选择自己的模型、搜索代理，详情见config文件内）：
 
 ```python
 # MySQL数据库配置
@@ -292,7 +292,9 @@ conda activate your_conda_name
 python app.py
 ```
 
-> 注：数据爬取需要单独操作，见5.3指引
+> 注1：一次运行终止后，streamlit app可能结束异常仍然占用端口，此时搜索占用端口的进程kill掉即可
+
+> 注2：数据爬取需要单独操作，见5.3指引
 
 访问 http://localhost:5000 即可使用完整系统
 

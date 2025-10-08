@@ -12,7 +12,7 @@ import re
 
 # 添加项目根目录到Python路径以导入config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import GUIJI_QWEN3_API_KEY
+from config import GUIJI_QWEN3_API_KEY, GUIJI_QWEN3_BASE_URL
 
 # 添加utils目录到Python路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -30,21 +30,24 @@ class ForumHost:
     使用Qwen3-235B模型作为智能主持人
     """
     
-    def __init__(self, api_key: str = None):
+    def __init__(self, api_key: str = None, base_url: Optional[str] = None):
         """
         初始化论坛主持人
         
         Args:
             api_key: 硅基流动API密钥，如果不提供则从配置文件读取
+            base_url: 接口基础地址，默认使用配置文件提供的SiliconFlow地址
         """
         self.api_key = api_key or GUIJI_QWEN3_API_KEY
 
         if not self.api_key:
             raise ValueError("未找到硅基流动API密钥，请在config.py中设置GUIJI_QWEN3_API_KEY")
 
+        self.base_url = base_url or GUIJI_QWEN3_BASE_URL
+
         self.client = OpenAI(
             api_key=self.api_key,
-            base_url="https://api.siliconflow.cn/v1"
+            base_url=self.base_url
         )
         self.model = "Qwen/Qwen3-235B-A22B-Instruct-2507"  # Use larger model variant
 

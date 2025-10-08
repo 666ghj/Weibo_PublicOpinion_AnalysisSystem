@@ -27,7 +27,7 @@ except locale.Error:
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from QueryEngine import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, TAVILY_API_KEY
+from config import DEEPSEEK_API_KEY, DEEPSEEK_BASE_URL, TAVILY_API_KEY
 
 
 def main():
@@ -110,6 +110,7 @@ def main():
             deepseek_api_key=deepseek_key,
             openai_api_key=None,
             tavily_api_key=tavily_key,
+            deepseek_base_url=DEEPSEEK_BASE_URL,
             default_llm_provider=llm_provider,
             deepseek_model=model_name,
             openai_model="gpt-4o-mini",  # 保留默认值以兼容

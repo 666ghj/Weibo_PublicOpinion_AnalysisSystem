@@ -15,6 +15,9 @@ class Config:
     deepseek_api_key: Optional[str] = None
     openai_api_key: Optional[str] = None
     kimi_api_key: Optional[str] = None
+    deepseek_base_url: str = "https://api.deepseek.com"
+    openai_base_url: Optional[str] = None
+    kimi_base_url: str = "https://api.moonshot.cn/v1"
     
     # 数据库配置
     db_host: Optional[str] = None
@@ -85,6 +88,10 @@ class Config:
             return cls(
                 deepseek_api_key=getattr(config_module, "DEEPSEEK_API_KEY", None),
                 openai_api_key=getattr(config_module, "OPENAI_API_KEY", None),
+                kimi_api_key=getattr(config_module, "KIMI_API_KEY", None),
+                deepseek_base_url=getattr(config_module, "DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
+                openai_base_url=getattr(config_module, "OPENAI_BASE_URL", None),
+                kimi_base_url=getattr(config_module, "KIMI_BASE_URL", "https://api.moonshot.cn/v1"),
                 
                 db_host=getattr(config_module, "DB_HOST", None),
                 db_user=getattr(config_module, "DB_USER", None),
@@ -131,6 +138,9 @@ class Config:
                 deepseek_api_key=config_dict.get("DEEPSEEK_API_KEY"),
                 openai_api_key=config_dict.get("OPENAI_API_KEY"),
                 kimi_api_key=config_dict.get("KIMI_API_KEY"),
+                deepseek_base_url=config_dict.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
+                openai_base_url=config_dict.get("OPENAI_BASE_URL"),
+                kimi_base_url=config_dict.get("KIMI_BASE_URL", "https://api.moonshot.cn/v1"),
                 
                 db_host=config_dict.get("DB_HOST"),
                 db_user=config_dict.get("DB_USER"),

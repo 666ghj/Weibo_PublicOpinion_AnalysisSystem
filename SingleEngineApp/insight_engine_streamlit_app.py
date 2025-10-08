@@ -27,7 +27,18 @@ except locale.Error:
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from InsightEngine import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, KIMI_API_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, DB_CHARSET
+from config import (
+    DEEPSEEK_API_KEY,
+    DEEPSEEK_BASE_URL,
+    KIMI_API_KEY,
+    KIMI_BASE_URL,
+    DB_HOST,
+    DB_USER,
+    DB_PASSWORD,
+    DB_NAME,
+    DB_PORT,
+    DB_CHARSET,
+)
 
 
 def main():
@@ -111,6 +122,8 @@ def main():
             deepseek_api_key=None,
             openai_api_key=None,
             kimi_api_key=KIMI_API_KEY,  # 强制使用配置文件中的Kimi Key
+            deepseek_base_url=DEEPSEEK_BASE_URL,
+            kimi_base_url=KIMI_BASE_URL,
             db_host=db_host,
             db_user=db_user,
             db_password=db_password,

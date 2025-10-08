@@ -9,6 +9,8 @@ from typing import Optional, Dict, Any
 from openai import OpenAI
 from .base import BaseLLM
 
+DEFAULT_GEMINI_BASE_URL = "https://www.chataiapi.com/v1"
+
 # 导入根目录的config
 try:
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -50,13 +52,14 @@ except ImportError:
 class GeminiLLM(BaseLLM):
     """Report Engine Gemini LLM实现类"""
     
-    def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None, config=None):
+    def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None, base_url: Optional[str] = None, config=None):
         """
         初始化Gemini客户端
         
         Args:
             api_key: Gemini API密钥，如果不提供则从config或环境变量读取
             model_name: 模型名称，默认使用gemini-2.5-pro
+            base_url: Gemini API基础地址
             config: 配置对象，用于获取超时设置
         """
         if api_key is None:
@@ -77,15 +80,22 @@ class GeminiLLM(BaseLLM):
         
         # 从配置获取超时时间，默认15分钟（适应7分钟平均生成时间）
         timeout = config.api_timeout if config and hasattr(config, 'api_timeout') else 900.0
-        
+
+        self.base_url = (
+            base_url
+            or (getattr(self.config, 'gemini_base_url', None) if self.config else None)
+            or os.getenv('GEMINI_BASE_URL')
+            or DEFAULT_GEMINI_BASE_URL
+        )
+
         # 创建针对此实例的重试配置
         self.retry_config = create_report_retry_config(config)
-        
+
         # 初始化OpenAI客户端，使用Gemini的中转endpoint
         # 专门为报告生成设置长超时（15分钟），适应7分钟平均生成时间
         self.client = OpenAI(
             api_key=self.api_key,
-            base_url="https://www.chataiapi.com/v1",
+            base_url=self.base_url,
             timeout=timeout
         )
         
@@ -188,6 +198,6 @@ class GeminiLLM(BaseLLM):
         return {
             "provider": "Gemini",
             "model": self.default_model,
-            "api_base": "https://www.chataiapi.com/v1",
+            "api_base": self.base_url,
             "purpose": "Report Generation"
         }

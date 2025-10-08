@@ -60,7 +60,8 @@ class DeepSearchAgent:
         if self.config.default_llm_provider == "deepseek":
             return DeepSeekLLM(
                 api_key=self.config.deepseek_api_key,
-                model_name=self.config.deepseek_model
+                model_name=self.config.deepseek_model,
+                base_url=self.config.deepseek_base_url
             )
         elif self.config.default_llm_provider == "openai":
             return OpenAILLM(

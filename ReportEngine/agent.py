@@ -192,6 +192,7 @@ class ReportAgent:
             return GeminiLLM(
                 api_key=self.config.gemini_api_key,
                 model_name=self.config.gemini_model,
+                base_url=self.config.gemini_base_url,
                 config=self.config  # 传入配置对象以支持动态超时设置
             )
         else:
