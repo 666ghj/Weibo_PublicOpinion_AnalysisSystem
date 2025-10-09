@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="700">
+<img src="static/image/logo_compressed.png" alt="Weibo Public Opinion Analysis System Logo" width="100%">
 
 <a href="https://trendshift.io/repositories/12461" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12461" alt="666ghj%2FWeibo_PublicOpinion_AnalysisSystem | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
