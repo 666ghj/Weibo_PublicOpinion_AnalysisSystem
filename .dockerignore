@@ -1,0 +1,12 @@
+.git
+.gitmodules
+.vscode
+.cursor
+__pycache__
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+.DS_Store
+Thumbs.db

@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  bettafish:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: bettafish:latest
+    container_name: bettafish
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5000:5000"
+      - "8501:8501"
+      - "8502:8502"
+      - "8503:8503"
+    volumes:
+      - ./logs:/app/logs
+      - ./final_reports:/app/final_reports
+      - ./insight_engine_streamlit_reports:/app/insight_engine_streamlit_reports
+      - ./media_engine_streamlit_reports:/app/media_engine_streamlit_reports
+      - ./query_engine_streamlit_reports:/app/query_engine_streamlit_reports
