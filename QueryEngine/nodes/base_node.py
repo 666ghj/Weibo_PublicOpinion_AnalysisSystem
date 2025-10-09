@@ -5,14 +5,14 @@
 
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
-from ..llms.base import BaseLLM
+from ..llms.base import LLMClient
 from ..state.state import State
 
 
 class BaseNode(ABC):
     """节点基类"""
     
-    def __init__(self, llm_client: BaseLLM, node_name: str = ""):
+    def __init__(self, llm_client: LLMClient, node_name: str = ""):
         """
         初始化节点
         

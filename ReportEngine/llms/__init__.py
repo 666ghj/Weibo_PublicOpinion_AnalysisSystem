@@ -1,9 +1,7 @@
 """
-Report Engine LLM模块
-包含各种大语言模型的接口实现
+LLM module for the Report Engine.
 """
 
-from .base import BaseLLM
-from .gemini_llm import GeminiLLM
+from .base import LLMClient
 
-__all__ = ["BaseLLM", "GeminiLLM"]
+__all__ = ["LLMClient"]

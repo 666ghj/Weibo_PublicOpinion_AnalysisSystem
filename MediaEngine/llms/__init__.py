@@ -1,11 +1,7 @@
 """
-LLM调用模块
-支持多种大语言模型的统一接口
+LLM module for the Media Engine.
 """
 
-from .base import BaseLLM
-from .deepseek import DeepSeekLLM
-from .openai_llm import OpenAILLM
-from .gemini_llm import GeminiLLM
+from .base import LLMClient
 
-__all__ = ["BaseLLM", "DeepSeekLLM", "OpenAILLM", "GeminiLLM"]
+__all__ = ["LLMClient"]

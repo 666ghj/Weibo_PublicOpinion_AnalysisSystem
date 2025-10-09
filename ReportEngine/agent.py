@@ -9,7 +9,7 @@ import logging
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 
-from .llms import GeminiLLM, BaseLLM
+from .llms import LLMClient
 from .nodes import (
     TemplateSelectionNode,
     HTMLGenerationNode
@@ -186,17 +186,13 @@ class ReportAgent:
         }
         self.file_baseline.initialize_baseline(directories)
     
-    def _initialize_llm(self) -> BaseLLM:
+    def _initialize_llm(self) -> LLMClient:
         """初始化LLM客户端"""
-        if self.config.default_llm_provider == "gemini":
-            return GeminiLLM(
-                api_key=self.config.gemini_api_key,
-                model_name=self.config.gemini_model,
-                base_url=self.config.gemini_base_url,
-                config=self.config  # 传入配置对象以支持动态超时设置
-            )
-        else:
-            raise ValueError(f"不支持的LLM提供商: {self.config.default_llm_provider}")
+        return LLMClient(
+            api_key=self.config.llm_api_key,
+            model_name=self.config.llm_model_name,
+            base_url=self.config.llm_base_url,
+        )
     
     def _initialize_nodes(self):
         """初始化处理节点"""

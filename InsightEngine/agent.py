@@ -9,7 +9,7 @@ import re
 from datetime import datetime
 from typing import Optional, Dict, Any, List, Union
 
-from .llms import DeepSeekLLM, OpenAILLM, KimiLLM, BaseLLM
+from .llms import LLMClient
 from .nodes import (
     ReportStructureNode,
     FirstSearchNode, 
@@ -67,27 +67,13 @@ class DeepSearchAgent:
         print(f"搜索工具集: MediaCrawlerDB (支持5种本地数据库查询工具)")
         print(f"情感分析: WeiboMultilingualSentiment (支持22种语言的情感分析)")
     
-    def _initialize_llm(self) -> BaseLLM:
+    def _initialize_llm(self) -> LLMClient:
         """初始化LLM客户端"""
-        if self.config.default_llm_provider == "deepseek":
-            return DeepSeekLLM(
-                api_key=self.config.deepseek_api_key,
-                model_name=self.config.deepseek_model,
-                base_url=self.config.deepseek_base_url
-            )
-        elif self.config.default_llm_provider == "openai":
-            return OpenAILLM(
-                api_key=self.config.openai_api_key,
-                model_name=self.config.openai_model
-            )
-        elif self.config.default_llm_provider == "kimi":
-            return KimiLLM(
-                api_key=self.config.kimi_api_key,
-                model_name=self.config.kimi_model,
-                base_url=self.config.kimi_base_url
-            )
-        else:
-            raise ValueError(f"不支持的LLM提供商: {self.config.default_llm_provider}")
+        return LLMClient(
+            api_key=self.config.llm_api_key,
+            model_name=self.config.llm_model_name,
+            base_url=self.config.llm_base_url,
+        )
     
     def _initialize_nodes(self):
         """初始化处理节点"""

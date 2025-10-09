@@ -28,11 +28,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from MediaEngine import DeepSearchAgent, Config
 from config import (
-    DEEPSEEK_API_KEY,
-    DEEPSEEK_BASE_URL,
-    BOCHA_Web_Search_API_KEY,
-    GEMINI_API_KEY,
-    GEMINI_BASE_URL,
+    MEDIA_ENGINE_API_KEY,
+    MEDIA_ENGINE_BASE_URL,
+    MEDIA_ENGINE_MODEL_NAME,
+    BOCHA_WEB_SEARCH_API_KEY,
 )
 
 
@@ -63,8 +62,7 @@ def main():
 
     # ----- 配置被硬编码 -----
     # 强制使用 Gemini
-    llm_provider = "gemini"
-    model_name = "gemini-2.5-pro"
+    model_name = MEDIA_ENGINE_MODEL_NAME or "gemini-2.5-pro"
     # 默认高级配置
     max_reflections = 2
     max_content_length = 20000
@@ -101,29 +99,23 @@ def main():
             return
 
         # 由于强制使用Gemini，检查相关的API密钥
-        if not GEMINI_API_KEY:
-            st.error("请在您的配置文件(config.py)中设置GEMINI_API_KEY")
+        if not MEDIA_ENGINE_API_KEY:
+            st.error("请在您的配置文件(config.py)中设置MEDIA_ENGINE_API_KEY")
             return
-        if not BOCHA_Web_Search_API_KEY:
-            st.error("请在您的配置文件(config.py)中设置BOCHA_Web_Search_API_KEY")
+        if not BOCHA_WEB_SEARCH_API_KEY:
+            st.error("请在您的配置文件(config.py)中设置BOCHA_WEB_SEARCH_API_KEY")
             return
 
         # 自动使用配置文件中的API密钥
-        gemini_key = GEMINI_API_KEY
-        bocha_key = BOCHA_Web_Search_API_KEY
+        engine_key = MEDIA_ENGINE_API_KEY
+        bocha_key = BOCHA_WEB_SEARCH_API_KEY
 
         # 创建配置
         config = Config(
-            deepseek_api_key=None,
-            openai_api_key=None,
-            gemini_api_key=gemini_key,
+            llm_api_key=engine_key,
+            llm_base_url=MEDIA_ENGINE_BASE_URL,
+            llm_model_name=model_name,
             bocha_api_key=bocha_key,
-            deepseek_base_url=DEEPSEEK_BASE_URL,
-            gemini_base_url=GEMINI_BASE_URL,
-            default_llm_provider=llm_provider,
-            deepseek_model="deepseek-chat",  # 保留默认值以兼容
-            openai_model="gpt-4o-mini",  # 保留默认值以兼容
-            gemini_model=model_name,
             max_reflections=max_reflections,
             max_content_length=max_content_length,
             output_dir="media_engine_streamlit_reports"

@@ -1,55 +1,57 @@
 # -*- coding: utf-8 -*-
 """
-Intelligence Public Opinion Analysis Platform Configuration File
-Stores database connection information and API keys
+微舆配置文件
 """
 
 # ============================== 数据库配置 ==============================
-# MySQL Database Configuration
-DB_HOST = "your_database_host"  # e.g., "localhost" or "127.0.0.1"
-DB_PORT = 3306  # e.g., 3306
-DB_USER = "your_database_user"
-DB_PASSWORD = "your_database_password"
-DB_NAME = "your_database_name"
+# 配置这些值以连接到您的MySQL实例。
+DB_HOST = "your_db_host"  # 例如："localhost" 或 "127.0.0.1"
+DB_PORT = 3306
+DB_USER = "your_db_user"
+DB_PASSWORD = "your_db_password"
+DB_NAME = "your_db_name"
 DB_CHARSET = "utf8mb4"
 # 我们也提供云数据库资源便捷配置，日均10w+数据，学术研究可免费申请，联系我们：670939375@qq.com
 
 
 # ============================== LLM配置 ==============================
-# 重要提醒：推荐第一次先按照默认模型安排配置，成功跑通后再更改自己的模型！
+# 您可以更改每个部分LLM使用的API，🚩只要兼容OpenAI请求格式都可以，定义好KEY、BASE_URL与MODEL_NAME即可正常使用。
+# 重要提醒：我们强烈推荐您先使用推荐的配置申请API，先跑通再进行您的更改！
 
-# DeepSeek API Key (openai调用格式)
-# 用于Query Agent
-# 申请地址https://www.deepseek.com/
-DEEPSEEK_API_KEY = "sk-xxxxxxxxxxxxxxxxx"
-DEEPSEEK_BASE_URL = "https://api.deepseek.com"
+# Insight Agent（推荐Kimi，申请地址：https://platform.moonshot.cn/）
+INSIGHT_ENGINE_API_KEY = "your_api_key"
+INSIGHT_ENGINE_BASE_URL = "https://api.moonshot.cn/v1"
+INSIGHT_ENGINE_MODEL_NAME = "kimi-k2-0711-preview"
 
-# Kimi API Key (openai调用格式)
-# 用于Insight Agent
-# 申请地址https://platform.moonshot.cn/
-KIMI_API_KEY = "sk-xxxxxxxxxxxxxxxxx"
-KIMI_BASE_URL = "https://api.moonshot.cn/v1"
+# Media Agent（推荐Gemini，这里我用了一个中转厂商，你也可以换成你自己的，申请地址：https://www.chataiapi.com/）
+MEDIA_ENGINE_API_KEY = "your_api_key"
+MEDIA_ENGINE_BASE_URL = "https://www.chataiapi.com/v1"
+MEDIA_ENGINE_MODEL_NAME = "gemini-2.5-pro"
 
-# Gemini API Key (openai调用格式)
-# 用于Media Agent与Report Agent
-# 这里我用了一个中转api来接入Gemini，申请地址https://api.chataiapi.com/，你也可以使用其他
-GEMINI_API_KEY = "sk-xxxxxxxxxxxxxxxxx"
-GEMINI_BASE_URL = "https://www.chataiapi.com/v1"
+# Query Agent（推荐DeepSeek，申请地址：https://www.deepseek.com/）
+QUERY_ENGINE_API_KEY = "your_api_key"
+QUERY_ENGINE_BASE_URL = "https://api.deepseek.com"
+QUERY_ENGINE_MODEL_NAME = "deepseek-reasoner"
 
-# Siliconflow API Key (openai调用格式)
-# 用于Forum Host与keyword Optimizer
-# 申请地址https://siliconflow.cn/
-GUIJI_QWEN3_API_KEY = "sk-xxxxxxxxxxxxxxxxx"
-GUIJI_QWEN3_BASE_URL = "https://api.siliconflow.cn/v1"
+# Report Agent（推荐Gemini，这里我用了一个中转厂商，你也可以换成你自己的，申请地址：https://www.chataiapi.com/）
+REPORT_ENGINE_API_KEY = "your_api_key"
+REPORT_ENGINE_BASE_URL = "https://www.chataiapi.com/v1"
+REPORT_ENGINE_MODEL_NAME = "gemini-2.5-pro"
 
-# 调试阶段出于成本考虑，没有使用ChatGPT与Claude，您也可以接入自己的模型，只要符合openai调用格式即可
+# Forum Host（Qwen3最新模型，这里我使用了硅基流动这个平台，申请地址：https://cloud.siliconflow.cn/）
+FORUM_HOST_API_KEY = "your_api_key"
+FORUM_HOST_BASE_URL = "https://api.siliconflow.cn/v1"
+FORUM_HOST_MODEL_NAME = "Qwen/Qwen3-235B-A22B-Instruct-2507"
+
+# SQL keyword Optimizer（小参数Qwen3模型，这里我使用了硅基流动这个平台，申请地址：https://cloud.siliconflow.cn/）
+KEYWORD_OPTIMIZER_API_KEY = "your_api_key"
+KEYWORD_OPTIMIZER_BASE_URL = "https://api.siliconflow.cn/v1"
+KEYWORD_OPTIMIZER_MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
 
 
-# ============================== Web工具配置 ==============================
-# Tavily Search API Key
-# 申请地址https://www.tavily.com/
-TAVILY_API_KEY = "tvly-xxxxxxxxxxxxxxxxx"
+# ============================== 网络工具配置 ==============================
+# Tavily API（申请地址：https://www.tavily.com/）
+TAVILY_API_KEY = "your_api_key"
 
-# Bocha Search API Key
-# 申请地址https://open.bochaai.com/
-BOCHA_Web_Search_API_KEY = "sk-xxxxxxxxxxxxxxxxx"
+# Bocha API（申请地址：https://open.bochaai.com/）
+BOCHA_WEB_SEARCH_API_KEY = "your_api_key"

@@ -67,11 +67,10 @@ class ReportFormattingNode(BaseNode):
             
             self.log_info("正在格式化最终报告")
             
-            # 调用LLM，传递更大的max_tokens以支持长文本报告
+            # 调用LLM生成Markdown格式
             response = self.llm_client.invoke(
-                SYSTEM_PROMPT_REPORT_FORMATTING, 
-                message, 
-                max_tokens=8192  # 支持一万字的报告输出
+                SYSTEM_PROMPT_REPORT_FORMATTING,
+                message,
             )
             
             # 处理响应

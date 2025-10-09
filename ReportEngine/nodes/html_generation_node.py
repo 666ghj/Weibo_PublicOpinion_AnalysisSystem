@@ -8,7 +8,7 @@ from datetime import datetime
 from typing import Dict, Any
 
 from .base_node import StateMutationNode
-from ..llms.base import BaseLLM
+from ..llms.base import LLMClient
 from ..state.state import ReportState
 from ..prompts import SYSTEM_PROMPT_HTML_GENERATION
 # 不再需要text_processing依赖
@@ -17,7 +17,7 @@ from ..prompts import SYSTEM_PROMPT_HTML_GENERATION
 class HTMLGenerationNode(StateMutationNode):
     """HTML生成处理节点"""
     
-    def __init__(self, llm_client: BaseLLM):
+    def __init__(self, llm_client: LLMClient):
         """
         初始化HTML生成节点
         

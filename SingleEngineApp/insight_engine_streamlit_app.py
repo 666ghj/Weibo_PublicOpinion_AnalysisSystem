@@ -28,10 +28,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from InsightEngine import DeepSearchAgent, Config
 from config import (
-    DEEPSEEK_API_KEY,
-    DEEPSEEK_BASE_URL,
-    KIMI_API_KEY,
-    KIMI_BASE_URL,
+    INSIGHT_ENGINE_API_KEY,
+    INSIGHT_ENGINE_BASE_URL,
+    INSIGHT_ENGINE_MODEL_NAME,
     DB_HOST,
     DB_USER,
     DB_PASSWORD,
@@ -67,8 +66,7 @@ def main():
 
     # ----- 配置被硬编码 -----
     # 强制使用 Kimi
-    llm_provider = "kimi"
-    model_name = "kimi-k2-0711-preview"
+    model_name = INSIGHT_ENGINE_MODEL_NAME or "kimi-k2-0711-preview"
     # 默认高级配置
     max_reflections = 2
     max_content_length = 500000  # Kimi支持长文本
@@ -104,9 +102,9 @@ def main():
             st.error("请输入研究查询")
             return
 
-        # 由于强制使用Kimi，只检查KIMI_API_KEY
-        if not KIMI_API_KEY:
-            st.error("请在您的配置文件(config.py)中设置KIMI_API_KEY")
+        # 检查配置中的LLM密钥
+        if not INSIGHT_ENGINE_API_KEY:
+            st.error("请在您的配置文件(config.py)中设置INSIGHT_ENGINE_API_KEY")
             return
 
         # 自动使用配置文件中的API密钥和数据库配置
@@ -119,21 +117,15 @@ def main():
 
         # 创建配置
         config = Config(
-            deepseek_api_key=None,
-            openai_api_key=None,
-            kimi_api_key=KIMI_API_KEY,  # 强制使用配置文件中的Kimi Key
-            deepseek_base_url=DEEPSEEK_BASE_URL,
-            kimi_base_url=KIMI_BASE_URL,
+            llm_api_key=INSIGHT_ENGINE_API_KEY,
+            llm_base_url=INSIGHT_ENGINE_BASE_URL,
+            llm_model_name=model_name,
             db_host=db_host,
             db_user=db_user,
             db_password=db_password,
             db_name=db_name,
             db_port=db_port,
             db_charset=db_charset,
-            default_llm_provider=llm_provider,
-            deepseek_model="deepseek-chat", # 保留默认值以兼容
-            openai_model="gpt-4o-mini", # 保留默认值以兼容
-            kimi_model=model_name,
             max_reflections=max_reflections,
             max_content_length=max_content_length,
             output_dir="insight_engine_streamlit_reports"

@@ -9,7 +9,7 @@ import re
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 
-from .llms import DeepSeekLLM, OpenAILLM, BaseLLM
+from .llms import LLMClient
 from .nodes import (
     ReportStructureNode,
     FirstSearchNode, 
@@ -35,6 +35,7 @@ class DeepSearchAgent:
         """
         # 加载配置
         self.config = config or load_config()
+        os.environ["TAVILY_API_KEY"] = self.config.tavily_api_key or ""
         
         # 初始化LLM客户端
         self.llm_client = self._initialize_llm()
@@ -55,21 +56,13 @@ class DeepSearchAgent:
         print(f"使用LLM: {self.llm_client.get_model_info()}")
         print(f"搜索工具集: TavilyNewsAgency (支持6种搜索工具)")
     
-    def _initialize_llm(self) -> BaseLLM:
+    def _initialize_llm(self) -> LLMClient:
         """初始化LLM客户端"""
-        if self.config.default_llm_provider == "deepseek":
-            return DeepSeekLLM(
-                api_key=self.config.deepseek_api_key,
-                model_name=self.config.deepseek_model,
-                base_url=self.config.deepseek_base_url
-            )
-        elif self.config.default_llm_provider == "openai":
-            return OpenAILLM(
-                api_key=self.config.openai_api_key,
-                model_name=self.config.openai_model
-            )
-        else:
-            raise ValueError(f"不支持的LLM提供商: {self.config.default_llm_provider}")
+        return LLMClient(
+            api_key=self.config.llm_api_key,
+            model_name=self.config.llm_model_name,
+            base_url=self.config.llm_base_url,
+        )
     
     def _initialize_nodes(self):
         """初始化处理节点"""

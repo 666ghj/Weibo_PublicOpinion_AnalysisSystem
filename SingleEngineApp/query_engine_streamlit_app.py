@@ -27,7 +27,7 @@ except locale.Error:
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from QueryEngine import DeepSearchAgent, Config
-from config import DEEPSEEK_API_KEY, DEEPSEEK_BASE_URL, TAVILY_API_KEY
+from config import QUERY_ENGINE_API_KEY, QUERY_ENGINE_BASE_URL, QUERY_ENGINE_MODEL_NAME, TAVILY_API_KEY
 
 
 def main():
@@ -56,8 +56,7 @@ def main():
 
     # ----- 配置被硬编码 -----
     # 强制使用 DeepSeek
-    llm_provider = "deepseek"
-    model_name = "deepseek-chat"
+    model_name = QUERY_ENGINE_MODEL_NAME or "deepseek-chat"
     # 默认高级配置
     max_reflections = 2
     max_content_length = 20000
@@ -94,26 +93,23 @@ def main():
             return
 
         # 由于强制使用DeepSeek，检查相关的API密钥
-        if not DEEPSEEK_API_KEY:
-            st.error("请在您的配置文件(config.py)中设置DEEPSEEK_API_KEY")
+        if not QUERY_ENGINE_API_KEY:
+            st.error("请在您的配置文件(config.py)中设置QUERY_ENGINE_API_KEY")
             return
         if not TAVILY_API_KEY:
             st.error("请在您的配置文件(config.py)中设置TAVILY_API_KEY")
             return
 
         # 自动使用配置文件中的API密钥
-        deepseek_key = DEEPSEEK_API_KEY
+        engine_key = QUERY_ENGINE_API_KEY
         tavily_key = TAVILY_API_KEY
 
         # 创建配置
         config = Config(
-            deepseek_api_key=deepseek_key,
-            openai_api_key=None,
+            llm_api_key=engine_key,
+            llm_base_url=QUERY_ENGINE_BASE_URL,
+            llm_model_name=model_name,
             tavily_api_key=tavily_key,
-            deepseek_base_url=DEEPSEEK_BASE_URL,
-            default_llm_provider=llm_provider,
-            deepseek_model=model_name,
-            openai_model="gpt-4o-mini",  # 保留默认值以兼容
             max_reflections=max_reflections,
             max_content_length=max_content_length,
             output_dir="query_engine_streamlit_reports"
