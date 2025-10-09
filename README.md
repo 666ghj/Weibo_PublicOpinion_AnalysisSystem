@@ -264,7 +264,7 @@ python schema/init_database.py
 
 **选择2：使用云数据库服务（推荐）**
 
-我们提供便捷的云数据库服务，包含日均10万+真实舆情数据，目前推广期间**免费申请**！
+我们提供便捷的云数据库服务，包含日均10万+真实舆情数据，目前**免费申请**！
 
 - 真实舆情数据，实时更新
 - 多维度标签分类
@@ -272,6 +272,8 @@ python schema/init_database.py
 - 专业技术支持
 
 **联系我们申请免费云数据库访问：📧 670939375@qq.com**
+
+> 为进行数据合规性审查与服务升级，云数据库自2025年10月1日起暂停接收新的使用申请
 
 ### 5. 启动系统
 
@@ -572,28 +574,13 @@ class DeepSearchAgent:
 
 ### 商务合作
 
-- 🏢 **企业定制开发**
-- 📊 **大数据服务**
-- 🎓 **学术合作**
-- 💼 **技术培训**
-
-### 云服务申请
-
-**免费云数据库服务申请**：
-📧 发送邮件至：670939375@qq.com  
-📝 标题：微舆云数据库申请  
-📝 说明：您的使用场景和需求
+- **企业定制开发**
+- **大数据服务**
+- **学术合作**
+- **技术培训**
 
 ## 👥 贡献者
 
 感谢以下优秀的贡献者们：
 
 [![Contributors](https://contrib.rocks/image?repo=666ghj/Weibo_PublicOpinion_AnalysisSystem)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/graphs/contributors)
-
----
-
-<div align="center">
-
-**⭐ 如果这个项目对您有帮助，请给我们一个星标！**
-
-</div>

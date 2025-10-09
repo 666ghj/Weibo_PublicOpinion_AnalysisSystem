@@ -261,7 +261,7 @@ python schema/init_database.py
 
 **Option 2: Use Cloud Database Service (Recommended)**
 
-We provide convenient cloud database service with 100,000+ daily real public opinion data, currently **free application** during the promotion period!
+We provide convenient cloud database service with 100,000+ daily real public opinion data, currently **free application**!
 
 - Real public opinion data, updated in real-time
 - Multi-dimensional tag classification
@@ -269,6 +269,8 @@ We provide convenient cloud database service with 100,000+ daily real public opi
 - Professional technical support
 
 **Contact us to apply for free cloud database access: 📧 670939375@qq.com**
+
+> To conduct a data compliance review and service upgrade, we are suspending new applications for the cloud database, effective October 1, 2025.
 
 ### 5. Launch System
 
@@ -571,28 +573,13 @@ This project is licensed under the [GPL-2.0 License](LICENSE). Please see the LI
 
 ### Business Cooperation
 
-- 🏢 **Enterprise Custom Development**
-- 📊 **Big Data Services**
-- 🎓 **Academic Collaboration**
-- 💼 **Technical Training**
-
-### Cloud Service Application
-
-**Free Cloud Database Service Application**:
-📧 Send email to: 670939375@qq.com  
-📝 Subject: WeiYu Cloud Database Application  
-📝 Description: Your use case and requirements  
+- **Enterprise Custom Development**
+- **Big Data Services**
+- **Academic Collaboration**
+- **Technical Training**
 
 ## 👥 Contributors
 
 Thanks to these excellent contributors:
 
 [![Contributors](https://contrib.rocks/image?repo=666ghj/Weibo_PublicOpinion_AnalysisSystem)](https://github.com/666ghj/Weibo_PublicOpinion_AnalysisSystem/graphs/contributors)
-
----
-
-<div align="center">
-
-**⭐ If this project helps you, please give us a star!**
-
-</div>
