@@ -23,7 +23,9 @@
 
 ## ⚡ 项目概述
 
-“**微舆**” 是一个从0实现的创新型 多智能体 舆情分析系统，不止微博，全平台简洁通用。
+“**微舆**” 是一个从0实现的创新型 多智能体 舆情分析系统，帮助大家破除信息茧房，还原舆情原貌，预测未来走向，辅助决策。用户只需像聊天一样提出分析需求，智能体开始全自动分析 国内外30+主流社媒 与 数百万条大众评论。
+
+> “微舆”谐音“微鱼”，BettaFish是一种体型很小但非常好斗、漂亮的鱼，它象征着“小而强大，不畏挑战”。
 
 查看系统以“武汉大学舆情”为例，生成的研究报告：[武汉大学品牌声誉深度分析报告](./final_reports/final_report__20250827_131630.html)
 
@@ -103,10 +105,7 @@ Weibo_PublicOpinion_AnalysisSystem/
 ├── InsightEngine/                 # 私有数据库挖掘Agent
 │   ├── agent.py                   # Agent主逻辑
 │   ├── llms/                      # LLM接口封装
-│   │   ├── deepseek.py            # DeepSeek API
-│   │   ├── kimi.py                # Kimi API
-│   │   ├── openai_llm.py          # OpenAI格式API
-│   │   └── base.py                # LLM基类
+│   │   └── base.py                # 统一的 OpenAI 兼容客户端
 │   ├── nodes/                     # 处理节点
 │   │   ├── base_node.py           # 基础节点类
 │   │   ├── formatting_node.py     # 格式化节点
@@ -130,7 +129,6 @@ Weibo_PublicOpinion_AnalysisSystem/
 ├── ReportEngine/                  # 多轮报告生成Agent
 │   ├── agent.py                   # Agent主逻辑
 │   ├── llms/                      # LLM接口
-│   │   └── gemini.py              # Gemini API专用
 │   ├── nodes/                     # 报告生成节点
 │   │   ├── template_selection.py  # 模板选择节点
 │   │   └── html_generation.py     # HTML生成节点
@@ -238,31 +236,26 @@ DB_HOST = "localhost"
 DB_PORT = 3306
 DB_USER = "your_username"
 DB_PASSWORD = "your_password"
-DB_NAME = "weibo_analysis"
+DB_NAME = "your_db_name"
 DB_CHARSET = "utf8mb4"
 
-# DeepSeek API（申请地址：https://www.deepseek.com/）
-DEEPSEEK_API_KEY = "your_deepseek_api_key"
+# LLM配置
+# 您可以更改每个部分LLM使用的API，只要兼容OpenAI请求格式都可以
 
-# Tavily搜索API（申请地址：https://www.tavily.com/）
-TAVILY_API_KEY = "your_tavily_api_key"
-
-# Kimi API（申请地址：https://www.kimi.com/）
-KIMI_API_KEY = "your_kimi_api_key"
-
-# Gemini API（申请地址：https://api.chataiapi.com/）
-GEMINI_API_KEY = "your_gemini_api_key"
-
-# 博查搜索API（申请地址：https://open.bochaai.com/）
-BOCHA_Web_Search_API_KEY = "your_bocha_api_key"
-
-# 硅基流动API（申请地址：https://siliconflow.cn/）
-GUIJI_QWEN3_API_KEY = "your_guiji_api_key"
+# Insight Agent
+INSIGHT_ENGINE_API_KEY = "your_api_key"
+INSIGHT_ENGINE_BASE_URL = "https://api.moonshot.cn/v1"
+INSIGHT_ENGINE_MODEL_NAME = "kimi-k2-0711-preview"
+# Media Agent
+...
 ```
 
 #### 4.2 数据库初始化
 
 **选择1：使用本地数据库**
+
+> MindSpider爬虫系统跟舆情系统是各自独立的，所以需要再去`MindSpider\config.py`配置一下
+
 ```bash
 # 本地MySQL数据库初始化
 cd MindSpider
@@ -373,30 +366,26 @@ SENTIMENT_CONFIG = {
 
 ### 接入不同的LLM模型
 
-系统支持多种LLM提供商，可在各Agent的配置中切换：
+支持任意openAI调用格式的LLM提供商，只需要在/config.py中填写对应的KEY、BASE_URL、MODEL_NAME即可。
 
-```python
-# 在各Engine的utils/config.py中配置
-class Config:
-    default_llm_provider = "deepseek"  # 可选: "deepseek", "openai", "kimi", "gemini"，"qwen"等
-    
-    # DeepSeek配置
-    deepseek_api_key = "your_api_key"
-    deepseek_model = "deepseek-chat"
-    
-    # OpenAI兼容配置
-    openai_api_key = "your_api_key"
-    openai_model = "gpt-3.5-turbo"
-    openai_base_url = "https://api.openai.com/v1"
-    
-    # Kimi配置
-    kimi_api_key = "your_api_key"  
-    kimi_model = "moonshot-v1-8k"
-    
-    # Gemini配置
-    gemini_api_key = "your_api_key"
-    gemini_model = "gemini-pro"
-```
+> 什么是openAI调用格式？下面提供一个简单的例子：
+>```python
+>from openai import OpenAI
+>
+>client = OpenAI(api_key="your_api_key", 
+>                base_url="https://api.siliconflow.cn/v1")
+>
+>response = client.chat.completions.create(
+>    model="Qwen/Qwen2.5-72B-Instruct",
+>    messages=[
+>        {'role': 'user', 
+>         'content': "推理模型会给市场带来哪些新的机会"}
+>    ],
+>)
+>
+>complete_response = response.choices[0].message.content
+>print(complete_response)
+>```
 
 ### 更改情感分析模型
 
