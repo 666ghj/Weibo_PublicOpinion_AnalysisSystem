@@ -46,6 +46,8 @@
 **始于舆情，而不止于舆情**。“微舆”的目标，是成为驱动一切业务场景的简洁通用的数据分析引擎。
 
 > 举个例子. 你只需简单修改Agent工具集的api参数与prompt，就可以把他变成一个金融领域的市场分析系统
+>
+> 附一个比较活跃的L站项目讨论帖：https://linux.do/t/topic/1009280
 
 <div align="center">
 <img src="static/image/system_schematic.png" alt="banner" width="800">
